@@ -11,4 +11,8 @@
 |
 */
 
+// Add here all GET request routes
 Route::get('/', 'PagesController@index');
+
+// Add here all resource routes
+Route::resource('staff', 'StaffsController');

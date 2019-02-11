@@ -1,7 +1,7 @@
 create database if not exists Bebsi;
 use Bebsi;
 
-create table if not exists department (
+create table if not exists departments (
     name        VARCHAR(255) NOT NULL UNIQUE,
     
     PRIMARY KEY (name) 
@@ -17,16 +17,16 @@ create table if not exists staff (
     
     PRIMARY KEY     (staff_id),
     CONSTRAINT
-        FOREIGN KEY (department) REFERENCES department(name) ON DELETE CASCADE
+        FOREIGN KEY (department) REFERENCES departments(name) ON DELETE CASCADE
 );
 
-create table if not exists patient (
+create table if not exists patients (
     patient_id          INT(7) unsigned NOT NULL AUTO_INCREMENT,
     
     PRIMARY KEY (patient_id)
 );
 
-create table if not exists test (
+create table if not exists tests (
     test_id       		INT(7) unsigned NOT NULL AUTO_INCREMENT,
     test_name       	VARCHAR(255) NOT NULL UNIQUE,
     description     	BLOB NOT NULL,
@@ -34,12 +34,12 @@ create table if not exists test (
     
     PRIMARY KEY (test_id) ,
     CONSTRAINT
-        FOREIGN KEY (department) REFERENCES department(name) ON DELETE CASCADE
+        FOREIGN KEY (department) REFERENCES departments(name) ON DELETE CASCADE
     
 );
 
 
-create table if not exists test_instance (
+create table if not exists test_instances (
     test_instance_id    INT(7) unsigned NOT NULL AUTO_INCREMENT,
     test_id         	INT(7) unsigned NOT NULL,
     details				BLOB,
@@ -47,10 +47,10 @@ create table if not exists test_instance (
     PRIMARY KEY (test_instance_id),
 
     CONSTRAINT
-        FOREIGN KEY (test_id) REFERENCES test(test_id) ON DELETE CASCADE
+        FOREIGN KEY (test_id) REFERENCES tests(test_id) ON DELETE CASCADE
 );
 
-create table if not exists appointment (
+create table if not exists appointments (
     app_id       	 	INT(9) unsigned NOT NULL AUTO_INCREMENT,
     patient_id          INT(7) unsigned NOT NULL,
     app_date           	date NOT NULL,
@@ -60,6 +60,6 @@ create table if not exists appointment (
     
     PRIMARY KEY     (app_id),
     CONSTRAINT
-        FOREIGN KEY (test_instance_id) REFERENCES test_instance(test_instance_id) ON DELETE CASCADE,
-        FOREIGN KEY (patient_id) REFERENCES patient(patient_id) ON DELETE CASCADE    
+        FOREIGN KEY (test_instance_id) REFERENCES test_instances(test_instance_id) ON DELETE CASCADE,
+        FOREIGN KEY (patient_id) REFERENCES patients(patient_id) ON DELETE CASCADE    
 );
