@@ -30,6 +30,19 @@ class _MyAppState extends State<MyApp>{
           backgroundColor: Colors.indigo,
           body: Center(
             child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  stops: [0.1, 0.5, 0.7, 0.9],
+                  colors: [
+                    Colors.indigo[800],
+                    Colors.indigo[700],
+                    Colors.blue[600],
+                    Colors.blue[400],
+                  ],
+                ),
+              ),
               padding: EdgeInsets.all(50.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -47,20 +60,29 @@ class _MyAppState extends State<MyApp>{
                     ),
                   ),
                   TextField(
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                    cursorColor: Colors.white,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
-
                       ),
                       labelText: "Patient code",
                       labelStyle: TextStyle(
-                        color: Colors.white
+                        color: Colors.blue[100],
                       )
                     ),
                   ),
                   Container(
                     padding: EdgeInsets.all(20.0),
                     child: RaisedButton(
-                      child: Text('LOG-IN'),
+                      color: Colors.white,
+                      child: Text(
+                        'LOG-IN',
+                        style: TextStyle(
+                          color: Colors.indigo,
+                        ),
+                      ),
                       onPressed: () {
                         Navigator.push(
                           context,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import './main.dart';
+import './appointment_info.dart';
+import './appointment.dart';
 
 class Dashboard extends StatelessWidget{
   @override
@@ -12,15 +14,34 @@ class Dashboard extends StatelessWidget{
           padding: EdgeInsets.zero,
             children: <Widget>[
               DrawerHeader(
-                child: Text(
-                  'Patient ID: 12345',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20.0,
-                  ),
+                child: Stack(
+                  children: <Widget>[
+                    Positioned(
+                      child: Align(
+                        alignment: FractionalOffset.bottomLeft,
+                        child: Text(
+                          'Patient ID: 123456',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.indigo,
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    stops: [0.1, 0.5, 0.7, 0.9],
+                    colors: [
+                      Colors.indigo[800],
+                      Colors.indigo[700],
+                      Colors.blue[600],
+                      Colors.blue[400],
+                    ],
+                  ),
                 ),
               ),
               ListTile(
@@ -28,10 +49,18 @@ class Dashboard extends StatelessWidget{
               ),
               ListTile(
                 title: Text('Past Appointments'),
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => PastAppointments()),
+                  );
+                },
               ),
-              Divider(
-                color: Colors.blue,
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: Divider(
+                  color: Colors.blue,
+                ),
               ),
               ListTile(
                 title: Text('Switch user'),
@@ -42,8 +71,11 @@ class Dashboard extends StatelessWidget{
                   );
                 },
               ),
-              Divider(
-                color: Colors.blue,
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: Divider(
+                  color: Colors.blue,
+                ),
               ),
               ListTile(
                 title: Text('About us'),
@@ -53,208 +85,95 @@ class Dashboard extends StatelessWidget{
         ),
         appBar: AppBar(
           backgroundColor: Colors.indigo,
-          title: Text('Dashboard'),
+          title: Text('Due appointments'),
         ),
         body: Container(
           padding: EdgeInsets.all(20.00),
             child: ListView(
               children: <Widget>[
-                Text("1st January"),
+                CalendarText(),
                 Divider(
                   color: Colors.white,
                 ),
-                Card(
-                  elevation: 3.0,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ListTile(
-                        leading: Icon(Icons.check_circle),
-                        title: Text("Heart PGE MRI test"),
-                        subtitle: Text("St. Thomas Hospital - 11:00 am"),
-                      ),
-                      ButtonTheme.bar(
-                        child: ButtonBar(
-                          children: <Widget>[
-                            FlatButton(
-                              child: Text('BUY NOW'),
-                              onPressed: (){},
-                            ),
-                            FlatButton(
-                              child: Text('LISTEN'),
-                              onPressed: (){},
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                CalendarCard(),
                 Divider(
                   color: Colors.white,
                 ),
-                Text("7st February"),
+                CalendarText(),
                 Divider(
                   color: Colors.white,
                 ),
-                Card(
-                  elevation: 3.0,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ListTile(
-                        leading: Icon(Icons.check_circle),
-                        title: Text("Heart PGE MRI test"),
-                        subtitle: Text("St. Thomas Hospital - 11:00 am"),
-                      ),
-                      ButtonTheme.bar(
-                        child: ButtonBar(
-                          children: <Widget>[
-                            FlatButton(
-                              child: Text('BUY NOW'),
-                              onPressed: (){},
-                            ),
-                            FlatButton(
-                              child: Text('LISTEN'),
-                              onPressed: (){},
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                CalendarCard(),
                 Divider(
                   color: Colors.white,
                 ),
-                Card(
-                  elevation: 3.0,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ListTile(
-                        leading: Icon(Icons.check_circle),
-                        title: Text("Heart PGE MRI test"),
-                        subtitle: Text("St. Thomas Hospital - 11:00 am"),
-                      ),
-                      ButtonTheme.bar(
-                        child: ButtonBar(
-                          children: <Widget>[
-                            FlatButton(
-                              child: Text('BUY NOW'),
-                              onPressed: (){},
-                            ),
-                            FlatButton(
-                              child: Text('LISTEN'),
-                              onPressed: (){},
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                CalendarCard(),
                 Divider(
                   color: Colors.white,
                 ),
-                Text("1st January"),
+                CalendarText(),
                 Divider(
                   color: Colors.white,
                 ),
-                Card(
-                  elevation: 3.0,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ListTile(
-                        leading: Icon(Icons.check_circle),
-                        title: Text("Heart PGE MRI test"),
-                        subtitle: Text("St. Thomas Hospital - 11:00 am"),
-                      ),
-                      ButtonTheme.bar(
-                        child: ButtonBar(
-                          children: <Widget>[
-                            FlatButton(
-                              child: Text('BUY NOW'),
-                              onPressed: (){},
-                            ),
-                            FlatButton(
-                              child: Text('LISTEN'),
-                              onPressed: (){},
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                CalendarCard(),
                 Divider(
                   color: Colors.white,
                 ),
-                Text("7st February"),
+                CalendarCard(),
                 Divider(
                   color: Colors.white,
                 ),
-                Card(
-                  elevation: 3.0,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ListTile(
-                        leading: Icon(Icons.check_circle),
-                        title: Text("Heart PGE MRI test"),
-                        subtitle: Text("St. Thomas Hospital - 11:00 am"),
-                      ),
-                      ButtonTheme.bar(
-                        child: ButtonBar(
-                          children: <Widget>[
-                            FlatButton(
-                              child: Text('BUY NOW'),
-                              onPressed: (){},
-                            ),
-                            FlatButton(
-                              child: Text('LISTEN'),
-                              onPressed: (){},
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                CalendarText(),
                 Divider(
                   color: Colors.white,
                 ),
-                Card(
-                  elevation: 3.0,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ListTile(
-                        leading: Icon(Icons.check_circle),
-                        title: Text("Heart PGE MRI test"),
-                        subtitle: Text("St. Thomas Hospital - 11:00 am"),
-                      ),
-                      ButtonTheme.bar(
-                        child: ButtonBar(
-                          children: <Widget>[
-                            FlatButton(
-                              child: Text('BUY NOW'),
-                              onPressed: (){},
-                            ),
-                            FlatButton(
-                              child: Text('LISTEN'),
-                              onPressed: (){},
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                CalendarCard(),
+                Divider(
+                  color: Colors.white,
                 ),
+                CalendarCard(),
               ],
             )
           ),
+    );
+  }
+}
+
+class CalendarCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 3.0,
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AppointmentInfo())
+          );
+        },
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.today),
+              title: Text("Heart PGE MRI test"),
+              subtitle: Text("St. Thomas Hospital - 11:00 am"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CalendarText extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+        "7st February",
+        style: TextStyle(
+          fontWeight: FontWeight.bold
+        ),
     );
   }
 }
