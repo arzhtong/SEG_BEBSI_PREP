@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
+import './allowed_foods.dart';
+
 class AppointmentPrep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.count(
-        crossAxisCount: 1,
-
+      crossAxisCount: 1,
       padding: const EdgeInsets.all(20.0),
       crossAxisSpacing: 10.0,
       mainAxisSpacing: 10.0,
@@ -15,14 +16,14 @@ class AppointmentPrep extends StatelessWidget {
           crossAxisSpacing: 10.0,
           mainAxisSpacing: 10.0,
           children: <Widget>[
-            CategoryCard("Allowed foods", 139, Colors.green[400], Colors.yellow[400]),
-            CategoryCard("Not allowed foods", 50, Colors.red[400], Colors.orange[400]),
-            CategoryCard("Other category", 73, Colors.blue[400], Colors.green[400]),
-            CategoryCard("Extra information", 63, Colors.cyan[200], Colors.teal[400]),
+            CategoryCard("Allowed foods", 139, Colors.green[200], Colors.yellow[200]),
+            CategoryCard("Not allowed foods", 50, Colors.red[200], Colors.orange[200]),
+            CategoryCard("Extra information", 63, Colors.orange[100], Colors.pink[100]),
+            CategoryCard("Other category", 73, Colors.blue[200], Colors.green[200]),
           ],
         ),
 
-        CategoryCard("Sample Menu", 30, Colors.purple[400], Colors.blue[400]),
+        CategoryCard("Sample Menu", 30, Colors.purple[200], Colors.blue[200]),
       ],
     );
   }
@@ -47,10 +48,10 @@ class CategoryCard extends StatelessWidget {
       elevation: 3.0,
       child: InkWell(
         onTap: () {
-//          Navigator.push(
-//              context,
-//              MaterialPageRoute(builder: (context) => AppointmentInfo())
-//          );
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AllowedFoods())
+          );
         },
         child: Column(
           mainAxisSize: MainAxisSize.min,
