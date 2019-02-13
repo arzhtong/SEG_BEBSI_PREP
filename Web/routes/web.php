@@ -16,3 +16,9 @@ Route::get('/', 'PagesController@index');
 
 // Add here all resource routes
 Route::resource('staff', 'StaffsController');
+
+//Auth routes
+Auth::routes();
+Route::get('/dashboard', 'DashboardController@index');
+
+
