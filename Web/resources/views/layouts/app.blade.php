@@ -18,13 +18,16 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    @if(Auth::guest())
+        @yield('styles')
+    @endif
 </head>
 <body>
     <div id="app">
         
         @if(Auth::guest())
         <div class = "container">
-                @yield('content')
+            @yield('content')
         </div>  
         @else
         @include('inc.navbar')
