@@ -8,8 +8,8 @@ return array(
         "address" => "from@example.com",
         "name" => "Example"
     ),
-    "username" => "1b9669dca0f987",
-    "password" => "48e86533fce359",
+    "username" => "ae9b284b61db3f",
+    "password" => "ea19bb0e112660",
     "sendmail" => "/usr/sbin/sendmail -bs",
     "pretend" => false
   );
