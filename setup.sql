@@ -58,6 +58,7 @@ create table if not exists appointments (
     app_location       	VARCHAR(255) NOT NULL,
     test_instance_id    INT(7) unsigned NOT NULL,
     
+    
     PRIMARY KEY     (app_id),
     CONSTRAINT
         FOREIGN KEY (test_instance_id) REFERENCES test_instances(test_instance_id) ON DELETE CASCADE,
