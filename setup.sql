@@ -55,7 +55,7 @@ create table if not exists appointments (
     patient_id          INT(7) unsigned NOT NULL,
     app_date           	date NOT NULL,
     app_time		    time NOT NULL,
-    app_location       	BOOLEAN NOT NULL,
+    app_location       	VARCHAR(255) NOT NULL,
     test_instance_id    INT(7) unsigned NOT NULL,
     
     PRIMARY KEY     (app_id),
