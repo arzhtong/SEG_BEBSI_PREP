@@ -15,8 +15,8 @@
 Route::get('/', 'PagesController@index');
 
 // Add here all resource routes
-Route::resource('staff', 'StaffsController');
-
+//Route::resource('staff', 'StaffsController');
+Route::resource('appointments','AppointmentsController');
 //Auth routes
 Auth::routes();
 Route::get('/dashboard', 'DashboardController@index');
