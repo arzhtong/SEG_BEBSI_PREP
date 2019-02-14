@@ -10,170 +10,91 @@ class AllowedFoods extends StatelessWidget {
       ),
       body: ListView(
         children: <Widget>[
-          ExpansionTile(
-            leading: Icon(Icons.local_florist),
-            title: Text("Condiments & seasonings"),
-            children: <Widget>[
-              ListTile(
-                contentPadding: EdgeInsets.fromLTRB(70.0, 0.0, 0.0, 0.0),
-                title: Text("Salt - "
-                  "Pepper - "
-                  "Any natural herbs or spices - "
-                  "Full-fat or home-made mayonnaise",
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-            ],
-          ),
-          ExpansionTile(
-            leading: Icon(Icons.restore_from_trash),
-            title: Text("Drinks"),
-            children: <Widget>[
-              ListTile(
-                contentPadding: EdgeInsets.fromLTRB(70.0, 0.0, 0.0, 0.0),
-                title: Text("Mineral water - "
-                    "Sparkling water - "
-                    "Coffee - "
-                    "Tea without milk or sugar",
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-            ],
-          ),
-          ExpansionTile(
-            leading: Icon(Icons.child_friendly),
-            title: Text("Dairy and alternatives"),
-            children: <Widget>[
-              ListTile(
-                contentPadding: EdgeInsets.fromLTRB(70.0, 0.0, 0.0, 0.0),
-                title: Text("Creme fraiche - "
-                    "Double cream - "
-                    "Sour cream - "
-                    "Butter eggs - "
-                    "Any non-processed cheese e.g. cheddar",
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-            ],
-          ),
-          ExpansionTile(
-            leading: Icon(Icons.fastfood),
-            title: Text("Fats & oils"),
-            children: <Widget>[
-              ListTile(
-                contentPadding: EdgeInsets.fromLTRB(70.0, 0.0, 0.0, 0.0),
-                title: Text("Butter - "
-                    "All vegetable oils (e.g. olive, peanut, sunflower, rapeseed and palm oil) - "
-                    "The fat on meat",
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-            ],
-          ),
-          ExpansionTile(
-            leading: Icon(Icons.watch),
-            title: Text("Fish & shelfish"),
-            children: <Widget>[
-              ListTile(
-                contentPadding: EdgeInsets.fromLTRB(70.0, 0.0, 0.0, 0.0),
-                title: Text("All non-processed fish/shellfish are allowed - "
-                    "Fresh salmon - "
-                    "Tuna - "
-                    "Tilapia - "
-                    "All fresh white fish such as cod",
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-            ],
-          ),
-          ExpansionTile(
-            leading: Icon(Icons.airport_shuttle),
-            title: Text("Meat"),
-            children: <Widget>[
-              ListTile(
-                contentPadding: EdgeInsets.fromLTRB(70.0, 0.0, 0.0, 0.0),
-                title: Text("All non-processed meats are allowed - "
-                    "Beef - "
-                    "Goat - "
-                    "Lamb - "
-                    "Pork - "
-                    "Veal",
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-            ],
-          ),
-          ExpansionTile(
-            leading: Icon(Icons.directions_run),
-            title: Text("Poultry"),
-            children: <Widget>[
-              ListTile(
-                contentPadding: EdgeInsets.fromLTRB(70.0, 0.0, 0.0, 0.0),
-                title: Text("All non-processed poultry along with their eggs are allowed - "
-                    "chicken - "
-                    "turkey - "
-                    "duck",
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-            ],
-          ),
-          ExpansionTile(
-            leading: Icon(Icons.accessible_forward),
-            title: Text("Vegetarian Foods"),
-            children: <Widget>[
-              ListTile(
-                contentPadding: EdgeInsets.fromLTRB(70.0, 0.0, 0.0, 0.0),
-                title: Text("Eggs - "
-                    "cheddar and other non-processed cheeses - "
-                    "nuts (except chestnuts) - "
-                    "Quorn pieces and Quorn meat free fillets (all other Quorn products are not permitted)",
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-            ],
-          ),
-          ExpansionTile(
-            leading: Icon(Icons.ac_unit),
-            title: Text("Vegetable"),
-            children: <Widget>[
-              ListTile(
-                contentPadding: EdgeInsets.fromLTRB(70.0, 0.0, 0.0, 0.0),
-                title: Text("Fresh and frozen vegetables - "
-                    "avocado - "
-                    "asparagus - "
-                    "artichokes - "
-                    "aubergines - "
-                    "broccoli - "
-                    "bok choy - "
-                    "brussel sprouts - "
-                    "bean sprouts - "
-                    "celery - "
-                    "cucumber - "
-                    "courgettes - "
-                    "cauliflower - "
-                    "fennel - "
-                    "garlic - "
-                    "lettuce - "
-                    "leeks - "
-                    "mushrooms - "
-                    "okra - "
-                    "peppers - "
-                    "radishes - "
-                    "squash - "
-                    "spring onions - "
-                    "shallots - "
-                    "spinach - "
-                    "tomatoes - "
-                    "turnips - "
-                    "fresh herbs",
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-            ],
-          ),
+          DescriptiveExpansionTile("Condiments & seasoning", "", "salt%pepper%any natural herb or spices%full-fat or home-made mayonnaise", Icons.local_florist),
+          DescriptiveExpansionTile("Drinks", "An example of a very long description for a food category", "mineral water%sparkling water%coffee%tea without milk or sugar", Icons.restore_from_trash),
+          DescriptiveExpansionTile("Dairy and alternatives", "", "creme fraiche%double cream%sour cream%butter%eggs%any non-processed cheese e.g. cheddar", Icons.child_friendly),
+          DescriptiveExpansionTile("Fats & oils", "", "butter%all vegetable oils (e.g. olive, peanut, sunflower, rapeseed and palm oild)%the fat on meat", Icons.fastfood),
+          DescriptiveExpansionTile("Fish & shelfish", "All non-processed fish/shellfish are allowed", "fresh salmon%tuna%tilapia%all fresh white fish such as cod", Icons.watch),
+          DescriptiveExpansionTile("Meats", "All non-processed meats are allowed", "beef%goat%lamb%pork%veal", Icons.ac_unit),
+          DescriptiveExpansionTile("Pultry", "All non-processed pultry along with their eggs are allowed", "chicken%turkey%duck", Icons.alarm),
+          DescriptiveExpansionTile("Vegetarian foods", "", "eggs%cheddar and other non-processed cheeses%nuts (except chestnuts)%Quorn pieces and Quorn meat free fillets (all other Quorn products are not permitted)", Icons.local_florist),
+          DescriptiveExpansionTile("Vegetables", "Fresh and frozen vegetables", "avocado%asparagus%artichokes%aubergines%broccoli%bok choy%brussel sprouts%bean sprouts%celery%cucumber%courgetters%cauliflower%fennel%garlic%lettuce%leeks"
+              "%mushroom%okra%peppers%radishes%squash%spring onions%shallots%spinach%tomatoes%turnips%fresh herbs", Icons.assignment_ind),
         ],
       ),
     );
+  }
+}
+
+class DescriptiveExpansionTile extends StatelessWidget {
+  String category;
+  String description;
+  String items;
+  IconData icon;
+  List<Widget> columnChildren;
+
+  DescriptiveExpansionTile(String category, String description, String items, IconData icon) {
+    this.category = category;
+    this.description = description;
+    this.items = items;
+    this.icon = icon;
+    columnChildren = new List();
+
+    if (description.isNotEmpty){
+      columnChildren.add(
+        Text(
+          description,
+          style: TextStyle(
+            color: Colors.grey[600],
+          ),
+        ),
+      );
+
+      columnChildren.add(
+        Divider(
+          color: Colors.white,
+        ),
+      );
+    }
+
+    columnChildren.add(
+      Text(
+        formatItemList(items),
+        style: TextStyle(
+          color: Colors.grey,
+        ),
+      )
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ExpansionTile(
+      leading: Icon(icon),
+      title: Text(category),
+      children: <Widget>[
+        ListTile(
+          contentPadding: EdgeInsets.fromLTRB(70.0, 0.0, 0.0, 0.0),
+          title: Container(
+            padding: EdgeInsets.only(right: 10.0),
+            child:  Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: columnChildren,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  String formatItemList(String rawItems){
+    String formattedList = "";
+    List<String> rawItemsList = rawItems.split("%");
+
+    for (var i  = 0; i < rawItemsList.length - 1; i++){
+      formattedList = formattedList + rawItemsList.elementAt(i) + " • ";
+    }
+
+    return formattedList + rawItemsList.elementAt(rawItemsList.length - 1);
   }
 }
