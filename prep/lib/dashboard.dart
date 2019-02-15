@@ -46,15 +46,16 @@ class Dashboard extends StatelessWidget{
               ),
               ListTile(
                 title: Text('Due Appointments'),
-              ),
-              ListTile(
-                title: Text('Past Appointments'),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => PastAppointments()),
                   );
                 },
+              ),
+              ListTile(
+                title: Text('Past Appointments'),
+                onTap: () {},
               ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -85,7 +86,7 @@ class Dashboard extends StatelessWidget{
         ),
         appBar: AppBar(
           backgroundColor: Colors.indigo,
-          title: Text('Due appointments'),
+          title: Text('Past appointments'),
         ),
         body: Container(
           padding: EdgeInsets.all(20.00),
@@ -156,7 +157,7 @@ class CalendarCard extends StatelessWidget {
           children: <Widget>[
             ListTile(
               leading: Icon(Icons.today),
-              title: Text("Heart PGE MRI test"),
+              title: Text("Cardiac FDG PET"),
               subtitle: Text("St. Thomas Hospital - 11:00 am"),
             ),
           ],

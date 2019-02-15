@@ -16,8 +16,8 @@ class AllowedFoods extends StatelessWidget {
           DescriptiveExpansionTile("Fats & oils", "", "butter%all vegetable oils (e.g. olive, peanut, sunflower, rapeseed and palm oild)%the fat on meat", Icons.fastfood),
           DescriptiveExpansionTile("Fish & shelfish", "All non-processed fish/shellfish are allowed", "fresh salmon%tuna%tilapia%all fresh white fish such as cod", Icons.watch),
           DescriptiveExpansionTile("Meats", "All non-processed meats are allowed", "beef%goat%lamb%pork%veal", Icons.ac_unit),
-          DescriptiveExpansionTile("Pultry", "All non-processed pultry along with their eggs are allowed", "chicken%turkey%duck", Icons.alarm),
-          DescriptiveExpansionTile("Vegetarian foods", "", "eggs%cheddar and other non-processed cheeses%nuts (except chestnuts)%Quorn pieces and Quorn meat free fillets (all other Quorn products are not permitted)", Icons.local_florist),
+          DescriptiveExpansionTile("Poultry", "All non-processed pultry along with their eggs are allowed", "chicken%turkey%duck", Icons.alarm),
+          DescriptiveExpansionTile("Vegetarian foods", "", "eggs%cheddar and other non-processed cheeses%nuts (except chestnuts)%Quorn pieces and Quorn meat free fillets (all other Quorn products are not permitted)", Icons.airport_shuttle),
           DescriptiveExpansionTile("Vegetables", "Fresh and frozen vegetables", "avocado%asparagus%artichokes%aubergines%broccoli%bok choy%brussel sprouts%bean sprouts%celery%cucumber%courgetters%cauliflower%fennel%garlic%lettuce%leeks"
               "%mushroom%okra%peppers%radishes%squash%spring onions%shallots%spinach%tomatoes%turnips%fresh herbs", Icons.assignment_ind),
         ],
@@ -76,7 +76,7 @@ class DescriptiveExpansionTile extends StatelessWidget {
         ListTile(
           contentPadding: EdgeInsets.fromLTRB(70.0, 0.0, 0.0, 0.0),
           title: Container(
-            padding: EdgeInsets.only(right: 10.0),
+            padding: EdgeInsets.only(right: 50.0),
             child:  Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: columnChildren,

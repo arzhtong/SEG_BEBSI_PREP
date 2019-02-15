@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './dashboard.dart';
+import './appointment.dart';
 
 void main() => runApp(
     MaterialApp(
@@ -86,7 +87,7 @@ class _MyAppState extends State<MyApp>{
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Dashboard()),
+                          MaterialPageRoute(builder: (context) => PastAppointments()),
                         );
                       },
                     ),

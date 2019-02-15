@@ -46,16 +46,16 @@ class PastAppointments extends StatelessWidget{
             ),
             ListTile(
               title: Text('Due Appointments'),
-              onTap: (){
+              onTap: (){},
+            ),
+            ListTile(
+              title: Text('Past Appointments'),
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Dashboard()),
                 );
               },
-            ),
-            ListTile(
-              title: Text('Past Appointments'),
-              onTap: () {},
             ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -86,7 +86,7 @@ class PastAppointments extends StatelessWidget{
       ),
       appBar: AppBar(
         backgroundColor: Colors.indigo,
-        title: Text('Past appointments'),
+        title: Text('Due appointments'),
       ),
       body: Container(
           padding: EdgeInsets.all(20.00),
@@ -162,14 +162,18 @@ class CalendarCard extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  stops: [0.2, 0.3, 0.4, 0.6, 0.7, 0.8],
+//                  stops: [0.2, 0.3, 0.4, 0.6, 0.7, 0.8],
+//                  colors: [
+//                    Colors.deepPurple[200],
+//                    Colors.purple[200],
+//                    Colors.red[200],
+//                    Colors.deepOrange[200],
+//                    Colors.deepOrange[100],
+//                    Colors.yellow[200],
+                  stops: [0.1, 0.9],
                   colors: [
-                    Colors.deepPurple[200],
-                    Colors.purple[200],
-                    Colors.red[200],
-                    Colors.deepOrange[200],
-                    Colors.deepOrange[100],
-                    Colors.yellow[200],
+                    Colors.blue[200],
+                    Colors.green[200],
                   ],
                 ),
               ),
@@ -177,7 +181,7 @@ class CalendarCard extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.today),
-              title: Text("Heart PGE MRI test"),
+              title: Text("Cardiac FDG PET"),
               subtitle: Text("St. Thomas Hospital - 11:00 am"),
             ),
           ],
