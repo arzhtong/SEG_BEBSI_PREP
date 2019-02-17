@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "928032384711",
+    "firebase_url": "https://prep-playground-19dab.firebaseio.com",
+    "project_id": "prep-playground-19dab",
+    "storage_bucket": "prep-playground-19dab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928032384711:android:c95e32521ac6a78d",
+        "android_client_info": {
+          "package_name": "com.bebsi.prep"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "928032384711-edhhv8nds2bjvobt2tnk4u348his2vbh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjq_-1cgmUg6X2_modPv_dRAmUs5gkddo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
