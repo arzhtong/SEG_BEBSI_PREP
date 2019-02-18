@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+//import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+//final FirebaseMessaging _messaging = FirebaseMessaging();
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    //_messaging.configure();
+    //_messaging.requestNotificationPermissions();
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -44,17 +52,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  Stream<DocumentSnapshot> counterSnapshot = Firestore.instance.collection('user1337').document('message1').snapshots();
+  int _counter;
 
   void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+    // This method increments the counter, and updates the database with that value.
+    _counter++;
+    Firestore.instance.collection('user1337').document('message1').setData({ 'message': _counter });
   }
 
   @override
@@ -94,10 +98,15 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               'You have pushed the button this many times:',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
+            StreamBuilder(
+              // If found, this returns the counter from the database.
+              stream: counterSnapshot,
+              builder: (context, snapshot){
+                if (!snapshot.hasData) return Text('loading');
+                _counter = snapshot.data['message'];
+                return Text(_counter.toString());
+              },
+            )
           ],
         ),
       ),
