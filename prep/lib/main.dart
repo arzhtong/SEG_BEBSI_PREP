@@ -52,13 +52,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Stream<DocumentSnapshot> counterSnapshot = Firestore.instance.collection('user1337').document('message1').snapshots();
-  int _counter;
+  var _docRef = Firestore.instance.collection('user1337').document('message1');
 
   void _incrementCounter() {
     // This method increments the counter, and updates the database with that value.
-    _counter++;
-    Firestore.instance.collection('user1337').document('message1').setData({ 'message': _counter });
+    Firestore.instance.runTransaction((transaction) async {
+      DocumentSnapshot freshSnap = await transaction.get(_docRef);
+      await transaction.update(freshSnap.reference, {'message': freshSnap['message'] + 1});
+    });
   }
 
   @override
@@ -100,11 +101,10 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             StreamBuilder(
               // If found, this returns the counter from the database.
-              stream: counterSnapshot,
+              stream: _docRef.snapshots(),
               builder: (context, snapshot){
                 if (!snapshot.hasData) return Text('loading');
-                _counter = snapshot.data['message'];
-                return Text(_counter.toString());
+                return Text(snapshot.data['message'].toString());
               },
             )
           ],
