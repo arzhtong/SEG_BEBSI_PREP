@@ -20,5 +20,6 @@ Route::resource('appointments','AppointmentsController');
 //Auth routes
 Auth::routes();
 Route::get('/dashboard', 'DashboardController@index');
+Route::get('/firebase', 'FirebaseController@initialize');
 
 
