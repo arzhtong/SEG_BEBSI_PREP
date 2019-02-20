@@ -110,28 +110,28 @@
             <div class="card card-signin my-5">
               <div class="card-body">
                 <h5 class="card-title text-center">{{ __('Login') }}</h5>
-                <form method="POST" action="{{ route('login') }}">
-                    @csrf
+               
+              <form action="{{route(login)}}"
                   <div class="form-label-group">
                     <input type="email" id="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="Email address" name="email" value="{{ old('email') }}" required autofocus>
-                    @if ($errors->has('email'))
+                    {{-- @if ($errors->has('email'))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $errors->first('email') }}</strong>
                     </span>
-                     @endif
+                     @endif --}}
                     <label for="inputEmail">Email address</label>
                   </div>
     
                   <div class="form-label-group">
                     <input type="password" id="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" placeholder="Password" name="password" required>
-                    @if ($errors->has('password'))
+                    {{-- @if ($errors->has('password'))
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $errors->first('password') }}</strong>
                         </span>
-                    @endif
+                    @endif --}}
                     <label for="inputPassword">Password</label>
                   </div>
-    
+                  
                
                   <div class="form-check" style="padding-bottom:10px;">
                         <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
@@ -149,11 +149,11 @@
                         {{ __('Forgot Your Password?') }}
                     </a>
                   @endif
-                </form>
+                  {!! Form::close() !!}
               </div>
             </div>
           </div>
         </div>
       </div>
-
+ 
 @endsection
