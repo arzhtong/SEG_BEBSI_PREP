@@ -33,7 +33,7 @@ class _AppointmentInfoState extends State<AppointmentInfo> {
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.accessibility_new), title: Text('Preparation')),
-          BottomNavigationBarItem(icon: Icon(Icons.done_all), title: Text('Daily Ceckups')),
+          BottomNavigationBarItem(icon: Icon(Icons.done_all), title: Text('Daily Checkups')),
           BottomNavigationBarItem(icon: Icon(Icons.chat), title: Text('Dr. Chat')),
         ],
         currentIndex: _selectedIndex,
