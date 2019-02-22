@@ -4,9 +4,11 @@ import Dashboard from '@/components/Dashboard'
 import NewEmployee from '@/components/staff/NewEmployee'
 import ViewStaff from '@/components/staff/ViewStaff'
 import EditEmployee from '@/components/staff/EditEmployee'
+import ViewAppointment from '@/components/appointment/ViewAppointment'
 import Login from '@/components/auth/Login'
 import Register from '@/components/auth/Register'
 import firebase from 'firebase'
+
 
 Vue.use(Router)
 
@@ -56,6 +58,14 @@ let router = new Router({
       path: '/view-staff',
       name: 'view-staff',
       component: ViewStaff,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/view-appointment',
+      name: 'view-appointment',
+      component: ViewAppointment,
       meta: {
         requiresAuth: true
       }
