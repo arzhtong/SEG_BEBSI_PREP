@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import './appointment.dart';
+import 'package:prep/screens/appointment.screen.dart';
 
 void main() => runApp(
     MaterialApp(

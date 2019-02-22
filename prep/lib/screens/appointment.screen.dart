@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import './appointment_info.dart';
-import './appointment_prep.dart';
-import './daily_checkups.dart';
-import './messaging.dart';
+import 'package:prep/screens/appointment_info.screen.dart';
+import 'package:prep/screens/appointment_prep.screen.dart';
+import 'package:prep/screens/daily_checkups.screen.dart';
+import 'package:prep/screens/messaging.screen.dart';
 
 class Appointment extends StatefulWidget {
   @override
