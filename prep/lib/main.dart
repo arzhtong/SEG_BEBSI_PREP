@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'messaging.dart';
+import 'screens/messaging.screen.dart';
 
 void main() => runApp(
   MaterialApp(
