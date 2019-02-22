@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Dashboard from '@/components/Dashboard'
-import NewEmployee from '@/components/NewEmployee'
-import ViewEmployee from '@/components/ViewEmployee'
-import EditEmployee from '@/components/EditEmployee'
-import Login from '@/components/Login'
-import Register from '@/components/Register'
+import NewEmployee from '@/components/staff/NewEmployee'
+import ViewStaff from '@/components/staff/ViewStaff'
+import EditEmployee from '@/components/staff/EditEmployee'
+import Login from '@/components/auth/Login'
+import Register from '@/components/auth/Register'
 import firebase from 'firebase'
 
 Vue.use(Router)
@@ -53,9 +53,9 @@ let router = new Router({
       }
     },
     {
-      path: '/:employee_id',
-      name: 'view-employee',
-      component: ViewEmployee,
+      path: '/view-staff',
+      name: 'view-staff',
+      component: ViewStaff,
       meta: {
         requiresAuth: true
       }
