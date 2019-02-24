@@ -44,7 +44,7 @@ import db from '../firebaseInit'
         },
         beforeRouteEnter (to, from, next) {
             db.collection('employees').where('employee_id', '==', to.params.employee_id).get()
-            .then(querySnapshot => {
+            .then(querySnapshot => {fetch
                 querySnapshot.forEach(doc => {
                     next(vm => {
                         vm.employee_id = doc.data().employee_id

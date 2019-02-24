@@ -5,6 +5,8 @@ import NewEmployee from '@/components/staff/NewEmployee'
 import ViewStaff from '@/components/staff/ViewStaff'
 import EditEmployee from '@/components/staff/EditEmployee'
 import ViewAppointment from '@/components/appointment/ViewAppointment'
+import ViewTests from '@/components/tests/ViewTests'
+import ViewRecipes from '@/components/tests/ViewRecipes'
 import Login from '@/components/auth/Login'
 import Register from '@/components/auth/Register'
 import firebase from 'firebase'
@@ -69,7 +71,24 @@ let router = new Router({
       meta: {
         requiresAuth: true
       }
+    },
+    {
+      path: '/view-tests',
+      name: 'view-tests',
+      component: ViewTests,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/view-recipes/:test_id',
+      name: 'view-recipes',
+      component: ViewRecipes,
+      meta: {
+        requiresAuth: true
+      }
     }
+
   ]
 })
 

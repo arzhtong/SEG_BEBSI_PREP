@@ -11,7 +11,7 @@
                     <li><router-link to="/" class="router .btn-rout">Dashboard</router-link></li>
                     <li><router-link v-if="isAdmin == 'admin' || isAdmin == 'Admin'" to="/view-appointment" class=".btn-rout menuItem">Appointments</router-link></li>
                     <li><router-link v-if="isAdmin == 'admin' || isAdmin == 'Admin'" to="/view-staff" class=".btn-rout menuItem">Staff</router-link></li>
-                    <li><router-link to="/" class=".btn-rout menuItem">Tests</router-link></li>
+                    <li><router-link to="/view-tests" class=".btn-rout menuItem">Tests</router-link></li>
                 </ul>
           
         </div>
