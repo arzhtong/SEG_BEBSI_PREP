@@ -32,7 +32,7 @@
                                 <p style="margin-right: 100%">  
                                     <i class="material-icons prefix blue-text">assignment_ind</i>     
                             <label>   
-                                <input type="checkbox" class="filled-in" style="margin-top:10px" />
+                                <input id="check" type="checkbox" class="filled-in" style="margin-top:10px" />
                                 <span class="blue-text" style="margin-top:10px">Admin</span>
                             </label>
                             </p>
@@ -59,11 +59,8 @@ export default {
             password: '',
             name: null,
             dept: null,
-            role: null
+            role: 'Staff'
         }
-    },
-    created() {
-    
     },
     methods: {
         register: function(e) {
@@ -72,8 +69,11 @@ export default {
                     .createUserWithEmailAndPassword(this.email, this.password)
                     .then(
                         user => {
+                            if(document.getElementById("check").checked){
+                                this.role = 'Admin'
+                            }
                             db.collection('users').add({
-                                email: this.email,
+                                email: this.email.toLowerCase(),
                                 name: this.name,
                                 dept: this.dept,
                                 role: this.role
