@@ -26,7 +26,7 @@
                     <button class="btn blue" style="position:relative;text-align:center;">edit</button>
                 </router-link>
             </td>
-            <td><button class="btn red" >Delete</button></td>
+            <td><button class="btn red" @click="deleteUser(user.email)">Delete</button></td>
           </tr>
         </tbody>
         <router-link to="/register" class="btn green" style="margin:20px">
@@ -69,7 +69,25 @@
                     this.users.push(data)
                 })
             })
-
+        },
+        methods: {
+            deleteUser(userEmail){
+              if(confirm(`Are you sure you want to delete user ${userEmail}`)){
+               
+                 db.collection("users").where('email','==',userEmail).get().then((querySnapshot) => {
+                        querySnapshot.forEach((doc) => {
+                            doc.ref.delete().then(()=>{
+                                console.log("Document successfully deleted!");
+                                alert(`Successfully deleted user ${userEmail}`)
+                                location.reload();
+                            }).catch(function(error) {
+                                console.error("Error removing document: ", error);
+                                alert(`There was an error: ${error}`)
+                            })
+                        })
+                    })
+              }
+            }
         }
     }
 </script>

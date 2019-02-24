@@ -26,11 +26,18 @@
                                 <input type="text" name="department" id="department" v-model="dept" required>
                                 <label class="blue-text" for="dept">Department</label>
                             </div>
-                            <div class="input-field">
-                                <i class="material-icons prefix">perm_identity</i>
-                                <input type="text" name="role" id="role" v-model="role" required>
-                                <label class="blue-text" for="role">Role</label>
+                            
+                            <div class="input-field"> 
+                                
+                                <p style="margin-right: 100%">  
+                                    <i class="material-icons prefix blue-text">assignment_ind</i>     
+                            <label>   
+                                <input type="checkbox" class="filled-in" style="margin-top:10px" />
+                                <span class="blue-text" style="margin-top:10px">Admin</span>
+                            </label>
+                            </p>
                             </div>
+
                         <button v-on:click="register" type="submit" class="btn btn-large blue lighten-2 black-text">Register</button>
                         </form>
                     </div>
@@ -55,6 +62,9 @@ export default {
             role: null
         }
     },
+    created() {
+    
+    },
     methods: {
         register: function(e) {
             if(this.name != null && this.dept != null && this.role != null){
@@ -70,7 +80,7 @@ export default {
                             })
                             .then(userRef => {
                                 alert(`Registration Successful!`)
-                                this.$router.go({path: this.$router.path})
+                                window.location.href = '/';
                             })
                             .catch(error => console.log(err))
                         },

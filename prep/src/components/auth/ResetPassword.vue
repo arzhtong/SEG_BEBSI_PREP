@@ -4,13 +4,13 @@
       <div class="row">
         <div class="col s12 m8 offset-m2">
           <div class="login card-panel white blue-text center">
-            <h3>ResetPassword</h3>
+            <h3>Reset Password</h3>
             <div class="input-field">
               <i class="material-icons prefix">email</i>
               <input type="text" name="email" id="email">
               <label class="blue-text" for="email">Email</label>
             </div>
-            <router-link to="/login" style="margin-right:100px;">Back to Login</router-link>
+            <router-link to="/login" style="margin-right:50px;">Back to Login</router-link>
             <button
               @click="sendResetEmail"
               class="btn btn-large blue lighten-2 black-text"
