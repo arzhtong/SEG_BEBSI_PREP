@@ -41,7 +41,7 @@ export default {
         .then(function() {
           // Password reset email sent.
           alert(`Password email has been sent to ${email}`);
-          this.$router.push("/");
+          window.location.href = '/';
         })
         .catch(function(error) {
           // Error occurred. Inspect error.code.
