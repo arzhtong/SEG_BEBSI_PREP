@@ -3,7 +3,7 @@
     <div class="container" style="width:100%;height:100%">
       <table
         class="collection with-header responsive-table"
-        style="background: white;margin-top:10%;width:100%;height:auto"
+        style="background: white;width:100%;height:auto"
       >
         <thead class="collection-header">
           <h4 style="padding:20px;font-size:3em;">
@@ -30,9 +30,8 @@
             <td>{{user.dept}}</td>
             <td>
               <router-link
-                v-bind:to="{name: 'edit-employee', params: {email: user.email}}"
-                class="secondary-content left"
-              >
+                v-bind:to="{name: 'edit-staff', params: {email: user.email}}"
+                class="secondary-content left">
                 <button
                   v-if="user.role != 'Admin'"
                   class="btn blue"
