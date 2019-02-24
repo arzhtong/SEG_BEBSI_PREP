@@ -9,8 +9,8 @@
                     <li class="right"><span class="email black-text"><b>Account:</b> {{currentUser}}</span></li>
                     <li class="right"><span class="email black-text" v-for="user in users" v-bind:key="user.role"><b>Role:</b> {{user.role}} </span></li>
                     <li><router-link to="/" class="router .btn-rout">Dashboard</router-link></li>
-                    <li><router-link v-if="isAdmin == 'admin' || isAdmin == 'Admin'" to="/view-appointment" class=".btn-rout menuItem">Appointments</router-link></li>
-                    <li><router-link v-if="isAdmin == 'admin' || isAdmin == 'Admin'" to="/view-staff" class=".btn-rout menuItem">Staff</router-link></li>
+                    <li><router-link to="/view-appointment" class=".btn-rout menuItem">Appointments</router-link></li>
+                    <li><router-link v-if="isAdmin == 'Admin'" to="/view-staff" class=".btn-rout menuItem">Staff</router-link></li>
                     <li><router-link to="/" class=".btn-rout menuItem">Tests</router-link></li>
                 </ul>
           

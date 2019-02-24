@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Dashboard from '@/components/Dashboard'
-import NewEmployee from '@/components/staff/NewEmployee'
 import ViewStaff from '@/components/staff/ViewStaff'
-import EditEmployee from '@/components/staff/EditEmployee'
+import EditStaff from '@/components/staff/EditStaff'
 import ViewAppointment from '@/components/appointment/ViewAppointment'
 import Login from '@/components/auth/Login'
 import Register from '@/components/auth/Register'
@@ -48,17 +47,9 @@ let router = new Router({
       }
     },
     {
-      path: '/new',
-      name: 'new-employee',
-      component: NewEmployee,
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
-      path: '/edit/:employee_id',
-      name: 'edit-employee',
-      component: EditEmployee,
+      path: '/edit-staff/:email',
+      name: 'edit-staff',
+      component: EditStaff,
       meta: {
         requiresAuth: true
       }
