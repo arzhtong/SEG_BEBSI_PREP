@@ -7,6 +7,7 @@ import EditEmployee from '@/components/staff/EditEmployee'
 import ViewAppointment from '@/components/appointment/ViewAppointment'
 import Login from '@/components/auth/Login'
 import Register from '@/components/auth/Register'
+import ResetPassword from '@/components/auth/ResetPassword'
 import firebase from 'firebase'
 
 
@@ -36,6 +37,14 @@ let router = new Router({
       component: Register,
       meta: {
         requiresAuth: true
+      }
+    },
+    {
+      path: '/resetPassword',
+      name: 'resetPassword',
+      component: ResetPassword,
+      meta: {
+        requiresGuest: true
       }
     },
     {
