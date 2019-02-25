@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 
-import './appointment_prep.dart';
-import './daily_checkups.dart';
-import './messaging.dart';
+import 'package:prep/screens/appointment_info.screen.dart';
+import 'package:prep/screens/appointment_prep.screen.dart';
+import 'package:prep/screens/daily_checkups.screen.dart';
+import 'package:prep/screens/messaging.screen.dart';
 
-class AppointmentInfo extends StatefulWidget {
+class Appointment extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _AppointmentInfoState();
+    return _AppointmentState();
   }
 }
 
-class _AppointmentInfoState extends State<AppointmentInfo> {
+class _AppointmentState extends State<Appointment> {
   int _selectedIndex = 0;
 
   final _widgetOptions = [
+    AppointmentInfo(),
     AppointmentPrep(),
     DailyCheckups(),
     Messaging()
@@ -32,8 +34,9 @@ class _AppointmentInfoState extends State<AppointmentInfo> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.update), title: Text('Information')),
           BottomNavigationBarItem(icon: Icon(Icons.accessibility_new), title: Text('Preparation')),
-          BottomNavigationBarItem(icon: Icon(Icons.done_all), title: Text('Daily Checkups')),
+          BottomNavigationBarItem(icon: Icon(Icons.done_all), title: Text('Daily Ceckups')),
           BottomNavigationBarItem(icon: Icon(Icons.chat), title: Text('Dr. Chat')),
         ],
         currentIndex: _selectedIndex,
