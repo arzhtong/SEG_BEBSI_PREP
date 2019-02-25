@@ -3,64 +3,40 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:prep/screens/appointment.screen.dart';
 
-void main() => runApp(
-    MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.indigo,
-      ),
-      home: MyApp(),
-    )
-);
-
-class MyApp extends StatefulWidget {
+class Dashboard extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _MyAppState();
+    return _DashboardState();
   }
 }
 
-///
-/// This solution dynamically loads the data one record at a time
-/// Advantage: Updates automatically
-/// Disadvantage: Does not allow for whole data analysis before displaying it
-///
-class _MyAppState extends State<MyApp> {
+class _DashboardState extends State<Dashboard> {
   List<Widget> calendarElements;
   List<DocumentSnapshot> documentList;
-  String numberOfElements = '0';
+  QuerySnapshot testDocList;
 
-  void _getDocData() async {
+  Future<Widget> _getDocData() async {
     documentList = new List();
     calendarElements = new List();
 
-    Firestore.instance.collection('appointments').orderBy('datetime').getDocuments().then((query) {
-      query.documents.forEach((document) {
-        documentList.add(document);
-        print(document.data['location']);
-      });
-      print("Live documents: " + documentList.length.toString());
+    testDocList = await Firestore.instance.collection('appointments').orderBy('datetime').getDocuments();
+    documentList = testDocList.documents;
 
-      numberOfElements = "Live documents: " + documentList.length.toString();
+    calendarElements.add(_CalendarLabel(documentList.elementAt(0).data['datetime']));
+    calendarElements.add(_CalendarCard(documentList.elementAt(0).data['testID'], documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime']));
 
-      calendarElements.add(_CalendarLabel(documentList.elementAt(0).data['datetime']));
-      calendarElements.add(_CalendarCard(documentList.elementAt(0).data['testID'], documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime']));
-
-      for (int i = 1; i < documentList.length; i++){
-        if (documentList.elementAt(i).data['datetime'] != documentList.elementAt(i - 1).data['datetime']){
-          calendarElements.add(_CalendarLabel(documentList.elementAt(i).data['datetime']));
-          calendarElements.add(_CalendarCard(documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
-        } else {
-          calendarElements.add(_CalendarCard(documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
-        }
+    for (int i = 1; i < documentList.length; i++){
+      if (documentList.elementAt(i).data['datetime'] != documentList.elementAt(i - 1).data['datetime']){
+        calendarElements.add(_CalendarLabel(documentList.elementAt(i).data['datetime']));
+        calendarElements.add(_CalendarCard(documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
+      } else {
+        calendarElements.add(_CalendarCard(documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
       }
-    });
-  }
+    }
 
-  @override
-  void initState() {
-    super.initState();
-    _getDocData();
-    print("--------Mian state initialised--------");
+    return Column(
+      children: calendarElements,
+    );
   }
 
   @override
@@ -73,15 +49,22 @@ class _MyAppState extends State<MyApp> {
       body: ListView(
         padding: EdgeInsets.all(10.0),
         children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: calendarElements,
-          )
+          FutureBuilder(
+              future: _getDocData(),
+              builder: (BuildContext context, AsyncSnapshot<Widget> snapshot){
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return Text('Waiting.');
+                  default:
+                    return snapshot.data;
+                }
+              }
+          ),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+          child: Icon(Icons.add),
           onPressed: () {
 
           }
@@ -98,13 +81,13 @@ class _CalendarLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10.0),
-      child: Text(
-        dateTimeFormater(dateTime),
-        style: TextStyle(
-            fontWeight: FontWeight.bold
-        ),
-      )
+        padding: EdgeInsets.all(10.0),
+        child: Text(
+          dateTimeFormater(dateTime),
+          style: TextStyle(
+              fontWeight: FontWeight.bold
+          ),
+        )
     );
   }
 
