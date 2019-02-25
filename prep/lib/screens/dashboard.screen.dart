@@ -11,13 +11,13 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  List<Widget> calendarElements;
+  Column cachedCalendar;
   List<DocumentSnapshot> documentList;
   QuerySnapshot testDocList;
 
   Future<Widget> _getDocData() async {
     documentList = new List();
-    calendarElements = new List();
+    List<Widget> calendarElements = new List();
 
     testDocList = await Firestore.instance.collection('appointments').orderBy('datetime').getDocuments();
     documentList = testDocList.documents;
@@ -54,8 +54,9 @@ class _DashboardState extends State<Dashboard> {
               builder: (BuildContext context, AsyncSnapshot<Widget> snapshot){
                 switch (snapshot.connectionState) {
                   case ConnectionState.waiting:
-                    return Text('Waiting.');
+                    return (cachedCalendar == null) ? Text('Waiting.') : cachedCalendar;
                   default:
+                    cachedCalendar = snapshot.data;
                     return snapshot.data;
                 }
               }
