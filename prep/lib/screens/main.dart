@@ -26,23 +26,41 @@ class MyApp extends StatefulWidget {
 ///
 class _MyAppState extends State<MyApp> {
   List<Widget> calendarElements;
-  List<DocumentSnapshot> documents;
+  List<DocumentSnapshot> documentList;
+  String numberOfElements = '0';
 
-  //returns appointment ordered by datetime.
-  void _getDocData(){
+  void _getDocData() async {
+    documentList = new List();
+    calendarElements = new List();
+
     Firestore.instance.collection('appointments').orderBy('datetime').getDocuments().then((query) {
       query.documents.forEach((document) {
-        documents.add(document);
+        documentList.add(document);
         print(document.data['location']);
       });
-      print("Live documents: " + documents.length.toString());
+      print("Live documents: " + documentList.length.toString());
+
+      numberOfElements = "Live documents: " + documentList.length.toString();
+
+      calendarElements.add(_CalendarLabel(documentList.elementAt(0).data['datetime']));
+      calendarElements.add(_CalendarCard(documentList.elementAt(0).data['testID'], documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime']));
+
+      for (int i = 1; i < documentList.length; i++){
+        if (documentList.elementAt(i).data['datetime'] != documentList.elementAt(i - 1).data['datetime']){
+          calendarElements.add(_CalendarLabel(documentList.elementAt(i).data['datetime']));
+          calendarElements.add(_CalendarCard(documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
+        } else {
+          calendarElements.add(_CalendarCard(documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
+        }
+      }
     });
   }
 
-  Widget _buildCalendar(BuildContext context, DocumentSnapshot document) {
-    print(document.data.length);  //this is the number of fields in a document
-    print("Build Calendar called " + document.documentID);
-    return _CalendarCard(document.data['testID'], document.data['location'],  document.data['datetime']);
+  @override
+  void initState() {
+    super.initState();
+    _getDocData();
+    print("--------Mian state initialised--------");
   }
 
   @override
@@ -52,16 +70,22 @@ class _MyAppState extends State<MyApp> {
         backgroundColor: Colors.indigo,
         title: Text("Dashboard"),
       ),
-      body: StreamBuilder(
-        stream: Firestore.instance.collection('appointments').snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) return const Text('Loading...');
-          return ListView.builder(
-            itemCount: snapshot.data.documents.length,
-            itemBuilder: (context, index) => _buildCalendar(context, snapshot.data.documents[index]),
-          );
-        },
-      )
+      body: ListView(
+        padding: EdgeInsets.all(10.0),
+        children: <Widget>[
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: calendarElements,
+          )
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+          onPressed: () {
+
+          }
+      ),
     );
   }
 }
@@ -73,12 +97,50 @@ class _CalendarLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-        dateTime.toString(),
+    return Container(
+      padding: EdgeInsets.all(10.0),
+      child: Text(
+        dateTimeFormater(dateTime),
         style: TextStyle(
-          fontWeight: FontWeight.bold
+            fontWeight: FontWeight.bold
         ),
+      )
     );
+  }
+
+  String dateTimeFormater(DateTime datetime){
+    String formatedString = datetime.day.toString();
+
+    switch(datetime.month){
+      case 1: {formatedString = formatedString + " January";}
+      break;
+      case 2: {formatedString = formatedString + " February";}
+      break;
+      case 3: {formatedString = formatedString + " March";}
+      break;
+      case 4: {formatedString = formatedString + " April";}
+      break;
+      case 5: {formatedString = formatedString + " May";}
+      break;
+      case 6: {formatedString = formatedString + " June";}
+      break;
+      case 7: {formatedString = formatedString + " July";}
+      break;
+      case 8: {formatedString = formatedString + " August";}
+      break;
+      case 9: {formatedString = formatedString + " September";}
+      break;
+      case 10: {formatedString = formatedString + " October";}
+      break;
+      case 11: {formatedString = formatedString + " November";}
+      break;
+      case 12: {formatedString = formatedString + " December";}
+      break;
+      default: {formatedString = formatedString + " Error";}
+      break;
+    }
+
+    return formatedString + " " + datetime.year.toString();
   }
 }
 
@@ -92,7 +154,7 @@ class _CalendarCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10.0),
+      //padding: EdgeInsets.all(10.0),
       child:  Card(
         elevation: 3.0,
         child: InkWell(

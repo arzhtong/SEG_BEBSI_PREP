@@ -4,6 +4,7 @@ import 'package:prep/screens/appointment_info.screen.dart';
 import 'package:prep/screens/appointment_prep.screen.dart';
 import 'package:prep/screens/daily_checkups.screen.dart';
 import 'package:prep/screens/messaging.screen.dart';
+import './main.dart';
 
 class Appointment extends StatefulWidget {
   @override

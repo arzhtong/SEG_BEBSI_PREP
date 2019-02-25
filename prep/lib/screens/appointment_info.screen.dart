@@ -22,32 +22,48 @@ class _AppointmentInfoState extends State<AppointmentInfo> {
   List<DocumentSnapshot> documentList;
   String numberOfElements = '0';
 
+  QuerySnapshot testDocList;
+
+  // The combination of 'async' and 'wait' makes this function execute
+  //synchronously with the rest of the application so it doesn't freeze and
+  //wait for the execution of the Firestore query. The widgets below are updated
+  //because set state is called after await, so after the query has returned.
   void _getDocData() async {
     documentList = new List();
     calendarElements = new List();
 
-    Firestore.instance.collection('appointments').orderBy('datetime').getDocuments().then((query) {
+    // await makes execution wait for the statement being executed to finish.
+    //set state only runs after the calendar has finished building.
+    //'then' waits for the operation before it.
+    //That being getting the collection and ordering the documents.
+    await Firestore.instance.collection('appointments').orderBy('datetime').getDocuments().then((query) {
       query.documents.forEach((document) {
         documentList.add(document);
         print(document.data['location']);
       });
       print("Live documents: " + documentList.length.toString());
+    });
 
-      setState(() {
-        numberOfElements = "Live documents: " + documentList.length.toString();
+    // the command after await returns a Future<QuerySnapshot>. await is making
+    //the assignment operator wait for the Future to stop being void and
+    //become an actual QuerySnapshot object. It holds a list of documents.
+    testDocList = await Firestore.instance.collection('appointments').orderBy('datetime').getDocuments();
+    print("Number of documents in the snapshot: " + testDocList.documents.length.toString());
 
-        calendarElements.add(_CalendarLabel(documentList.elementAt(0).data['datetime']));
-        calendarElements.add(_CalendarCard(documentList.elementAt(0).data['testID'], documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime']));
-
-        for (int i = 1; i < documentList.length; i++){
-          if (documentList.elementAt(i).data['datetime'] != documentList.elementAt(i - 1).data['datetime']){
-            calendarElements.add(_CalendarLabel(documentList.elementAt(i).data['datetime']));
-            calendarElements.add(_CalendarCard(documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
-          } else {
-            calendarElements.add(_CalendarCard(documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
-          }
+    // This is here to make sure the calendar is updated once the Firestore
+    //query returns.
+    setState(() {
+      numberOfElements = "Live documents: " + documentList.length.toString();
+      calendarElements.add(_CalendarLabel(documentList.elementAt(0).data['datetime']));
+      calendarElements.add(_CalendarCard(documentList.elementAt(0).data['testID'], documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime']));
+      for (int i = 1; i < documentList.length; i++){
+        if (documentList.elementAt(i).data['datetime'] != documentList.elementAt(i - 1).data['datetime']){
+          calendarElements.add(_CalendarLabel(documentList.elementAt(i).data['datetime']));
+          calendarElements.add(_CalendarCard(documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
+        } else {
+          calendarElements.add(_CalendarCard(documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
         }
-      });
+      }
     });
   }
 
@@ -55,6 +71,7 @@ class _AppointmentInfoState extends State<AppointmentInfo> {
   void initState() {
     super.initState();
     _getDocData();
+    print("Widget appointmnet info screen init state");
   }
 
   @override
