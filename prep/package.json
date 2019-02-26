@@ -13,6 +13,7 @@
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.0-rc.13",
     "firebase": "^5.8.3",
+    "firebase-firestore-timestamp": "^1.0.4",
     "vue": "^2.6.7",
     "vue-router": "^3.0.1"
   },
