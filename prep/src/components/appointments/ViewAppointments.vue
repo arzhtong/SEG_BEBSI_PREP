@@ -139,7 +139,7 @@ export default {
 
 <style>
 td, th{
-  padding: 20px !important;
+  padding: 5px !important;
 }
 
 </style>
