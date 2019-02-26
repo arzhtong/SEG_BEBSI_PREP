@@ -33,7 +33,7 @@
         <div class="row">
           <div class="input-field col s12">
             <span>Choose Test</span>
-            <select class="browser-default" style="color:black" >
+            <select class="browser-default" style="color:black" v-model="testID">
               <option v-for="test in tests" v-bind:key="test.testID" :value="test">{{test.title}}</option>
             </select>
             
@@ -119,7 +119,7 @@ export default {
           time: this.time,
           location: this.location,
           staffMember: this.staffMember,
-          testID: this.testID
+          testID: this.testID.testID
         })
         .then(docRef => {
           alert("Successfully created new appointment!");
