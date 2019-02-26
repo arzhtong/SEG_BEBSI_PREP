@@ -3,7 +3,8 @@ import Router from 'vue-router'
 import Dashboard from '@/components/Dashboard'
 import ViewStaff from '@/components/staff/ViewStaff'
 import EditStaff from '@/components/staff/EditStaff'
-import ViewAppointment from '@/components/appointment/ViewAppointment'
+import ViewAppointments from '@/components/appointments/ViewAppointments'
+import AddAppointment from '@/components/appointments/AddAppointment'
 import Login from '@/components/auth/Login'
 import Register from '@/components/auth/Register'
 import ResetPassword from '@/components/auth/ResetPassword'
@@ -63,9 +64,17 @@ let router = new Router({
       }
     },
     {
-      path: '/view-appointment',
-      name: 'view-appointment',
-      component: ViewAppointment,
+      path: '/view-appointments',
+      name: 'view-appointments',
+      component: ViewAppointments,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/add-appointment',
+      name: 'add-appointment',
+      component: AddAppointment,
       meta: {
         requiresAuth: true
       }
