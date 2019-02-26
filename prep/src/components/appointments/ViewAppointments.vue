@@ -3,7 +3,7 @@
     <div class="container" style="width:100%;height:100%;">
       <table
         class="collection with-header responsive-table"
-        style="background: white;width:100%;height:auto;left:-5%"
+        style="background: white;"
       >
         <thead class="collection-header">
           <h4 style="padding:20px;font-size:3em;">
