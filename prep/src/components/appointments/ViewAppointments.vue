@@ -16,10 +16,10 @@
           </tr>
         </thead>
 
-        <tbody v-for="appointment in appointments" v-bind:key="appointment.code" class="collection-item" >
+        <tbody v-for="appointment in appointments" v-bind:key="appointment.datetime" class="collection-item" >
           <tr>
-            <td style="padding: 20px;">{{appointment.code}}</td>
-            <td>{{appointment.datetime.toDate()}}</td>
+            <td style="padding: 20px;"></td>
+            <td>{{appointment.datetime}}</td>
             <td>{{appointment.location}}</td>
             <td>{{appointment.staffMember}}</td>
             <td>{{appointment.test}}</td>
@@ -30,7 +30,7 @@
           </tr>
         </tbody>
 
-        <router-link to="/" class="btn green" style="margin:20px">
+        <router-link to="/add-appointment" class="btn green" style="margin:20px">
             Add Appointment
         </router-link>
       </table>
@@ -44,7 +44,7 @@
     import firebase from 'firebase'
 
     export default{
-        name: 'view-appointment',
+        name: 'view-appointments',
         data() {
             return {
                 appointments: [],
