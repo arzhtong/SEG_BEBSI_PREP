@@ -35,6 +35,7 @@ class _DashboardState extends State<Dashboard> {
     }
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: calendarElements,
     );
   }
@@ -47,7 +48,7 @@ class _DashboardState extends State<Dashboard> {
         title: Text("Dashboard"),
       ),
       body: ListView(
-        padding: EdgeInsets.all(10.0),
+        padding: EdgeInsets.only(top: 20.0, bottom: 10.0, left: 10.0, right: 10.0),
         children: <Widget>[
           FutureBuilder(
               future: _getDocData(),
@@ -65,10 +66,18 @@ class _DashboardState extends State<Dashboard> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-
-          }
+        child: Icon(Icons.add),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+              title: new Text("Enter appointment code"),
+              content: SingleChildScrollView(
+                child: MyCustomForm(),
+              ),
+            )
+          );
+        }
       ),
     );
   }
@@ -82,7 +91,7 @@ class _CalendarLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(10.0),
+        padding: EdgeInsets.only(left: 10.0),
         child: Text(
           dateTimeFormater(dateTime),
           style: TextStyle(
@@ -93,38 +102,38 @@ class _CalendarLabel extends StatelessWidget {
   }
 
   String dateTimeFormater(DateTime datetime){
-    String formatedString = datetime.day.toString();
+    String formattedString = datetime.day.toString();
 
     switch(datetime.month){
-      case 1: {formatedString = formatedString + " January";}
+      case 1: {formattedString = formattedString + " January";}
       break;
-      case 2: {formatedString = formatedString + " February";}
+      case 2: {formattedString = formattedString + " February";}
       break;
-      case 3: {formatedString = formatedString + " March";}
+      case 3: {formattedString = formattedString + " March";}
       break;
-      case 4: {formatedString = formatedString + " April";}
+      case 4: {formattedString = formattedString + " April";}
       break;
-      case 5: {formatedString = formatedString + " May";}
+      case 5: {formattedString = formattedString + " May";}
       break;
-      case 6: {formatedString = formatedString + " June";}
+      case 6: {formattedString = formattedString + " June";}
       break;
-      case 7: {formatedString = formatedString + " July";}
+      case 7: {formattedString = formattedString + " July";}
       break;
-      case 8: {formatedString = formatedString + " August";}
+      case 8: {formattedString = formattedString + " August";}
       break;
-      case 9: {formatedString = formatedString + " September";}
+      case 9: {formattedString = formattedString + " September";}
       break;
-      case 10: {formatedString = formatedString + " October";}
+      case 10: {formattedString = formattedString + " October";}
       break;
-      case 11: {formatedString = formatedString + " November";}
+      case 11: {formattedString = formattedString + " November";}
       break;
-      case 12: {formatedString = formatedString + " December";}
+      case 12: {formattedString = formattedString + " December";}
       break;
-      default: {formatedString = formatedString + " Error";}
+      default: {formattedString = formattedString + " Error";}
       break;
     }
 
-    return formatedString + " " + datetime.year.toString();
+    return formattedString + " " + datetime.year.toString();
   }
 }
 
@@ -138,7 +147,7 @@ class _CalendarCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      //padding: EdgeInsets.all(10.0),
+      padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
       child:  Card(
         elevation: 3.0,
         child: InkWell(
@@ -176,6 +185,90 @@ class _CalendarCard extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+// Create a Form Widget
+class MyCustomForm extends StatefulWidget {
+  @override
+  MyCustomFormState createState() {
+    return MyCustomFormState();
+  }
+}
+
+class MyCustomFormState extends State<MyCustomForm> {
+  final _formKey = GlobalKey<FormState>();
+  bool validationResult;
+  TextEditingController codeController = new TextEditingController();
+
+  ///TODO split this function into checking if the code already exists in the local JSON and into checking if the code exists in Firebase
+  ///This code can maybe be written in the onpress of the button.
+  ///Think about loading the JSON file into a variable upon startup so I don't have to wait for it
+  Future<bool> _validateAppointmentCode (String code) async {
+    List<String> liveIDs = new List();
+
+    await Firestore.instance.collection('appointments').getDocuments().then((query) {
+        query.documents.forEach((document) {
+          liveIDs.add(document.documentID);
+        });
+    });
+
+    //print("Entered code: " + code);
+
+    if (liveIDs.contains(code)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          TextFormField(
+            controller: codeController,
+            validator: (value) {
+              if (value.isEmpty){
+                return "Please enter a value";
+              } else {
+                if (validationResult){
+                  return null;
+                } else {
+                  return "Invalid code";
+                }
+              }
+            },
+          ),
+          Container(
+            padding: EdgeInsets.only(top: 20.0),
+            child: RaisedButton(
+              onPressed: () async {
+                if (codeController.text.isEmpty){
+                  _formKey.currentState.validate();
+                } else {
+                  bool result = await _validateAppointmentCode(codeController.text);
+
+                  //print("Result: " + result.toString());
+
+                  setState(() {
+                    this.validationResult = result;
+                  });
+
+                  if(_formKey.currentState.validate()){
+                    Navigator.pop(context);
+                  }
+                }
+              },
+              child: Text('SUBMIT'),
+            ),
+          ),
+        ],
       ),
     );
   }
