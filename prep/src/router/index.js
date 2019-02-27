@@ -9,6 +9,7 @@ import Login from '@/components/auth/Login'
 import Register from '@/components/auth/Register'
 import ResetPassword from '@/components/auth/ResetPassword'
 import ViewMessages from '@/components/messages/ViewMessages'
+import Message from '@/components/messages/Message'
 import firebase from 'firebase'
 
 
@@ -84,6 +85,14 @@ let router = new Router({
       path: '/view-messages',
       name: 'view-messages',
       component: ViewMessages,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/message/:appointmentID',
+      name: 'message',
+      component: Message,
       meta: {
         requiresAuth: true
       }

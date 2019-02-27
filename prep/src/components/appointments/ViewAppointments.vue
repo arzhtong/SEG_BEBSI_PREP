@@ -1,10 +1,7 @@
 <template>
   <div id="view-appointment">
     <div class="container" style="width:100%;height:100%;">
-      <table
-        class="collection with-header responsive-table"
-        style="background: white;"
-      >
+      <table class="collection with-header responsive-table" style="background: white;">
         <thead class="collection-header">
           <h4 style="padding:20px;font-size:3em;">
             <b>Appointments</b>
@@ -14,8 +11,6 @@
             <th style="padding: 20px;">Mobile Code</th>
             <th>Datetime</th>
             <th>Location</th>
-            <th>Staff Member</th>
-            <th>Department</th>
             <th>Test</th>
           </tr>
         </thead>
@@ -26,11 +21,9 @@
           class="collection-item"
         >
           <tr>
-            <td style="padding: 20px;">{{appointment.code}}</td>
+            <td style="padding-left: 20px;">{{appointment.code}}</td>
             <td>{{appointment.datetime.toDate()}}</td>
             <td>{{appointment.location}}</td>
-            <td v-for="user in users" v-bind:key="user.name">{{user.name}}</td>
-            <td v-for="user in users" v-bind:key="user.dept">{{user.dept}}</td>
             <td v-for="test in tests" v-bind:key="test.title">{{test.title}}</td>
             <td>
               <button class="btn blue" style="position:relative;text-align:center;">edit</button>
@@ -39,7 +32,7 @@
               <button class="btn red">Delete</button>
             </td>
             <td>
-              <button class="btn Green">Message</button>
+              <router-link v-bind:to="{name: 'message', params: {appointmentID: appointment.code}}" class="btn Green">Message</router-link>
             </td>
           </tr>
         </tbody>
@@ -63,13 +56,10 @@ export default {
       code: null,
       tests: [],
       testID: null,
-      staffID: null,
-      users: [],
       staffMemberID: null
     };
   },
   created() {
-  
     if (firebase.auth().currentUser) {
       db.collection("users")
         .where("email", "==", firebase.auth().currentUser.email)
@@ -80,11 +70,11 @@ export default {
           });
         });
     }
-    this.getApp()
+    this.getApp();
   },
   methods: {
-    getApp(){
-       db.collection("users")
+    getApp() {
+      db.collection("users")
         .where("email", "==", firebase.auth().currentUser.email)
         .get()
         .then(querySnapshot => {
@@ -92,25 +82,22 @@ export default {
             this.staffMemberID = doc.id;
           });
           db.collection("appointments")
-      .where('staffMember', '==', this.staffMemberID)
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(appointment => {
-          const data = {
-            code: appointment.id,
-            datetime: appointment.data().datetime,
-            staffMember: appointment.data().staffMember,
-            location: appointment.data().location
-          };
-          this.testID = appointment.data().testID;
-          this.staffID = appointment.data().staffMember;
-          this.appointments.push(data);
+            .where("staffMember", "==", this.staffMemberID)
+            .get()
+            .then(querySnapshot => {
+              querySnapshot.forEach(appointment => {
+                const data = {
+                  code: appointment.id,
+                  datetime: appointment.data().datetime,
+                  staffMember: appointment.data().staffMember,
+                  location: appointment.data().location
+                };
+                this.testID = appointment.data().testID;
+                this.appointments.push(data);
+              });
+              this.getDoc(this.testID);
+            });
         });
-        this.getDoc(this.testID);
-        this.getStaff(this.staffID);
-      });
-        });
-      
     },
     getDoc() {
       db.collection("tests")
@@ -126,35 +113,14 @@ export default {
             this.tests.push(data);
           });
         });
-    },
-    getStaff() {
-      var docRef = db.collection("users").doc(this.staffID);
-      docRef
-        .get()
-        .then(doc => {
-          if (doc.exists) {
-            docRef.onSnapshot((doc) => {
-              const data = {
-              name: doc.data().name,
-              dept: doc.data().dept
-            };
-            this.users.push(data);
-            });
-          } else {
-            alert('This staff member does not exist!')
-          }
-        })
-        .catch(function(error) {
-          alert(error);
-        });
     }
   }
 };
 </script>
 
 <style>
-td, th{
+td,
+th {
   padding: 5px !important;
 }
-
 </style>
