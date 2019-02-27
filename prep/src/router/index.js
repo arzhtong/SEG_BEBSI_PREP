@@ -5,6 +5,7 @@ import ViewStaff from '@/components/staff/ViewStaff'
 import EditStaff from '@/components/staff/EditStaff'
 import ViewAppointments from '@/components/appointments/ViewAppointments'
 import AddAppointment from '@/components/appointments/AddAppointment'
+import EditAppointment from '@/components/appointments/EditAppointment'
 import Login from '@/components/auth/Login'
 import Register from '@/components/auth/Register'
 import ResetPassword from '@/components/auth/ResetPassword'
@@ -76,6 +77,14 @@ let router = new Router({
       path: '/add-appointment',
       name: 'add-appointment',
       component: AddAppointment,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/edit-appointment/:code',
+      name: 'edit-appointment',
+      component: EditAppointment,
       meta: {
         requiresAuth: true
       }

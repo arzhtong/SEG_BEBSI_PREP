@@ -33,13 +33,18 @@
             <td v-for="user in users" v-bind:key="user.dept">{{user.dept}}</td>
             <td v-for="test in tests" v-bind:key="test.title">{{test.title}}</td>
             <td>
-              <button class="btn blue" style="position:relative;text-align:center;">edit</button>
+              <router-link v-bind:to="{name:'edit-appointment',
+              params: {code:appointment.code}}">
+                <button class="btn blue" style="position:relative;text-align:center;">edit</button>
+              </router-link>            
             </td>
             <td>
               <button class="btn red">Delete</button>
             </td>
             <td>
-              <button class="btn Green">Message</button>
+              <router-link to="/new"  >
+                <i class="fa fa-comments"  style='font-size:65px;color:MediumSpringGreen'></I>
+              </router-link>
             </td>
           </tr>
         </tbody>
