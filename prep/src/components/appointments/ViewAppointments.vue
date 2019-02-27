@@ -64,10 +64,12 @@ export default {
       tests: [],
       testID: null,
       staffID: null,
-      users: []
+      users: [],
+      staffMemberID: null
     };
   },
   created() {
+  
     if (firebase.auth().currentUser) {
       db.collection("users")
         .where("email", "==", firebase.auth().currentUser.email)
@@ -78,7 +80,19 @@ export default {
           });
         });
     }
-    db.collection("appointments")
+    this.getApp()
+  },
+  methods: {
+    getApp(){
+       db.collection("users")
+        .where("email", "==", firebase.auth().currentUser.email)
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            this.staffMemberID = doc.id;
+          });
+          db.collection("appointments")
+      .where('staffMember', '==', this.staffMemberID)
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(appointment => {
@@ -95,8 +109,9 @@ export default {
         this.getDoc(this.testID);
         this.getStaff(this.staffID);
       });
-  },
-  methods: {
+        });
+      
+    },
     getDoc() {
       db.collection("tests")
         .where("testID", "==", this.testID)
