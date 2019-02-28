@@ -6,13 +6,22 @@
         <div class="row">
           <div class="input-field col s12">
             <p>Mobile Code:</p>
-            <input type="text" v-model="code" disabled required>
+            <input type="text"  v-model="code" disabled required>
           </div>
         </div>
 
         <div class="row">
           <div class="input-field col s12">
-            <input type="date"  v-model="datetime" disabled required>
+            <p>Date:</p>
+            <input type="date" class="datepicker" v-model="date" required>
+            
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s12">
+            <p>Time:</p>
+            <input type="time" class="timepicker" v-model="time" required>
            
           </div>
         </div>
@@ -58,9 +67,10 @@ export default {
     name: 'edit-appointment',
     data(){
         return{
+           date: "",
+           time: "",
            code:null,
            location:null,
-           datetime:null,
            testID:null,
            staffMember:null,
            tests:[],
@@ -99,7 +109,8 @@ export default {
         querySnapshot.forEach(doc => {
           
           next(vm => {      
-            vm.datetime=doc.data().datetime
+            vm.date=doc.data().datetime.toDate().toISOString().split('T')[0]
+            vm.time=doc.data().datetime.toDate().toTimeString().split(' ')[0]
             vm.location = doc.data().location
             vm.testID=doc.data().testID
             vm.staffMember=doc.data().staffMember
@@ -118,7 +129,7 @@ export default {
         .then(querySnapshot => {
           querySnapshot.forEach(doc => {
             this.location = doc.data().location
-            this.datetime=doc.data().datetime
+            this.datetime=doc.data().datetime.toDate()
             this.testID=doc.data().testID
             this.staffMember=doc.data().staffMember
             this.code = doc.id
@@ -132,7 +143,6 @@ export default {
             doc.ref
               .update({
                 location: this.location,
-                datetime: this.datetime,
                 testID:this.testID.testID,
                 code: this.code,
                 staffMember:this.staffMember.Ucode
@@ -141,6 +151,7 @@ export default {
                 alert('Appointments info updated!')
                 this.$router.push("/view-appointment")
               })
+              .catch(error => console.log(err));
           })
         })
     }
