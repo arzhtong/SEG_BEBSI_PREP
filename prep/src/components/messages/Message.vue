@@ -2,30 +2,34 @@
   <div>
     <div>
       <h2>Chat Messages</h2>
-
-      <ul>
-        <li v-for="message in messages" v-bind:key="message.datetime">
-          <div class="container" style="max-width:100%;">
-            <p>{{message.content}}</p>
-            <span class="time-right">{{message.datetime}}</span>
-          </div>
-        </li>
-      </ul>
-      <ul>
-        <li v-for="message in messagesPatient" v-bind:key="message.datetime">
-          <div class="container darker" style="max-width:100%">
-            <p>{{message.content}}</p>
-            <span class="time-left">{{message.datetime}}</span>
-          </div>
-        </li>
-      </ul>
+      <div>
+        <ul>
+          <li v-for="message in messages" v-bind:key="message.datetime">
+            <div v-if="message.isPatient == false" class="container" style="max-width:100%;">
+              <p>{{message.content}}</p>
+              <span class="time-left">{{message.datetime}}</span>
+              <i class="material-icons right">accessibility_new</i>
+            </div>
+            <div v-if="message.isPatient == true" class="container darker" style="max-width:100%">
+              <p>{{message.content}}</p>
+              <span class="time-left">{{message.datetime}}</span>
+              <label class="right">Patient</label>
+            </div>
+          </li>
+        </ul>
+      </div>
 
       <div class="row">
-        <div>
-          <button class="btn" type="submit">Submit</button>
-        </div>
         <div class="input-field col s12">
-          <input type="text" required>
+          <textarea style="width:30%;height:80px;resize: none;" data-length="120" id="textArea" @click="listenForEnterKey"></textarea>
+          <button
+            id="sendMessage"
+            @click="sendMessage"
+            class="btn btn-large"
+            style="margin: 0 0 5% 10px"
+          >
+            <i class="material-icons left">send</i>
+          </button>
         </div>
       </div>
     </div>
@@ -42,67 +46,64 @@ export default {
       email: null,
       name: null,
       dept: null,
-      role: null,
       messages: [],
       messagesPatient: [],
-      currentUser: null
+      currentUser: null,
+      isStaff: null
     };
   },
   created() {
     this.currentUser = firebase.auth().currentUser.email;
-    // db.collection("users")
-    //   .where("email", "<", "\uf8ff")
-    //   .get()
-    //   .then(querySnapshot => {
-    //     querySnapshot.forEach(user => {
-    //       const data = {
-    //         email: user.data().email,
-    //         name: user.data().name,
-    //         dept: user.data().dept,
-    //         role: user.data().role
-    //       };
-    //       this.users.push(data);
-    //     });
-    //   });
-    this.fetchDataStaff();
-    this.fetchDataPatient();
+    this.fetchData();
   },
   methods: {
-    fetchDataStaff() {
+    listenForEnterKey() {
+      var input = document.getElementById("textArea");
+      input.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+          event.preventDefault();
+          document.getElementById("sendMessage").click();
+        }
+      });
+    },
+    fetchData() {
       db.collection("appointments")
         .doc(this.$route.params.appointmentID)
         .collection("messages")
-        .where("isPatient", "==", false)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
+        .orderBy("datetime", "asc")
+        .onSnapshot(snapshot => {
+          snapshot.docChanges().forEach(change => {
             const data = {
-              content: doc.data().content,
-              datetime: doc.data().datetime.toDate()
+              content: change.doc.data().content,
+              datetime: change.doc.data().datetime.toDate(),
+              isPatient: change.doc.data().isPatient
             };
             this.messages.push(data);
           });
         });
     },
-    fetchDataPatient() {
+    sendMessage() {
+      var message = document.getElementById("textArea").value;
       db.collection("appointments")
         .doc(this.$route.params.appointmentID)
         .collection("messages")
-        .where("isPatient", "==", true)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            const data = {
-              content: doc.data().content,
-              datetime: doc.data().datetime.toDate()
-            };
-            this.messagesPatient.push(data);
-          });
+        .add({
+          content: message,
+          datetime: firebase.firestore.Timestamp.fromDate(new Date(Date.now())),
+          isPatient: false
+        })
+        .then(function() {
+          document.getElementById("textArea").value = "";
+          console.log("Document successfully written!");
+        })
+        .catch(function(error) {
+          console.error("Error writing document: ", error);
         });
     }
   }
 };
 </script>
+
 <style>
 .container {
   border: 2px solid #dedede;
