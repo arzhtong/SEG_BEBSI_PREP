@@ -32,19 +32,18 @@
             <td v-for="user in users" v-bind:key="user.name">{{user.name}}</td>
             <td v-for="user in users" v-bind:key="user.dept">{{user.dept}}</td>
             <td v-for="test in tests" v-bind:key="test.title">{{test.title}}</td>
+
             <td>
-              <router-link v-bind:to="{name:'edit-appointment',
-              params: {code:appointment.code}}">
-                <button class="btn blue" style="position:relative;text-align:center;">edit</button>
-              </router-link>            
+              <router-link v-bind:to="{name: 'edit-appointment', params: {id:appointment.location}}">
+             <button class="btn blue" style="position:relative;text-align:center;">edit</button>
+            </router-link>         
+
             </td>
             <td>
-              <button class="btn red">Delete</button>
+              <button class="btn red" @click="deleteAppointment(appointment.location)">Delete</button>
             </td>
             <td>
-              <router-link to="/new"  >
-                <i class="fa fa-comments"  style='font-size:65px;color:MediumSpringGreen'></I>
-              </router-link>
+              <button class="btn Green">Message</button>
             </td>
           </tr>
         </tbody>
@@ -137,6 +136,28 @@ export default {
         .catch(function(error) {
           alert(error);
         });
+    },
+    deleteAppointment(appointmentLocation) {
+      if (confirm(`Are you sure you want to delete appointment which located in ${appointmentLocation}`)) {
+        db.collection("appointments")
+          .where("location", "==", appointmentLocation)
+          .get()
+          .then(querySnapshot => {
+            querySnapshot.forEach(doc => {
+              doc.ref
+                .delete()
+                .then(() => {
+                  console.log("Document successfully deleted!")
+                  alert(`Successfully deleted Appointment which located in ${appointmentLocation}`)
+                  location.reload();
+                })
+                .catch(function(error) {
+                  console.error("Error removing document: ", error)
+                  alert(`There was an error: ${error}`)
+                })
+            })
+          })
+      }
     }
   }
 };

@@ -82,7 +82,7 @@ let router = new Router({
       }
     },
     {
-      path: '/edit-appointment/:code',
+      path: '/edit-appointment/:id',
       name: 'edit-appointment',
       component: EditAppointment,
       meta: {
