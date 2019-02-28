@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:prep/screens/appointment.screen.dart';
+
+//TODO: Refactor this file. There is too many classes in one place.
 
 class Dashboard extends StatefulWidget {
   @override
@@ -14,6 +18,12 @@ class _DashboardState extends State<Dashboard> {
   Column cachedCalendar;
   List<DocumentSnapshot> documentList;
   QuerySnapshot testDocList;
+  String codeFileState;
+  Storage storage = new Storage();
+
+  bool documentInCodeFile(DocumentSnapshot doc) {
+    return codeFileState.split(',').contains(doc.documentID);
+  }
 
   Future<Widget> _getDocData() async {
     documentList = new List();
@@ -22,6 +32,16 @@ class _DashboardState extends State<Dashboard> {
     testDocList = await Firestore.instance.collection('appointments').orderBy('datetime').getDocuments();
     documentList = testDocList.documents;
 
+    List<DocumentSnapshot> filteredDocuments= new List();
+    documentList.forEach((doc){
+      if (documentInCodeFile(doc)) {
+          filteredDocuments.add(doc);
+        }
+    });
+
+    documentList = filteredDocuments;
+
+    //calendar building
     calendarElements.add(_CalendarLabel(documentList.elementAt(0).data['datetime']));
     calendarElements.add(_CalendarCard(documentList.elementAt(0).data['testID'], documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime']));
 
@@ -41,6 +61,17 @@ class _DashboardState extends State<Dashboard> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    storage.readData().then((String value){
+      setState(() {
+        codeFileState = value;
+        print("FILE : " + value);
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -48,7 +79,7 @@ class _DashboardState extends State<Dashboard> {
         title: Text("Dashboard"),
       ),
       body: ListView(
-        padding: EdgeInsets.only(top: 20.0, bottom: 10.0, left: 10.0, right: 10.0),
+        padding: EdgeInsets.only(top: 20.0, bottom: 80.0, left: 10.0, right: 10.0),
         children: <Widget>[
           FutureBuilder(
               future: _getDocData(),
@@ -190,8 +221,9 @@ class _CalendarCard extends StatelessWidget {
   }
 }
 
-// Create a Form Widget
 class MyCustomForm extends StatefulWidget {
+  final Storage storage = new Storage();
+
   @override
   MyCustomFormState createState() {
     return MyCustomFormState();
@@ -200,13 +232,35 @@ class MyCustomForm extends StatefulWidget {
 
 class MyCustomFormState extends State<MyCustomForm> {
   final _formKey = GlobalKey<FormState>();
-  bool validationResult;
+  bool validationResultDb;
+  bool validationResultFile;
   TextEditingController codeController = new TextEditingController();
+  String fileState;
 
-  ///TODO split this function into checking if the code already exists in the local JSON and into checking if the code exists in Firebase
-  ///This code can maybe be written in the onpress of the button.
-  ///Think about loading the JSON file into a variable upon startup so I don't have to wait for it
-  Future<bool> _validateAppointmentCode (String code) async {
+  Future<File> writeData() async {
+    setState(() {
+      fileState = fileState + codeController.text + ',';
+      codeController.text = '';
+    });
+    return widget.storage.writeData(fileState);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    widget.storage.readData().then((String value){
+      setState(() {
+        fileState = value;
+        print("STATE VALUE: " + value);
+      });
+    });
+  }
+
+  bool _isCodeInLocalFile () {
+    return fileState.split(",").contains(codeController.text);
+  }
+
+  Future<bool> _isCodeInFirestore (String code) async {
     List<String> liveIDs = new List();
 
     await Firestore.instance.collection('appointments').getDocuments().then((query) {
@@ -214,8 +268,6 @@ class MyCustomFormState extends State<MyCustomForm> {
           liveIDs.add(document.documentID);
         });
     });
-
-    //print("Entered code: " + code);
 
     if (liveIDs.contains(code)) {
       return true;
@@ -235,12 +287,16 @@ class MyCustomFormState extends State<MyCustomForm> {
             controller: codeController,
             validator: (value) {
               if (value.isEmpty){
-                return "Please enter a value";
+                return "Please enter a code";
               } else {
-                if (validationResult){
-                  return null;
+                if (validationResultFile) {
+                  return "This appointment has already been added to your calendar";
                 } else {
-                  return "Invalid code";
+                  if (validationResultDb){
+                    return null;
+                  } else {
+                    return "Invalid code";
+                  }
                 }
               }
             },
@@ -252,15 +308,16 @@ class MyCustomFormState extends State<MyCustomForm> {
                 if (codeController.text.isEmpty){
                   _formKey.currentState.validate();
                 } else {
-                  bool result = await _validateAppointmentCode(codeController.text);
-
-                  //print("Result: " + result.toString());
+                  bool inFile = _isCodeInLocalFile();
+                  bool inDatabase = await _isCodeInFirestore(codeController.text);
 
                   setState(() {
-                    this.validationResult = result;
+                    this.validationResultDb = inDatabase;
+                    this.validationResultFile = inFile;
                   });
 
                   if(_formKey.currentState.validate()){
+                    writeData();
                     Navigator.pop(context);
                   }
                 }
@@ -271,5 +328,32 @@ class MyCustomFormState extends State<MyCustomForm> {
         ],
       ),
     );
+  }
+}
+
+class Storage {
+  Future<String> get localPath async {
+    final dir = await getApplicationDocumentsDirectory();
+    return dir.path;
+  }
+
+  Future<File> get localFile async {
+    final path = await localPath;
+    return File('$path/prepApCode.txt');
+  }
+
+  Future<String> readData() async {
+    try {
+      final file = await localFile;
+      String body = await file.readAsString();
+      return body;
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+  Future<File> writeData(String data) async {
+    final file = await localFile;
+    return file.writeAsString("$data");
   }
 }
