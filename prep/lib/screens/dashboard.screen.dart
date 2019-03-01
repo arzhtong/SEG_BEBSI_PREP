@@ -15,68 +15,128 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  /// Firestore variables
   Column cachedCalendar;
   List<DocumentSnapshot> documentList;
   QuerySnapshot testDocList;
-  String codeFileState;
+  /// Codes file variables
   Storage storage = new Storage();
+  String codeFileState;
+  /// Form validation variables
+  TextEditingController codeController = new TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  bool validationResultDb;
+  bool validationResultFile;
 
-  bool documentInCodeFile(DocumentSnapshot doc) {
-    return codeFileState.split(',').contains(doc.documentID);
+  /// Checks if an appointment ID exists in the codes file
+  bool _documentInCodeFile(String value) {
+    return codeFileState.split(',').contains(value);
   }
 
-  Future<Widget> _getDocData() async {
-    documentList = new List();
-    List<Widget> calendarElements = new List();
-
-    testDocList = await Firestore.instance.collection('appointments').orderBy('datetime').getDocuments();
-    documentList = testDocList.documents;
-
-    List<DocumentSnapshot> filteredDocuments= new List();
-    documentList.forEach((doc){
-      if (documentInCodeFile(doc)) {
-          filteredDocuments.add(doc);
-        }
+  /// Writes data to the codes file
+  Future<File> writeData() async {
+    //must apply set state to make sure the calendar is redrawn
+    setState(() {
+      codeFileState = codeFileState + codeController.text + ',';
+      codeController.text = '';
     });
-
-    documentList = filteredDocuments;
-
-    //calendar building
-    calendarElements.add(_CalendarLabel(documentList.elementAt(0).data['datetime']));
-    calendarElements.add(_CalendarCard(documentList.elementAt(0).data['testID'], documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime']));
-
-    for (int i = 1; i < documentList.length; i++){
-      if (documentList.elementAt(i).data['datetime'] != documentList.elementAt(i - 1).data['datetime']){
-        calendarElements.add(_CalendarLabel(documentList.elementAt(i).data['datetime']));
-        calendarElements.add(_CalendarCard(documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
-      } else {
-        calendarElements.add(_CalendarCard(documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
-      }
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: calendarElements,
-    );
+    return storage.writeData(codeFileState);
   }
 
-  @override
-  void initState() {
-    super.initState();
-    storage.readData().then((String value){
-      setState(() {
-        codeFileState = value;
-        print("FILE : " + value);
+  /// Writes data to the codes file
+  Future<File> clearData() async {
+    //must apply set state to make sure the calendar is redrawn
+    setState(() {
+      codeFileState = "";
+      codeController.text = '';
+    });
+    return storage.writeData("");
+  }
+
+  /// Checks if a code exists in the Firestore
+  Future<bool> _isCodeInFirestore (String code) async {
+    List<String> liveIDs = new List();
+
+    await Firestore.instance.collection('appointments').getDocuments().then((query) {
+      query.documents.forEach((document) {
+        liveIDs.add(document.documentID);
       });
     });
+
+    if (liveIDs.contains(code)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
+  /// Retrieves data from the Firestore and builds the calendar
+  Future<Widget> _getDocData() async {
+    await storage.readData().then((String value){
+      //setState(() {
+        codeFileState = value;
+        print("FILE : " + value);
+      //});
+    });
+
+    print("GET DOC DATA RUNNING");
+    if (codeFileState == null || codeFileState.isEmpty){
+      return Column(
+        children: <Widget>[
+          Text("Add some appointments")
+        ],
+      );
+    } else {
+      documentList = new List();
+      List<Widget> calendarElements = new List();
+
+      testDocList = await Firestore.instance.collection('appointments').orderBy('datetime').getDocuments();
+      documentList = testDocList.documents;
+
+      //Generates a list of filtered appointments
+      List<DocumentSnapshot> filteredDocuments= new List();
+      documentList.forEach((doc){
+        if (_documentInCodeFile(doc.documentID)) {
+          filteredDocuments.add(doc);
+        }
+      });
+      documentList = filteredDocuments;
+
+      //calendar building
+      calendarElements.add(_CalendarLabel(documentList.elementAt(0).data['datetime']));
+      calendarElements.add(_CalendarCard(documentList.elementAt(0).data['testID'], documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime']));
+
+      for (int i = 1; i < documentList.length; i++){
+        if (documentList.elementAt(i).data['datetime'] != documentList.elementAt(i - 1).data['datetime']){
+          calendarElements.add(_CalendarLabel(documentList.elementAt(i).data['datetime']));
+          calendarElements.add(_CalendarCard(documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
+        } else {
+          calendarElements.add(_CalendarCard(documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
+        }
+      }
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: calendarElements,
+      );
+    }
+  }
+
+  /// Regular build method
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.indigo,
         title: Text("Dashboard"),
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.delete_sweep),
+              onPressed: (){
+                clearData();
+              }
+          )
+        ],
       ),
       body: ListView(
         padding: EdgeInsets.only(top: 20.0, bottom: 80.0, left: 10.0, right: 10.0),
@@ -99,12 +159,63 @@ class _DashboardState extends State<Dashboard> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
+          print(codeFileState);
           showDialog(
             context: context,
             builder: (_) => AlertDialog(
               title: new Text("Enter appointment code"),
               content: SingleChildScrollView(
-                child: MyCustomForm(),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      TextFormField(
+                        controller: codeController,
+                        validator: (value) {
+                          if (value.isEmpty){
+                            return "Please enter a code";
+                          } else {
+                            if (validationResultFile) {
+                              return "This appointment is in your calendar";
+                            } else {
+                              if (validationResultDb){
+                                return null;
+                              } else {
+                                return "Invalid code";
+                              }
+                            }
+                          }
+                        },
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(top: 20.0),
+                        child: RaisedButton(
+                          onPressed: () async {
+                            if (codeController.text.isEmpty){
+                              _formKey.currentState.validate();
+                            } else {
+                              bool inFile = _documentInCodeFile(codeController.text);
+                              bool inDatabase = await _isCodeInFirestore(codeController.text);
+
+                              //every time this setState runs, _getDocData is executed. It's inefficient.
+                              //setState(() {
+                                this.validationResultDb = inDatabase;
+                                this.validationResultFile = inFile;
+                              //});
+
+                              if(_formKey.currentState.validate()){
+                                writeData();
+                                Navigator.pop(context);
+                              }
+                            }
+                          },
+                          child: Text('SUBMIT'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             )
           );
@@ -221,6 +332,34 @@ class _CalendarCard extends StatelessWidget {
   }
 }
 
+class Storage {
+  Future<String> get localPath async {
+    final dir = await getApplicationDocumentsDirectory();
+    return dir.path;
+  }
+
+  Future<File> get localFile async {
+    final path = await localPath;
+    return File('$path/prepApCode.txt');
+  }
+
+  Future<String> readData() async {
+    try {
+      final file = await localFile;
+      String body = await file.readAsString();
+      return body;
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+  Future<File> writeData(String data) async {
+    final file = await localFile;
+    return file.writeAsString("$data");
+  }
+}
+
+/// Not being used currently
 class MyCustomForm extends StatefulWidget {
   final Storage storage = new Storage();
 
@@ -331,29 +470,3 @@ class MyCustomFormState extends State<MyCustomForm> {
   }
 }
 
-class Storage {
-  Future<String> get localPath async {
-    final dir = await getApplicationDocumentsDirectory();
-    return dir.path;
-  }
-
-  Future<File> get localFile async {
-    final path = await localPath;
-    return File('$path/prepApCode.txt');
-  }
-
-  Future<String> readData() async {
-    try {
-      final file = await localFile;
-      String body = await file.readAsString();
-      return body;
-    } catch (e) {
-      return e.toString();
-    }
-  }
-
-  Future<File> writeData(String data) async {
-    final file = await localFile;
-    return file.writeAsString("$data");
-  }
-}
