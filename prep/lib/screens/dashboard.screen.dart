@@ -21,6 +21,7 @@ class _DashboardState extends State<Dashboard> {
   // Codes file variables
   Storage storage = new Storage();
   String codeFileState;
+  bool fileExists = false;
 
   // Form validation variables
   TextEditingController codeController = new TextEditingController();
@@ -72,6 +73,16 @@ class _DashboardState extends State<Dashboard> {
 
   // Retrieves data from the Firestore and builds the calendar
   Future<Widget> _getDocData() async {
+    // checking if a file already exists, if not, creating one
+    if (!fileExists) {
+      await storage.codeFileExists().then((result) {
+        if (!result){
+            storage.writeData("");
+            fileExists = true;
+          }
+      });
+    }
+
     await storage.readData().then((String value){
       codeFileState = value;
     });
@@ -376,6 +387,16 @@ class Storage {
       return body;
     } catch (e) {
       return e.toString();
+    }
+  }
+
+  Future<bool> codeFileExists() async {
+    try {
+      final file = await localFile;
+      int length = await file.length();
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 
