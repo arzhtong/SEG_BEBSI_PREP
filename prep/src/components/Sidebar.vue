@@ -15,7 +15,7 @@
                 <li><div class="divider"></div></li>
                 <li><router-link to="/" class=".btn-rout menuItem">Dashboard</router-link></li>
                 <li><router-link to="/view-appointments" class=".btn-rout menuItem">Appointments</router-link></li>
-                <li><router-link to="/" class=".btn-rout menuItem">Messages</router-link></li>
+                <li><router-link to="/view-messages" class=".btn-rout menuItem">Messages</router-link></li>
                 <li><router-link v-if="isAdmin == 'Admin'" to="/view-staff" class=".btn-rout menuItem">Staff</router-link></li>
                 <li><router-link to="/" class=".btn-rout menuItem">Tests</router-link></li>
                 <li><router-link to="/add-appointment" class="waves-effect waves-light btn red">Add Appointment</router-link></li>
