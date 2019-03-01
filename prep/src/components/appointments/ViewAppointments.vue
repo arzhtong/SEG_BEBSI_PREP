@@ -80,7 +80,6 @@ export default {
   },
   methods: {
     getApp() {
-      var appId = null;
       db.collection("users")
         .where("email", "==", firebase.auth().currentUser.email)
         .get()
@@ -101,8 +100,7 @@ export default {
                 };
                 this.testID = appointment.data().testID;
                 this.appointments.push(data);
-                appId = appointment.id;
-                this.fetchData(appId);
+                this.fetchData(appointment.id);
               });
               this.getDoc();
             });
