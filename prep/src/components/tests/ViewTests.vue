@@ -16,7 +16,7 @@
               <th>Recipes</th>
           </tr>
         </thead>
-
+ 
         <tbody v-for="test in tests" v-bind:key="test.id" class="collection-item" >
           <tr >
             <td style="padding: 20px;">{{test.title}}</td>

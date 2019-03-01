@@ -12,12 +12,12 @@
               <th style="padding: 20px;">Dish Name</th>
               <th>Description</th>
           </tr>
-        </thead>
+        </thead> 
 
         <tbody v-for="recipe in recipes" v-bind:key="recipe.id" class="collection-item" >
           <tr >
             <td style="padding: 20px;">{{recipe.title}}</td>
-            <td><router-link to="" class="btn blue">Show</router-link></td>
+            <td><router-link v-bind:to="{name: 'view-recipe-info', params: {test_id: testID, recipe_id: recipe.title}}" class="btn blue">Show</router-link></td>
           </tr>
         </tbody>
         <router-link to="/register" class="btn green" style="margin:20px">
@@ -40,7 +40,8 @@
         name: 'view-recipes',
         data() {
             return {
-                recipes: []
+                recipes: [],
+                testID: this.$route.params.test_id
                 
             }
         },

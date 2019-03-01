@@ -7,6 +7,7 @@ import EditEmployee from '@/components/staff/EditEmployee'
 import ViewAppointment from '@/components/appointment/ViewAppointment'
 import ViewTests from '@/components/tests/ViewTests'
 import ViewRecipes from '@/components/tests/ViewRecipes'
+import ViewRecipeInfo from '@/components/tests/ViewRecipeInfo'
 import Login from '@/components/auth/Login'
 import Register from '@/components/auth/Register'
 import firebase from 'firebase'
@@ -16,7 +17,7 @@ Vue.use(Router)
 
 let router = new Router({
   routes: [
-    {
+    { 
       path: '/',
       name: 'dashboard',
       component: Dashboard,
@@ -84,6 +85,14 @@ let router = new Router({
       path: '/view-recipes/:test_id',
       name: 'view-recipes',
       component: ViewRecipes,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/view-recipe-info/:test_id/:recipe_id',
+      name: 'view-recipe-info',
+      component: ViewRecipeInfo,
       meta: {
         requiresAuth: true
       }
