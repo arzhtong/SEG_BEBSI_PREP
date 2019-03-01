@@ -142,7 +142,7 @@ class _DashboardState extends State<Dashboard> {
         builder: (BuildContext context, AsyncSnapshot<Widget> snapshot){
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
-              return (cachedCalendar == null) ? _LoadingCalendar() : cachedCalendar;
+              return (cachedCalendar == null) ? LinearProgressIndicator(): Stack(children: <Widget>[cachedCalendar, LinearProgressIndicator()]);
             default:
               cachedCalendar = snapshot.data;
               return snapshot.data;
@@ -199,7 +199,6 @@ class _DashboardState extends State<Dashboard> {
                               //});
 
                               if(_formKey.currentState.validate()){
-                                //cachedCalendar = _LoadingCalendar();
                                 writeData();
                                 Navigator.pop(context);
                               }
@@ -355,22 +354,6 @@ class _EmptyCalendarPlaceholder extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
       ],
-    );
-  }
-}
-
-class _LoadingCalendar extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        "Loading calendar...",
-        style: TextStyle(
-          fontSize: 40.0,
-          color: Colors.grey,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
     );
   }
 }
