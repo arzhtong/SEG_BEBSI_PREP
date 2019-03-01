@@ -115,8 +115,7 @@ export default {
       db.collection("appointments")
         .doc(this.code)
         .set({
-          date: this.date,
-          time: this.time,
+          datetime: firebase.firestore.Timestamp.fromDate(new Date(Date.parse(this.date + 'T' + this.time + 'Z'))),
           location: this.location,
           staffMember: this.staffMember,
           testID: this.testID.testID
