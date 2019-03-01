@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="containerChat" id="top">
-      <h2>Chat Messages</h2>
+      <h3>Chat with 
+        {{this.$route.params.appointmentID}}</h3>
       <div>
         <ul>
           <li v-for="message in messages" v-bind:key="message.datetime">
@@ -44,6 +45,7 @@
           </div>
         </div>
       </form>
+      <router-link to="/view-appointments" class="btn" style="margin-bottom:10px;">Go Back</router-link>
     </div>
   </div>
 </template>
@@ -104,12 +106,15 @@ export default {
         .orderBy("datetime", "asc")
         .onSnapshot(snapshot => {
           snapshot.docChanges().forEach(change => {
-            const data = {
-              content: change.doc.data().content,
-              datetime: change.doc.data().datetime.toDate(),
-              isPatient: change.doc.data().isPatient
-            };
-            this.messages.push(data);
+            if (change.type === "added") {
+              const data = {
+                content: change.doc.data().content,
+                datetime: change.doc.data().datetime.toDate(),
+                isPatient: change.doc.data().isPatient
+              };
+              this.messages.push(data);
+              console.log("New message sent!");
+            }
           });
         });
     },
@@ -143,8 +148,8 @@ export default {
 
 <style>
 #top {
-  padding-bottom: 0;
-  height: 100%;
+  padding: 20px;
+  height: auto;
 }
 .containerChat {
   border: 2px solid #dedede;
@@ -153,6 +158,7 @@ export default {
   padding: 10px;
   margin: 10px 0;
   width: 100%;
+  
 }
 
 #textArea {

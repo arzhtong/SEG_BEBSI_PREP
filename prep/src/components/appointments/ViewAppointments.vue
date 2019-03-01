@@ -1,9 +1,9 @@
 <template>
-  <div id="view-appointment">
+  <div id="view-appointment" style="width:100%;">
     <div class="container" style="width:100%;height:100%;">
       <table class="collection with-header responsive-table" style="background: white;">
         <thead class="collection-header">
-          <h4 style="padding:20px;font-size:3em;">
+          <h4 style="padding:30px;font-size:3em;">
             <b>Appointments</b>
           </h4>
 
@@ -15,12 +15,8 @@
           </tr>
         </thead>
 
-        <tbody
-          v-for="appointment in appointments"
-          v-bind:key="appointment.datetime"
-          class="collection-item"
-        >
-          <tr>
+        <tbody class="collection-item">
+          <tr v-for="appointment in appointments" v-bind:key="appointment.datetime">
             <td style="padding-left: 20px;">{{appointment.code}}</td>
             <td>{{appointment.datetime.toDate()}}</td>
             <td>{{appointment.location}}</td>
@@ -31,17 +27,21 @@
             <td>
               <button class="btn red">Delete</button>
             </td>
-            <td v-for="[id, count] of notifications" v-bind:key="id">
+            <td>
               <router-link v-bind:to="{name: 'message', params: {appointmentID: appointment.code}}">
                 <i class="material-icons left green-text" style="font-size:40px">insert_comment</i>
-                <div v-if="appointment.code == id">
-                  <span class="new badge">{{count}}</span>
-                </div>
+                <span>
+                  <span v-if="notifications[ids.indexOf(appointment.code)] != 0">
+                    <span
+                      v-if="ids.includes(appointment.code) == true"
+                      class="new badge"
+                    >{{notifications[ids.indexOf(appointment.code)]}}</span>
+                  </span>
+                </span>
               </router-link>
             </td>
           </tr>
         </tbody>
-
         <router-link to="/add-appointment" class="btn green" style="margin:20px">Add Appointment</router-link>
       </table>
     </div>
@@ -58,11 +58,11 @@ export default {
     return {
       appointments: [],
       isAdmin: null,
-      code: null,
       tests: [],
       testID: null,
       staffMemberID: null,
-      notifications: new Map()
+      notifications: [],
+      ids: []
     };
   },
   created() {
@@ -77,10 +77,10 @@ export default {
         });
     }
     this.getApp();
-    this.fetchData("2vqqyqcc7");
   },
   methods: {
     getApp() {
+      var appId = null;
       db.collection("users")
         .where("email", "==", firebase.auth().currentUser.email)
         .get()
@@ -101,6 +101,8 @@ export default {
                 };
                 this.testID = appointment.data().testID;
                 this.appointments.push(data);
+                appId = appointment.id;
+                this.fetchData(appId);
               });
               this.getDoc();
             });
@@ -129,7 +131,15 @@ export default {
         .onSnapshot(snapshot => {
           snapshot.docChanges().forEach(change => {
             if (change.doc.data().isPatient == true) {
-              this.notifications.set(id, snapshot.size);
+              var count = snapshot.size;
+              if (this.ids.indexOf(id) != -1) {
+                var index = this.ids.indexOf(id);
+                this.notifications[index] = count;
+                this.notifications.push();
+              } else {
+                this.notifications.push(count);
+                this.ids.push(id);
+              }
             }
           });
         });
