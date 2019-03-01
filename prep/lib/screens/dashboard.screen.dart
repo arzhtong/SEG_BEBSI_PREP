@@ -5,8 +5,6 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:prep/screens/appointment.screen.dart';
 
-//TODO: Refactor this file. There is too many classes in one place.
-
 class Dashboard extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -15,27 +13,27 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  /// Firestore variables
+  // Firestore variables
   Widget cachedCalendar;
   List<DocumentSnapshot> documentList;
   QuerySnapshot testDocList;
 
-  /// Codes file variables
+  // Codes file variables
   Storage storage = new Storage();
   String codeFileState;
 
-  /// Form validation variables
+  // Form validation variables
   TextEditingController codeController = new TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool validationResultDb;
   bool validationResultFile;
 
-  /// Checks if an appointment ID exists in the codes file
+  // Checks if an appointment ID exists in the codes file
   bool _documentInCodeFile(String value) {
     return codeFileState.split(',').contains(value);
   }
 
-  /// Writes data to the codes file
+  // Writes data to the codes file
   Future<File> writeData() async {
     //must apply set state to make sure the calendar is redrawn
     setState(() {
@@ -45,7 +43,7 @@ class _DashboardState extends State<Dashboard> {
     return storage.writeData(codeFileState);
   }
 
-  /// Writes data to the codes file
+  // Writes data to the codes file
   Future<File> clearData() async {
     //must apply set state to make sure the calendar is redrawn
     setState(() {
@@ -55,7 +53,7 @@ class _DashboardState extends State<Dashboard> {
     return storage.writeData("");
   }
 
-  /// Checks if a code exists in the Firestore
+  // Checks if a code exists in the Firestore
   Future<bool> _isCodeInFirestore (String code) async {
     List<String> liveIDs = new List();
 
@@ -72,13 +70,15 @@ class _DashboardState extends State<Dashboard> {
     }
   }
 
-  /// Retrieves data from the Firestore and builds the calendar
+  // Retrieves data from the Firestore and builds the calendar
   Future<Widget> _getDocData() async {
     await storage.readData().then((String value){
       codeFileState = value;
     });
 
-    if (codeFileState == null || codeFileState.isEmpty){
+    if (codeFileState == null){
+      return null;
+    } else if (codeFileState.isEmpty) {
       return _EmptyCalendarPlaceholder();
     } else {
       documentList = new List();
@@ -121,10 +121,10 @@ class _DashboardState extends State<Dashboard> {
     }
   }
 
-  /// Regular build method
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         backgroundColor: Colors.indigo,
         title: Text("Dashboard"),
@@ -199,6 +199,8 @@ class _DashboardState extends State<Dashboard> {
                               //});
 
                               if(_formKey.currentState.validate()){
+                                //Temporarily display loading message while calendar loads
+                                cachedCalendar = _LoadingCalendar();
                                 writeData();
                                 Navigator.pop(context);
                               }
