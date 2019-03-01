@@ -141,8 +141,11 @@ export default {
 };
 </script>
   <style>
-label,
-span {
+label{
   color: #2196f3 !important;
+}
+
+span {
+  color: #2196f3;
 }
 </style>
