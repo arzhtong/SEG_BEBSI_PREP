@@ -1,10 +1,7 @@
 <template>
   <div id="view-appointment">
-    <div class="container" style="width:100%;height:100%">
-      <table
-        class="collection with-header responsive-table"
-        style="background: white;margin-top:10%;width:100%;height:auto"
-      >
+    <div class="container" style="width:100%;height:100%;">
+      <table class="collection with-header responsive-table" style="background: white;">
         <thead class="collection-header">
           <h4 style="padding:20px;font-size:3em;">
             <b>Appointments</b>
@@ -12,10 +9,8 @@
 
           <tr style="font-size:1.5em">
             <th style="padding: 20px;">Mobile Code</th>
-            <th>Date</th>
-            <th>Time</th>
+            <th>Datetime</th>
             <th>Location</th>
-            <th>Staff Member</th>
             <th>Test</th>
           </tr>
         </thead>
@@ -26,11 +21,9 @@
           class="collection-item"
         >
           <tr>
-            <td style="padding: 20px;">{{appointment.code}}</td>
-            <td>{{appointment.date}}</td>
-            <td>{{appointment.time}}</td>
+            <td style="padding-left: 20px;">{{appointment.code}}</td>
+            <td>{{appointment.datetime.toDate()}}</td>
             <td>{{appointment.location}}</td>
-            <td>{{appointment.staffMember}}</td>
             <td v-for="test in tests" v-bind:key="test.title">{{test.title}}</td>
             <td>
               <button class="btn blue" style="position:relative;text-align:center;">edit</button>
@@ -39,7 +32,7 @@
               <button class="btn red">Delete</button>
             </td>
             <td>
-              <button class="btn Green">Message</button>
+              <router-link v-bind:to="{name: 'message', params: {appointmentID: appointment.code}}" class="btn Green">Message</router-link>
             </td>
           </tr>
         </tbody>
@@ -62,7 +55,8 @@ export default {
       isAdmin: null,
       code: null,
       tests: [],
-      testID: null
+      testID: null,
+      staffMemberID: null
     };
   },
   created() {
@@ -76,26 +70,35 @@ export default {
           });
         });
     }
-    db.collection("appointments")
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(appointment => {
-          const data = {
-            code: appointment.id,
-            date: appointment.data().date,
-            time: appointment.data().time,
-            staffMember: appointment.data().staffMember,
-            location: appointment.data().location
-          };
-          this.testID = appointment.data().testID;
-          this.appointments.push(data);
-        });
-        this.getDoc(this.testID);
-      });
-      
-
+    this.getApp();
   },
   methods: {
+    getApp() {
+      db.collection("users")
+        .where("email", "==", firebase.auth().currentUser.email)
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            this.staffMemberID = doc.id;
+          });
+          db.collection("appointments")
+            .where("staffMember", "==", this.staffMemberID)
+            .get()
+            .then(querySnapshot => {
+              querySnapshot.forEach(appointment => {
+                const data = {
+                  code: appointment.id,
+                  datetime: appointment.data().datetime,
+                  staffMember: appointment.data().staffMember,
+                  location: appointment.data().location
+                };
+                this.testID = appointment.data().testID;
+                this.appointments.push(data);
+              });
+              this.getDoc(this.testID);
+            });
+        });
+    },
     getDoc() {
       db.collection("tests")
         .where("testID", "==", this.testID)
@@ -116,4 +119,8 @@ export default {
 </script>
 
 <style>
+td,
+th {
+  padding: 5px !important;
+}
 </style>

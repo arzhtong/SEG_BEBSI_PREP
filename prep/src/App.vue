@@ -8,6 +8,7 @@
       <div id="central" class="col s12 m12 l10">
         <router-view/>
       </div>
+
     </div>
   </div>
 </template>
