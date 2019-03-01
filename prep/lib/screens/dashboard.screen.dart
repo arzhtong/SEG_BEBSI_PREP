@@ -16,12 +16,14 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   /// Firestore variables
-  Column cachedCalendar;
+  Widget cachedCalendar;
   List<DocumentSnapshot> documentList;
   QuerySnapshot testDocList;
+
   /// Codes file variables
   Storage storage = new Storage();
   String codeFileState;
+
   /// Form validation variables
   TextEditingController codeController = new TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -73,19 +75,11 @@ class _DashboardState extends State<Dashboard> {
   /// Retrieves data from the Firestore and builds the calendar
   Future<Widget> _getDocData() async {
     await storage.readData().then((String value){
-      //setState(() {
-        codeFileState = value;
-        print("FILE : " + value);
-      //});
+      codeFileState = value;
     });
 
-    print("GET DOC DATA RUNNING");
     if (codeFileState == null || codeFileState.isEmpty){
-      return Column(
-        children: <Widget>[
-          Text("Add some appointments")
-        ],
-      );
+      return _EmptyCalendarPlaceholder();
     } else {
       documentList = new List();
       List<Widget> calendarElements = new List();
@@ -115,9 +109,14 @@ class _DashboardState extends State<Dashboard> {
         }
       }
 
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: calendarElements,
+      return ListView(
+        padding: EdgeInsets.only(top: 20.0, bottom: 80.0, left: 10.0, right: 10.0),
+        children: <Widget>[
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: calendarElements,
+          )
+        ],
       );
     }
   }
@@ -138,22 +137,17 @@ class _DashboardState extends State<Dashboard> {
           )
         ],
       ),
-      body: ListView(
-        padding: EdgeInsets.only(top: 20.0, bottom: 80.0, left: 10.0, right: 10.0),
-        children: <Widget>[
-          FutureBuilder(
-              future: _getDocData(),
-              builder: (BuildContext context, AsyncSnapshot<Widget> snapshot){
-                switch (snapshot.connectionState) {
-                  case ConnectionState.waiting:
-                    return (cachedCalendar == null) ? Text('Waiting.') : cachedCalendar;
-                  default:
-                    cachedCalendar = snapshot.data;
-                    return snapshot.data;
-                }
-              }
-          ),
-        ],
+      body: FutureBuilder(
+        future: _getDocData(),
+        builder: (BuildContext context, AsyncSnapshot<Widget> snapshot){
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return (cachedCalendar == null) ? _LoadingCalendar() : cachedCalendar;
+            default:
+              cachedCalendar = snapshot.data;
+              return snapshot.data;
+          }
+        }
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
@@ -332,6 +326,54 @@ class _CalendarCard extends StatelessWidget {
   }
 }
 
+class _EmptyCalendarPlaceholder extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          "Your calendar is empty",
+          style: TextStyle(
+            fontSize: 40.0,
+            color: Colors.grey,
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        Padding(
+          padding: EdgeInsets.all(20.0),
+        ),
+        Text(
+          "Add some appointments",
+          style: TextStyle(
+            fontSize: 30.0,
+            color: Colors.grey,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+}
+
+class _LoadingCalendar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        "Loading calendar...",
+        style: TextStyle(
+          fontSize: 40.0,
+          color: Colors.grey,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+}
+
 class Storage {
   Future<String> get localPath async {
     final dir = await getApplicationDocumentsDirectory();
@@ -358,115 +400,3 @@ class Storage {
     return file.writeAsString("$data");
   }
 }
-
-/// Not being used currently
-class MyCustomForm extends StatefulWidget {
-  final Storage storage = new Storage();
-
-  @override
-  MyCustomFormState createState() {
-    return MyCustomFormState();
-  }
-}
-
-class MyCustomFormState extends State<MyCustomForm> {
-  final _formKey = GlobalKey<FormState>();
-  bool validationResultDb;
-  bool validationResultFile;
-  TextEditingController codeController = new TextEditingController();
-  String fileState;
-
-  Future<File> writeData() async {
-    setState(() {
-      fileState = fileState + codeController.text + ',';
-      codeController.text = '';
-    });
-    return widget.storage.writeData(fileState);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    widget.storage.readData().then((String value){
-      setState(() {
-        fileState = value;
-        print("STATE VALUE: " + value);
-      });
-    });
-  }
-
-  bool _isCodeInLocalFile () {
-    return fileState.split(",").contains(codeController.text);
-  }
-
-  Future<bool> _isCodeInFirestore (String code) async {
-    List<String> liveIDs = new List();
-
-    await Firestore.instance.collection('appointments').getDocuments().then((query) {
-        query.documents.forEach((document) {
-          liveIDs.add(document.documentID);
-        });
-    });
-
-    if (liveIDs.contains(code)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          TextFormField(
-            controller: codeController,
-            validator: (value) {
-              if (value.isEmpty){
-                return "Please enter a code";
-              } else {
-                if (validationResultFile) {
-                  return "This appointment has already been added to your calendar";
-                } else {
-                  if (validationResultDb){
-                    return null;
-                  } else {
-                    return "Invalid code";
-                  }
-                }
-              }
-            },
-          ),
-          Container(
-            padding: EdgeInsets.only(top: 20.0),
-            child: RaisedButton(
-              onPressed: () async {
-                if (codeController.text.isEmpty){
-                  _formKey.currentState.validate();
-                } else {
-                  bool inFile = _isCodeInLocalFile();
-                  bool inDatabase = await _isCodeInFirestore(codeController.text);
-
-                  setState(() {
-                    this.validationResultDb = inDatabase;
-                    this.validationResultFile = inFile;
-                  });
-
-                  if(_formKey.currentState.validate()){
-                    writeData();
-                    Navigator.pop(context);
-                  }
-                }
-              },
-              child: Text('SUBMIT'),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
