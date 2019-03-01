@@ -31,8 +31,13 @@
             <td>
               <button class="btn red">Delete</button>
             </td>
-            <td>
-              <router-link v-bind:to="{name: 'message', params: {appointmentID: appointment.code}}" class="btn Green">Message</router-link>
+            <td v-for="[id, count] of notifications" v-bind:key="id">
+              <router-link v-bind:to="{name: 'message', params: {appointmentID: appointment.code}}">
+                <i class="material-icons left green-text" style="font-size:40px">insert_comment</i>
+                <div v-if="appointment.code == id">
+                  <span class="new badge">{{count}}</span>
+                </div>
+              </router-link>
             </td>
           </tr>
         </tbody>
@@ -56,7 +61,8 @@ export default {
       code: null,
       tests: [],
       testID: null,
-      staffMemberID: null
+      staffMemberID: null,
+      notifications: new Map()
     };
   },
   created() {
@@ -71,6 +77,7 @@ export default {
         });
     }
     this.getApp();
+    this.fetchData("2vqqyqcc7");
   },
   methods: {
     getApp() {
@@ -95,7 +102,7 @@ export default {
                 this.testID = appointment.data().testID;
                 this.appointments.push(data);
               });
-              this.getDoc(this.testID);
+              this.getDoc();
             });
         });
     },
@@ -111,6 +118,19 @@ export default {
               type: test.data().type
             };
             this.tests.push(data);
+          });
+        });
+    },
+    fetchData(id) {
+      db.collection("appointments")
+        .doc(id)
+        .collection("messages")
+        .where("seenByStaff", "==", false)
+        .onSnapshot(snapshot => {
+          snapshot.docChanges().forEach(change => {
+            if (change.doc.data().isPatient == true) {
+              this.notifications.set(id, snapshot.size);
+            }
           });
         });
     }

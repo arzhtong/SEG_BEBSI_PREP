@@ -10,7 +10,11 @@
               <span class="time-left">{{message.datetime}}</span>
               <i class="material-icons right">accessibility_new</i>
             </div>
-            <div v-if="message.isPatient == true" class="containerChat darker" style="max-width:100%">
+            <div
+              v-if="message.isPatient == true"
+              class="containerChat darker"
+              style="max-width:100%"
+            >
               <p>{{message.content}}</p>
               <span class="time-left">{{message.datetime}}</span>
               <label class="right">Patient</label>
@@ -23,7 +27,7 @@
           </li>
         </ul>
       </div>
-       <form @submit.prevent="sendMessage">
+      <form @submit.prevent="sendMessage">
         <div class="row">
           <div class="input-field col s12">
             <div id="foot">
@@ -39,9 +43,8 @@
             </div>
           </div>
         </div>
-        </form>
+      </form>
     </div>
-     
   </div>
 </template>
 <script>
@@ -64,6 +67,7 @@ export default {
   created() {
     this.currentUser = firebase.auth().currentUser.email;
     this.fetchData();
+    this.clearNot();
   },
   methods: {
     // listenForEnterKey() {
@@ -75,6 +79,24 @@ export default {
     //     }
     //   });
     // },
+    clearNot() {
+      db.collection("appointments")
+        .doc(this.$route.params.appointmentID)
+        .collection("messages")
+        .where("seenByStaff", "==", false)
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            doc.ref
+              .update({
+                seenByStaff: true
+              })
+              .then(() => {
+                console.log("Updated notification count");
+              });
+          });
+        });
+    },
     fetchData() {
       db.collection("appointments")
         .doc(this.$route.params.appointmentID)
@@ -92,20 +114,22 @@ export default {
         });
     },
     sendMessage() {
-      var checkMessage = document.getElementById("textArea").value.trim()
-      if(checkMessage.length != 0 && checkMessage != ''){
+      var checkMessage = document.getElementById("textArea").value.trim();
+      if (checkMessage.length != 0 && checkMessage != "") {
         var message = document.getElementById("textArea").value;
         db.collection("appointments")
           .doc(this.$route.params.appointmentID)
           .collection("messages")
           .add({
             content: message,
-            datetime: firebase.firestore.Timestamp.fromDate(new Date(Date.now())),
+            datetime: firebase.firestore.Timestamp.fromDate(
+              new Date(Date.now())
+            ),
             isPatient: false
           })
           .then(function() {
             document.getElementById("textArea").value = "";
-            message = null
+            message = null;
             console.log("Document successfully written!");
           })
           .catch(function(error) {
@@ -118,9 +142,9 @@ export default {
 </script>
 
 <style>
-#top{
-  padding-bottom:0;
-  height:100%;
+#top {
+  padding-bottom: 0;
+  height: 100%;
 }
 .containerChat {
   border: 2px solid #dedede;
@@ -131,9 +155,9 @@ export default {
   width: 100%;
 }
 
-#textArea{
+#textArea {
   background-color: #f1f1f1;
-  clear:both;
+  clear: both;
 }
 
 .darker {
