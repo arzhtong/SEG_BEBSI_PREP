@@ -199,8 +199,7 @@ class _DashboardState extends State<Dashboard> {
                               //});
 
                               if(_formKey.currentState.validate()){
-                                //Temporarily display loading message while calendar loads
-                                cachedCalendar = _LoadingCalendar();
+                                //cachedCalendar = _LoadingCalendar();
                                 writeData();
                                 Navigator.pop(context);
                               }
