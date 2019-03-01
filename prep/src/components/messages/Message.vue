@@ -1,38 +1,47 @@
 <template>
   <div>
-    <div>
+    <div class="containerChat" id="top">
       <h2>Chat Messages</h2>
       <div>
         <ul>
           <li v-for="message in messages" v-bind:key="message.datetime">
-            <div v-if="message.isPatient == false" class="container" style="max-width:100%;">
+            <div v-if="message.isPatient == false" class="containerChat" style="max-width:100%;">
               <p>{{message.content}}</p>
               <span class="time-left">{{message.datetime}}</span>
               <i class="material-icons right">accessibility_new</i>
             </div>
-            <div v-if="message.isPatient == true" class="container darker" style="max-width:100%">
+            <div v-if="message.isPatient == true" class="containerChat darker" style="max-width:100%">
               <p>{{message.content}}</p>
               <span class="time-left">{{message.datetime}}</span>
               <label class="right">Patient</label>
             </div>
           </li>
+          <li v-if="messages.length == 0">
+            <div class="containerChat" style="max-width:100%;">
+              <p>Say hello to the patient 👋</p>
+            </div>
+          </li>
         </ul>
       </div>
-
-      <div class="row">
-        <div class="input-field col s12">
-          <textarea style="width:30%;height:80px;resize: none;" data-length="120" id="textArea" @click="listenForEnterKey"></textarea>
-          <button
-            id="sendMessage"
-            @click="sendMessage"
-            class="btn btn-large"
-            style="margin: 0 0 5% 10px"
-          >
-            <i class="material-icons left">send</i>
-          </button>
+       <form @submit.prevent="sendMessage">
+        <div class="row">
+          <div class="input-field col s12">
+            <div id="foot">
+              <textarea style="width:30%;height:80px;resize: none;" id="textArea" required></textarea>
+              <button
+                id="sendMessage"
+                type="submit"
+                class="btn btn-large"
+                style="margin: 0 0 8% 10px"
+              >
+                <i class="material-icons left">send</i>
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+        </form>
     </div>
+     
   </div>
 </template>
 <script>
@@ -57,15 +66,15 @@ export default {
     this.fetchData();
   },
   methods: {
-    listenForEnterKey() {
-      var input = document.getElementById("textArea");
-      input.addEventListener("keyup", function(event) {
-        if (event.keyCode === 13) {
-          event.preventDefault();
-          document.getElementById("sendMessage").click();
-        }
-      });
-    },
+    // listenForEnterKey() {
+    //   var input = document.getElementById("textArea");
+    //   input.addEventListener("keydown", function(event) {
+    //     if (event.keyCode === 13) {
+    //       event.preventDefault()
+    //         document.getElementById("sendMessage").click()
+    //     }
+    //   });
+    // },
     fetchData() {
       db.collection("appointments")
         .doc(this.$route.params.appointmentID)
@@ -83,29 +92,37 @@ export default {
         });
     },
     sendMessage() {
-      var message = document.getElementById("textArea").value;
-      db.collection("appointments")
-        .doc(this.$route.params.appointmentID)
-        .collection("messages")
-        .add({
-          content: message,
-          datetime: firebase.firestore.Timestamp.fromDate(new Date(Date.now())),
-          isPatient: false
-        })
-        .then(function() {
-          document.getElementById("textArea").value = "";
-          console.log("Document successfully written!");
-        })
-        .catch(function(error) {
-          console.error("Error writing document: ", error);
-        });
+      var checkMessage = document.getElementById("textArea").value.trim()
+      if(checkMessage.length != 0 && checkMessage != ''){
+        var message = document.getElementById("textArea").value;
+        db.collection("appointments")
+          .doc(this.$route.params.appointmentID)
+          .collection("messages")
+          .add({
+            content: message,
+            datetime: firebase.firestore.Timestamp.fromDate(new Date(Date.now())),
+            isPatient: false
+          })
+          .then(function() {
+            document.getElementById("textArea").value = "";
+            message = null
+            console.log("Document successfully written!");
+          })
+          .catch(function(error) {
+            console.error("Error writing document: ", error);
+          });
+      }
     }
   }
 };
 </script>
 
 <style>
-.container {
+#top{
+  padding-bottom:0;
+  height:100%;
+}
+.containerChat {
   border: 2px solid #dedede;
   background-color: #f1f1f1;
   border-radius: 5px;
@@ -114,29 +131,20 @@ export default {
   width: 100%;
 }
 
+#textArea{
+  background-color: #f1f1f1;
+  clear:both;
+}
+
 .darker {
   border-color: #ccc;
   background-color: #ddd;
 }
 
-.container::after {
+.containerChat::after {
   content: "";
   clear: both;
   display: table;
-}
-
-.container img {
-  float: left;
-  max-width: 60px;
-  width: 100%;
-  margin-right: 20px;
-  border-radius: 50%;
-}
-
-.container img.right {
-  float: right;
-  margin-left: 20px;
-  margin-right: 0;
 }
 
 .time-right {
