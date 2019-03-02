@@ -10,19 +10,17 @@
           </div>
         </div>
 
-        <div class="row">
+         <div class="row">
           <div class="input-field col s12">
-            <p>Date:</p>
-            <input type="text"  v-model="date" required>
-            
+            <p>Date</p>
+            <input type="date" class="datepicker" v-model="date" required>
           </div>
         </div>
 
         <div class="row">
           <div class="input-field col s12">
-            <p>Time:</p>
-            <input type="text"  v-model="time" required>
-           
+            <p>Time</p>
+            <input type="time" class="timepicker" v-model="time" required>
           </div>
         </div>
         
@@ -139,7 +137,7 @@ export default {
      })
     },
     updateAppointment(){
-    db.collection("appointments")
+     db.collection("appointments")
        .doc(this.$route.params.id)
        .set({
          location: this.location,
