@@ -11,7 +11,7 @@ class Messaging extends StatefulWidget {
 class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
   final TextEditingController _textController = TextEditingController();
   bool _hasTyped = false;
-  List<_Message> _messagesList;
+  //List<_Message> _messagesList;
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +81,9 @@ class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
               List<Widget> children =
                   snapshot.data.documents.map((DocumentSnapshot document) {
                 Map<String, dynamic> message = document.data;
+                if(!message['seenByPatient']) {
+                  MessagingQueries().setSeenByPatient(document.reference);
+                }
                 return _Message(message['content'], message['datetime'],
                     message['isPatient'], message['seenByStaff']);
               }).toList();
@@ -91,11 +94,10 @@ class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
 
   ListView _messageListView(List<Widget> childrenIn) {
     bool isReverse = true;
-    EdgeInsets insets = EdgeInsets.all(6.0);
 
     return (childrenIn == null)
-        ? ListView(reverse: isReverse, padding: insets)
-        : ListView(reverse: isReverse, padding: insets, children: childrenIn);
+        ? ListView(reverse: isReverse)
+        : ListView(reverse: isReverse, children: childrenIn);
   }
 
   void _sendMessage(String messageText) {
