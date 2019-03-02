@@ -8,10 +8,30 @@
           </h4>
 
           <tr style="font-size:1.5em">
-            <th style="padding: 20px;">Mobile Code</th>
-            <th>Datetime</th>
-            <th>Location</th>
-            <th>Test</th>
+            <th>
+              <a class="black-text tooltip" style="margin-left: 25px !important;">
+                <span class="tooltiptext">Mobile Code</span>
+                <i class="material-icons">phonelink_lock</i>
+              </a>
+            </th>
+            <th>
+              <a class="black-text tooltip">
+                <span class="tooltiptext">Date and Time</span>
+                <i class="material-icons">event</i>
+              </a>
+            </th>
+            <th>
+              <a class="black-text tooltip">
+                <span class="tooltiptext">Location</span>
+                <i class="material-icons">location_on</i>
+              </a>
+            </th>
+            <th>
+              <a class="black-text tooltip">
+                <span class="tooltiptext">Test info</span>
+                <i class="material-icons">info</i>
+              </a>
+            </th>
           </tr>
         </thead>
 
@@ -66,6 +86,10 @@ export default {
     };
   },
   created() {
+    document.addEventListener("DOMContentLoaded", function() {
+      var elems = document.querySelectorAll(".tooltipped");
+      var instances = M.Tooltip.init(elems, options);
+    });
     if (firebase.auth().currentUser) {
       db.collection("users")
         .where("email", "==", firebase.auth().currentUser.email)
@@ -149,5 +173,43 @@ export default {
 td,
 th {
   padding: 5px !important;
+}
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 100px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 100%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
 }
 </style>
