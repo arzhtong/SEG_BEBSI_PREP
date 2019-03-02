@@ -82,7 +82,7 @@ class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
                   snapshot.data.documents.map((DocumentSnapshot document) {
                 Map<String, dynamic> message = document.data;
                 return _Message(message['content'], message['datetime'],
-                    message['isPatient'], message['seenByPatient'], message['seenByStaff']);
+                    message['isPatient'], message['seenByStaff']);
               }).toList();
               return _messageListView(children);
           }
@@ -107,23 +107,46 @@ class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
 }
 
 class _Message extends StatelessWidget {
-  _Message(this.messageText, this.timestamp, this.isPatient, this.seenByPatient, this.seenByStaff);
+  _Message(this.messageText, this.datetime,
+    this.isPatient, this.seenByStaff);
+  
   final String messageText;
-  // timestamp not used at the moment
-  final DateTime timestamp;
+  final DateTime datetime;
   final bool isPatient;
-  final bool seenByPatient;
   final bool seenByStaff;
 
   @override
-  Widget build(BuildContext context) {
-    Alignment alignmentMessage =
-        (isPatient) ? Alignment.centerRight : Alignment.centerLeft;
-
+ Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5.0),
+        color: (isPatient) ? Colors.greenAccent : Colors.white
+      ),
       margin: const EdgeInsets.symmetric(vertical: 6.0),
-      child: Text(messageText),
-      alignment: alignmentMessage,
+      child: Stack(children: <Widget>[
+        Text(
+          messageText,
+          style: TextStyle(
+            fontSize: 16.0
+          ),
+        ),
+        Positioned(
+          bottom: 0.0,
+          right: 0.0,
+          child: Row(children: <Widget>[
+            Text(
+              datetime.toString().substring(10,16),
+              style: TextStyle(fontSize: 12.0),
+            ),
+            SizedBox(width: 4.0),
+            Icon(
+              ((seenByStaff) ? Icons.done_all : Icons.done),
+              color: (seenByStaff) ? Colors.lightBlue : Colors.blueGrey,
+              size: 16.0
+            ),
+          ]),
+        )
+      ])
     );
   }
 }
