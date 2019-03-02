@@ -126,18 +126,17 @@ export default {
         .doc(id)
         .collection("messages")
         .where("seenByStaff", "==", false)
+        .where("isPatient", "==", true)
         .onSnapshot(snapshot => {
           snapshot.docChanges().forEach(change => {
-            if (change.doc.data().isPatient == true) {
-              var count = snapshot.size;
-              if (this.ids.indexOf(id) != -1) {
-                var index = this.ids.indexOf(id);
-                this.notifications[index] = count;
-                this.notifications.push();
-              } else {
-                this.notifications.push(count);
-                this.ids.push(id);
-              }
+            var count = snapshot.size;
+            if (this.ids.indexOf(id) != -1) {
+              var index = this.ids.indexOf(id);
+              this.notifications[index] = count;
+              this.notifications.push();
+            } else {
+              this.notifications.push(count);
+              this.ids.push(id);
             }
           });
         });

@@ -130,7 +130,9 @@ export default {
             datetime: firebase.firestore.Timestamp.fromDate(
               new Date(Date.now())
             ),
-            isPatient: false
+            isPatient: false,
+            seenByStaff: true,
+            seenByPatient: false
           })
           .then(function() {
             document.getElementById("textArea").value = "";
