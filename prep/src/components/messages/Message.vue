@@ -1,15 +1,21 @@
 <template>
   <div>
     <div class="containerChat" id="top">
-      <h3>Chat with 
-        {{this.$route.params.appointmentID}}</h3>
+      <h3>
+        Chat with
+        {{this.$route.params.appointmentID}}
+      </h3>
       <div>
         <ul>
           <li v-for="message in messages" v-bind:key="message.datetime">
             <div v-if="message.isPatient == false" class="containerChat" style="max-width:100%;">
               <p>{{message.content}}</p>
               <span class="time-left">{{message.datetime}}</span>
-              <i class="material-icons right">accessibility_new</i>
+              <div>
+                <i class="material-icons right">accessibility_new</i>
+                <i v-if="message.seenByPatient == false" class="material-icons time-right">done</i>
+                <i v-else class="material-icons blue-text right">done_all</i>
+              </div>
             </div>
             <div
               v-if="message.isPatient == true"
@@ -57,9 +63,6 @@ export default {
   name: "message",
   data() {
     return {
-      email: null,
-      name: null,
-      dept: null,
       messages: [],
       messagesPatient: [],
       currentUser: null,
@@ -67,7 +70,6 @@ export default {
     };
   },
   created() {
-    this.currentUser = firebase.auth().currentUser.email;
     this.fetchData();
     this.clearNot();
   },
@@ -110,10 +112,31 @@ export default {
               const data = {
                 content: change.doc.data().content,
                 datetime: change.doc.data().datetime.toDate(),
-                isPatient: change.doc.data().isPatient
+                isPatient: change.doc.data().isPatient,
+                seenByPatient: change.doc.data().seenByPatient,
+                timestamp: change.doc.data().datetime
               };
               this.messages.push(data);
               console.log("New message sent!");
+            }
+            if (change.type === "modified") {
+              for (var i = 0; i < this.messages.length; i++) {
+                if (
+                  this.messages[i].timestamp.toString() ==
+                  change.doc.data().datetime.toString()
+                ) {
+                  if (
+                    this.messages[i].seenByPatient !=
+                    change.doc.data().seenByPatient
+                  ) {
+                    this.messages[
+                      i
+                    ].seenByPatient = change.doc.data().seenByPatient;
+                    this.messages.push();
+                  }
+                }
+              }
+              console.log("Message modified!");
             }
           });
         });
@@ -160,7 +183,6 @@ export default {
   padding: 10px;
   margin: 10px 0;
   width: 100%;
-  
 }
 
 #textArea {
