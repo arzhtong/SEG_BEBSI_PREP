@@ -117,6 +117,7 @@ export default {
                 timestamp: change.doc.data().datetime
               };
               this.messages.push(data);
+              this.clearNot()
               console.log("New message sent!");
             }
             if (change.type === "modified") {
