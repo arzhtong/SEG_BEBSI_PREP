@@ -38,7 +38,11 @@
         <div class="row">
           <div class="input-field col s12">
             <div id="foot">
-              <textarea style="width:30%;height:80px;resize: none;" id="textArea" required></textarea>
+              <textarea
+                style="width:30%;height:80px;resize: none;"
+                id="textArea"
+                required
+              ></textarea>
               <button
                 id="sendMessage"
                 type="submit"
@@ -74,15 +78,6 @@ export default {
     this.clearNot();
   },
   methods: {
-    // listenForEnterKey() {
-    //   var input = document.getElementById("textArea");
-    //   input.addEventListener("keydown", function(event) {
-    //     if (event.keyCode === 13) {
-    //       event.preventDefault()
-    //         document.getElementById("sendMessage").click()
-    //     }
-    //   });
-    // },
     clearNot() {
       db.collection("appointments")
         .doc(this.$route.params.appointmentID)
@@ -117,7 +112,7 @@ export default {
                 timestamp: change.doc.data().datetime
               };
               this.messages.push(data);
-              this.clearNot()
+              this.clearNot();
               console.log("New message sent!");
             }
             if (change.type === "modified") {
