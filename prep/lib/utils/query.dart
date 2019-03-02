@@ -7,7 +7,7 @@ export 'package:cloud_firestore/cloud_firestore.dart';
 
 //TODO Remove dependancy on appointment ID here.
 // appointmentID needs to be stored with appointment info when added
-const String appointmentID = "fe7sdGe2";
+const String appointmentID = "2vqqyqcc7";
 
 class MessagingQueries {
   static const MessagingQueries _singleton = MessagingQueries._internal();
@@ -18,7 +18,7 @@ class MessagingQueries {
 
   //TODO Remove appointmentID dependancy!
   static final CollectionReference _colRef = Firestore.instance
-      .collection('chats')
+      .collection('appointments')
       .document(appointmentID)
       .collection('messages');
 
@@ -30,7 +30,7 @@ class MessagingQueries {
 
   void sendMessage(String message) {
     _colRef.add({
-      'message': message,
+      'content': message,
       'datetime': DateTime.now(),
       'isPatient': true,
     });

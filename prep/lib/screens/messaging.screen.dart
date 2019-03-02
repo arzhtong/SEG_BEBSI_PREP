@@ -22,14 +22,14 @@ class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
         ),
         Divider(height: 1.0),
         Container(
-          child: _biuldTextComposer(),
+          child: _buildTextComposer(),
           decoration: BoxDecoration(color: Theme.of(context).cardColor),
         )
       ]),
     );
   }
 
-  Widget _biuldTextComposer() {
+  Widget _buildTextComposer() {
     return IconTheme(
       data: IconThemeData(color: Theme.of(context).accentColor),
       child: new Container(
