@@ -33,6 +33,8 @@ class MessagingQueries {
       'content': message,
       'datetime': DateTime.now(),
       'isPatient': true,
+      'seenByPatient': true,
+      'seenByStaff': false
     });
   }
 }

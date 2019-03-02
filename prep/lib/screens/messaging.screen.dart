@@ -53,7 +53,7 @@ class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
               margin: EdgeInsets.symmetric(horizontal: 4.0),
               child: IconButton(
                 icon: Icon(Icons.send),
-                onPressed: () => _handleSendIconTap(_textController.text),
+                onPressed: () => _sendMessage(_textController.text),
               ),
             ),
           ],
@@ -82,7 +82,7 @@ class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
                   snapshot.data.documents.map((DocumentSnapshot document) {
                 Map<String, dynamic> message = document.data;
                 return _Message(message['content'], message['datetime'],
-                    message['isPatient']);
+                    message['isPatient'], message['seenByPatient'], message['seenByStaff']);
               }).toList();
               return _messageListView(children);
           }
@@ -98,19 +98,22 @@ class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
         : ListView(reverse: isReverse, padding: insets, children: childrenIn);
   }
 
-  void _sendMessage(String messageText) =>
+  void _sendMessage(String messageText) {
+    if (_hasTyped) {
       MessagingQueries().sendMessage(messageText);
-
-  void _handleSendIconTap(String messageText) =>
-      _hasTyped ? MessagingQueries().sendMessage(messageText) : null;
+      _textController.clear();
+    }
+  }
 }
 
 class _Message extends StatelessWidget {
-  _Message(this.messageText, this.timestamp, this.isPatient);
+  _Message(this.messageText, this.timestamp, this.isPatient, this.seenByPatient, this.seenByStaff);
   final String messageText;
   // timestamp not used at the moment
   final DateTime timestamp;
   final bool isPatient;
+  final bool seenByPatient;
+  final bool seenByStaff;
 
   @override
   Widget build(BuildContext context) {
