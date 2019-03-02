@@ -13,7 +13,7 @@
         <div class="row">
           <div class="input-field col s12">
             <p>Date:</p>
-            <input type="date" class="datepicker" v-model="date" required>
+            <input type="text"  v-model="date" required>
             
           </div>
         </div>
@@ -21,7 +21,7 @@
         <div class="row">
           <div class="input-field col s12">
             <p>Time:</p>
-            <input type="time" class="timepicker" v-model="time" required>
+            <input type="text"  v-model="time" required>
            
           </div>
         </div>
@@ -139,23 +139,25 @@ export default {
      })
     },
     updateAppointment(){
-     db.collection("appointments").doc(this.$route.params.id).get()
-     .then(doc => {
-       if (doc.exists) {
-            doc.ref.update({
-                location: this.location,
-                testID:this.testID.testID,
-                code: this.code,
-                datetime: firebase.firestore.Timestamp.fromDate(new Date(Date.parse(this.date + 'T' + this.time + 'Z'))),
-                staffMember:this.staffMember.Ucode
-              })
-              .then(() => {
-                alert('Appointments info updated!')
-                this.$router.push("/view-appointment")
-              })
-        }
-  
+    db.collection("appointments")
+       .doc(this.$route.params.id)
+       .set({
+         location: this.location,
+         testID: this.testID.testID,
+         datetime: firebase.firestore.Timestamp.fromDate(
+           new Date(
+             Date.parse(this.date + "T" + this.time + "Z")
+           )
+         ),
+         staffMember: this.staffMember.Ucode
        })
+       .then(() => {
+         alert("Appointments info updated!");
+         this.$router.push("/view-appointments");
+       })
+       .catch(function(error) {
+         console.error("Error writing document: ", error);
+       });
      }
     
   }
