@@ -34,7 +34,7 @@
             <td v-for="test in tests" v-bind:key="test.title">{{test.title}}</td>
 
             <td>
-              <router-link v-bind:to="{name: 'edit-appointment', params: {id:appointment.location}}">
+              <router-link v-bind:to="{name: 'edit-appointment', params: {id:appointment.code}}">
              <button class="btn blue" style="position:relative;text-align:center;">edit</button>
             </router-link>         
 
@@ -138,7 +138,7 @@ export default {
         });
     },
     deleteAppointment(appointmentLocation) {
-      if (confirm(`Are you sure you want to delete appointment which located in ${appointmentLocation}`)) {
+      if (confirm(`Are you sure you want to delete this appointment`)) {
         db.collection("appointments")
           .where("location", "==", appointmentLocation)
           .get()
@@ -148,7 +148,7 @@ export default {
                 .delete()
                 .then(() => {
                   console.log("Document successfully deleted!")
-                  alert(`Successfully deleted Appointment which located in ${appointmentLocation}`)
+                  alert(`Successfully deleted Appointment`)
                   location.reload();
                 })
                 .catch(function(error) {

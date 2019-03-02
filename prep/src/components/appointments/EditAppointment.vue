@@ -67,14 +67,14 @@ export default {
     name: 'edit-appointment',
     data(){
         return{
-           date: "",
-           time: "",
-           code:null,
-           location:null,
-           testID:null,
-           staffMember:null,
-           tests:[],
-           users:[]
+          date: "",
+          time: "",
+          code:null,
+          location:null,
+          testID:null,
+          staffMember:null,
+          tests:[],
+          users:[]
            
         }
     },
@@ -103,58 +103,61 @@ export default {
       })
     },
     beforeRouteEnter(to, from, next) {
-       
-    db.collection("appointments").where("location", '==', to.params.id).get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          
-          next(vm => {      
-            vm.date=doc.data().datetime.toDate().toISOString().split('T')[0]
-            vm.time=doc.data().datetime.toDate().toTimeString().split(' ')[0]
-            vm.location = doc.data().location
-            vm.testID=doc.data().testID
-            vm.staffMember=doc.data().staffMember
-            vm.code=doc.id           
-          })
-        })
-      })
-      
-  },
+
+   db.collection("appointments").doc(to.params.id).get()
+     .then(doc => {
+       if (doc.exists) {
+         next(vm => {
+           vm.date=doc.data().datetime.toDate().toISOString().split('T')[0]
+           vm.time=doc.data().datetime.toDate().toTimeString().split(' ')[0]
+           vm.location = doc.data().location
+           vm.testID=doc.data().testID
+           vm.staffMember=doc.data().staffMember
+           vm.code=doc.id
+         })
+       }
+
+     })
+
+ },
   watch: {
     $route: "fetchData"
   },
   methods: {
-    fetchData() {
-      db.collection("appointments").where("location", '==', this.$route.params.id).get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            this.location = doc.data().location
-            this.datetime=doc.data().datetime.toDate()
-            this.testID=doc.data().testID
-            this.staffMember=doc.data().staffMember
-            this.code = doc.id
-          })
-        })
+    fetchData(){
+         db.collection("appointments").doc(this.$route.params.id).get()
+        .then(doc => {
+       if (doc.exists) {
+         this.location = doc.data().location
+         this.datetime=doc.data().datetime
+         this.testID=doc.data().testID
+         this.staffMember=doc.data().staffMember
+         this.code = doc.id
+        
+       }
+
+     })
     },
-    updateAppointment() {
-      db.collection("appointments").where("location", '==', this.$route.params.id).get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            doc.ref
-              .update({
+    updateAppointment(){
+     db.collection("appointments").doc(this.$route.params.id).get()
+     .then(doc => {
+       if (doc.exists) {
+            doc.ref.update({
                 location: this.location,
                 testID:this.testID.testID,
                 code: this.code,
+                datetime: firebase.firestore.Timestamp.fromDate(new Date(Date.parse(this.date + 'T' + this.time + 'Z'))),
                 staffMember:this.staffMember.Ucode
               })
               .then(() => {
                 alert('Appointments info updated!')
                 this.$router.push("/view-appointment")
               })
-              .catch(error => console.log(err));
-          })
-        })
-    }
+        }
+  
+       })
+     }
+    
   }
 }
 </script>
