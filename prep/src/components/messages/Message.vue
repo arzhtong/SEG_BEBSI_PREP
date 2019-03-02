@@ -83,6 +83,7 @@ export default {
         .doc(this.$route.params.appointmentID)
         .collection("messages")
         .where("seenByStaff", "==", false)
+        .orderBy("datetime", "asc")
         .get()
         .then(querySnapshot => {
           querySnapshot.forEach(doc => {
@@ -173,6 +174,7 @@ export default {
   height: auto;
 }
 .containerChat {
+  word-wrap: break-word;
   border: 2px solid #dedede;
   background-color: #f1f1f1;
   border-radius: 5px;
@@ -182,6 +184,8 @@ export default {
 }
 
 #textArea {
+  word-wrap: break-word;
+  overflow:hidden;
   background-color: #f1f1f1;
   clear: both;
 }
