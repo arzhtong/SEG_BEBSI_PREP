@@ -61,6 +61,7 @@
 
 <script>
 import db from "../firebaseInit"; 
+import firebase from "firebase";
 export default {
     name: 'edit-appointment',
     data(){
@@ -142,20 +143,16 @@ export default {
        .set({
          location: this.location,
          testID: this.testID.testID,
-         datetime: firebase.firestore.Timestamp.fromDate(
-           new Date(
-             Date.parse(this.date + "T" + this.time + "Z")
-           )
-         ),
+         datetime: firebase.firestore.Timestamp.fromDate(new Date(Date.parse(this.date + "T" + this.time + "Z"))),
          staffMember: this.staffMember.Ucode
        })
        .then(() => {
-         alert("Appointments info updated!");
-         this.$router.push("/view-appointments");
+         alert("Appointments info updated!")
+         this.$router.push("/view-appointments")
        })
        .catch(function(error) {
-         console.error("Error writing document: ", error);
-       });
+         console.error("Error writing document: ", error)
+       })
      }
     
   }
