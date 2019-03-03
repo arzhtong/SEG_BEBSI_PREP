@@ -1,27 +1,39 @@
 <template>
   <div id="dashboard">
-    <ul class="collection with-header">
-      <li class="collection-header">
-        <h4>Employees</h4>
-      </li>
-    </ul>
+    <div id="dashboard-top" class="dcontent">
+      <Messages />
+    </div>
+    <div class="dcontent">
+      <Appointments />
+    </div>
 
   </div>
 </template>
 
 <script>
 import db from "./firebaseInit";
+import Messages from "./messages/ViewMessages";
+import Appointments from "./appointments/ViewAppointments";
 
 export default {
   name: "dashboard",
-  data() {
-    return {
-      employees: []
-    };
-  },
-  created() {
+  components: {
+    Messages,
+    Appointments
   }
 };
 </script>
+
+<style scoped>
+.dcontent {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  overflow-y: scroll;
+}
+
+#dashboard-top {
+  max-height: 400px;
+}
+</style>
 
 
