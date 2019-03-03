@@ -1,14 +1,16 @@
 <template>
-    <nav v-if="isLoggedIn">
-        <div class="nav-wrapper white">
-            <router-link to="/" class="brand-logo left" id="logo">Prep</router-link>
-         
-                <ul>
-                    <li class="right"><button v-on:click="logout" class="btn red" style="margin-left: 10px">Logout</button></li>
-                </ul>
-          
-        </div>
-    </nav>
+    <div class="navbar-fixed">
+        <nav v-if="isLoggedIn">
+            <div class="nav-wrapper white">
+                <router-link to="/" class="brand-logo left" id="logo">Prep</router-link>
+            
+                    <ul>
+                        <li class="right"><button v-on:click="logout" class="btn red" style="margin-left: 10px">Logout</button></li>
+                    </ul>
+            
+            </div>
+        </nav>
+    </div>
 </template>
 
 <script>

@@ -5,7 +5,7 @@
       <div>
         <Sidebar />
       </div>
-      <div id="central" class="col s12 m12 l10">
+      <div id="central" class="col s12 m12 l10" style="overflow-y: scroll; max-height: 90vh;">
         <router-view/>
       </div>
 
