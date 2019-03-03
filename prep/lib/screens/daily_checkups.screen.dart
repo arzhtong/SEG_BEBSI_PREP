@@ -3,15 +3,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:collection';
 
 class DailyCheckups extends StatefulWidget {
+  final String _appointmentID;
+  DailyCheckups(this._appointmentID);
+
   @override
   State<StatefulWidget> createState() {
+    print("DailyCheckups screen recieved: " + _appointmentID);
     return _DailyCheckups();
   }
 }
 
 class _DailyCheckups extends State<DailyCheckups> {
-  String testID;
-
   List<Widget> myList = new List<Widget>();
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
@@ -87,7 +89,7 @@ class _DailyCheckups extends State<DailyCheckups> {
   Widget build(BuildContext context) {
     return StreamBuilder(
       //The document ID is hard coded as we don't have a set way of identifying tests in appointments yet
-      stream: Firestore.instance.collection('tests').document('VyyiBYwp0xX4nJyvX9oN').collection('dailyCheckUps').orderBy('durationUntil', descending: true).snapshots(),
+      stream: Firestore.instance.collection('appointments').document('VyyiBYwp0xX4nJyvX9oN').collection('dailyCheckups').orderBy('durationUntil', descending: true).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const Text('Loading...');
         return ListView.builder(
