@@ -13,11 +13,11 @@
                     <li><span id="email" class="email black-text"> {{currentUser}}</span></li>
                 </div>
                 <li><div class="divider"></div></li>
-                <li><router-link to="/" class=".btn-rout menuItem">Dashboard</router-link></li>
-                <li><router-link to="/view-appointments" class=".btn-rout menuItem">Appointments</router-link></li>
-                <li><router-link to="/view-messages" class=".btn-rout menuItem">Messages</router-link></li>
-                <li><router-link v-if="isAdmin == 'Admin'" to="/view-staff" class=".btn-rout menuItem">Staff</router-link></li>
-                <li><router-link to="/" class=".btn-rout menuItem">Tests</router-link></li>
+                <li><router-link to="/" class="menuItem" exact-active-class="exact active" exact>Dashboard</router-link></li>
+                <li><router-link to="/view-appointments" class="menuItem" exact-active-class="exact active" exact>Appointments</router-link></li>
+                <li><router-link to="/view-messages" class="menuItem" exact-active-class="exact active" exact>Messages</router-link></li>
+                <li><router-link v-if="isAdmin == 'Admin'" to="/view-staff" class="menuItem" exact-active-class="exact active" exact>Staff</router-link></li>
+                <li><router-link to="/" class="menuItem" exact-active-class="exact active" exact>Tests</router-link></li>
                 <li><router-link to="/add-appointment" class="waves-effect waves-light btn red">Add Appointment</router-link></li>
             </ul>
 
@@ -70,6 +70,15 @@ export default {
 </script>
 
 <style>
+
+.menuItem:hover,
+.menuItem.router-link-active,
+.menuItem.router-link-exact-active {
+    cursor: pointer;
+    background-color: rgb(240, 240, 240); 
+    
+}
+
 .sidenav-trigger {
     color: white;
 }
