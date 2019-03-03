@@ -18,9 +18,9 @@ class _DailyCheckups extends State<DailyCheckups> {
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
     List<Widget> instructionWidgets = new List();
-    Map<dynamic, dynamic> dynamicInstructions = document['test'];
+    Map<dynamic, dynamic> dynamicInstructions = document['instructions'];
 
-    SplayTreeMap sortedInstruciton = new SplayTreeMap.from(dynamicInstructions, (dynamic me, dynamic other){
+    SplayTreeMap sortedInstruction = new SplayTreeMap.from(dynamicInstructions, (dynamic me, dynamic other){
       int myPlace = int.parse(me.toString().substring(0,1));
       int otherPlace = int.parse(other.toString().substring(0,1));
 
@@ -28,7 +28,7 @@ class _DailyCheckups extends State<DailyCheckups> {
     });
 
     // Building each row containing an instruction
-    sortedInstruciton.forEach((instruction, result){
+    sortedInstruction.forEach((instruction, result){
       instructionWidgets.add(
         Container(
           padding: EdgeInsets.only(bottom: 20.0),
@@ -48,14 +48,14 @@ class _DailyCheckups extends State<DailyCheckups> {
                     Firestore.instance.runTransaction((transaction) async {
                       DocumentSnapshot freshSnap = await transaction.get(document.reference);
                       await transaction.update(freshSnap.reference, {
-                      ('test.'+ instruction): false
+                      ('instructions.'+ instruction): false
                       });
                     });
                   } else {
                     Firestore.instance.runTransaction((transaction) async {
                       DocumentSnapshot freshSnap = await transaction.get(document.reference);
                       await transaction.update(freshSnap.reference, {
-                        ('test.'+ instruction): true
+                        ('instructions.'+ instruction): true
                       });
                     });
                   }
@@ -88,8 +88,7 @@ class _DailyCheckups extends State<DailyCheckups> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      //The document ID is hard coded as we don't have a set way of identifying tests in appointments yet
-      stream: Firestore.instance.collection('appointments').document('VyyiBYwp0xX4nJyvX9oN').collection('dailyCheckups').orderBy('durationUntil', descending: true).snapshots(),
+      stream: Firestore.instance.collection('appointments').document(widget._appointmentID).collection('dailyCheckups').orderBy('daysBeforeTest', descending: true).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const Text('Loading...');
         return ListView.builder(
