@@ -66,8 +66,7 @@ export default {
       messages: [],
       messagesPatient: [],
       currentUser: null,
-      isStaff: null,
-      key: generateKey("fiV56MClmTzASUtqDMCkp4jwgBPWeXXEKHAeCVIFEaJGndE69i4BmGaeyQYjN21I")
+      isStaff: null
     };
   },
   created() {
@@ -101,7 +100,10 @@ export default {
         .onSnapshot(snapshot => {
           snapshot.docChanges().forEach(change => {
             if (change.type === "added") {
-              var msg = decryptMessage(change.doc.data().content, this.key)
+              var msg = decryptMessage(change.doc.data().content,
+              this.$route.params.appointmentID,
+              change.doc.data().datetime
+              );
               const data = {
                 content: msg,
                 datetime: change.doc.data().datetime.toDate(),
@@ -139,15 +141,16 @@ export default {
       var checkMessage = document.getElementById("textArea").value.trim();
       if (checkMessage.length != 0 && checkMessage != "") {
         var message = document.getElementById("textArea").value;
-        var encryptedMessage = encryptMessage(message);
+        var currentDatetime = firebase.firestore.Timestamp.fromDate(
+          new Date(Date.now())
+        );
+        var encryptedMessage = encryptMessage(message, this.$route.params.appointmentID, currentDatetime);
         db.collection("appointments")
           .doc(this.$route.params.appointmentID)
           .collection("messages")
           .add({
             content: encryptedMessage,
-            datetime: firebase.firestore.Timestamp.fromDate(
-              new Date(Date.now())
-            ),
+            datetime: currentDatetime,
             isPatient: false,
             seenByStaff: true,
             seenByPatient: false
