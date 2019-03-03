@@ -38,11 +38,7 @@
         <div class="row">
           <div class="input-field col s12">
             <div id="foot">
-              <textarea
-                style="width:30%;height:80px;resize: none;"
-                id="textArea"
-                required
-              ></textarea>
+              <textarea style="width:30%;height:80px;resize: none;" id="textArea" required></textarea>
               <button
                 id="sendMessage"
                 type="submit"
@@ -62,7 +58,7 @@
 <script>
 import db from "../firebaseInit";
 import firebase from "firebase";
-
+import { encryptMessage, decryptMessage, generateKey } from "./AES.js";
 export default {
   name: "message",
   data() {
@@ -83,7 +79,6 @@ export default {
         .doc(this.$route.params.appointmentID)
         .collection("messages")
         .where("seenByStaff", "==", false)
-        .orderBy("datetime", "asc")
         .get()
         .then(querySnapshot => {
           querySnapshot.forEach(doc => {
@@ -105,8 +100,12 @@ export default {
         .onSnapshot(snapshot => {
           snapshot.docChanges().forEach(change => {
             if (change.type === "added") {
+              var msg = decryptMessage(change.doc.data().content,
+              this.$route.params.appointmentID,
+              change.doc.data().datetime
+              );
               const data = {
-                content: change.doc.data().content,
+                content: msg,
                 datetime: change.doc.data().datetime.toDate(),
                 isPatient: change.doc.data().isPatient,
                 seenByPatient: change.doc.data().seenByPatient,
@@ -142,14 +141,16 @@ export default {
       var checkMessage = document.getElementById("textArea").value.trim();
       if (checkMessage.length != 0 && checkMessage != "") {
         var message = document.getElementById("textArea").value;
+        var currentDatetime = firebase.firestore.Timestamp.fromDate(
+          new Date(Date.now())
+        );
+        var encryptedMessage = encryptMessage(message, this.$route.params.appointmentID, currentDatetime);
         db.collection("appointments")
           .doc(this.$route.params.appointmentID)
           .collection("messages")
           .add({
-            content: message,
-            datetime: firebase.firestore.Timestamp.fromDate(
-              new Date(Date.now())
-            ),
+            content: encryptedMessage,
+            datetime: currentDatetime,
             isPatient: false,
             seenByStaff: true,
             seenByPatient: false
@@ -185,7 +186,7 @@ export default {
 
 #textArea {
   word-wrap: break-word;
-  overflow:hidden;
+  overflow: hidden;
   background-color: #f1f1f1;
   clear: both;
 }
