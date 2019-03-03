@@ -26,6 +26,10 @@ dependencies:
   # The following adds Firebase Cloud Database Firestore.
   cloud_firestore: ^0.9.0+2
 
+  # The following adds encryption
+  pointycastle: ^1.0.1
+  hex: ^0.1.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

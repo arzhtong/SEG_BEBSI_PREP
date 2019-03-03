@@ -28,10 +28,10 @@ class MessagingQueries {
   Stream<QuerySnapshot> get messagesSnapshots => _snapshots;
 
 
-  void sendMessage(String message) {
+  void sendMessage(String message, DateTime datetime) {
     _colRef.add({
       'content': message,
-      'datetime': DateTime.now(),
+      'datetime': datetime,
       'isPatient': true,
       'seenByPatient': true,
       'seenByStaff': false
