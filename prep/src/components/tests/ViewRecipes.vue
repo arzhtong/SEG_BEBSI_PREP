@@ -9,9 +9,9 @@
             <h4 style="padding:20px;font-size:3em;"><b>Recipes</b></h4>
             
           <tr style="font-size:1.5em">
-              <th style="padding: 20px;">Dish Name</th>
+              <th style="padding: 20px;">Dish Name</th> 
               <th>Description</th>
-          </tr>
+          </tr> 
         </thead> 
 
         <tbody v-for="recipe in recipes" v-bind:key="recipe.id" class="collection-item" >
@@ -20,7 +20,7 @@
             <td><router-link v-bind:to="{name: 'view-recipe-info', params: {test_id: testID, recipe_id: recipe.title}}" class="btn blue">Show</router-link></td>
           </tr>
         </tbody>
-        <router-link to="/register" class="btn green" style="margin:20px">
+        <router-link v-bind:to="{name: 'new-recipe', params: {test_id: testID}}" class="btn green" style="margin:20px">
             Add Recipe
         </router-link>
       </table>

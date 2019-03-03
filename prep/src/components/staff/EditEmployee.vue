@@ -77,13 +77,13 @@ import db from '../firebaseInit'
                        doc.ref.update({
                            employee_id: this.employee_id,
                            name: this.name,
-                           dept: this.dept,
+                           dept: this.dept, 
                            position: this.position
                        })
                        .then(() => {
                            this.$router.push({name: 'view-employee', params: {employee_id: this.employee_id}})
                        })
-                    })
+                    }) 
                 })
             }
 

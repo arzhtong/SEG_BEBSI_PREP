@@ -7,10 +7,10 @@
             <li class="collection-item"><b>Dish Name:</b> {{title}}</li>
             <li class="collection-item"><b>Instructions:</b>
             <ol >
-                <li v-for="instruction in instructions" >{{instruction}}</li>
-            </ol>
+                <li v-for="instruction in instructions" v-bind:key="instruction">{{instruction}}</li>
+            </ol> 
             
-            </li>
+            </li> 
             <li v-if="notes" class="collection-item"><b>Notes:</b> {{notes}}</li> 
         </ul>
         <router-link v-bind:to="{name: 'view-recipes', params: {test_id: test_id}}" class="btn grey">
@@ -22,8 +22,6 @@
             </button>
             </router-link>
          <div class="fixed-action-btn">
-            <router-link to="" class="btn green">
-            </router-link>
         </div>
     </div>
 </template>

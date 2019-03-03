@@ -8,6 +8,7 @@ import ViewAppointment from '@/components/appointment/ViewAppointment'
 import ViewTests from '@/components/tests/ViewTests'
 import ViewRecipes from '@/components/tests/ViewRecipes'
 import ViewRecipeInfo from '@/components/tests/ViewRecipeInfo'
+import NewRecipe from '@/components/tests/NewRecipe'
 import Login from '@/components/auth/Login'
 import Register from '@/components/auth/Register'
 import firebase from 'firebase'
@@ -85,6 +86,14 @@ let router = new Router({
       path: '/view-recipes/:test_id',
       name: 'view-recipes',
       component: ViewRecipes,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/new-recipe/:test_id',
+      name: 'new-recipe',
+      component: NewRecipe,
       meta: {
         requiresAuth: true
       }
