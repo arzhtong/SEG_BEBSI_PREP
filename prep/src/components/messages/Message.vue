@@ -1,11 +1,7 @@
 <template>
   <div>
     <div class="containerChat" id="top">
-      <h3>
-        Chat with
-        {{this.$route.params.appointmentID}}
-      </h3>
-      <div>
+      <div id="messages">
         <ul>
           <li v-for="message in messages" v-bind:key="message.datetime">
             <div v-if="message.isPatient == false" class="containerChat" style="max-width:100%;">
@@ -100,9 +96,10 @@ export default {
         .onSnapshot(snapshot => {
           snapshot.docChanges().forEach(change => {
             if (change.type === "added") {
+              var date = new Date(change.doc.data().datetime.toDate()).getTime().toString()
               var msg = decryptMessage(change.doc.data().content,
               this.$route.params.appointmentID,
-              change.doc.data().datetime
+              date.substring(date.length-7)
               );
               const data = {
                 content: msg,
@@ -144,7 +141,11 @@ export default {
         var currentDatetime = firebase.firestore.Timestamp.fromDate(
           new Date(Date.now())
         );
-        var encryptedMessage = encryptMessage(message, this.$route.params.appointmentID, currentDatetime);
+        var newDate = new Date(Date.now())
+        var mil = newDate.getTime().toString()
+        var milSubstring = mil.substring(mil.length-7)
+        alert(milSubstring)
+        var encryptedMessage = encryptMessage(message, this.$route.params.appointmentID, milSubstring);
         db.collection("appointments")
           .doc(this.$route.params.appointmentID)
           .collection("messages")
@@ -157,12 +158,14 @@ export default {
           })
           .then(function() {
             document.getElementById("textArea").value = "";
+            
             message = null;
             console.log("Document successfully written!");
           })
           .catch(function(error) {
             console.error("Error writing document: ", error);
           });
+          
       }
     }
   }
@@ -170,6 +173,11 @@ export default {
 </script>
 
 <style>
+#messages{
+  max-height: 60vh;
+  overflow-y: scroll;
+}
+
 #top {
   padding: 20px;
   height: auto;
