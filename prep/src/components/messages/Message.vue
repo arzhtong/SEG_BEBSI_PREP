@@ -96,14 +96,15 @@ export default {
         .onSnapshot(snapshot => {
           snapshot.docChanges().forEach(change => {
             if (change.type === "added") {
-              var date = new Date(change.doc.data().datetime.toDate()).getTime().toString()
+              var msgDate = change.doc.data().datetime.toDate()
+              var millisStr = msgDate.getTime().toString()
               var msg = decryptMessage(change.doc.data().content,
-              this.$route.params.appointmentID,
-              date.substring(date.length-7)
+                this.$route.params.appointmentID,
+                millisStr.substring(millisStr.length - 7)
               );
               const data = {
                 content: msg,
-                datetime: change.doc.data().datetime.toDate(),
+                datetime: msgDate,
                 isPatient: change.doc.data().isPatient,
                 seenByPatient: change.doc.data().seenByPatient,
                 timestamp: change.doc.data().datetime
@@ -138,14 +139,13 @@ export default {
       var checkMessage = document.getElementById("textArea").value.trim();
       if (checkMessage.length != 0 && checkMessage != "") {
         var message = document.getElementById("textArea").value;
+        var currentDate = new Date(Date.now());
         var currentDatetime = firebase.firestore.Timestamp.fromDate(
-          new Date(Date.now())
+          currentDate
         );
-        var newDate = new Date(Date.now())
-        var mil = newDate.getTime().toString()
-        var milSubstring = mil.substring(mil.length-7)
-        alert(milSubstring)
-        var encryptedMessage = encryptMessage(message, this.$route.params.appointmentID, milSubstring);
+        var millisStr = currentDate.getTime().toString()
+        var millisSubstring = millisStr.substring(millisStr.length - 7)
+        var encryptedMessage = encryptMessage(message, this.$route.params.appointmentID, millisSubstring);
         db.collection("appointments")
           .doc(this.$route.params.appointmentID)
           .collection("messages")
