@@ -117,9 +117,11 @@ class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
     //TODO: format encryption/decryption methods into new file
     //TODO: comment code
     const appointmentCode = "2vqqyqcc7";
-    String keyEncoded = HEX
-        .encode(utf8.encode(appointmentCode + millisSinceEpoch.toString()))
-        .substring(0, 32);
+    String millisStr = millisSinceEpoch.toString();
+    String keyToEncode =
+        appointmentCode + millisStr.substring(millisStr.length - 7);
+
+    String keyEncoded = HEX.encode(utf8.encode(keyToEncode));
     List<int> keyEncodedList = utf8.encode(keyEncoded);
 
     Mac mac = new Mac("SHA-512/HMAC");
