@@ -17,7 +17,7 @@
                 <li><router-link to="/view-appointments" class="menuItem" exact-active-class="exact active" exact>Appointments</router-link></li>
                 <li><router-link to="/view-messages" class="menuItem" exact-active-class="exact active" exact>Messages</router-link></li>
                 <li><router-link v-if="isAdmin == 'Admin'" to="/view-staff" class="menuItem" exact-active-class="exact active" exact>Staff</router-link></li>
-                <li><router-link to="/" class="menuItem" exact-active-class="exact active" exact>Tests</router-link></li>
+                <li><router-link to="/view-tests" class="menuItem" exact-active-class="exact active" exact>Tests</router-link></li>
                 <li><router-link to="/add-appointment" class="waves-effect waves-light btn red">Add Appointment</router-link></li>
             </ul>
 
