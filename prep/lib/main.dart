@@ -2,29 +2,20 @@ import 'package:flutter/material.dart';
 
 import 'screens/messaging.screen.dart';
 
-void main() => runApp(
-  MaterialApp(
-    home: MyApp(),
-  ),
-);
+void main() => runApp(Prep());
 
-class MyApp extends StatefulWidget {
+class Prep extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _MyAppState();
+    return _PrepState();
   }
 }
 
-class _MyAppState extends State<MyApp> {
+class _PrepState extends State<Prep> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: new Scaffold(
-        body: new Container(
-          padding: new EdgeInsets.all(20),
-          child: new Messaging(),
-        ),
-      ),
-    );
+      home: new Messaging(),
+        );
   }
 }
