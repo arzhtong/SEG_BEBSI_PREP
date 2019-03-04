@@ -1,7 +1,7 @@
 <template>
   <div id="dashboard">
     <div id="dashboard-top" class="dcontent">
-      <Messages />
+
     </div>
     <div class="dcontent">
       <Appointments />
@@ -12,13 +12,13 @@
 
 <script>
 import db from "./firebaseInit";
-import Messages from "./messages/ViewMessages";
+
 import Appointments from "./appointments/ViewAppointments";
 
 export default {
   name: "dashboard",
   components: {
-    Messages,
+
     Appointments
   }
 };
