@@ -9,6 +9,7 @@ import ViewTests from '@/components/tests/ViewTests'
 import ViewRecipes from '@/components/tests/ViewRecipes'
 import ViewRecipeInfo from '@/components/tests/ViewRecipeInfo'
 import NewRecipe from '@/components/tests/NewRecipe'
+import EditRecipe from '@/components/tests/EditRecipe'
 import Login from '@/components/auth/Login'
 import Register from '@/components/auth/Register'
 import firebase from 'firebase'
@@ -102,6 +103,14 @@ let router = new Router({
       path: '/view-recipe-info/:test_id/:recipe_id',
       name: 'view-recipe-info',
       component: ViewRecipeInfo,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/edit-recipe/:test_id/:recipe_id',
+      name: 'edit-recipe',
+      component: EditRecipe,
       meta: {
         requiresAuth: true
       }

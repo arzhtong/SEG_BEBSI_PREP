@@ -38,7 +38,6 @@ import db from '../firebaseInit'
             return {
                 title: null,
                 instructions: [],
-                message: "",
                 notes: null
             }
         },
