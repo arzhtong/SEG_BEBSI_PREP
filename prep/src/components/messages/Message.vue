@@ -188,6 +188,7 @@ export default {
 </script>
 
 <style>
+
 #messages {
   max-height: 50vh;
   overflow-y: auto;
