@@ -16,6 +16,33 @@ class DailyCheckups extends StatefulWidget {
 class _DailyCheckups extends State<DailyCheckups> {
   List<Widget> myList = new List<Widget>();
 
+  IconData _assignIcon(int index) {
+    switch(index){
+      case 0: {return Icons.event;}
+      break;
+      case 1: {return Icons.filter_1;}
+      break;
+      case 2: {return Icons.filter_2;}
+      break;
+      case 3: {return Icons.filter_3;}
+      break;
+      case 4: {return Icons.filter_4;}
+      break;
+      case 5: {return Icons.filter_5;}
+      break;
+      case 6: {return Icons.filter_6;}
+      break;
+      case 7: {return Icons.filter_7;}
+      break;
+      case 8: {return Icons.filter_8;}
+      break;
+      case 8: {return Icons.filter_9;}
+      break;
+      default: {return Icons.filter_9_plus;}
+      break;
+    }
+  }
+
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
     List<Widget> instructionWidgets = new List();
     Map<dynamic, dynamic> dynamicInstructions = document['instructions'];
@@ -30,51 +57,73 @@ class _DailyCheckups extends State<DailyCheckups> {
     // Building each row containing an instruction
     sortedInstruction.forEach((instruction, result){
       instructionWidgets.add(
-        Container(
-          padding: EdgeInsets.only(bottom: 20.0),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: Text(instruction.toString().replaceAll('>', '.')),
+        Column(
+          children: <Widget>[
+            Divider(),
+            Container(
+              padding: EdgeInsets.only(),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.only(right: 30.0),
+                            child: Text(
+                              instruction.toString().replaceAll('>', '.').substring(0,2),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey
+                              ),
+                            ),
+                          ),
+
+                          Expanded(
+                            child: Text(
+                              instruction.toString().replaceAll('>', '.').substring(3, instruction.toString().length),
+                            ),
+                          )
+                        ],
+                      )
+                  ),
+                  Switch(
+//                    activeTrackColor: Colors.green[200],
+//                    activeColor: Colors.green,
+//                    inactiveTrackColor: Colors.grey[300],
+//                    inactiveThumbColor: Colors.grey,
+                    value: result,
+                    onChanged: (_) {
+                      if (result) {
+                        // This method works fine as only one user (the patient) will
+                        // be editing the data so there is no risk of a race condition
+                        document.reference.updateData({
+                          ('instructions.'+ instruction): false
+                        });
+                      } else {
+                        document.reference.updateData({
+                          ('instructions.'+ instruction): true
+                        });
+                      }
+                    },
+                  )
+                ],
               ),
-              Switch(
-                activeTrackColor: Colors.green[200],
-                activeColor: Colors.green,
-                inactiveTrackColor: Colors.red[200],
-                inactiveThumbColor: Colors.red,
-                value: result,
-                onChanged: (_) {
-                  if (result) {
-                    Firestore.instance.runTransaction((transaction) async {
-                      DocumentSnapshot freshSnap = await transaction.get(document.reference);
-                      await transaction.update(freshSnap.reference, {
-                      ('instructions.'+ instruction): false
-                      });
-                    });
-                  } else {
-                    Firestore.instance.runTransaction((transaction) async {
-                      DocumentSnapshot freshSnap = await transaction.get(document.reference);
-                      await transaction.update(freshSnap.reference, {
-                        ('instructions.'+ instruction): true
-                      });
-                    });
-                  }
-                },
-              )
-            ],
-          ),
+            ),
+          ],
         )
       );
     });
 
     return ExpansionTile(
-      leading: Icon(Icons.airport_shuttle),
+      initiallyExpanded: true,
+      leading: Icon(_assignIcon(document['daysBeforeTest'])),
       title: Text(document['title']),
       children: <Widget>[
         ListTile(
-          contentPadding: EdgeInsets.fromLTRB(70.0, 0.0, 0.0, 0.0),
+          contentPadding: EdgeInsets.fromLTRB(30.0, 0.0, 0.0, 0.0),
           title: Container(
-            padding: EdgeInsets.only(right: 50.0),
+            padding: EdgeInsets.only(right: 20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: instructionWidgets
