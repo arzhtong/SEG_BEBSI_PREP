@@ -61,16 +61,12 @@ export default {
     },
     mounted() {
         M.AutoInit();
-    },
-    watch: {
-
     }
 }
 
 </script>
 
 <style>
-
 .menuItem:hover,
 .menuItem.router-link-active,
 .menuItem.router-link-exact-active {

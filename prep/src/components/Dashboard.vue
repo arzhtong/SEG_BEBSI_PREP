@@ -26,8 +26,7 @@ export default {
 
 <style scoped>
 .dcontent {
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-bottom: 20px;
   overflow-y: scroll;
 }
 
