@@ -121,31 +121,6 @@ export default {
       var ID = Math.random()
         .toString(36)
         .substr(2, 9);
-      // var items = [
-      //   "2vqqyqcc7",
-      //   "bwc1xhq0a",
-      //   "jgsj5c7pg",
-      //   "1asdsada",
-      //   "2vqqyqcc7",
-      //   "bwc1xhq0a",
-      //   "jgsj5c7pg",
-      //   "2vqqyqcc7",
-      //   "bwc1xhq0a",
-      //   "jgsj5c7pg",
-      //   "2vqqyqcc7",
-      //   "bwc1xhq0a",
-      //   "jgsj5c7pg",
-      //   "2vqqyqcc7",
-      //   "bwc1xhq0a",
-      //   "jgsj5c7pg",
-      //   "2vqqyqcc7",
-      //   "bwc1xhq0a",
-      //   "jgsj5c7pg",
-      //   "2vqqyqcc7",
-      //   "bwc1xhq0a",
-      //   "jgsj5c7pg"
-      // ];
-      // var item = items[Math.floor(Math.random() * items.length)];
 
       var docRef = db.collection("appointments").doc(ID);
       return docRef

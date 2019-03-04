@@ -3,9 +3,20 @@
     <div class="container" style="width:100%;height:100%;">
       <table class="collection with-header responsive-table" style="background: white;">
         <thead class="collection-header">
-          <h4 style="padding:30px;font-size:3em;">
-            <b>Appointments</b>
-          </h4>
+          <div style="padding:20px;" class="row">
+            <h3>
+              <b>Appointments</b>
+            </h3>
+            <div class="input-field col s12">
+              <span>
+                <b>Sort by:</b>
+              </span>
+              <select id="select" @change="sort" class="browser-default" style="color:black">
+                <option value="Date" selected>Date</option>
+                <option value="Messages">Messages</option>
+              </select>
+            </div>
+          </div>
 
           <tr style="font-size:1.5em">
             <th>
@@ -44,9 +55,8 @@
 
             <td>
               <router-link v-bind:to="{name: 'edit-appointment', params: {id:appointment.code}}">
-             <button class="btn blue" style="position:relative;text-align:center;">edit</button>
-            </router-link>         
-
+                <button class="btn blue" style="position:relative;text-align:center;">edit</button>
+              </router-link>
             </td>
             <td>
               <button class="btn red" @click="deleteAppointment(appointment.location)">Delete</button>
@@ -54,14 +64,14 @@
             <td>
               <router-link v-bind:to="{name: 'message', params: {appointmentID: appointment.code}}">
                 <i class="material-icons left green-text" style="font-size:40px">insert_comment</i>
-                <span>
+              
                   <span v-if="notifications[ids.indexOf(appointment.code)] != 0">
                     <span
                       v-if="ids.includes(appointment.code) == true"
                       class="new badge"
                     >{{notifications[ids.indexOf(appointment.code)]}}</span>
                   </span>
-                </span>
+              
               </router-link>
             </td>
           </tr>
@@ -94,44 +104,39 @@ export default {
       var elems = document.querySelectorAll(".tooltipped");
       var instances = M.Tooltip.init(elems, options);
     });
-    if (firebase.auth().currentUser) {
-      db.collection("users")
-        .where("email", "==", firebase.auth().currentUser.email)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(user => {
-            this.isAdmin = user.data().role;
-          });
-        });
-    }
-    this.getApp();
+    
+    this.getApp("asc");
   },
   methods: {
-    getApp() {
+    getApp(dir) {
       db.collection("users")
         .where("email", "==", firebase.auth().currentUser.email)
         .get()
         .then(querySnapshot => {
           querySnapshot.forEach(doc => {
+            this.isAdmin = doc.data().role;
             this.staffMemberID = doc.id;
           });
-          db.collection("appointments")
-            .where("staffMember", "==", this.staffMemberID)
-            .get()
-            .then(querySnapshot => {
-              querySnapshot.forEach(appointment => {
-                const data = {
-                  code: appointment.id,
-                  datetime: appointment.data().datetime,
-                  staffMember: appointment.data().staffMember,
-                  location: appointment.data().location
-                };
-                this.testID = appointment.data().testID;
-                this.appointments.push(data);
-                this.fetchData(appointment.id);
-              });
-              this.getDoc();
-            });
+          this.getAppointments(dir);
+        });
+    },
+    getAppointments(dir) {
+      db.collection("appointments")
+        .orderBy("datetime", dir)
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(appointment => {
+            const data = {
+              code: appointment.id,
+              datetime: appointment.data().datetime,
+              staffMember: appointment.data().staffMember,
+              location: appointment.data().location
+            };
+            this.testID = appointment.data().testID;
+            this.appointments.push(data);
+            this.fetchData(appointment.id);
+          });
+          this.getDoc();
         });
     },
     getDoc() {
@@ -179,17 +184,32 @@ export default {
               doc.ref
                 .delete()
                 .then(() => {
-                  console.log("Document successfully deleted!")
-                  alert(`Successfully deleted Appointment`)
+                  console.log("Document successfully deleted!");
+                  alert(`Successfully deleted Appointment`);
                   location.reload();
                 })
                 .catch(function(error) {
-                  console.error("Error removing document: ", error)
-                  alert(`There was an error: ${error}`)
-                })
-            })
-          })
+                  console.error("Error removing document: ", error);
+                  alert(`There was an error: ${error}`);
+                });
+            });
+          });
       }
+    },
+    sort() {
+      var selectValue = document.getElementById("select").value;
+      this.appointments = [];
+      this.tests = [];
+      this.notifications = [];
+      this.ids = [];
+      if (selectValue == "Date") {
+        this.getApp("asc");
+      } else {
+        this.getApp("desc");
+      }
+    },
+    sortQuery(dir) {
+
     }
   }
 };
@@ -198,7 +218,7 @@ export default {
 <style>
 td,
 th {
-  padding: 5px !important;
+  padding: 10px !important;
 }
 .tooltip {
   position: relative;
