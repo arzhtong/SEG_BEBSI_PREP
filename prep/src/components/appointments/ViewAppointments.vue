@@ -41,11 +41,15 @@
             <td>{{appointment.datetime.toDate()}}</td>
             <td>{{appointment.location}}</td>
             <td v-for="test in tests" v-bind:key="test.title">{{test.title}}</td>
+
             <td>
-              <button class="btn blue" style="position:relative;text-align:center;">edit</button>
+              <router-link v-bind:to="{name: 'edit-appointment', params: {id:appointment.code}}">
+             <button class="btn blue" style="position:relative;text-align:center;">edit</button>
+            </router-link>         
+
             </td>
             <td>
-              <button class="btn red">Delete</button>
+              <button class="btn red" @click="deleteAppointment(appointment.location)">Delete</button>
             </td>
             <td>
               <router-link v-bind:to="{name: 'message', params: {appointmentID: appointment.code}}">
@@ -164,6 +168,28 @@ export default {
             }
           });
         });
+    },
+    deleteAppointment(appointmentLocation) {
+      if (confirm(`Are you sure you want to delete this appointment`)) {
+        db.collection("appointments")
+          .where("location", "==", appointmentLocation)
+          .get()
+          .then(querySnapshot => {
+            querySnapshot.forEach(doc => {
+              doc.ref
+                .delete()
+                .then(() => {
+                  console.log("Document successfully deleted!")
+                  alert(`Successfully deleted Appointment`)
+                  location.reload();
+                })
+                .catch(function(error) {
+                  console.error("Error removing document: ", error)
+                  alert(`There was an error: ${error}`)
+                })
+            })
+          })
+      }
     }
   }
 };
