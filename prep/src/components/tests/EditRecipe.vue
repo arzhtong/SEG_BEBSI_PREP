@@ -5,24 +5,22 @@
       <form @submit.prevent="updateRecipe" class="col s12">
         <div class="row">
           <div class="input-field col s12">
+            <span>Title</span>
             <input type="text" v-model="title" required>
-            <label>Title</label>
           </div>
         </div>
         <button @click="addInstruction" class="btn green">new instruction</button>
         <div class="row">
-          <div
-          v-for="instr in allInstr" v-bind:key="instr" 
-          class="input-field col s12">
-            <input type="text" v-model="allInstr[allInstr.indexOf(instr)]" required>
-            <label>Instructions</label>
-            <button @click="deleteInstruction" class="btn red">remove instruction</button>
+          <div v-for="instr in allInstr.length" v-bind:key="instr" class="input-field col s12">
+            <span>Instruction</span>
+            <input type="text" v-model="allInstr[instr - 1]" required>   
+            <button @click="deleteInstruction(instr -1)" class="btn red">remove instruction</button>
           </div>
         </div>
         <div class="row">
           <div class="input-field col s12">
+            <span>Notes</span>
             <input type="text" v-model="notes">
-            <label>Notes</label>
           </div>
         </div>
         <button type="submit" class="btn">Submit</button>
@@ -47,19 +45,21 @@ export default {
       notes: null,
       test_id: this.$route.params.test_id,
       recipe_id: this.$route.params.recipe_id
-    }
+    };
   },
-  created () {
-        db.collection('tests').doc(this.$route.params.test_id).collection('recipes').get().then(querySnapshot => {
-             querySnapshot.forEach(doc => {
-                 
-                    this.allInstr = doc.data().instructions,
-                    this.notes =  doc.data().notes,
-                    this.title =  doc.data().title
-                
-             })
-        })
-    },
+  created() {
+    db.collection("tests")
+      .doc(this.$route.params.test_id)
+      .collection("recipes")
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          (this.allInstr = doc.data().instructions),
+            (this.notes = doc.data().notes),
+            (this.title = doc.data().title);
+        });
+      });
+  },
   beforeRouteEnter(to, from, next) {
     db.collection("tests")
       .doc(to.params.test_id)
@@ -76,25 +76,7 @@ export default {
         });
       });
   },
-  watch: {
-    $route: "fetchData"
-  },
   methods: {
-    fetchData() {
-      alert("instructions");
-      db.collection("tests")
-        .doc(this.$route.params.test_id)
-        .collection("recipes")
-        .where("title", "==", this.$route.params.recipe_id)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            this.title = doc.data().title;
-            this.allinstr = doc.data().instructions;
-            this.notes = doc.data().notes;
-          });
-        });          
-    },
     updateRecipe() {
       db.collection("tests")
         .doc(this.$route.params.test_id)
@@ -106,20 +88,20 @@ export default {
             doc.ref
               .update({
                 title: this.title,
-                instructions: this.allinstr,
+                instructions: this.allInstr,
                 notes: this.notes
               })
               .then(() => {
                 this.$router.push({
                   name: "view-recipes",
-                  params: { test_id:  this.$route.params.test_id}
+                  params: { test_id: this.$route.params.test_id }
                 });
               });
           });
         });
     },
     addInstruction() {
-      const data = ""
+      const data = "";
       this.allInstr.push(data);
     },
     deleteInstruction(index) {
