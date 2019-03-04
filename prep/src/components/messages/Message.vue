@@ -34,12 +34,17 @@
         <div class="row">
           <div class="input-field col s12">
             <div id="foot">
-              <textarea style="width:30%;height:80px;resize: none;" id="textArea" required></textarea>
+              <textarea
+                @focus="scroll"
+                style="width:30%;height:80px;resize: none;"
+                id="textArea"
+                required
+              ></textarea>
               <button
                 id="sendMessage"
                 type="submit"
                 class="btn btn-large"
-                style="margin: 0 0 8% 10px"
+                style="margin: 0 0 5% 10px"
               >
                 <i class="material-icons left">send</i>
               </button>
@@ -96,9 +101,10 @@ export default {
         .onSnapshot(snapshot => {
           snapshot.docChanges().forEach(change => {
             if (change.type === "added") {
-              var msgDate = change.doc.data().datetime.toDate()
-              var millisStr = msgDate.getTime().toString()
-              var msg = decryptMessage(change.doc.data().content,
+              var msgDate = change.doc.data().datetime.toDate();
+              var millisStr = msgDate.getTime().toString();
+              var msg = decryptMessage(
+                change.doc.data().content,
                 this.$route.params.appointmentID,
                 millisStr.substring(millisStr.length - 7)
               );
@@ -110,8 +116,8 @@ export default {
                 timestamp: change.doc.data().datetime
               };
               this.messages.push(data);
+
               this.clearNot();
-              console.log("New message sent!");
             }
             if (change.type === "modified") {
               for (var i = 0; i < this.messages.length; i++) {
@@ -133,6 +139,7 @@ export default {
               console.log("Message modified!");
             }
           });
+          this.scroll();
         });
     },
     sendMessage() {
@@ -143,9 +150,13 @@ export default {
         var currentDatetime = firebase.firestore.Timestamp.fromDate(
           currentDate
         );
-        var millisStr = currentDate.getTime().toString()
-        var millisSubstring = millisStr.substring(millisStr.length - 7)
-        var encryptedMessage = encryptMessage(message, this.$route.params.appointmentID, millisSubstring);
+        var millisStr = currentDate.getTime().toString();
+        var millisSubstring = millisStr.substring(millisStr.length - 7);
+        var encryptedMessage = encryptMessage(
+          message,
+          this.$route.params.appointmentID,
+          millisSubstring
+        );
         db.collection("appointments")
           .doc(this.$route.params.appointmentID)
           .collection("messages")
@@ -158,30 +169,30 @@ export default {
           })
           .then(function() {
             document.getElementById("textArea").value = "";
-            
             message = null;
+            var elem = document.getElementById("messages");
+            elem.scrollTop = elem.scrollHeight;
             console.log("Document successfully written!");
           })
           .catch(function(error) {
             console.error("Error writing document: ", error);
           });
-          
       }
+    },
+    scroll() {
+      var elmnt = document.getElementById("messages");
+      elmnt.scrollTop = elmnt.scrollHeight;
     }
   }
 };
 </script>
 
 <style>
-#messages{
-  max-height: 60vh;
-  overflow-y: scroll;
+#messages {
+  max-height: 50vh;
+  overflow-y: auto;
 }
 
-#top {
-  padding: 20px;
-  height: auto;
-}
 .containerChat {
   word-wrap: break-word;
   border: 2px solid #dedede;
@@ -190,6 +201,8 @@ export default {
   padding: 10px;
   margin: 10px 0;
   width: 100%;
+  overflow-x: hidden;
+  max-height: 100vh;
 }
 
 #textArea {
