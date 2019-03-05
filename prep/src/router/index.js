@@ -2,12 +2,13 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Dashboard from '@/components/Dashboard'
 import ViewStaff from '@/components/staff/ViewStaff'
+import EditStaff from '@/components/staff/EditStaff'
 import ViewTests from '@/components/tests/ViewTests'
 import ViewRecipes from '@/components/tests/ViewRecipes'
 import ViewRecipeInfo from '@/components/tests/ViewRecipeInfo'
 import NewRecipe from '@/components/tests/NewRecipe'
 import EditRecipe from '@/components/tests/EditRecipe'
-import EditStaff from '@/components/staff/EditStaff'
+import ViewDailyCheckups from '@/components/tests/ViewDailyCheckups'
 import ViewAppointments from '@/components/appointments/ViewAppointments'
 import AddAppointment from '@/components/appointments/AddAppointment'
 import EditAppointment from '@/components/appointments/EditAppointment'
@@ -140,6 +141,14 @@ let router = new Router({
       path: '/edit-recipe/:test_id/:recipe_id',
       name: 'edit-recipe',
       component: EditRecipe,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/view-dailycheckups/:id',
+      name: 'view-dailycheckups',
+      component: ViewDailyCheckups,
       meta: {
         requiresAuth: true
       }
