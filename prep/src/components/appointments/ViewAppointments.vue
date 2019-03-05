@@ -12,8 +12,8 @@
                 <b>Sort by:</b>
               </span>
               <select id="select" @change="sort" class="browser-default" style="color:black">
-                <option value="Date" selected>Date</option>
-                <option value="Messages">Messages</option>
+                <option value="Date" selected>Date in ascending order</option>
+                <option value="Messages">Date in descending order</option>
               </select>
             </div>
           </div>
@@ -207,9 +207,6 @@ export default {
       } else {
         this.getApp("desc");
       }
-    },
-    sortQuery(dir) {
-
     }
   }
 };
