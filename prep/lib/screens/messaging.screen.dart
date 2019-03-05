@@ -3,20 +3,8 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'dart:convert';
-import 'dart:typed_data';
-import 'dart:math';
-
-import 'package:pointycastle/api.dart' as pc;
-import 'package:pointycastle/padded_block_cipher/padded_block_cipher_impl.dart';
-import 'package:pointycastle/paddings/pkcs7.dart';
-import 'package:pointycastle/block/aes_fast.dart';
-import 'package:pointycastle/block/modes/cbc.dart';
-//import 'package:firebase_auth/firebase_auth.dart';
-
-import 'package:hex/hex.dart';
-
 import '../utils/query.dart';
+import '../utils/message_crypto.dart';
 
 class _MockData {
   _MockData() {
@@ -55,13 +43,6 @@ class MessagingScreenState extends State<MessagingScreen>
   void initState() {
     super.initState();
     print("InitState ran!");
-    //Subscribe to Message stream
-    /* FirebaseAuth.instance.signInAnonymously().catchError((error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        print(
-            "Firebase Auth anonymous sign-in error-> $errorCode : $errorMessage");
-      }).then((user) { */
 
     //Load all initial messages.
     //TODO Remove the first forEach somehow...
@@ -82,7 +63,6 @@ class MessagingScreenState extends State<MessagingScreen>
         }
       });
     });
-    /* }); */
   }
 
   void _loadMessageFromFirestore(DocumentSnapshot document) {
@@ -92,7 +72,7 @@ class MessagingScreenState extends State<MessagingScreen>
       MessagingQueries().setSeenByPatient(document.reference);
     }
 
-    String decryptedMessage = decryptMessage(
+    String decryptedMessage = MessageCrypto().decryptMessage(
         message['content'], message['datetime'].millisecondsSinceEpoch);
 
     _addMessageDataToInternalList(
@@ -194,45 +174,6 @@ class MessagingScreenState extends State<MessagingScreen>
     );
   }
 
-  /* StreamBuilder<QuerySnapshot> _messagesStream(
-                Stream<QuerySnapshot> snapshots) {
-              return StreamBuilder<QuerySnapshot>(
-                  stream: snapshots,
-                  builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.hasError) {
-                      //TODO (for production) print to console log.
-                      return Text('Error: ${snapshot.error}');
-                    }
-          
-                    switch (snapshot.connectionState) {
-                      // waiting case may be removed when reading from cache is implemented
-                      case ConnectionState.waiting:
-                        return CircularProgressIndicator();
-          
-                      default:
-                        List<Widget> children =
-                            snapshot.data.documents.map((DocumentSnapshot document) {
-                          Map<String, dynamic> message = document.data;
-                          if (!message['seenByPatient']) {
-                            MessagingQueries().setSeenByPatient(document.reference);
-                          }
-                          String decryptedMessage = decryptMessage(message['content'],
-                              message['datetime'].millisecondsSinceEpoch);
-          
-                          var messageData = _MessageData(
-                              messageText: decryptedMessage,
-                              datetime: message['datetime'],
-                              isPatient: message['isPatient'],
-                              seenByStaff: message['seenByStaff']);
-          
-                          return _MessageListItem(messageData);
-                        }).toList();
-          
-                        return _messageListView(children);
-                    }
-                  });
-            } */
-
   void _scrollMessageViewToBottom() => _scrollController.animateTo(0.0,
       curve: Curves.ease, duration: const Duration(milliseconds: 300));
 
@@ -249,66 +190,14 @@ class MessagingScreenState extends State<MessagingScreen>
     }
   }
 
-  pc.PaddedBlockCipher getCipher(
-      bool mode, Uint8List iv, int millisSinceEpoch) {
-    //TODO: remove appointmentCode and read from file when merging with develop
-    //TODO: format encryption/decryption methods into new file
-    //TODO: comment code
-    const appointmentCode = "2vqqyqcc7";
-    String millisStr = millisSinceEpoch.toString();
-    String keyToEncode =
-        appointmentCode + millisStr.substring(millisStr.length - 7);
+  ListView _messageListView(List<Widget> childrenIn) {
+    bool isReverse = true;
 
-    String keyEncoded = HEX.encode(utf8.encode(keyToEncode));
-    List<int> keyEncodedList = utf8.encode(keyEncoded);
-
-    pc.Mac mac = new pc.Mac("SHA-512/HMAC");
-    mac.init(pc.KeyParameter(keyEncodedList));
-    String keyHash = HEX.encode(mac.process(Uint8List(0))).substring(0, 32);
-    Uint8List keyHashList = utf8.encode(keyHash);
-
-    pc.PaddedBlockCipher cipher = PaddedBlockCipherImpl(
-      PKCS7Padding(),
-      CBCBlockCipher(AESFastEngine()),
-    );
-
-    cipher.init(
-      mode ? true : false,
-      pc.PaddedBlockCipherParameters<pc.CipherParameters, pc.CipherParameters>(
-        pc.ParametersWithIV<pc.KeyParameter>(pc.KeyParameter(keyHashList), iv),
-        null,
-      ),
-    );
-    return cipher;
+    return (childrenIn == null)
+        ? ListView(reverse: isReverse)
+        : ListView(reverse: isReverse, children: childrenIn);
   }
 
-  String encryptMessage(String messageText, int millisSinceEpoch) {
-    Random rand = Random.secure();
-    int ivArrayLength = 16;
-    Uint8List iv = Uint8List(ivArrayLength);
-    for (int i = 0; i < ivArrayLength; ++i) {
-      iv[i] = rand.nextInt(255);
-    }
-
-    String encodedIV = HEX.encode(iv);
-    pc.PaddedBlockCipher cipher = getCipher(true, iv, millisSinceEpoch);
-
-    String encodedMessage =
-        HEX.encode(cipher.process(utf8.encode(messageText)));
-    String encodedText = encodedIV + encodedMessage;
-    return encodedText;
-  }
-
-  String decryptMessage(String hex, int millisSinceEpoch) {
-    String encodedIV = hex.substring(0, 32);
-    Uint8List iv = HEX.decode(encodedIV);
-    pc.PaddedBlockCipher cipher = getCipher(false, iv, millisSinceEpoch);
-
-    String encodedMessage = hex.substring(32);
-    String decodedMessage =
-        utf8.decode(cipher.process(HEX.decode(encodedMessage)));
-    return decodedMessage;
-  }
 
   void _sendMessage(String messageText) {
     if (_hasTyped) {
@@ -319,8 +208,7 @@ class MessagingScreenState extends State<MessagingScreen>
       DateTime now = DateTime.now();
 
       String encryptedMessage =
-          encryptMessage(messageText, now.millisecondsSinceEpoch);
-
+          MessageCrypto().encryptMessage(messageText, now.millisecondsSinceEpoch);
       MessagingQueries().sendMessage(encryptedMessage, now);
       _textController.clear();
     }
