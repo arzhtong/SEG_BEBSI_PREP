@@ -15,7 +15,7 @@ class _PrepState extends State<Prep> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: new Messaging(),
+      home: new MessagingScreen(),
         );
   }
 }

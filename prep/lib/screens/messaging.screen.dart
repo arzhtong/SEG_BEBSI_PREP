@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -10,21 +12,127 @@ import 'package:pointycastle/padded_block_cipher/padded_block_cipher_impl.dart';
 import 'package:pointycastle/paddings/pkcs7.dart';
 import 'package:pointycastle/block/aes_fast.dart';
 import 'package:pointycastle/block/modes/cbc.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:hex/hex.dart';
 
 import '../utils/query.dart';
 
-class Messaging extends StatefulWidget {
-  @override
-  State createState() => MessagingScreen();
+class _MockData {
+  _MockData() {
+    //iinitialise mock message list
+    for (int i = 10; i > 0; i--) {
+      bool isPatientMessage = (i % 2 == 0) ? true : false;
+      messagesList.add(
+        _MessageData(
+          messageText: "Lorem Ipsum. Message $i",
+          isPatient: isPatientMessage,
+          datetime: DateTime.now().subtract(Duration(seconds: i * 60)),
+          seenByStaff: isPatientMessage,
+        ),
+      );
+    }
+  }
+
+  static List<_MessageData> messagesList;
 }
 
-class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
+class MessagingScreen extends StatefulWidget {
+  @override
+  State createState() => MessagingScreenState();
+}
+
+class MessagingScreenState extends State<MessagingScreen>
+    with TickerProviderStateMixin {
   final TextEditingController _textController = TextEditingController();
   bool _hasTyped = false;
   final ScrollController _scrollController = ScrollController();
-  //List<_Message> _messagesList;
+  List<_MessageData> _messagesList = [];
+  StreamSubscription<QuerySnapshot> messageStreamSubscription;
+  bool _firstTimeLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    print("InitState ran!");
+    //Subscribe to Message stream
+    /* FirebaseAuth.instance.signInAnonymously().catchError((error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        print(
+            "Firebase Auth anonymous sign-in error-> $errorCode : $errorMessage");
+      }).then((user) { */
+
+    //Load all initial messages.
+    //TODO Remove the first forEach somehow...
+    MessagingQueries().messageDocuments.then((querySnapshot) {
+      querySnapshot.documents.forEach((documentSnapshot) {
+        _loadMessageFromFirestore(documentSnapshot);
+      });
+    });
+
+    messageStreamSubscription =
+        MessagingQueries().messageSnapshots.listen((QuerySnapshot snapshot) {
+      snapshot.documentChanges.forEach((DocumentChange change) {
+        if (change.type == DocumentChangeType.added) {
+          print("Document Addition Detected");
+          DocumentSnapshot documentSnaphot = change.document;
+
+          _loadMessageFromFirestore(documentSnaphot);
+        }
+      });
+    });
+    /* }); */
+  }
+
+  void _loadMessageFromFirestore(DocumentSnapshot document) {
+    Map<String, dynamic> message = document.data;
+
+    if (!message['seenByPatient']) {
+      MessagingQueries().setSeenByPatient(document.reference);
+    }
+
+    String decryptedMessage = decryptMessage(
+        message['content'], message['datetime'].millisecondsSinceEpoch);
+
+    _addMessageDataToInternalList(
+        messageText: decryptedMessage,
+        datetime: message['datetime'],
+        isPatient: message['isPatient'],
+        seenByStaff: message['seenByStaff']);
+
+    _scrollMessageViewToBottom();
+  }
+
+  void _addMessageDataToInternalList(
+      {String messageText,
+      DateTime datetime,
+      bool isPatient,
+      bool seenByStaff}) {
+    AnimationController animController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+
+    _MessageData message = _MessageData(
+        messageText: messageText,
+        datetime: datetime,
+        isPatient: isPatient,
+        seenByStaff: seenByStaff,
+        animController: animController);
+
+    setState(() {
+      _messagesList.insert(0, message);
+    });
+  }
+
+  @override
+  void dispose() {
+    for (_MessageData message in _messagesList) {
+      message.animController.dispose();
+    }
+
+    messageStreamSubscription.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +141,9 @@ class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
         title: Text("Doctor Name"), //TODO Add doctor name from datanase
       ),
       body: Column(children: <Widget>[
-        Flexible(child: _messagesStream(MessagingQueries().messagesSnapshots)),
+        Flexible(
+          child: _buildMessageListView(),
+        ),
         Divider(height: 1.0),
         Container(
           child: _buildTextComposer(),
@@ -42,9 +152,6 @@ class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
       ]),
     );
   }
-
-  void _scrollMessageViewToBottom() => _scrollController.animateTo(0.0,
-      curve: Curves.ease, duration: const Duration(milliseconds: 300));
 
   Widget _buildTextComposer() {
     return IconTheme(
@@ -87,47 +194,59 @@ class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
     );
   }
 
-  StreamBuilder<QuerySnapshot> _messagesStream(
-      Stream<QuerySnapshot> snapshots) {
-    return StreamBuilder<QuerySnapshot>(
-        stream: snapshots,
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.hasError) {
-            //TODO (for production) print to console log.
-            return Text('Error: ${snapshot.error}');
-          }
+  /* StreamBuilder<QuerySnapshot> _messagesStream(
+                Stream<QuerySnapshot> snapshots) {
+              return StreamBuilder<QuerySnapshot>(
+                  stream: snapshots,
+                  builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      //TODO (for production) print to console log.
+                      return Text('Error: ${snapshot.error}');
+                    }
+          
+                    switch (snapshot.connectionState) {
+                      // waiting case may be removed when reading from cache is implemented
+                      case ConnectionState.waiting:
+                        return CircularProgressIndicator();
+          
+                      default:
+                        List<Widget> children =
+                            snapshot.data.documents.map((DocumentSnapshot document) {
+                          Map<String, dynamic> message = document.data;
+                          if (!message['seenByPatient']) {
+                            MessagingQueries().setSeenByPatient(document.reference);
+                          }
+                          String decryptedMessage = decryptMessage(message['content'],
+                              message['datetime'].millisecondsSinceEpoch);
+          
+                          var messageData = _MessageData(
+                              messageText: decryptedMessage,
+                              datetime: message['datetime'],
+                              isPatient: message['isPatient'],
+                              seenByStaff: message['seenByStaff']);
+          
+                          return _MessageListItem(messageData);
+                        }).toList();
+          
+                        return _messageListView(children);
+                    }
+                  });
+            } */
 
-          switch (snapshot.connectionState) {
-            // waiting case may be removed when reading from cache is implemented
-            case ConnectionState.waiting:
-              return CircularProgressIndicator();
+  void _scrollMessageViewToBottom() => _scrollController.animateTo(0.0,
+      curve: Curves.ease, duration: const Duration(milliseconds: 300));
 
-            default:
-              List<Widget> children =
-                  snapshot.data.documents.map((DocumentSnapshot document) {
-                Map<String, dynamic> message = document.data;
-                if (!message['seenByPatient']) {
-                  MessagingQueries().setSeenByPatient(document.reference);
-                }
-                String decryptedMessage = decryptMessage(message['content'],
-                    message['datetime'].millisecondsSinceEpoch);
-                return _Message(decryptedMessage, message['datetime'],
-                    message['isPatient'], message['seenByStaff']);
-              }).toList();
-
-              return _messageListView(children);
-          }
-        });
-  }
-
-  ListView _messageListView(List<Widget> childrenIn) {
-    var retVal = ListView(
-      reverse: true,
-      children: childrenIn,
-      controller: _scrollController,
-    );
-    _scrollMessageViewToBottom();
-    return retVal;
+  Widget _buildMessageListView() {
+    if (_messagesList.length == 0) {
+      return CircularProgressIndicator();
+    } else {
+      return ListView.builder(
+        reverse: true,
+        itemBuilder: (_, int index) => _MessageListItem(_messagesList[index]),
+        itemCount: _messagesList.length,
+        controller: _scrollController,
+      );
+    }
   }
 
   pc.PaddedBlockCipher getCipher(
@@ -208,38 +327,53 @@ class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
   }
 }
 
-class _Message extends StatelessWidget {
-  _Message(this.messageText, this.datetime, this.isPatient, this.seenByStaff)
-      : rowAlignment =
-            (isPatient) ? MainAxisAlignment.end : MainAxisAlignment.start,
-        messageBackgroundColor = (isPatient)
-            ? Colors.greenAccent
-            : Colors.lightBlueAccent, //TODO use Theme colors
-        statuslineTimestamp = Text(
-          datetime.toString().substring(10, 16),
-          style: TextStyle(fontSize: 12.0),
-        );
-
+//Data class which hold information of a particular message
+class _MessageData {
   final String messageText;
   final DateTime datetime;
-
   final bool seenByStaff;
   final bool isPatient;
+  final AnimationController animController; //not yet used
+
+  _MessageData(
+      {@required this.messageText,
+      @required this.datetime,
+      @required this.isPatient,
+      @required this.seenByStaff,
+      this.animController});
+}
+
+//Widget used to display a particlat message on screen
+class _MessageListItem extends StatelessWidget {
+  final _MessageData message;
+
+  _MessageListItem(this.message)
+      : rowAlignment = (message.isPatient)
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
+        messageBackgroundColor = (message.isPatient)
+            ? Colors.greenAccent
+            : Colors.lightBlueAccent; //TODO use Theme colors
+
   final MainAxisAlignment rowAlignment;
   final Color messageBackgroundColor;
   final bool shouldWrap = true; // not yet used...
-  final Widget statuslineTimestamp;
 
   Widget _getStatusLine(BuildContext context) {
+    var statuslineTimestamp = Text(
+      message.datetime.toString().substring(10, 16),
+      style: TextStyle(fontSize: 12.0),
+    );
+
     return Row(
       mainAxisAlignment: rowAlignment,
-      children: (isPatient)
+      children: (message.isPatient)
           ? <Widget>[
               //Time sent
               statuslineTimestamp,
               //Read Receipt
-              Icon(((seenByStaff) ? Icons.done_all : Icons.done),
-                  color: (seenByStaff)
+              Icon(((message.seenByStaff) ? Icons.done_all : Icons.done),
+                  color: (message.seenByStaff)
                       ? Theme.of(context).accentColor
                       : Theme.of(context).buttonColor,
                   size: 16.0)
@@ -267,7 +401,7 @@ class _Message extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  messageText,
+                  message.messageText,
                   style: TextStyle(fontSize: 16.0),
                 ),
               ),

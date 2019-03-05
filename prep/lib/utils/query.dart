@@ -22,11 +22,9 @@ class MessagingQueries {
       .document(appointmentID)
       .collection('messages');
 
-  static final Stream<QuerySnapshot> _snapshots =
-      _colRef.orderBy('datetime', descending: true).snapshots();
+  Future<QuerySnapshot> get messageDocuments => _colRef.orderBy('datetime', descending: true).getDocuments();
 
-  Stream<QuerySnapshot> get messagesSnapshots => _snapshots;
-
+  Stream<QuerySnapshot> get messageSnapshots => _colRef.orderBy('datetime', descending: true).snapshots();
 
   void sendMessage(String message, DateTime datetime) {
     _colRef.add({
