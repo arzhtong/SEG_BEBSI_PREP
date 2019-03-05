@@ -96,7 +96,7 @@ class _DailyCheckups extends State<DailyCheckups> {
                     onChanged: (_) {
                       if (result) {
                         // This method works fine as only one user (the patient) will
-                        // be editing the data so there is no risk of a race condition
+                        // be editing the data so there is no risk of race conditions
                         document.reference.updateData({
                           ('instructions.'+ instruction): false
                         });
@@ -139,11 +139,11 @@ class _DailyCheckups extends State<DailyCheckups> {
     return StreamBuilder(
       stream: Firestore.instance.collection('appointments').document(widget._appointmentID).collection('dailyCheckups').orderBy('daysBeforeTest', descending: true).snapshots(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return const Text('Loading...');
-        return ListView.builder(
-          itemCount: snapshot.data.documents.length,
-          itemBuilder: (context, index) => _buildListItem(context, snapshot.data.documents[index]),
-        );},
+      if (!snapshot.hasData) return const Align(alignment: Alignment.topCenter, child: LinearProgressIndicator(),);
+      return ListView.builder(
+        itemCount: snapshot.data.documents.length,
+        itemBuilder: (context, index) => _buildListItem(context, snapshot.data.documents[index]),
+      );},
     );
   }
 }
