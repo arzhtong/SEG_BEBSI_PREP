@@ -8,7 +8,7 @@
           </h3>
           <div style="padding:20px;display:flex;" class="row">
             <div class="input-field col s12">
-              <span>
+              <span style="color:black !important">
                 <b>Sort by:</b>
               </span>
               <select id="select" @change="sort" class="browser-default" style="color:black">
@@ -18,6 +18,7 @@
             </div>
             <div class="input-field col s12" style="padding:15px;">
               <input
+                readonly="readonly"
                 id="datePicker"
                 @change="sortByDate"
                 value="Calendar"
@@ -85,13 +86,15 @@
                   @click="deleteAppointment(appointment.location)"
                   class="red-text material-icons"
                   style="position:relative;text-align:center;cursor:pointer;"
-                  
                 >delete</i>
               </a>
             </td>
             <td>
               <router-link v-bind:to="{name: 'message', params: {appointmentID: appointment.code}}">
-                <i class="material-icons left green-text" style="margin-left:5px;font-size:30px;text-align:center">insert_comment</i>
+                <i
+                  class="material-icons left green-text"
+                  style="margin-left:5px;font-size:30px;text-align:center"
+                >insert_comment</i>
                 
                 <span v-if="notifications[ids.indexOf(appointment.code)] != 0">
                   <span
@@ -118,6 +121,7 @@ export default {
   data() {
     return {
       appointments: [],
+      prevAppointments: [],
       isAdmin: null,
       tests: [],
       testID: null,
@@ -128,10 +132,10 @@ export default {
     };
   },
   created() {
-    this.getApp(null, "asc");
+    this.getApp("asc");
   },
   methods: {
-    getApp(sign, dir) {
+    getApp(dir) {
       db.collection("users")
         .where("email", "==", firebase.auth().currentUser.email)
         .get()
@@ -140,48 +144,28 @@ export default {
             this.isAdmin = doc.data().role;
             this.staffMemberID = doc.id;
           });
-          this.getAppointments(sign, dir);
+          this.getAppointments(dir);
         });
     },
-    getAppointments(sign, dir) {
-      if (sign != null) {
-        db.collection("appointments")
-          .where("datetime", ">=", dir)
-          .where("datetime", "<=", sign)
-          .get()
-          .then(querySnapshot => {
-            querySnapshot.forEach(appointment => {
-              const data = {
-                code: appointment.id,
-                datetime: appointment.data().datetime,
-                staffMember: appointment.data().staffMember,
-                location: appointment.data().location
-              };
-              this.testID = appointment.data().testID;
-              this.appointments.push(data);
-              this.fetchData(appointment.id);
-            });
-            this.getDoc();
+    getAppointments(dir) {
+      db.collection("appointments")
+        .orderBy("datetime", dir)
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(appointment => {
+            const data = {
+              code: appointment.id,
+              datetime: appointment.data().datetime,
+              staffMember: appointment.data().staffMember,
+              location: appointment.data().location,
+              id: appointment.id
+            };
+            this.testID = appointment.data().testID;
+            this.appointments.push(data);
+            this.fetchData(appointment.id);
           });
-      } else {
-        db.collection("appointments")
-          .orderBy("datetime", dir)
-          .get()
-          .then(querySnapshot => {
-            querySnapshot.forEach(appointment => {
-              const data = {
-                code: appointment.id,
-                datetime: appointment.data().datetime,
-                staffMember: appointment.data().staffMember,
-                location: appointment.data().location
-              };
-              this.testID = appointment.data().testID;
-              this.appointments.push(data);
-              this.fetchData(appointment.id);
-            });
-            this.getDoc();
-          });
-      }
+          this.getDoc();
+        });
     },
     getDoc() {
       db.collection("tests")
@@ -247,32 +231,50 @@ export default {
 
       if (selectValue == "Date") {
         // Sort by date asc
-        this.getApp(null, "asc");
+        this.getApp("asc");
       } else if (selectValue == "Date desc") {
         // Sort by date desc
-        this.getApp(null, "desc");
+        this.getApp("desc");
       }
     },
     sortByDate() {
       var value = document.getElementById("datePicker").value;
-      if (value == null) {
-        this.getApp(null, "asc");
-      }
-      var convertDate = new Date(value);
+
       var newDay = new Date(value);
-      convertDate.setDate(convertDate.getDate() + 1);
+      var newAppointments = [];
+      for (var i = 0; i < this.appointments.length; i++) {
+        var date = this.appointments[i].datetime.toDate();
+        var wholeDate =
+          date.getDate().toString() +
+          date.getMonth().toString() +
+          date.getFullYear().toString();
+        var convertWholeDate =
+          newDay.getDate().toString() +
+          newDay.getMonth().toString() +
+          newDay.getFullYear().toString();
 
-      var timestamp1 = firebase.firestore.Timestamp.fromDate(convertDate);
-      var timestamp2 = firebase.firestore.Timestamp.fromDate(newDay);
-
-      this.clearData();
-      this.getApp(timestamp1, timestamp2);
+        if (wholeDate == convertWholeDate) {
+          newAppointments.push(this.appointments[i]);
+          this.fetchData(this.appointments[i].id);
+        }
+      }
+      if (newAppointments.length != 0) {
+        this.clearData();
+        this.appointments = newAppointments;
+        this.appointments.push();
+      } else {
+        alert("No appointments scheduled for " + value + "!");
+        this.clearData();
+        this.getApp("asc");
+        document.getElementById("datePicker").value = "Calendar";
+      }
+      document.getElementById("select").value = "Date";
     },
     resetTable() {
       this.clearData();
       document.getElementById("select").value = "Date";
       document.getElementById("datePicker").value = "Calendar";
-      this.getApp(null, "asc");
+      this.getApp("asc");
     },
     clearData() {
       this.appointments = [];
