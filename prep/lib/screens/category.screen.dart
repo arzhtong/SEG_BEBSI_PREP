@@ -42,7 +42,7 @@ class _CategoryState extends State<Category>{
       String name = myMap.values.elementAt(0);
       String description = myMap.values.elementAt(1);
 
-      listOfDropDowns.add(DescriptiveExpansionTile(name, description));
+      listOfDropDowns.add(DescriptiveExpansionTile(name, description,list.toString()));
     });
 
     return Column(
@@ -56,9 +56,35 @@ class DescriptiveExpansionTile extends StatelessWidget {
   String description;
   List<Widget> columnChildren;
 
-  DescriptiveExpansionTile(String category, String description){
+  DescriptiveExpansionTile(String category, String description,String items){
     this.category = category;
     this.description =description;
+    columnChildren=new List();
+        if (description.isNotEmpty){
+      columnChildren.add(
+        Text(
+          description,
+          style: TextStyle(
+            color: Colors.grey[600],
+          ),
+        ),
+      );
+
+      columnChildren.add(
+        Divider(
+          color: Colors.white,
+        ),
+      );
+    }
+
+    columnChildren.add(
+      Text(
+        formatItemList(items),
+        style: TextStyle(
+          color: Colors.grey,
+        ),
+      )
+    );
   }
   
   @override
@@ -73,9 +99,9 @@ class DescriptiveExpansionTile extends StatelessWidget {
             padding: EdgeInsets.only(right: 50.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-
-              ],
+              children: columnChildren,
+               
+              
             ),
           ),
         )
@@ -141,23 +167,23 @@ class DescriptiveExpansionTile extends StatelessWidget {
   //   return columnContent;
   // }
 
-  // String formatItemList(String rawItems){
-  //   String formattedList = "";
-  //   List<String> rawItemsList = rawItems.split(",");
-  //   String remainderstring= rawItemsList.elementAt(rawItemsList.length-1);
-  //   for (var i  = 0; i < rawItemsList.length - 1; i++){
-  //     formattedList = formattedList + rawItemsList.elementAt(i) + " • ";
-  //   }
-  //   for (var j=0;j<=formattedList.length-1;j++){
-  //     if (formattedList.substring(j,j+1)=='[' || formattedList.substring(j,j+1)==']'){
-  //      formattedList= formattedList.replaceRange(j, j+1, ' ');
-  //     }
-  //     for (var k=0;k<=remainderstring.length-1;k++){
-  //       if (remainderstring.substring(k,k+1)==']'){
-  //        remainderstring=remainderstring.replaceRange(k, k+1, '');
-  //       }
-  //     }
-  //   return formattedList + remainderstring;
-  // }
-  //   return formattedList + remainderstring;
-  // }
+  String formatItemList(String rawItems){
+    String formattedList = "";
+    List<String> rawItemsList = rawItems.split(",");
+    String remainderstring= rawItemsList.elementAt(rawItemsList.length-1);
+    for (var i  = 0; i < rawItemsList.length - 1; i++){
+      formattedList = formattedList + rawItemsList.elementAt(i) + " • ";
+    }
+    for (var j=0;j<=formattedList.length-1;j++){
+      if (formattedList.substring(j,j+1)=='[' || formattedList.substring(j,j+1)==']'){
+       formattedList= formattedList.replaceRange(j, j+1, ' ');
+      }
+      for (var k=0;k<=remainderstring.length-1;k++){
+        if (remainderstring.substring(k,k+1)==']'){
+         remainderstring=remainderstring.replaceRange(k, k+1, '');
+        }
+      }
+    return formattedList + remainderstring;
+  }
+    return formattedList + remainderstring;
+  }
