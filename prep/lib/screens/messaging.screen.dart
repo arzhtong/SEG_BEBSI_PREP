@@ -72,7 +72,7 @@ class MessagingScreenState extends State<MessagingScreen>
       MessagingQueries().setSeenByPatient(document.reference);
     }
 
-    String decryptedMessage = MessageCrypto().decryptMessage(
+    String decryptedMessage = MessageCrypto.decryptMessage(
         message['content'], message['datetime'].millisecondsSinceEpoch);
 
     _addMessageDataToInternalList(
@@ -208,7 +208,7 @@ class MessagingScreenState extends State<MessagingScreen>
       DateTime now = DateTime.now();
 
       String encryptedMessage =
-          MessageCrypto().encryptMessage(messageText, now.millisecondsSinceEpoch);
+          MessageCrypto.encryptMessage(messageText, now.millisecondsSinceEpoch);
       MessagingQueries().sendMessage(encryptedMessage, now);
       _textController.clear();
     }
