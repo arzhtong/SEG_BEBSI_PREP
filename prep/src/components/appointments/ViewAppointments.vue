@@ -3,18 +3,35 @@
     <div class="container" style="width:100%;height:100%;">
       <table class="collection with-header responsive-table" style="background: white;">
         <thead class="collection-header">
-          <div style="padding:20px;" class="row">
-            <h3>
-              <b>Appointments</b>
-            </h3>
+          <h3>
+            <b>Appointments</b>
+          </h3>
+          <div style="padding:20px;display:flex;" class="row">
             <div class="input-field col s12">
               <span>
                 <b>Sort by:</b>
               </span>
               <select id="select" @change="sort" class="browser-default" style="color:black">
                 <option value="Date" selected>Date in ascending order</option>
-                <option value="Messages">Date in descending order</option>
+                <option value="Date desc">Date in descending order</option>
               </select>
+            </div>
+            <div class="input-field col s12" style="padding:15px;">
+              <input
+                id="datePicker"
+                @change="sortByDate"
+                value="Calendar"
+                type="text"
+                class="datepicker"
+                style="text-align:center"
+              >
+              <button style="margin-left:20%" @click="resetTable" class="btn">Reset</button>
+            </div>
+            <div>
+              <a @click="clickInput" class="blue-text tooltip" style="margin-top: 45px !important;">
+                <span class="tooltiptext">Click the calendar to sort by specific date</span>
+                <i class="material-icons">calendar_today</i>
+              </a>
             </div>
           </div>
 
@@ -55,23 +72,33 @@
 
             <td>
               <router-link v-bind:to="{name: 'edit-appointment', params: {id:appointment.code}}">
-                <button class="btn blue" style="position:relative;text-align:center;">edit</button>
+                <a class="tooltip">
+                  <span class="tooltiptext">Edit Appointment</span>
+                  <i class="material-icons" style="position:relative;text-align:center;">edit</i>
+                </a>
               </router-link>
             </td>
             <td>
-              <button class="btn red" @click="deleteAppointment(appointment.location)">Delete</button>
+              <a class="tooltip">
+                <span class="tooltiptext">Edit Appointment</span>
+                <i
+                  @click="deleteAppointment(appointment.location)"
+                  class="red-text material-icons"
+                  style="position:relative;text-align:center;cursor:pointer;"
+                  
+                >delete</i>
+              </a>
             </td>
             <td>
               <router-link v-bind:to="{name: 'message', params: {appointmentID: appointment.code}}">
-                <i class="material-icons left green-text" style="font-size:40px">insert_comment</i>
-              
-                  <span v-if="notifications[ids.indexOf(appointment.code)] != 0">
-                    <span
-                      v-if="ids.includes(appointment.code) == true"
-                      class="new badge"
-                    >{{notifications[ids.indexOf(appointment.code)]}}</span>
-                  </span>
-              
+                <i class="material-icons left green-text" style="margin-left:5px;font-size:30px;text-align:center">insert_comment</i>
+                
+                <span v-if="notifications[ids.indexOf(appointment.code)] != 0">
+                  <span
+                    v-if="ids.includes(appointment.code) == true"
+                    class="new badge"
+                  >{{notifications[ids.indexOf(appointment.code)]}}</span>
+                </span>
               </router-link>
             </td>
           </tr>
@@ -96,19 +123,15 @@ export default {
       testID: null,
       staffMemberID: null,
       notifications: [],
-      ids: []
+      ids: [],
+      id: null
     };
   },
   created() {
-    document.addEventListener("DOMContentLoaded", function() {
-      var elems = document.querySelectorAll(".tooltipped");
-      var instances = M.Tooltip.init(elems, options);
-    });
-    
-    this.getApp("asc");
+    this.getApp(null, "asc");
   },
   methods: {
-    getApp(dir) {
+    getApp(sign, dir) {
       db.collection("users")
         .where("email", "==", firebase.auth().currentUser.email)
         .get()
@@ -117,27 +140,48 @@ export default {
             this.isAdmin = doc.data().role;
             this.staffMemberID = doc.id;
           });
-          this.getAppointments(dir);
+          this.getAppointments(sign, dir);
         });
     },
-    getAppointments(dir) {
-      db.collection("appointments")
-        .orderBy("datetime", dir)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(appointment => {
-            const data = {
-              code: appointment.id,
-              datetime: appointment.data().datetime,
-              staffMember: appointment.data().staffMember,
-              location: appointment.data().location
-            };
-            this.testID = appointment.data().testID;
-            this.appointments.push(data);
-            this.fetchData(appointment.id);
+    getAppointments(sign, dir) {
+      if (sign != null) {
+        db.collection("appointments")
+          .where("datetime", ">=", dir)
+          .where("datetime", "<=", sign)
+          .get()
+          .then(querySnapshot => {
+            querySnapshot.forEach(appointment => {
+              const data = {
+                code: appointment.id,
+                datetime: appointment.data().datetime,
+                staffMember: appointment.data().staffMember,
+                location: appointment.data().location
+              };
+              this.testID = appointment.data().testID;
+              this.appointments.push(data);
+              this.fetchData(appointment.id);
+            });
+            this.getDoc();
           });
-          this.getDoc();
-        });
+      } else {
+        db.collection("appointments")
+          .orderBy("datetime", dir)
+          .get()
+          .then(querySnapshot => {
+            querySnapshot.forEach(appointment => {
+              const data = {
+                code: appointment.id,
+                datetime: appointment.data().datetime,
+                staffMember: appointment.data().staffMember,
+                location: appointment.data().location
+              };
+              this.testID = appointment.data().testID;
+              this.appointments.push(data);
+              this.fetchData(appointment.id);
+            });
+            this.getDoc();
+          });
+      }
     },
     getDoc() {
       db.collection("tests")
@@ -162,6 +206,7 @@ export default {
         .where("isPatient", "==", true)
         .onSnapshot(snapshot => {
           snapshot.docChanges().forEach(change => {
+            this.id = id;
             var count = snapshot.size;
             if (this.ids.indexOf(id) != -1) {
               var index = this.ids.indexOf(id);
@@ -198,21 +243,55 @@ export default {
     },
     sort() {
       var selectValue = document.getElementById("select").value;
+      this.clearData();
+
+      if (selectValue == "Date") {
+        // Sort by date asc
+        this.getApp(null, "asc");
+      } else if (selectValue == "Date desc") {
+        // Sort by date desc
+        this.getApp(null, "desc");
+      }
+    },
+    sortByDate() {
+      var value = document.getElementById("datePicker").value;
+      if (value == null) {
+        this.getApp(null, "asc");
+      }
+      var convertDate = new Date(value);
+      var newDay = new Date(value);
+      convertDate.setDate(convertDate.getDate() + 1);
+
+      var timestamp1 = firebase.firestore.Timestamp.fromDate(convertDate);
+      var timestamp2 = firebase.firestore.Timestamp.fromDate(newDay);
+
+      this.clearData();
+      this.getApp(timestamp1, timestamp2);
+    },
+    resetTable() {
+      this.clearData();
+      document.getElementById("select").value = "Date";
+      document.getElementById("datePicker").value = "Calendar";
+      this.getApp(null, "asc");
+    },
+    clearData() {
       this.appointments = [];
       this.tests = [];
       this.notifications = [];
       this.ids = [];
-      if (selectValue == "Date") {
-        this.getApp("asc");
-      } else {
-        this.getApp("desc");
-      }
+    },
+    clickInput() {
+      document.getElementById("datePicker").click();
     }
   }
 };
 </script>
 
 <style>
+h3 {
+  padding: 20px;
+}
+
 td,
 th {
   padding: 10px !important;
@@ -220,7 +299,6 @@ th {
 .tooltip {
   position: relative;
   display: inline-block;
-  border-bottom: 1px dotted black;
 }
 
 .tooltip .tooltiptext {
