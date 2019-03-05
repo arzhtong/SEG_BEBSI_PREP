@@ -7,6 +7,7 @@ import ViewRecipes from '@/components/tests/ViewRecipes'
 import ViewRecipeInfo from '@/components/tests/ViewRecipeInfo'
 import NewRecipe from '@/components/tests/NewRecipe'
 import EditRecipe from '@/components/tests/EditRecipe'
+import ViewPrepCategories from '@/components/tests/ViewPrepCategories'
 import EditStaff from '@/components/staff/EditStaff'
 import ViewAppointments from '@/components/appointments/ViewAppointments'
 import AddAppointment from '@/components/appointments/AddAppointment'
@@ -116,6 +117,14 @@ let router = new Router({
       path: '/view-recipes/:test_id',
       name: 'view-recipes',
       component: ViewRecipes,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/view-prep-categories/:test_id',
+      name: 'view-prep-categories',
+      component: ViewPrepCategories,
       meta: {
         requiresAuth: true
       }

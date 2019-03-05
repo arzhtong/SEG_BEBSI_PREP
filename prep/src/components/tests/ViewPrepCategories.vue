@@ -1,27 +1,27 @@
 <template>
-    <div id="view-recipes">
+    <div id="view-prep-categories">
         <ul class="collection with-header">
             <li class="collection-header">
                 
 <div class="container" style="width:100%;height:100%">
         <table class="collection with-header responsive-table" style="background: white;margin-top:10%;width:100%;height:auto">
         <thead class="collection-header">
-            <h4 style="padding:20px;font-size:3em;"><b>Recipes</b></h4>
+            <h4 style="padding:20px;font-size:3em;"><b>Preparation Categories</b></h4>
             
           <tr style="font-size:1.5em">
-              <th style="padding: 20px;">Dish Name</th> 
+              <th style="padding: 20px;">contents</th> 
               <th>Description</th>
           </tr> 
         </thead> 
 
-        <tbody v-for="recipe in recipes" v-bind:key="recipe.id" class="collection-item" >
+        <tbody v-for="category in categories" v-bind:key="category.id" class="collection-item" >
           <tr >
-            <td style="padding: 20px;">{{recipe.title}}</td>
-            <td><router-link v-bind:to="{name: 'view-recipe-info', params: {test_id: testID, recipe_id: recipe.title}}" class="btn blue">Show</router-link></td>
+            <td style="padding: 20px;">{{category.contents}}</td>
+            <td><router-link to="/" class="btn blue">Show</router-link></td>
           </tr>
         </tbody>
         <router-link v-bind:to="{name: 'new-recipe', params: {test_id: testID}}" class="btn green" style="margin:20px">
-            Add Recipe
+            Add category
         </router-link>
       </table>
       </div>
@@ -37,24 +37,24 @@
     import db from '../firebaseInit'
 
     export default{
-        name: 'view-recipes',
+        name: 'view-prep-categories',
         data() {
             return {
-                recipes: [],
+                categories: [],
                 testID: this.$route.params.test_id
                 
             }
         },
        created () {
-            db.collection('tests').doc(this.$route.params.test_id).collection('recipes').get().then(querySnapshot => {
+            db.collection('tests').doc(this.$route.params.test_id).collection('prepCards').get().then(querySnapshot => {
                 querySnapshot.forEach(doc => {
                     const data = {
                         'id': doc.id,
-                        'instructions': doc.data().instructions,
-                        'notes': doc.data().notes,
-                        'title': doc.data().title,
+                        'contents': doc.data().contents,
+                        
+                        
                     }
-                    this.recipes.push(data)
+                    this.categories.push(data)
                 })
             })
         }

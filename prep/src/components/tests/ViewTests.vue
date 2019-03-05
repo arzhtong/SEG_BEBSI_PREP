@@ -11,8 +11,7 @@
           <tr style="font-size:1.5em">
               <th style="padding: 20px;">Title</th>
               <th>Daily check-ups</th>
-              <th>Preparation cards</th>
-              <th>Preparation contents</th>
+              <th>Preparation categories</th>
               <th>Recipes</th>
           </tr>
         </thead>
@@ -21,8 +20,7 @@
           <tr >
             <td style="padding: 20px;">{{test.title}}</td>
             <td><router-link to="" class="btn blue">Show</router-link></td>
-            <td><router-link to="" class="btn blue">Show</router-link></td>
-            <td><router-link to="" class="btn blue">Show</router-link></td>
+            <td><router-link v-bind:to="{name: 'view-prep-categories', params: {test_id: test.id}}" class="btn blue">Show</router-link></td>
             <td><router-link v-bind:to="{name: 'view-recipes', params: {test_id: test.id}}" class="btn blue">Show</router-link></td>
           </tr>
         </tbody>
