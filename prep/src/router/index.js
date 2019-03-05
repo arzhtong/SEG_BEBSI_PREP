@@ -10,6 +10,7 @@ import Login from '@/components/auth/Login'
 import Register from '@/components/auth/Register'
 import ResetPassword from '@/components/auth/ResetPassword'
 import Message from '@/components/messages/Message'
+import AddTest from '@/components/AddTest'
 import firebase from 'firebase'
 
 
@@ -95,6 +96,14 @@ let router = new Router({
       path: '/message/:appointmentID',
       name: 'message',
       component: Message,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/add-test',
+      name: 'add-test',
+      component: AddTest,
       meta: {
         requiresAuth: true
       }
