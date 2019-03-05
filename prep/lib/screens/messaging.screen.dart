@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:math';
 
-import 'package:pointycastle/api.dart';
+import 'package:pointycastle/api.dart' as pc;
 import 'package:pointycastle/padded_block_cipher/padded_block_cipher_impl.dart';
 import 'package:pointycastle/paddings/pkcs7.dart';
 import 'package:pointycastle/block/aes_fast.dart';
@@ -23,11 +23,15 @@ class Messaging extends StatefulWidget {
 class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
   final TextEditingController _textController = TextEditingController();
   bool _hasTyped = false;
+  final ScrollController _scrollController = ScrollController();
   //List<_Message> _messagesList;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Doctor Name"), //TODO Add doctor name from datanase
+      ),
       body: Column(children: <Widget>[
         Flexible(child: _messagesStream(MessagingQueries().messagesSnapshots)),
         Divider(height: 1.0),
@@ -39,6 +43,9 @@ class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
     );
   }
 
+  void _scrollMessageViewToBottom() => _scrollController.animateTo(0.0,
+      curve: Curves.ease, duration: const Duration(milliseconds: 300));
+
   Widget _buildTextComposer() {
     return IconTheme(
       data: IconThemeData(color: Theme.of(context).accentColor),
@@ -48,6 +55,8 @@ class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
           children: <Widget>[
             Flexible(
               child: TextField(
+                maxLines: null,
+                keyboardType: TextInputType.multiline,
                 controller: _textController,
                 onChanged: (userInputText) {
                   setState(() {
@@ -62,8 +71,14 @@ class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 4.0),
               child: IconButton(
-                icon: Icon(Icons.send),
-                onPressed: () => _sendMessage(_textController.text),
+                icon: Icon(
+                  Icons.send,
+                  //TODO Change to proper theme colors after implementation.
+                  color: (_hasTyped)
+                      ? Theme.of(context).accentColor
+                      : Theme.of(context).buttonColor,
+                ),
+                onPressed: () => _sendMessage(_textController.text.trim()),
               ),
             ),
           ],
@@ -85,7 +100,7 @@ class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
           switch (snapshot.connectionState) {
             // waiting case may be removed when reading from cache is implemented
             case ConnectionState.waiting:
-              return _messageListView(null);
+              return CircularProgressIndicator();
 
             default:
               List<Widget> children =
@@ -99,20 +114,24 @@ class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
                 return _Message(decryptedMessage, message['datetime'],
                     message['isPatient'], message['seenByStaff']);
               }).toList();
+
               return _messageListView(children);
           }
         });
   }
 
   ListView _messageListView(List<Widget> childrenIn) {
-    bool isReverse = true;
-
-    return (childrenIn == null)
-        ? ListView(reverse: isReverse)
-        : ListView(reverse: isReverse, children: childrenIn);
+    var retVal = ListView(
+      reverse: true,
+      children: childrenIn,
+      controller: _scrollController,
+    );
+    _scrollMessageViewToBottom();
+    return retVal;
   }
 
-  PaddedBlockCipher getCipher(bool mode, Uint8List iv, int millisSinceEpoch) {
+  pc.PaddedBlockCipher getCipher(
+      bool mode, Uint8List iv, int millisSinceEpoch) {
     //TODO: remove appointmentCode and read from file when merging with develop
     //TODO: format encryption/decryption methods into new file
     //TODO: comment code
@@ -124,20 +143,20 @@ class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
     String keyEncoded = HEX.encode(utf8.encode(keyToEncode));
     List<int> keyEncodedList = utf8.encode(keyEncoded);
 
-    Mac mac = new Mac("SHA-512/HMAC");
-    mac.init(KeyParameter(keyEncodedList));
+    pc.Mac mac = new pc.Mac("SHA-512/HMAC");
+    mac.init(pc.KeyParameter(keyEncodedList));
     String keyHash = HEX.encode(mac.process(Uint8List(0))).substring(0, 32);
     Uint8List keyHashList = utf8.encode(keyHash);
 
-    PaddedBlockCipher cipher = PaddedBlockCipherImpl(
+    pc.PaddedBlockCipher cipher = PaddedBlockCipherImpl(
       PKCS7Padding(),
       CBCBlockCipher(AESFastEngine()),
     );
 
     cipher.init(
       mode ? true : false,
-      PaddedBlockCipherParameters<CipherParameters, CipherParameters>(
-        ParametersWithIV<KeyParameter>(KeyParameter(keyHashList), iv),
+      pc.PaddedBlockCipherParameters<pc.CipherParameters, pc.CipherParameters>(
+        pc.ParametersWithIV<pc.KeyParameter>(pc.KeyParameter(keyHashList), iv),
         null,
       ),
     );
@@ -153,7 +172,7 @@ class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
     }
 
     String encodedIV = HEX.encode(iv);
-    PaddedBlockCipher cipher = getCipher(true, iv, millisSinceEpoch);
+    pc.PaddedBlockCipher cipher = getCipher(true, iv, millisSinceEpoch);
 
     String encodedMessage =
         HEX.encode(cipher.process(utf8.encode(messageText)));
@@ -164,7 +183,7 @@ class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
   String decryptMessage(String hex, int millisSinceEpoch) {
     String encodedIV = hex.substring(0, 32);
     Uint8List iv = HEX.decode(encodedIV);
-    PaddedBlockCipher cipher = getCipher(false, iv, millisSinceEpoch);
+    pc.PaddedBlockCipher cipher = getCipher(false, iv, millisSinceEpoch);
 
     String encodedMessage = hex.substring(32);
     String decodedMessage =
@@ -174,9 +193,15 @@ class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
 
   void _sendMessage(String messageText) {
     if (_hasTyped) {
+      setState(() {
+        _hasTyped = false;
+      });
+
       DateTime now = DateTime.now();
+
       String encryptedMessage =
           encryptMessage(messageText, now.millisecondsSinceEpoch);
+
       MessagingQueries().sendMessage(encryptedMessage, now);
       _textController.clear();
     }
@@ -184,39 +209,86 @@ class MessagingScreen extends State<Messaging> with TickerProviderStateMixin {
 }
 
 class _Message extends StatelessWidget {
-  _Message(this.messageText, this.datetime, this.isPatient, this.seenByStaff);
+  _Message(this.messageText, this.datetime, this.isPatient, this.seenByStaff)
+      : rowAlignment =
+            (isPatient) ? MainAxisAlignment.end : MainAxisAlignment.start,
+        messageBackgroundColor = (isPatient)
+            ? Colors.greenAccent
+            : Colors.lightBlueAccent, //TODO use Theme colors
+        statuslineTimestamp = Text(
+          datetime.toString().substring(10, 16),
+          style: TextStyle(fontSize: 12.0),
+        );
 
   final String messageText;
   final DateTime datetime;
-  final bool isPatient;
+
   final bool seenByStaff;
+  final bool isPatient;
+  final MainAxisAlignment rowAlignment;
+  final Color messageBackgroundColor;
+  final bool shouldWrap = true; // not yet used...
+  final Widget statuslineTimestamp;
+
+  Widget _getStatusLine(BuildContext context) {
+    return Row(
+      mainAxisAlignment: rowAlignment,
+      children: (isPatient)
+          ? <Widget>[
+              //Time sent
+              statuslineTimestamp,
+              //Read Receipt
+              Icon(((seenByStaff) ? Icons.done_all : Icons.done),
+                  color: (seenByStaff)
+                      ? Theme.of(context).accentColor
+                      : Theme.of(context).buttonColor,
+                  size: 16.0)
+            ]
+          : <Widget>[
+              //Time sent
+              statuslineTimestamp
+            ],
+    );
+  }
+
+  Widget _getMessageBody(BuildContext context) {
+    return Row(
+      mainAxisAlignment: rowAlignment,
+      children: <Widget>[
+        Flexible(
+          child: FractionallySizedBox(
+            widthFactor: 0.8,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                color: messageBackgroundColor,
+              ),
+              margin: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  messageText,
+                  style: TextStyle(fontSize: 16.0),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5.0),
-            color: (isPatient) ? Colors.greenAccent : Colors.white),
-        margin: const EdgeInsets.symmetric(vertical: 6.0),
-        child: Stack(children: <Widget>[
-          Text(
-            messageText,
-            style: TextStyle(fontSize: 16.0),
-          ),
-          Positioned(
-            bottom: 0.0,
-            right: 0.0,
-            child: Row(children: <Widget>[
-              Text(
-                datetime.toString().substring(10, 16),
-                style: TextStyle(fontSize: 12.0),
-              ),
-              SizedBox(width: 4.0),
-              Icon(((seenByStaff) ? Icons.done_all : Icons.done),
-                  color: (seenByStaff) ? Colors.lightBlue : Colors.blueGrey,
-                  size: 16.0),
-            ]),
-          )
-        ]));
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Column(
+        children: <Widget>[
+          _getStatusLine(context),
+          _getMessageBody(context),
+          Divider(),
+        ],
+      ),
+    );
   }
 }
