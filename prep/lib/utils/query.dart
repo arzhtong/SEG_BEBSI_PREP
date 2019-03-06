@@ -22,11 +22,9 @@ class MessagingQueries {
       .document(appointmentID)
       .collection('messages');
 
-  Future<QuerySnapshot> get messageDocuments => _colRef.orderBy('datetime', descending: true).getDocuments();
+  static Stream<QuerySnapshot> get messageSnapshots => _colRef.orderBy('datetime', descending: false).snapshots();
 
-  Stream<QuerySnapshot> get messageSnapshots => _colRef.orderBy('datetime', descending: true).snapshots();
-
-  void sendMessage(String message, DateTime datetime) {
+  static void sendMessage(String message, DateTime datetime) {
     _colRef.add({
       'content': message,
       'datetime': datetime,
@@ -36,7 +34,7 @@ class MessagingQueries {
     });
   }
 
-  void setSeenByPatient(DocumentReference docRef) {
+  static void setSeenByPatient(DocumentReference docRef) {
     // WriteBatch batch = Firestore.instance.batch();
     // _colRef.getDocuments().then((querySnapshot) => {
     //   querySnapshot.documents.forEach((doc) => {
