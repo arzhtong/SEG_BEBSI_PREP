@@ -6,7 +6,6 @@ import 'dart:async';
 import '../utils/query.dart';
 import '../utils/message_crypto.dart';
 
-
 class MessagingScreen extends StatefulWidget {
   final _MessagingScreenState _messagingScreenState = _MessagingScreenState();
 
@@ -117,12 +116,6 @@ class _MessagesViewState extends State<_MessagesView>
 
     setState(() => _messagesList.insert(0, _newMessage));
     _scrollMessageViewToBottom();
-
-    @override
-    void initState() {
-      super.initState();
-      Firestore.instance.enablePersistence(true);
-    }
   }
 
   void _scrollMessageViewToBottom() => _scrollController.animateTo(0.0,
@@ -133,6 +126,12 @@ class _MessagesViewState extends State<_MessagesView>
       message.animController.dispose();
     }
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Firestore.instance.enablePersistence(true);
   }
 
   @override
