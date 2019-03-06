@@ -16,6 +16,6 @@ class _PrepState extends State<Prep> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: new MessagingScreen(),
-        );
+    );
   }
 }

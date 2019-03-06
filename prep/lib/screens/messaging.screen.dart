@@ -37,14 +37,16 @@ class _MessagingScreenState extends State<MessagingScreen> {
   @override
   void initState() {
     super.initState();
+
+    Firestore.instance.enablePersistence(true);
     _messageStreamSubscription =
         MessagingQueries.messageSnapshots.listen((QuerySnapshot snapshot) {
       snapshot.documentChanges.forEach((DocumentChange change) {
-        print("CHANGE DETECTED");        
+        print("CHANGE DETECTED");
         if (change.type == DocumentChangeType.added)
           _addNewMessage(change.document);
       });
-    });  
+    });
   }
 
   @override
