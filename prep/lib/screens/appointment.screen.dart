@@ -6,12 +6,8 @@ import 'package:prep/screens/daily_checkups.screen.dart';
 import 'package:prep/screens/messaging.screen.dart';
 
 class Appointment extends StatefulWidget {
-  final String _appointmentID;
-  Appointment(this._appointmentID);
-
   @override
   State<StatefulWidget> createState() {
-    print("Appointment screen recieved: " + _appointmentID);
     return _AppointmentState();
   }
 }
@@ -19,18 +15,12 @@ class Appointment extends StatefulWidget {
 class _AppointmentState extends State<Appointment> {
   int _selectedIndex = 0;
 
-  Widget getPage(int index) {
-    switch(index){
-      case 0: {return AppointmentInfo();}
-      break;
-      case 1: {return AppointmentPrep();}
-      break;
-      case 2: {return DailyCheckups(widget._appointmentID);}
-      break;
-      default: {return Messaging();}
-      break;
-    }
-  }
+  final _widgetOptions = [
+    AppointmentInfo(),
+    AppointmentPrep(),
+    DailyCheckups(),
+    Messaging()
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +30,7 @@ class _AppointmentState extends State<Appointment> {
         title: Text('Appointments'),
       ),
       body: Center(
-        child: getPage(_selectedIndex),
+        child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
