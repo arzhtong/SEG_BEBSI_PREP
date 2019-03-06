@@ -54,7 +54,6 @@
                 querySnapshot.forEach(doc => {
                     const data = {
                         'id': doc.id,
-                        'test_id': doc.data().testID,
                         'title': doc.data().title,
 
                     }

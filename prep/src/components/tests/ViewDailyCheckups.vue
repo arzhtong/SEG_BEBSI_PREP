@@ -5,22 +5,27 @@
                <div calss="container" style="width:100%;height:100%">
                    <table calss="collection with-header responsive-table" style="background: white;margin-top:10%;width:100%;height:auto">
                        <thead calss="collection-header">
-                          <h4>Daily Check-ups</h4>
+                          <h4 style="padding:10px;font-size:3em;font-weight: bold;">Daily Check-ups</h4>
                           <tr style="font-size:1.5em">
-                               <th style="padding: 20px;">Title</th> 
+                               <th>Id</th>
+                               <th>Title</th> 
+                               <th>Days Before Test</th>
                                <th>Description</th>
                            </tr>
                        </thead>
                        <tbody v-for="dailyCheckup in dailyCheckups" v-bind:key="dailyCheckup.id" class="collection-item">
                            <tr>
+                               <td>{{dailyCheckup.id}}</td>
                                <td>{{dailyCheckup.title}}</td>
+                               <td>{{dailyCheckup.daysBeforeTest}}</td>
                                <td><button class="btn blue" style="position:relative;text-align:center;">Show Information</button></td>
                               
                            </tr>
                           
                        </tbody>
                        <br>
-                        <button class="btn green" style="position:relative;text-align:center;">Add DailyCheckUps</button>
+                        <router-link v-bind:to="{name: 'new-dailycheckups', params: {id: testID}}"> <button class="btn green" style="position:relative;text-align:center;">Add DailyCheckUps</button></router-link>
+                        <router-link to="/view-tests" ><button class="btn grey" style="margin:20px;">Back</button></router-link>
                        
                    </table>
                </div>

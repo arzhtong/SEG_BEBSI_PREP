@@ -9,6 +9,7 @@ import ViewRecipeInfo from '@/components/tests/ViewRecipeInfo'
 import NewRecipe from '@/components/tests/NewRecipe'
 import EditRecipe from '@/components/tests/EditRecipe'
 import ViewDailyCheckups from '@/components/tests/ViewDailyCheckups'
+import NewDailyCheckups from '@/components/tests/NewDailyCheckups'
 import ViewAppointments from '@/components/appointments/ViewAppointments'
 import AddAppointment from '@/components/appointments/AddAppointment'
 import EditAppointment from '@/components/appointments/EditAppointment'
@@ -149,6 +150,14 @@ let router = new Router({
       path: '/view-dailycheckups/:id',
       name: 'view-dailycheckups',
       component: ViewDailyCheckups,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/new-dailycheckups/:id',
+      name: 'new-dailycheckups',
+      component: NewDailyCheckups,
       meta: {
         requiresAuth: true
       }
