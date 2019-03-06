@@ -64,10 +64,10 @@
             <td v-for="test in tests" v-bind:key="test.title">{{test.title}}</td>
 
             <td>
-              <router-link v-bind:to="{name: 'edit-appointment', params: {id:appointment.code}}">
+              <router-link v-bind:to="{name: 'view-appointment', params: {id:appointment.code}}">
                 <a class="tooltip">
-                  <span class="tooltiptext">Edit Appointment</span>
-                  <i class="material-icons" style="position:relative;text-align:center;">edit</i>
+                  <span class="tooltiptext">View Appointment</span>
+                  <i class="material-icons" style="position:relative;text-align:center;">remove_red_eye</i>
                 </a>
               </router-link>
             </td>

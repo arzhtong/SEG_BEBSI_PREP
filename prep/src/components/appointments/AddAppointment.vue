@@ -149,10 +149,29 @@ export default {
           testID: this.testID.testID
         })
         .then(docRef => {
+          this.addDailyCheckups();
           alert("Successfully created new appointment!");
           this.$router.push("/view-appointments");
         })
         .catch(error => console.log(err));
+    },
+    addDailyCheckups() {
+      db.collection("tests")
+        .doc(this.testID.testID)
+        .collection("dailyCheckups")
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            db.collection("appointments")
+              .doc(this.code)
+              .collection("dailyCheckups")
+              .add(doc.data())
+              .then(docRef => {
+                tconsole.log("Added dailyCheckup");
+              })
+              .catch(error => console.log(err));
+          });
+        });
     },
     getDocId() {
       db.collection("users")
