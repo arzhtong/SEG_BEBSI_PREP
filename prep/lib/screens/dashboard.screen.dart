@@ -109,14 +109,14 @@ class _DashboardState extends State<Dashboard> {
 
       //calendar building
       calendarElements.add(_CalendarLabel(documentList.elementAt(0).data['datetime']));
-      calendarElements.add(_CalendarCard(documentList.elementAt(0).data['testID'], documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime']));
+      calendarElements.add(_CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime']));
 
       for (int i = 1; i < documentList.length; i++){
         if (documentList.elementAt(i).data['datetime'] != documentList.elementAt(i - 1).data['datetime']){
           calendarElements.add(_CalendarLabel(documentList.elementAt(i).data['datetime']));
-          calendarElements.add(_CalendarCard(documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
+          calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
         } else {
-          calendarElements.add(_CalendarCard(documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
+          calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
         }
       }
 
@@ -301,7 +301,7 @@ class _CalendarCard extends StatelessWidget {
           onTap: () {
             Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Appointment())
+                MaterialPageRoute(builder: (context) => Appointment(name))
             );
           },
           child: Column(
