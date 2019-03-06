@@ -42,7 +42,8 @@ class _CategoryState extends State<Category>{
       String name = myMap.values.elementAt(0);
       String description = myMap.values.elementAt(1);
 
-      listOfDropDowns.add(DescriptiveExpansionTile(name, description,list.toString()));
+      listOfDropDowns.add(DescriptiveExpansionTile(name, description,list)
+      );
     });
 
     return Column(
@@ -56,7 +57,7 @@ class DescriptiveExpansionTile extends StatelessWidget {
   String description;
   List<Widget> columnChildren;
 
-  DescriptiveExpansionTile(String category, String description,String items){
+  DescriptiveExpansionTile(String category, String description,List<dynamic> items){
     this.category = category;
     this.description =description;
     columnChildren=new List();
@@ -65,7 +66,7 @@ class DescriptiveExpansionTile extends StatelessWidget {
         Text(
           description,
           style: TextStyle(
-            color: Colors.grey[600],
+            color: Colors.black,
           ),
         ),
       );
@@ -107,6 +108,7 @@ class DescriptiveExpansionTile extends StatelessWidget {
         )
       ],
     );
+    
   }
 }
      
@@ -134,56 +136,17 @@ class DescriptiveExpansionTile extends StatelessWidget {
     //   print(myMap.values.elementAt(2));
     // });
 
-  // Widget makeDatas(BuildContext context,DocumentSnapshot document,int i,){
-  //   for (int j=0;j<=document['name'].length;j++){
-  //   return Card(child: new Column(
-  //     mainAxisSize: MainAxisSize.min,
-  //       children: <Widget>[
-  //       ExpansionTile(title: new Text(document[0]['testfield'].toString()),
-  //         children: <Widget>[
-  //           new ListTile(title: new Text(formatItemList(document['fatsAndOils']['list'].toString())),)
-  //         ],
-  //       )
-  //     ]
-  //   ,)
-  // ,);
 
 
-  //   }
 
-  //     }
-  // }
-  //  _buildExpandableContent(Vehicle vehicle) {
-  //   List<Widget> columnContent = [];
+  String formatItemList(List<dynamic> elementlist){
+   String rawItems="";
 
-  //   for (String content in vehicle.contents)
-  //     columnContent.add(
-  //       new ExpansionTile(
-  //         title: new Text(content, style: new TextStyle(fontSize: 18.0),),
-  //         leading: new Icon(vehicle.icon),
-  //       ),
-  //     );
-
-  //   return columnContent;
-  // }
-
-  String formatItemList(String rawItems){
-    String formattedList = "";
-    List<String> rawItemsList = rawItems.split(",");
-    String remainderstring= rawItemsList.elementAt(rawItemsList.length-1);
-    for (var i  = 0; i < rawItemsList.length - 1; i++){
-      formattedList = formattedList + rawItemsList.elementAt(i) + " • ";
-    }
-    for (var j=0;j<=formattedList.length-1;j++){
-      if (formattedList.substring(j,j+1)=='[' || formattedList.substring(j,j+1)==']'){
-       formattedList= formattedList.replaceRange(j, j+1, ' ');
-      }
-      for (var k=0;k<=remainderstring.length-1;k++){
-        if (remainderstring.substring(k,k+1)==']'){
-         remainderstring=remainderstring.replaceRange(k, k+1, '');
-        }
-      }
-    return formattedList + remainderstring;
-  }
-    return formattedList + remainderstring;
+   elementlist.forEach((value){
+     rawItems+=value + " " "•" + " ";
+   }
+   
+   );
+   rawItems=rawItems.replaceRange(rawItems.length-2,rawItems.length-1,' ');
+    return rawItems;
   }

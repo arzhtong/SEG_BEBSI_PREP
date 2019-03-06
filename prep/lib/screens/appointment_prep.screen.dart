@@ -24,26 +24,30 @@ class _AppointmentPrepState extends State<AppointmentPrep> {
   }
 
 Widget _makeData(BuildContext context, DocumentSnapshot document) {
-  return new Card(
-    elevation: 5.0,
+  return new Container(
+    padding:EdgeInsets.all(5.0),
+    child: Card(
+    elevation: 3.0,
     child: InkWell(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) => Category(document['contents'])));
       },
       child: new Container(
         padding: EdgeInsets.all(20.0),
+        margin: EdgeInsets.all(5.0),
         child: new Row(
           children: <Widget>[
             new CircleAvatar(),
-            new Padding(padding: EdgeInsets.all(10.0)),
+            new Padding(padding: EdgeInsets.all(20.0)),
             new Text(
               document['title'].toString(),
-              style: TextStyle(fontSize: 20.0),
+              style: TextStyle(fontSize: 25.0),
             )
           ],
         ),
       ),
     ),
+  ),
   );
 }
 }
