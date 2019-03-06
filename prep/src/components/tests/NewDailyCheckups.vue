@@ -20,7 +20,7 @@
 
                <div class="row">
                     <div class="input-field col s12">
-                        <input type="text" v-model="daysBeforeTest" required>
+                        <input type="number" v-model="daysBeforeTest" required>
                         <label>Number of Days Before Test:</label>
                     </div>
                </div>
@@ -67,7 +67,7 @@ import db from '../firebaseInit'
                     title: this.title,
                     instructions: array,
                     description: this.description,
-                    daysBeforeTest:this.daysBeforeTest
+                    daysBeforeTest:Number(this.daysBeforeTest)
                 })
                 .then(docRef => {
                     this.$router.push({ name: 'view-dailycheckups', params: {id: this.$route.params.id} })

@@ -46,7 +46,7 @@
             }
         },
        created () {
-            db.collection('tests').doc(this.$route.params.id).collection('dailyCheckups').get().then(querySnapshot => {
+            db.collection('tests').doc(this.$route.params.id).collection('dailyCheckups').orderBy('daysBeforeTest','desc').get().then(querySnapshot => {
                 querySnapshot.forEach(doc => {
                     const data = {
                         'id': doc.id,
