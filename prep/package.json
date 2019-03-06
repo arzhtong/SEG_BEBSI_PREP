@@ -16,6 +16,7 @@
     "crypto-js": "^3.1.9-1",
     "firebase": "^5.8.3",
     "firebase-firestore-timestamp": "^1.0.4",
+    "materialize-css": "^1.0.0-rc.2",
     "pkcs7": "^1.0.2",
     "text-encoding": "^0.7.0",
     "utf8": "^3.0.0",

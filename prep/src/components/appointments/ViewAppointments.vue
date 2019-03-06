@@ -3,9 +3,30 @@
     <div class="container" style="width:100%;height:100%;">
       <table class="collection with-header responsive-table" style="background: white;">
         <thead class="collection-header">
-          <h4 style="padding:30px;font-size:3em;">
+          <h3>
             <b>Appointments</b>
-          </h4>
+          </h3>
+          <div style="padding:20px;display:flex;" class="row">
+            <div class="input-field col s12">
+              <span style="color:black !important">
+                <b>Sort by:</b>
+              </span>
+              <select id="select" @change="sort" class="browser-default" style="color:black">
+                <option value="Date" selected>Date in ascending order</option>
+                <option value="Date desc">Date in descending order</option>
+              </select>
+              <button style="margin-top:5px;" @click="resetTable" class="btn">Reset</button>
+            </div>
+            <div class="input-field col s12" style="padding:15px;">
+              <input required id="datePicker" value="" type="date" min="2019-01-01" style="text-align:center">
+            </div>
+            <div>
+              <a class="blue-text tooltip" style="margin-top: 45px !important;cursor:pointer">
+                <span class="tooltiptext">Click this calendar icon to sort by specific date</span>
+                <i class="material-icons" @click="sortByDate">calendar_today</i>
+              </a>
+            </div>
+          </div>
 
           <tr style="font-size:1.5em">
             <th>
@@ -44,23 +65,34 @@
 
             <td>
               <router-link v-bind:to="{name: 'edit-appointment', params: {id:appointment.code}}">
-             <button class="btn blue" style="position:relative;text-align:center;">edit</button>
-            </router-link>         
-
+                <a class="tooltip">
+                  <span class="tooltiptext">Edit Appointment</span>
+                  <i class="material-icons" style="position:relative;text-align:center;">edit</i>
+                </a>
+              </router-link>
             </td>
             <td>
-              <button class="btn red" @click="deleteAppointment(appointment.location)">Delete</button>
+              <a class="tooltip">
+                <span class="tooltiptext">Edit Appointment</span>
+                <i
+                  @click="deleteAppointment(appointment.location)"
+                  class="red-text material-icons"
+                  style="position:relative;text-align:center;cursor:pointer;"
+                >delete</i>
+              </a>
             </td>
             <td>
               <router-link v-bind:to="{name: 'message', params: {appointmentID: appointment.code}}">
-                <i class="material-icons left green-text" style="font-size:40px">insert_comment</i>
-                <span>
-                  <span v-if="notifications[ids.indexOf(appointment.code)] != 0">
-                    <span
-                      v-if="ids.includes(appointment.code) == true"
-                      class="new badge"
-                    >{{notifications[ids.indexOf(appointment.code)]}}</span>
-                  </span>
+                <i
+                  class="material-icons left green-text"
+                  style="margin-left:5px;font-size:30px;text-align:center"
+                >insert_comment</i>
+                
+                <span v-if="notifications[ids.indexOf(appointment.code)] != 0">
+                  <span
+                    v-if="ids.includes(appointment.code) == true"
+                    class="new badge"
+                  >{{notifications[ids.indexOf(appointment.code)]}}</span>
                 </span>
               </router-link>
             </td>
@@ -81,72 +113,63 @@ export default {
   data() {
     return {
       appointments: [],
+      prevAppointments: [],
       isAdmin: null,
       tests: [],
       testID: null,
       staffMemberID: null,
       notifications: [],
-      ids: []
+      ids: [],
+      id: null,
+      currentDate: Date.now().toLocaleString
     };
   },
   created() {
-    document.addEventListener("DOMContentLoaded", function() {
-      var elems = document.querySelectorAll(".tooltipped");
-      var instances = M.Tooltip.init(elems, options);
-    });
-    if (firebase.auth().currentUser) {
-      db.collection("users")
-        .where("email", "==", firebase.auth().currentUser.email)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(user => {
-            this.isAdmin = user.data().role;
-          });
-        });
-    }
-    this.getApp();
+    this.getApp("asc");
   },
   methods: {
-    getApp() {
+    getApp(dir) {
       db.collection("users")
         .where("email", "==", firebase.auth().currentUser.email)
         .get()
         .then(querySnapshot => {
           querySnapshot.forEach(doc => {
+            this.isAdmin = doc.data().role;
             this.staffMemberID = doc.id;
           });
-          db.collection("appointments")
-            .where("staffMember", "==", this.staffMemberID)
-            .get()
-            .then(querySnapshot => {
-              querySnapshot.forEach(appointment => {
-                const data = {
-                  code: appointment.id,
-                  datetime: appointment.data().datetime,
-                  staffMember: appointment.data().staffMember,
-                  location: appointment.data().location
-                };
-                this.testID = appointment.data().testID;
-                this.appointments.push(data);
-                this.fetchData(appointment.id);
-              });
-              this.getDoc();
-            });
+          this.getAppointments(dir);
+        });
+    },
+    getAppointments(dir) {
+      db.collection("appointments")
+        .orderBy("datetime", dir)
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(appointment => {
+            const data = {
+              code: appointment.id,
+              datetime: appointment.data().datetime,
+              staffMember: appointment.data().staffMember,
+              location: appointment.data().location,
+              id: appointment.id
+            };
+            this.testID = appointment.data().testID;
+            this.appointments.push(data);
+            this.fetchData(appointment.id);
+          });
+          this.getDoc();
         });
     },
     getDoc() {
       db.collection("tests")
-        .where("testID", "==", this.testID)
+        .doc(this.testID)
         .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(test => {
-            const data = {
-              testID: test.data().testID,
-              title: test.data().title,
-              type: test.data().type
-            };
-            this.tests.push(data);
-          });
+        .then(doc => {
+          const data = {
+            title: doc.data().title,
+            type: doc.data().type
+          };
+          this.tests.push(data);
         });
     },
     fetchData(id) {
@@ -157,6 +180,7 @@ export default {
         .where("isPatient", "==", true)
         .onSnapshot(snapshot => {
           snapshot.docChanges().forEach(change => {
+            this.id = id;
             var count = snapshot.size;
             if (this.ids.indexOf(id) != -1) {
               var index = this.ids.indexOf(id);
@@ -179,31 +203,95 @@ export default {
               doc.ref
                 .delete()
                 .then(() => {
-                  console.log("Document successfully deleted!")
-                  alert(`Successfully deleted Appointment`)
+                  console.log("Document successfully deleted!");
+                  alert(`Successfully deleted Appointment`);
                   location.reload();
                 })
                 .catch(function(error) {
-                  console.error("Error removing document: ", error)
-                  alert(`There was an error: ${error}`)
-                })
-            })
-          })
+                  console.error("Error removing document: ", error);
+                  alert(`There was an error: ${error}`);
+                });
+            });
+          });
       }
+    },
+    sort() {
+      var selectValue = document.getElementById("select").value;
+      this.clearData();
+
+      if (selectValue == "Date") {
+        // Sort by date asc
+        this.getApp("asc");
+      } else if (selectValue == "Date desc") {
+        // Sort by date desc
+        this.getApp("desc");
+      }
+    },
+    sortByDate() {
+      var value = document.getElementById("datePicker").value;
+
+      var newDay = new Date(value);
+      var newAppointments = [];
+      for (var i = 0; i < this.appointments.length; i++) {
+        var date = this.appointments[i].datetime.toDate();
+        var wholeDate =
+          date.getDate().toString() +
+          date.getMonth().toString() +
+          date.getFullYear().toString();
+        var convertWholeDate =
+          newDay.getDate().toString() +
+          newDay.getMonth().toString() +
+          newDay.getFullYear().toString();
+
+        if (wholeDate == convertWholeDate) {
+          newAppointments.push(this.appointments[i]);
+          this.fetchData(this.appointments[i].id);
+        }
+      }
+      if (newAppointments.length != 0) {
+        this.clearData();
+        this.appointments = newAppointments;
+        this.appointments.push();
+      } else {
+        if (value == "") {
+          alert("Please enter a date first!");
+        } else {
+          alert("No appointments scheduled for " + value + "!");
+        }
+        this.clearData();
+        this.getApp("asc");
+        document.getElementById("datePicker").value = "";
+      }
+      document.getElementById("select").value = "Date";
+    },
+    resetTable() {
+      this.clearData();
+      document.getElementById("select").value = "Date";
+      document.getElementById("datePicker").value = "";
+      this.getApp("asc");
+    },
+    clearData() {
+      this.appointments = [];
+      this.tests = [];
+      this.notifications = [];
+      this.ids = [];
     }
   }
 };
 </script>
 
 <style>
+h3 {
+  padding: 20px;
+}
+
 td,
 th {
-  padding: 5px !important;
+  padding: 10px !important;
 }
 .tooltip {
   position: relative;
   display: inline-block;
-  border-bottom: 1px dotted black;
 }
 
 .tooltip .tooltiptext {

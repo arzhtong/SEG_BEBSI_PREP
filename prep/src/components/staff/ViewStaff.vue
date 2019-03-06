@@ -33,7 +33,7 @@
                 v-bind:to="{name: 'edit-staff', params: {email: user.email}}"
                 class="secondary-content left">
                 <button
-                  v-if="user.role != 'Admin'"
+                  v-if="user.email == currentEmail || user.role != 'Admin'"
                   class="btn blue"
                   style="position:relative;text-align:center;"
                 >edit</button>
