@@ -38,7 +38,6 @@ class _MessagingScreenState extends State<MessagingScreen> {
   void initState() {
     super.initState();
 
-    Firestore.instance.enablePersistence(true);
     _messageStreamSubscription =
         MessagingQueries.messageSnapshots.listen((QuerySnapshot snapshot) {
       snapshot.documentChanges.forEach((DocumentChange change) {
@@ -118,6 +117,12 @@ class _MessagesViewState extends State<_MessagesView>
 
     setState(() => _messagesList.insert(0, _newMessage));
     _scrollMessageViewToBottom();
+
+    @override
+    void initState() {
+      super.initState();
+      Firestore.instance.enablePersistence(true);
+    }
   }
 
   void _scrollMessageViewToBottom() => _scrollController.animateTo(0.0,

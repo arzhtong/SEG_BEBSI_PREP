@@ -35,13 +35,6 @@ class MessagingQueries {
   }
 
   static void setSeenByPatient(DocumentReference docRef) {
-    // WriteBatch batch = Firestore.instance.batch();
-    // _colRef.getDocuments().then((querySnapshot) => {
-    //   querySnapshot.documents.forEach((doc) => {
-    //     batch.updateData(doc.reference, { 'seenByPatient': true })
-    //   }),
-    //   batch.commit()
-    // });
     docRef.updateData({'seenByPatient': true});
   }
 }
