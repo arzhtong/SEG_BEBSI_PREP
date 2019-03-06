@@ -15,23 +15,15 @@
                 <option value="Date" selected>Date in ascending order</option>
                 <option value="Date desc">Date in descending order</option>
               </select>
+              <button style="margin-top:5px;" @click="resetTable" class="btn">Reset</button>
             </div>
             <div class="input-field col s12" style="padding:15px;">
-              <input
-                readonly="readonly"
-                id="datePicker"
-                @change="sortByDate"
-                value="Calendar"
-                type="text"
-                class="datepicker"
-                style="text-align:center"
-              >
-              <button style="margin-left:20%" @click="resetTable" class="btn">Reset</button>
+              <input required id="datePicker" value="" type="date" min="2019-01-01" style="text-align:center">
             </div>
             <div>
-              <a @click="clickInput" class="blue-text tooltip" style="margin-top: 45px !important;">
-                <span class="tooltiptext">Click the calendar to sort by specific date</span>
-                <i class="material-icons">calendar_today</i>
+              <a class="blue-text tooltip" style="margin-top: 45px !important;cursor:pointer">
+                <span class="tooltiptext">Click this calendar icon to sort by specific date</span>
+                <i class="material-icons" @click="sortByDate">calendar_today</i>
               </a>
             </div>
           </div>
@@ -128,7 +120,8 @@ export default {
       staffMemberID: null,
       notifications: [],
       ids: [],
-      id: null
+      id: null,
+      currentDate: Date.now().toLocaleString
     };
   },
   created() {
@@ -169,17 +162,14 @@ export default {
     },
     getDoc() {
       db.collection("tests")
-        .where("testID", "==", this.testID)
+        .doc(this.testID)
         .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(test => {
-            const data = {
-              testID: test.data().testID,
-              title: test.data().title,
-              type: test.data().type
-            };
-            this.tests.push(data);
-          });
+        .then(doc => {
+          const data = {
+            title: doc.data().title,
+            type: doc.data().type
+          };
+          this.tests.push(data);
         });
     },
     fetchData(id) {
@@ -263,17 +253,21 @@ export default {
         this.appointments = newAppointments;
         this.appointments.push();
       } else {
-        alert("No appointments scheduled for " + value + "!");
+        if (value == "") {
+          alert("Please enter a date first!");
+        } else {
+          alert("No appointments scheduled for " + value + "!");
+        }
         this.clearData();
         this.getApp("asc");
-        document.getElementById("datePicker").value = "Calendar";
+        document.getElementById("datePicker").value = "";
       }
       document.getElementById("select").value = "Date";
     },
     resetTable() {
       this.clearData();
       document.getElementById("select").value = "Date";
-      document.getElementById("datePicker").value = "Calendar";
+      document.getElementById("datePicker").value = "";
       this.getApp("asc");
     },
     clearData() {
@@ -281,9 +275,6 @@ export default {
       this.tests = [];
       this.notifications = [];
       this.ids = [];
-    },
-    clickInput() {
-      document.getElementById("datePicker").click();
     }
   }
 };

@@ -96,7 +96,7 @@ export default {
       .then(querySnapshot => {
         querySnapshot.forEach(test => {
           const data = {
-            testID: test.data().testID,
+            testID: test.id,
             title: test.data().title,
             type: test.data().type
           };
