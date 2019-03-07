@@ -51,7 +51,7 @@
 
         
         <button type="submit" class="btn">Submit</button>
-        <router-link to="/view-appointments" class="btn grey">Cancel</router-link>
+        <router-link v-bind:to="{name: 'view-appointment', params: {id: router}}" class="btn grey">Cancel</router-link>
       
       </form>
     </div>
@@ -73,7 +73,8 @@ export default {
           testID:null,
           staffMember:null,
           tests:[],
-          users:[]
+          users:[],
+          router: this.$route.params.id
            
         }
     },

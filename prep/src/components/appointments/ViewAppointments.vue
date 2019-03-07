@@ -73,7 +73,7 @@
             </td>
             <td>
               <a class="tooltip">
-                <span class="tooltiptext">Edit Appointment</span>
+                <span class="tooltiptext">Delete Appointment</span>
                 <i
                   @click="deleteAppointment(appointment.location)"
                   class="red-text material-icons"
