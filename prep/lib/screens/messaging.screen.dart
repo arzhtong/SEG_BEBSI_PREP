@@ -9,6 +9,7 @@ import '../utils/message_crypto.dart';
 class MessagingScreen extends StatefulWidget {
   MessagingScreen(appointmentID) {
     MessagingQueries.setAppointmentID(appointmentID);
+    MessageCrypto.setAppointmentID(appointmentID);
   }
 
   @override
@@ -32,7 +33,6 @@ class _MessagingScreenState extends State<MessagingScreen> {
       messageText: decryptedMessage,
       datetime: message['datetime'],
       isPatient: message['isPatient'],
-      seenByStaff: message['seenByStaff'],
     );
   }
 
@@ -59,9 +59,6 @@ class _MessagingScreenState extends State<MessagingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /* appBar: AppBar(
-        title: Text("Doctor"),
-      ), */
       body: Column(children: <Widget>[
         Flexible(
           child: _messagesView,
@@ -77,18 +74,13 @@ class _MessagingScreenState extends State<MessagingScreen> {
 }
 
 class _MessagesView extends StatefulWidget {
-  _MessagesViewState _messagesState = _MessagesViewState();
+  final _MessagesViewState _messagesState = _MessagesViewState();
 
-  void addMessage(
-      {String messageText,
-      DateTime datetime,
-      bool isPatient,
-      bool seenByStaff}) {
+  void addMessage({String messageText, DateTime datetime, bool isPatient}) {
     _messagesState._addMessageToList(
       messageText: messageText,
       datetime: datetime,
       isPatient: isPatient,
-      seenByStaff: seenByStaff,
     );
   }
 
@@ -102,10 +94,7 @@ class _MessagesViewState extends State<_MessagesView>
   // final ScrollController _scrollController = ScrollController();
 
   void _addMessageToList(
-      {String messageText,
-      DateTime datetime,
-      bool isPatient,
-      bool seenByStaff}) {
+      {String messageText, DateTime datetime, bool isPatient}) {
     AnimationController animController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 500));
 
@@ -113,7 +102,6 @@ class _MessagesViewState extends State<_MessagesView>
       messageText: messageText,
       datetime: datetime,
       isPatient: isPatient,
-      seenByStaff: seenByStaff,
       animController: animController,
     );
 
@@ -206,7 +194,6 @@ class _TextComposerState extends State<_TextComposer> {
 class _MessageData {
   final String messageText;
   final DateTime datetime;
-  final bool seenByStaff;
   final bool isPatient;
   final AnimationController animController; //not yet used
 
@@ -214,7 +201,6 @@ class _MessageData {
       {@required this.messageText,
       @required this.datetime,
       @required this.isPatient,
-      @required this.seenByStaff,
       this.animController});
 }
 
@@ -247,11 +233,15 @@ class _MessageListItem extends StatelessWidget {
               //Time sent
               statuslineTimestamp,
               //Read Receipt
-              Icon(((message.seenByStaff) ? Icons.done_all : Icons.done),
-                  color: (message.seenByStaff)
-                      ? Theme.of(context).accentColor
-                      : Theme.of(context).buttonColor,
-                  size: 16.0)
+              /* Icon(
+                Icons.done,
+                color: Theme.of(context).buttonColor,
+                size: 16.0,
+              ),
+              Text(
+                "Delivered",
+                style: TextStyle(fontSize: 12.0, fontStyle: FontStyle.italic),
+              ), */
             ]
           : <Widget>[
               //Time sent

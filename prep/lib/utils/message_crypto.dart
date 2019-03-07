@@ -9,15 +9,18 @@ import 'package:pointycastle/paddings/pkcs7.dart';
 import 'package:pointycastle/block/aes_fast.dart';
 import 'package:pointycastle/block/modes/cbc.dart';
 
-//TODO: remove appointmentCode and read from file when merging with develop
-const String appointmentID = "2vqqyqcc7";
-
 class MessageCrypto {
+  static String _appointmentID;
+
   static const MessageCrypto _singleton = MessageCrypto._internal();
 
   factory MessageCrypto() => _singleton;
 
   const MessageCrypto._internal();
+
+  static void setAppointmentID(String appointmentID) {
+    _appointmentID = appointmentID;
+  }
 
   static String encryptMessage(String message, int millisSinceEpoch) {
     Random rand = Random.secure();
@@ -50,7 +53,7 @@ class MessageCrypto {
   static PaddedBlockCipher getCipher(bool mode, Uint8List iv, int millisSinceEpoch) {
     String millisStr = millisSinceEpoch.toString();
     String keyToEncode =
-        appointmentID + millisStr.substring(millisStr.length - 7);
+        _appointmentID + millisStr.substring(millisStr.length - 7);
 
     String keyEncoded = HEX.encode(utf8.encode(keyToEncode));
     List<int> keyEncodedList = utf8.encode(keyEncoded);
