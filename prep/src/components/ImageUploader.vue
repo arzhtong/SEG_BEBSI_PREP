@@ -26,7 +26,7 @@
                 style="max-height: 150px; max-width: 150px;"/>
                 <!-- Wrapper to use custom upload button -->
                 <div v-if="!uploadEnd && !uploading" class="upload-btn-wrapper">
-                    <a class="waves-effect waves-light btn red" onclick="document.getElementById('fileButton').click()"><i class="material-icons left">add</i>Upload image</a>
+                    <a class="waves-effect waves-light btn" onclick="document.getElementById('fileButton').click()"><i class="material-icons left">add</i>Upload image</a>
                     <input type="file" value="uplaod" id="fileButton" @change="upload">
                 </div> 
             </div>
@@ -75,7 +75,7 @@ export default {
             }
         },
         deleteImage() {
-            firebase.storage().ref('test_images/' + this.fileName).delete().then(() => {
+            firebase.storage().ref('images/' + this.fileName).delete().then(() => {
                 this.uploading = false
                 this.uploadEnd = false
                 this.uploadPercentage = 0
