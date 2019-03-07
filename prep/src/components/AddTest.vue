@@ -14,6 +14,13 @@
         </div>
         <button @click="saveData" class="btn">Test</button>
         </form>
+        
+        <div class="container" id="images">
+            <imageUploader />
+        </div>
+        <div class="container" id="images1">
+            <imageUploader />
+        </div>
         </div>
     </div>
 </template>
@@ -22,25 +29,39 @@
 import db from "./firebaseInit";
 import firebase from "firebase";
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import imageUploader from "./ImageUploader";
 
 export default {
     name: 'mainScreen',
     data() {
         return {
+            selectedFile: null,
             title: '',
             editor: ClassicEditor,
             editorData: '',
             editorConfig: {
                 // The configuration of the editor.
+                // removePlugins: [ 'Heading', 'Link' ]
+
             }
         };
+    },
+    components: {
+        imageUploader
     },
     methods: {
         saveData() {
             alert(this.title + this.editorData);
+        },
+        onFileSelected(event) {
+            this.selectedFile = event.target.files[0]
+            firebase.storage().ref('test_images/' + this.selectedFile.name).put(this.selectedFile)
         }
+
     }
 }
+
+
 </script>
 
 <style>
