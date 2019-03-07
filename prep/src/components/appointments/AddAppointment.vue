@@ -25,7 +25,7 @@
         <form @submit.prevent="saveAppointment" class="col s12">
           <div class="row">
             <div class="input-field col s12">
-              <input type="date" class="datepicker" v-model="date" required>
+              <input type="date" min="2019-01-01" class="datepicker" v-model="date" required>
               <label>Date</label>
             </div>
           </div>

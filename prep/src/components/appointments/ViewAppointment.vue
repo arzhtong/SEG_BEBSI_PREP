@@ -22,7 +22,7 @@
           <tr>
             <td>{{app.date}}</td>
             <td>{{app.time}}</td>
-            <td>{{app.location}}</td>  
+            <td>{{app.location}}</td>
             <td>{{testName}}</td>
             <td>{{testType}}</td>
             <td>
@@ -31,13 +31,12 @@
                   <span class="tooltiptext">Edit Appointment</span>
                   <i class="material-icons">edit</i>
                 </a>
-            </router-link>
+              </router-link>
             </td>
-            
           </tr>
         </tbody>
       </table>
-      <div id="dailyCheckups">
+      <div style="padding-top:5%;" id="dailyCheckups">
         <h4>Daily Checkups</h4>
         <table
           class="collection with-header responsive-table"
@@ -46,8 +45,8 @@
           <thead class="collection-header">
             <tr style="font-size:1.5em;">
               <th>Days to appointment</th>
-              <th>Description</th>
-              <th>Instructions:</th>
+              <th style="padding-left:10% !important">Description</th>
+              <th style="padding-left:10% !important">Instructions:</th>
             </tr>
           </thead>
 
@@ -59,34 +58,69 @@
           >
             <tr>
               <td>{{checkup.daysBeforeTest}}</td>
-              <td>{{checkup.description}}</td>
-              <td>
-                <span v-for="(instr, value) in checkup.instructions" v-bind:key="instr">
-                  <span>{{value}}</span>
-                  <input
-                    class="dailyInput"
-                    id="dailyInput"
-                    readonly="readonly"
-                    :value="instr"
-                    style="word-wrap: break-word;widht:20px !important"
-                  >
-                
-                </span>
-                  <!-- <label>
-                  <input @change="enableEditMode" id="check" type="checkbox" class="filled-in">
-                  <span class="black-text">Edit Mode</span>
-                </label>
-                
-                <button
-                  @click="addInstructions(checkup.instructions.indexOf(instr))"
-                  class="btn"
-                >Submit changes</button> -->
-                
+              <td style="padding-left:10% !important">{{checkup.description}}</td>
+              <td style="padding-left:10% !important">
+                <div v-for="(instr, value) in checkup.instructions" v-bind:key="instr">
+                  <div style="float:left;">
+                    <span>
+                      <textarea
+                        id="dailyInput"
+                        class="dailyInput"
+                        readonly="readonly"
+                        type="text"
+                        style="color:grey;width: 250px; word-wrap: break-word;resize: none;"
+                        :value="value"
+                        required
+                      ></textarea>
+                    </span>
+                    <div style="float:right;">
+                      <div v-if="instr" style="margin-top:15px">
+                        <span style="margin:10px 0 0 5px;padding">
+                          <a class="tooltip" style="margin-right:20px">
+                            <span class="tooltiptext">Completed</span>
+                            <i class="material-icons green-text">check_circle</i>
+                          </a>
+                        </span>
+                      </div>
+                      <div v-if="instr == false" style="margin-top:15px">
+                        <span style="margin:10px 0 0 5px;">
+                          <a class="tooltip" style="margin-right:20px">
+                            <span class="tooltiptext">Not Completed</span>
+                            <i class="material-icons red-text">cancel</i>
+                          </a>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="btns">
+                  <div>
+                    <span style="margin:0px 0px 0px 40px;cursor:pointer">
+                      <a @click="enableEditMode(checkup)" class="tooltip" style="margin-right:20px">
+                        <span class="tooltiptext">Edit Daily Checkup</span>
+                        <i style="font-size:30px" class="material-icons">edit</i>
+                      </a>
+                      <a class="tooltip" style="margin-right:20px">
+                        <span class="tooltiptext">Add Daily Checkup</span>
+                        <i style="font-size:30px" class="material-icons green-text">fiber_new</i>
+                      </a>
+                    </span>
+                  </div>
+
+                  <div>
+                    <button
+                      style="width:120px;margin-left:20px"
+                      @click="addInstructionsToFb(checkup)"
+                      class="btn"
+                    >Save</button>
+                  </div>
+                </div>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
+      <router-link to="/view-appointments" class="btn">Go Back</router-link>
     </div>
   </div>
 </template>
@@ -104,7 +138,8 @@ export default {
       appointments: [],
       testName: null,
       testType: null,
-      router: this.$route.params.id
+      router: this.$route.params.id,
+      newMap: new Map
     };
   },
   created() {
@@ -117,22 +152,31 @@ export default {
         .doc(this.$route.params.id)
         .get()
         .then(doc => {
-            const data = {
-              testID: doc.data().testID,
-              date: doc.data().datetime.toDate().toISOString().split('T')[0],
-              time: doc.data().datetime.toDate().toTimeString().split(' ')[0],
-              location: doc.data().location
-            }
-            this.appointments.push(data)
-            this.getTestInfo();
-        })
+          const data = {
+            testID: doc.data().testID,
+            date: doc
+              .data()
+              .datetime.toDate()
+              .toISOString()
+              .split("T")[0],
+            time: doc
+              .data()
+              .datetime.toDate()
+              .toTimeString()
+              .split(" ")[0],
+            location: doc.data().location
+          };
+          this.appointments.push(data);
+          this.getTestInfo();
+        });
     },
-    getTestInfo(){
-      db.collection("tests").doc(this.appointments[0].testID).get()
-      .then(doc => {
-          this.testName = doc.data().title,
-          this.testType = doc.data().type
-      })
+    getTestInfo() {
+      db.collection("tests")
+        .doc(this.appointments[0].testID)
+        .get()
+        .then(doc => {
+          (this.testName = doc.data().title), (this.testType = doc.data().type);
+        });
     },
     listenDailyCheckups() {
       db.collection("appointments")
@@ -141,68 +185,83 @@ export default {
         .orderBy("daysBeforeTest", "desc")
         .onSnapshot(snapshot => {
           snapshot.docChanges().forEach(change => {
-            if(change.type == "added"){
-                const data = {
+            if (change.type == "added") {
+              const data = {
                 docId: change.doc.id,
                 daysBeforeTest: change.doc.data().daysBeforeTest,
                 description: change.doc.data().description,
                 instructions: change.doc.data().instructions
               };
+              data.instructions = data.instructions
               this.dailyCheckups.push(data);
             }
-            if(change.type == "modified"){
-              for(var i = 0; i < this.dailyCheckups.length; i++){
-                if(this.dailyCheckups[i].daysBeforeTest == change.doc.data().daysBeforeTest){
-                  this.dailyCheckups[i].instructions = change.doc.data().instructions
-                  this.dailyCheckups.push()
+            if (change.type == "modified") {
+              for (var i = 0; i < this.dailyCheckups.length; i++) {
+                if (
+                  this.dailyCheckups[i].daysBeforeTest ==
+                  change.doc.data().daysBeforeTest
+                ) {
+                  this.dailyCheckups[
+                    i
+                  ].instructions = change.doc.data().instructions;
+                  this.dailyCheckups.push();
                 }
               }
             }
-           
           });
         });
     },
-    // enableEditMode() {
-    //   var checkBox = document.getElementById("check").checked;
-    //   var input = document.getElementById("dailyInput");
-    //   if (checkBox) {
-    //     input.readOnly = false;
-    //   } else {
-    //     input.readOnly = true;
-    //   }
-    // },
-    // addInstructions(index) {
-    //   var inputValue = document.getElementById("dailyInput").value;
-    //   var checkUp = this.dailyCheckups[index];
+    enableEditMode(currentCheckup) {
+      var inputArray = document.getElementsByClassName("dailyInput");
+      var inputList = Array.from(inputArray);
+      for (var i = 0; i < inputList.length; i++) {
+        if (inputList[i].value in currentCheckup.instructions) {
+          if (inputList[i].readOnly == true) {
+            inputList[i].readOnly = false;
+            inputList[i].style.color = "#2196f3";
+          } else {
+            inputList[i].readOnly = true;
+            inputList[i].style.color = "grey";
+          }
+        }
+      }
+    },
+    addInstructions(index) {
+      var inputValue = document.getElementById("dailyInput").value;
+      var checkUp = this.dailyCheckups[index];
 
-    //   if (checkUp.instructions.includes(inputValue)) {
-    //      alert(index);
-    //     alert("You have not made any changes!");
-    //   } else {
-    //     alert(index);
-    //     // TODO: Fix arrays on fb
-    //     //this.addInstrutionsToFb(checkUp.docId);
-    //   }
-    // },
-    // addInstrutionsToFb(docId) {
-    //   db.collection("appointments")
-    //     .doc(this.$route.params.id)
-    //     .collection("dailyCheckups")
-    //     .doc(docId)
-    //     .update({
-    //       instructions: {
-    //         [0]: document.getElementById("dailyInput").value
-    //       }
-    //     })
-    //     .catch(function(error) {
-    //       console.error("Error writing document: ", error);
-    //     });
-    // }
+      if (checkUp.instructions.includes(inputValue)) {
+         alert(index);
+        alert("You have not made any changes!");
+      } else {
+        alert(index);
+        // TODO: Fix arrays on fb
+        //this.addInstrutionsToFb(checkUp.docId);
+      }
+    },
+    addInstructionsToFb(checkup) {
+      var inputArray = document.getElementsByClassName("dailyInput");
+      var inputList = Array.from(inputArray);
+      var map = new Map()
+      
+      
+      // db.collection("appointments")
+      //   .doc(this.$route.params.id)
+      //   .collection("dailyCheckups")
+      //   .doc(docId)
+      //   .update({
+      //     instructions: map
+      //   })
+      //   .catch(function(error) {
+      //     console.error("Error writing document: ", error);
+      //   });
+
+    }
   }
 };
 </script>
   <style scoped>
-  .tooltip {
+.tooltip {
   position: relative;
   display: inline-block;
 }
@@ -248,6 +307,12 @@ span {
 }
 tr {
   border-bottom: 2px dotted lightgrey;
+}
+textarea {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 2px solid rgb(0, 71, 6);
 }
 input:read-only {
   color: grey;

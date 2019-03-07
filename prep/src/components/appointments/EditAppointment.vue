@@ -1,5 +1,5 @@
 <template>
-   <div id="edit-appointment" style="background-color:white" >
+   <div id="edit-appointment"  style="background-color:white; padding: 10px 50px 10px 50px; margin-top:10px" >
        <h3>Edit Appointment</h3>
     <div class="row">
       <form @submit.prevent="updateAppointment" class="col s12">
@@ -13,7 +13,7 @@
          <div class="row">
           <div class="input-field col s12">
             <p>Date</p>
-            <input type="date" class="datepicker" v-model="date" required>
+            <input type="date" min="2019-01-01" class="datepicker" v-model="date" required>
           </div>
         </div>
 
@@ -159,7 +159,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 p{
   color: #2196f3;
 }
