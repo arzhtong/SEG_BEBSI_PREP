@@ -5,9 +5,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 export 'package:cloud_firestore/cloud_firestore.dart';
 
-//TODO Remove dependancy on appointment ID here.
-// appointmentID needs to be stored with appointment info when added
-
 class MessagingQueries {
   static String _appointmentID;
   static CollectionReference _colRef;
