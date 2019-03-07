@@ -7,12 +7,12 @@
             <li class="collection-item"><b>Id:</b> {{code}}</li>
             <li class="collection-item"><b>Title:</b> {{title}}</li>
             <li class="collection-item"><b>Number of Days Before Test:</b> {{daysBeforeTest}}</li>
-            <li class="collection-item"><b>Instructions:</b>
-            <ol >
-                <li v-for="instruction in instructions" v-bind:key="instruction">{{instruction}}</li>
-            </ol> 
-            
+            <li class="collection-item"><b>Instructions:</b>         
+                <ul v-for="(value, key) in instructions" :key="key">
+                <ol>{{key}}: {{value}}</ol>           
+                </ul>          
             </li> 
+            
             <li v-if="description" class="collection-item"><b>Description:</b> {{description}}</li> 
              <li class="collection-item">
              
