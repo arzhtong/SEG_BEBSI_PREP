@@ -10,6 +10,8 @@ import NewRecipe from '@/components/tests/NewRecipe'
 import EditRecipe from '@/components/tests/EditRecipe'
 import ViewDailyCheckups from '@/components/tests/ViewDailyCheckups'
 import NewDailyCheckups from '@/components/tests/NewDailyCheckups'
+import ViewDailyCheckupsInfo from '@/components/tests/ViewDailyCheckupsInfo'
+import EditDailyCheckups from '@/components/tests/EditDailyCheckups'
 import ViewAppointments from '@/components/appointments/ViewAppointments'
 import AddAppointment from '@/components/appointments/AddAppointment'
 import EditAppointment from '@/components/appointments/EditAppointment'
@@ -147,7 +149,7 @@ let router = new Router({
       }
     },
     {
-      path: '/view-dailycheckups/:id',
+      path: '/view-dailycheckups/:test_id',
       name: 'view-dailycheckups',
       component: ViewDailyCheckups,
       meta: {
@@ -155,9 +157,25 @@ let router = new Router({
       }
     },
     {
-      path: '/new-dailycheckups/:id',
+      path: '/new-dailycheckups/:test_id',
       name: 'new-dailycheckups',
       component: NewDailyCheckups,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/view-dailycheckups-info/:test_id/:daily_id',
+      name: 'view-dailycheckups-info',
+      component: ViewDailyCheckupsInfo,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/edit-dailycheckups/:test_id/:daily_id',
+      name: 'edit-dailycheckups',
+      component: EditDailyCheckups,
       meta: {
         requiresAuth: true
       }

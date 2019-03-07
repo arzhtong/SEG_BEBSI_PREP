@@ -35,7 +35,7 @@
                 </div>
                 
                 <button type="submit" class="btn">Submit</button>
-                <router-link v-bind:to="{name: 'view-dailycheckups', params: {id: this.$route.params.id}}" class="btn grey">Cancel</router-link>
+                <router-link v-bind:to="{name: 'view-dailycheckups', params: {test_id: this.$route.params.test_id}}" class="btn grey">Cancel</router-link>
 
             </form>
        </div>
@@ -63,14 +63,15 @@ import db from '../firebaseInit'
                 for(var i =0 ; i < this.instructions.length; i++){
                     array.push(this.instructions[i].value)
                 }
-                db.collection('tests').doc(this.$route.params.id).collection('dailyCheckups').add({
+                db.collection('tests').doc(this.$route.params.test_id).collection('dailyCheckups').add({
                     title: this.title,
                     instructions: array,
                     description: this.description,
                     daysBeforeTest:Number(this.daysBeforeTest)
                 })
                 .then(docRef => {
-                    this.$router.push({ name: 'view-dailycheckups', params: {id: this.$route.params.id} })
+                    alert("Successfully created new Daily Check-ups!");
+                    this.$router.push({ name: 'view-dailycheckups', params: {test_id: this.$route.params.test_id} })
                 })
                 .catch(error => console.log(err))
             },

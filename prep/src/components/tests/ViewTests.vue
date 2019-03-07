@@ -20,7 +20,7 @@
         <tbody v-for="test in tests" v-bind:key="test.id" class="collection-item" >
           <tr >
             <td style="padding: 20px;">{{test.title}}</td>
-            <td><router-link v-bind:to="{name: 'view-dailycheckups', params: {id: test.id}}" class="btn blue">Show</router-link></td>
+            <td><router-link v-bind:to="{name: 'view-dailycheckups', params: {test_id: test.id}}" class="btn blue">Show</router-link></td>
             <td><router-link to="" class="btn blue">Show</router-link></td>
             <td><router-link to="" class="btn blue">Show</router-link></td>
             <td><router-link v-bind:to="{name: 'view-recipes', params: {test_id: test.id}}" class="btn blue">Show</router-link></td>
