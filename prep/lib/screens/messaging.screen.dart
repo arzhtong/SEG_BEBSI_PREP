@@ -7,14 +7,16 @@ import '../utils/query.dart';
 import '../utils/message_crypto.dart';
 
 class MessagingScreen extends StatefulWidget {
-  final _MessagingScreenState _messagingScreenState = _MessagingScreenState();
+  MessagingScreen(appointmentID) {
+    MessagingQueries.setAppointmentID(appointmentID);
+  }
 
   @override
-  State createState() => _messagingScreenState;
+  State createState() => _MessagingScreenState();
 }
 
 class _MessagingScreenState extends State<MessagingScreen> {
-  final _MessagesView _messagesView = _MessagesView();
+  _MessagesView _messagesView = _MessagesView();
   StreamSubscription<QuerySnapshot> _messageStreamSubscription;
 
   void _addNewMessage(DocumentSnapshot document) {
@@ -57,9 +59,9 @@ class _MessagingScreenState extends State<MessagingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      /* appBar: AppBar(
         title: Text("Doctor"),
-      ),
+      ), */
       body: Column(children: <Widget>[
         Flexible(
           child: _messagesView,
@@ -75,7 +77,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
 }
 
 class _MessagesView extends StatefulWidget {
-  final _MessagesViewState _messagesState = _MessagesViewState();
+  _MessagesViewState _messagesState = _MessagesViewState();
 
   void addMessage(
       {String messageText,
@@ -146,7 +148,7 @@ class _TextComposer extends StatefulWidget {
 }
 
 class _TextComposerState extends State<_TextComposer> {
-  final TextEditingController _textController = TextEditingController();
+  TextEditingController _textController = TextEditingController();
   bool _hasTyped = false;
 
   void _sendMessage(String messageText) {

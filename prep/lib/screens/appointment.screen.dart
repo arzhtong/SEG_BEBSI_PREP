@@ -27,7 +27,7 @@ class _AppointmentState extends State<Appointment> {
       break;
       case 2: {return DailyCheckups(widget._appointmentID);}
       break;
-      default: {return Messaging();}
+      default: {return MessagingScreen(widget._appointmentID);}
       break;
     }
   }
