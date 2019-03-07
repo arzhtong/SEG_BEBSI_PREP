@@ -17,7 +17,7 @@
         <tbody v-for="category in categories" v-bind:key="category.id" class="collection-item" >
           <tr >
             <td style="padding: 20px;">{{category.contents}}</td>
-            <td><router-link to="/" class="btn blue">Show</router-link></td>
+            <td><button @click="routeToCard(category.type, category.contents)"  class="btn blue">Show</button></td>
           </tr>
         </tbody>
         <router-link v-bind:to="{name: 'new-recipe', params: {test_id: testID}}" class="btn green" style="margin:20px">
@@ -41,7 +41,7 @@
         data() {
             return {
                 categories: [],
-                testID: this.$route.params.test_id
+                test_id: this.$route.params.test_id
                 
             }
         },
@@ -51,12 +51,19 @@
                     const data = {
                         'id': doc.id,
                         'contents': doc.data().contents,
-                        
+                        'type': doc.data().type
                         
                     }
                     this.categories.push(data)
                 })
             })
+        },
+        methods: {
+            routeToCard(categoryType, categoryContents){
+                if(categoryType === 'categoryList'){
+                    this.$router.push({name: 'view-prep-list', params: {test_id: this.$route.params.test_id, contents: categoryContents}})
+                }
+            }
         }
     }
 </script>
