@@ -5,23 +5,56 @@
         <form @submit.prevent="" class="col s12">
           <div class="row">
             <div class="input-field col s12">
-              <input type="text" v-model="title" required>
+              <input type="text" v-model="title">
               <label>Title</label>
             </div>
           </div>
         <div id="editor">
             <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
         </div>
-        <button @click="saveData" class="btn">Test</button>
         </form>
+        </div>
         
-        <div class="container" id="images">
-            <imageUploader />
+        <div v-for="(input, index) in inputs" :key="index">
+            <div v-if="input == 'image'" class="valign-wrapper row" id="imageWrapper">
+                <div class="inline-block left-align col s6" id="images">
+                    <imageUploader v-on:downloadURL="testInformation.push($event);"/>
+                </div>
+                <div class="inline-block right-align col s6">
+                    <a 
+                        class="btn-floating red tooltipped" 
+                        data-position="left" 
+                        data-tooltip="remove" 
+                        id="removeText" 
+                        @click="removeInput(index)">
+                        <i class="material-icons">clear</i>
+                    </a>
+                </div>
+            </div>
+
+            <div v-else id="textWrapper">
+                <input type="text" v-model="testInformation[index]">
+                <div class="right-align">
+                    <a 
+                        class="btn-floating red tooltipped" 
+                        data-position="left" 
+                        data-tooltip="remove" 
+                        id="removeText" 
+                        @click="removeInput(index)">
+                        <i class="material-icons">clear</i>
+                    </a>
+                </div>
+            </div>
+
         </div>
-        <div class="container" id="images1">
-            <imageUploader />
+
+        <div class="valign-wrapper flow">
+            <a class="waves-light btn-small" @click="addTextInput">Add text</a>
+            <a class="waves-light btn-small" @click="addImageInput">Add image</a>
+            <a class="waves-light btn-small" @click="saveData">finished</a>
+            <a class="waves-light btn-small">cancle</a>
         </div>
-        </div>
+        
     </div>
 </template>
 
@@ -35,8 +68,9 @@ export default {
     name: 'mainScreen',
     data() {
         return {
-            selectedFile: null,
             title: '',
+            testInformation: [],
+            inputs: [],
             editor: ClassicEditor,
             editorData: '',
             editorConfig: {
@@ -51,11 +85,19 @@ export default {
     },
     methods: {
         saveData() {
-            alert(this.title + this.editorData);
+            alert(this.testInformation[0] + this.testInformation[2]);
+            // alert(this.title + this.editorData);
         },
-        onFileSelected(event) {
-            this.selectedFile = event.target.files[0]
-            firebase.storage().ref('test_images/' + this.selectedFile.name).put(this.selectedFile)
+        addImageInput() {
+            this.inputs.push('image')
+        },
+        addTextInput() {
+            this.inputs.push('text')
+            this.testInformation.push('')
+        },
+        removeInput(index) {
+            this.inputs.splice(index, 1)
+            this.testInformation.splice(index, 1)
         }
 
     }
@@ -64,9 +106,25 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
 .ck-editor__editable {
     min-height: 50vh;
+}
+
+#imageWrapper {
+    background: lightblue;
+    width: 102%;
+}
+
+#textWrapper {
+    padding-bottom: 20px;
+    padding-top: 10px;
+}
+
+.inline-block {
+  display: inline-block;
+  padding: 10px;
+  
 }
 </style>
 
