@@ -25,6 +25,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
     String decryptedMessage = MessageCrypto.decryptMessage(
         message['content'], message['datetime'].millisecondsSinceEpoch);
 
+    // TODO: Remove seenByStaff, as the patient should not see read receipts
     _messagesView.addMessage(
       messageText: decryptedMessage,
       datetime: message['datetime'],
@@ -96,7 +97,7 @@ class _MessagesView extends StatefulWidget {
 class _MessagesViewState extends State<_MessagesView>
     with TickerProviderStateMixin {
   List<_MessageData> _messagesList = [];
-  final ScrollController _scrollController = ScrollController();
+  // final ScrollController _scrollController = ScrollController();
 
   void _addMessageToList(
       {String messageText,
@@ -115,11 +116,11 @@ class _MessagesViewState extends State<_MessagesView>
     );
 
     setState(() => _messagesList.insert(0, _newMessage));
-    _scrollMessageViewToBottom();
+    // _scrollMessageViewToBottom();
   }
 
-  void _scrollMessageViewToBottom() => _scrollController.animateTo(0.0,
-      curve: Curves.ease, duration: const Duration(milliseconds: 300));
+  /* void _scrollMessageViewToBottom() => _scrollController.animateTo(0.0,
+      curve: Curves.ease, duration: const Duration(milliseconds: 300)); */
 
   void dispose() {
     for (_MessageData message in _messagesList) {
@@ -129,18 +130,12 @@ class _MessagesViewState extends State<_MessagesView>
   }
 
   @override
-  void initState() {
-    super.initState();
-    Firestore.instance.enablePersistence(true);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return ListView.builder(
       reverse: true,
       itemBuilder: (_, int index) => _MessageListItem(_messagesList[index]),
       itemCount: _messagesList.length,
-      controller: _scrollController,
+      // controller: _scrollController,
     );
   }
 }
