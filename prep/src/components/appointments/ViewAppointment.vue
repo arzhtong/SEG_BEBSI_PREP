@@ -26,12 +26,14 @@
             <td>{{testName}}</td>
             <td>{{testType}}</td>
             <td>
-              <router-link v-bind:to="{name: 'edit-appointment', params: {id: router}}">
-                <a class="tooltip" style="margin-right:20px">
-                  <span class="tooltiptext">Edit Appointment</span>
-                  <i class="material-icons">edit</i>
-                </a>
-              </router-link>
+              <template v-if="past == false">
+                <router-link v-bind:to="{name: 'edit-appointment', params: {id: router}}">
+                  <a class="tooltip" style="margin-right:20px">
+                    <span class="tooltiptext">Edit Appointment</span>
+                    <i class="material-icons">edit</i>
+                  </a>
+                </router-link>
+              </template>
             </td>
           </tr>
         </tbody>
@@ -117,7 +119,8 @@ export default {
       testName: null,
       testType: null,
       router: this.$route.params.id,
-      newMap: new Map
+      newMap: new Map(),
+      past: this.$route.params.expired
     };
   },
   created() {
@@ -170,7 +173,7 @@ export default {
                 description: change.doc.data().description,
                 instructions: change.doc.data().instructions
               };
-              data.instructions = data.instructions
+              data.instructions = data.instructions;
               this.dailyCheckups.push(data);
             }
             if (change.type == "modified") {
@@ -203,7 +206,6 @@ export default {
           }
         }
       }
-
     }
   }
 };

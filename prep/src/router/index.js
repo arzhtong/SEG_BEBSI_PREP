@@ -9,6 +9,7 @@ import NewRecipe from '@/components/tests/NewRecipe'
 import EditRecipe from '@/components/tests/EditRecipe'
 import EditStaff from '@/components/staff/EditStaff'
 import ViewAppointments from '@/components/appointments/ViewAppointments'
+import PastAppointments from '@/components/appointments/PastAppointments'
 import AddAppointment from '@/components/appointments/AddAppointment'
 import EditAppointment from '@/components/appointments/EditAppointment'
 import ViewAppointment from '@/components/appointments/ViewAppointment'
@@ -80,6 +81,14 @@ let router = new Router({
       }
     },
     {
+      path: '/past-appointments',
+      name: 'past-appointments',
+      component: PastAppointments,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
       path: '/add-appointment',
       name: 'add-appointment',
       component: AddAppointment,
@@ -146,7 +155,7 @@ let router = new Router({
       }
     },
     {
-      path: '/view-appointment/:id',
+      path: '/view-appointment/:expired/:id',
       name: 'view-appointment',
       component: ViewAppointment,
       meta: {
