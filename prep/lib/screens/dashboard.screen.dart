@@ -405,3 +405,46 @@ class Storage {
     return file.writeAsString("$data");
   }
 }
+
+class Date {
+  int year = 0;
+  int month = 0;
+  int day = 0;
+  int hour = 0;
+  int minute = 0;
+  int second = 0;
+
+  Date();
+
+  Date.and(DateTime datetime) {
+    year = datetime.year;
+    month = datetime.month;
+    day = datetime.day;
+  }
+
+  Date.ios(Timestamp timestamp) {
+    year = timestamp.toDate().year;
+    month = timestamp.toDate().month;
+    day = timestamp.toDate().day;
+  }
+
+  int getYear(){
+    return year;
+  }
+
+  int getMonth(){
+    return month;
+  }
+
+  int getDay(){
+    return day;
+  }
+
+  String getDate(){
+    return day.toString() + " - " + month.toString() + " - " + year.toString();
+  }
+
+  bool equals(Date other){
+    return (this.year == other.year && this.month == other.month && this.day == other.day);
+  }
+}
