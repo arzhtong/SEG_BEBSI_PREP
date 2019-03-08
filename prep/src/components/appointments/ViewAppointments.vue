@@ -53,6 +53,9 @@
                 <i class="material-icons">info</i>
               </a>
             </th>
+            <th></th>
+            <th></th>
+            <th></th>
           </tr>
         </thead>
 
@@ -75,7 +78,7 @@
               <a class="tooltip">
                 <span class="tooltiptext">Delete Appointment</span>
                 <i
-                  @click="deleteAppointment(appointment.location)"
+                  @click="deleteAppointment(appointment.code)"
                   class="red-text material-icons"
                   style="position:relative;text-align:center;cursor:pointer;"
                 >delete</i>
@@ -121,10 +124,13 @@ export default {
       notifications: [],
       ids: [],
       id: null,
+      today: new Date(),
+      yesterday: null,
       currentDate: Date.now().toLocaleString
     };
   },
   created() {
+    this.yesterday = new Date(this.today.setDate(this.today.getDate()-1))
     this.getApp("asc");
   },
   methods: {
@@ -193,14 +199,10 @@ export default {
           });
         });
     },
-    deleteAppointment(appointmentLocation) {
+    deleteAppointment(code) {
       if (confirm(`Are you sure you want to delete this appointment`)) {
         db.collection("appointments")
-          .where("location", "==", appointmentLocation)
-          .get()
-          .then(querySnapshot => {
-            querySnapshot.forEach(doc => {
-              doc.ref
+          .doc(code)
                 .delete()
                 .then(() => {
                   console.log("Document successfully deleted!");
@@ -211,8 +213,8 @@ export default {
                   console.error("Error removing document: ", error);
                   alert(`There was an error: ${error}`);
                 });
-            });
-          });
+          
+        
       }
     },
     sort() {
