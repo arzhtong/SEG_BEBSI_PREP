@@ -11,6 +11,7 @@ import EditStaff from '@/components/staff/EditStaff'
 import ViewAppointments from '@/components/appointments/ViewAppointments'
 import AddAppointment from '@/components/appointments/AddAppointment'
 import EditAppointment from '@/components/appointments/EditAppointment'
+import ViewAppointment from '@/components/appointments/ViewAppointment'
 import Login from '@/components/auth/Login'
 import Register from '@/components/auth/Register'
 import ResetPassword from '@/components/auth/ResetPassword'
@@ -140,6 +141,14 @@ let router = new Router({
       path: '/edit-recipe/:test_id/:recipe_id',
       name: 'edit-recipe',
       component: EditRecipe,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/view-appointment/:id',
+      name: 'view-appointment',
+      component: ViewAppointment,
       meta: {
         requiresAuth: true
       }
