@@ -5,10 +5,8 @@ import App from './App'
 import router from './router'
 import firebase from 'firebase'
 import './components/firebaseInit'
-import CKEditor from '@ckeditor/ckeditor5-vue';
 
 Vue.config.productionTip = false
-Vue.use( CKEditor );
 
 let app
 firebase.auth().onAuthStateChanged(user => {

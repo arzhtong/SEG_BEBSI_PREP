@@ -9,13 +9,14 @@
               <label>Title</label>
             </div>
           </div>
-        <div id="editor">
-            <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
-        </div>
         </form>
         </div>
+
+        <div>
+            <textEditor v-on:editorData="saveTest($event)"/>
+        </div>
         
-        <div v-for="(input, index) in inputs" :key="index">
+        <!-- <div v-for="(input, index) in inputs" :key="index">
             <div v-if="input == 'image'" class="valign-wrapper row" id="imageWrapper">
                 <div class="inline-block left-align col s6" id="images">
                     <imageUploader v-on:downloadURL="testInformation.push($event);"/>
@@ -53,16 +54,16 @@
             <a class="waves-light btn-small" @click="addImageInput">Add image</a>
             <a class="waves-light btn-small" @click="saveData">finished</a>
             <a class="waves-light btn-small">cancle</a>
-        </div>
+        </div> -->
         
     </div>
 </template>
 
 <script>
-import db from "./firebaseInit";
-import firebase from "firebase";
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import imageUploader from "./ImageUploader";
+import db from "./firebaseInit"
+import firebase from "firebase"
+import imageUploader from "./ImageUploader"
+import textEditor from "./TextEditor"
 
 export default {
     name: 'mainScreen',
@@ -71,17 +72,12 @@ export default {
             title: '',
             testInformation: [],
             inputs: [],
-            editor: ClassicEditor,
-            editorData: '',
-            editorConfig: {
-                // The configuration of the editor.
-                // removePlugins: [ 'Heading', 'Link' ]
-
-            }
+            htmlForEditor: ''
         };
     },
     components: {
-        imageUploader
+        imageUploader,
+        textEditor
     },
     methods: {
         saveData() {
@@ -98,8 +94,12 @@ export default {
         removeInput(index) {
             this.inputs.splice(index, 1)
             this.testInformation.splice(index, 1)
+        },
+        saveTest(information) {
+            alert(information)
+            //information - from the text editor
+            // save this to firebase here
         }
-
     }
 }
 
@@ -107,9 +107,6 @@ export default {
 </script>
 
 <style scoped>
-.ck-editor__editable {
-    min-height: 50vh;
-}
 
 #imageWrapper {
     background: lightblue;
