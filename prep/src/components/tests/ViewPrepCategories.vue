@@ -20,7 +20,7 @@
             <td><button @click="routeToCard(category.type, category.contents)"  class="btn blue">Show</button></td>
           </tr>
         </tbody>
-        <router-link v-bind:to="{name: 'new-recipe', params: {test_id: testID}}" class="btn green" style="margin:20px">
+        <router-link v-bind:to="{name: 'new-category', params: {test_id: test_id}}" class="btn green" style="margin:20px">
             Add category
         </router-link>
       </table>
