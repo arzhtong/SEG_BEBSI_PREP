@@ -108,15 +108,41 @@ class _DashboardState extends State<Dashboard> {
       documentList = filteredDocuments;
 
       //calendar building
-      calendarElements.add(_CalendarLabel(documentList.elementAt(0).data['datetime']));
-      calendarElements.add(_CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime']));
+//      calendarElements.add(_CalendarLabel(documentList.elementAt(0).data['datetime']));
+//      calendarElements.add(_CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime']));
+//
+//      for (int i = 1; i < documentList.length; i++){
+//        if (documentList.elementAt(i).data['datetime'] != documentList.elementAt(i - 1).data['datetime']){
+//          calendarElements.add(_CalendarLabel(documentList.elementAt(i).data['datetime']));
+//          calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
+//        } else {
+//          calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
+//        }
+//      }
 
-      for (int i = 1; i < documentList.length; i++){
-        if (documentList.elementAt(i).data['datetime'] != documentList.elementAt(i - 1).data['datetime']){
-          calendarElements.add(_CalendarLabel(documentList.elementAt(i).data['datetime']));
-          calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
-        } else {
-          calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
+      if (Platform.isAndroid) { //ANDROID
+        calendarElements.add(_CalendarLabel(Date.and(documentList.elementAt(0).data['datetime'])));
+        calendarElements.add(_CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], Date.and(documentList.elementAt(0).data['datetime'])));
+
+        for (int i = 1; i < documentList.length; i++){
+          if (Date.and(documentList.elementAt(i).data['datetime']).equals(Date.and(documentList.elementAt(i - 1).data['datetime']))){
+            calendarElements.add(_CalendarLabel(Date.and(documentList.elementAt(i).data['datetime'])));
+            calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], Date.and(documentList.elementAt(i).data['datetime'])));
+          } else {
+            calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], Date.and(documentList.elementAt(i).data['datetime'])));
+          }
+        }
+      } else {  //iOS
+        calendarElements.add(_CalendarLabel(Date.ios(documentList.elementAt(0).data['datetime'])));
+        calendarElements.add(_CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], Date.ios(documentList.elementAt(0).data['datetime'])));
+
+        for (int i = 1; i < documentList.length; i++){
+          if (Date.ios(documentList.elementAt(i).data['datetime']).equals(Date.ios(documentList.elementAt(i - 1).data['datetime']))){
+            calendarElements.add(_CalendarLabel(Date.ios(documentList.elementAt(i).data['datetime'])));
+            calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], Date.ios(documentList.elementAt(i).data['datetime'])));
+          } else {
+            calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], Date.ios(documentList.elementAt(i).data['datetime'])));
+          }
         }
       }
 
@@ -231,7 +257,7 @@ class _DashboardState extends State<Dashboard> {
 }
 
 class _CalendarLabel extends StatelessWidget {
-  final DateTime dateTime;
+  final Date dateTime;
 
   _CalendarLabel(this.dateTime);
 
@@ -248,7 +274,7 @@ class _CalendarLabel extends StatelessWidget {
     );
   }
 
-  String dateTimeFormater(DateTime datetime){
+  String dateTimeFormater(Date datetime){
     String formattedString = datetime.day.toString();
 
     switch(datetime.month){
@@ -287,7 +313,7 @@ class _CalendarLabel extends StatelessWidget {
 class _CalendarCard extends StatelessWidget {
   final String name;
   final String location;
-  final DateTime dateTime;
+  final Date dateTime;
 
   _CalendarCard(this.name, this.location, this.dateTime);
 
@@ -326,7 +352,7 @@ class _CalendarCard extends StatelessWidget {
               ListTile(
                 leading: Icon(Icons.today),
                 title: Text(name),
-                subtitle: Text(location + " - " + dateTime.toString()),
+                subtitle: Text(location + " - " + dateTime.getDate()),
                 //subtitle: Text("St. Thomas Hospital - 11:00 am"),
               ),
             ],
@@ -426,18 +452,6 @@ class Date {
     year = timestamp.toDate().year;
     month = timestamp.toDate().month;
     day = timestamp.toDate().day;
-  }
-
-  int getYear(){
-    return year;
-  }
-
-  int getMonth(){
-    return month;
-  }
-
-  int getDay(){
-    return day;
   }
 
   String getDate(){
