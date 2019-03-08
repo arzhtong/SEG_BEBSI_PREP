@@ -93,28 +93,6 @@
                     </div>
                   </div>
                 </div>
-                <div id="btns">
-                  <div>
-                    <span style="margin:0px 0px 0px 40px;cursor:pointer">
-                      <a @click="enableEditMode(checkup)" class="tooltip" style="margin-right:20px">
-                        <span class="tooltiptext">Edit Daily Checkup</span>
-                        <i style="font-size:30px" class="material-icons">edit</i>
-                      </a>
-                      <a class="tooltip" style="margin-right:20px">
-                        <span class="tooltiptext">Add Daily Checkup</span>
-                        <i style="font-size:30px" class="material-icons green-text">fiber_new</i>
-                      </a>
-                    </span>
-                  </div>
-
-                  <div>
-                    <button
-                      style="width:120px;margin-left:20px"
-                      @click="addInstructionsToFb(checkup)"
-                      class="btn"
-                    >Save</button>
-                  </div>
-                </div>
               </td>
             </tr>
           </tbody>
@@ -225,36 +203,6 @@ export default {
           }
         }
       }
-    },
-    addInstructions(index) {
-      var inputValue = document.getElementById("dailyInput").value;
-      var checkUp = this.dailyCheckups[index];
-
-      if (checkUp.instructions.includes(inputValue)) {
-         alert(index);
-        alert("You have not made any changes!");
-      } else {
-        alert(index);
-        // TODO: Fix arrays on fb
-        //this.addInstrutionsToFb(checkUp.docId);
-      }
-    },
-    addInstructionsToFb(checkup) {
-      var inputArray = document.getElementsByClassName("dailyInput");
-      var inputList = Array.from(inputArray);
-      var map = new Map()
-      
-      
-      // db.collection("appointments")
-      //   .doc(this.$route.params.id)
-      //   .collection("dailyCheckups")
-      //   .doc(docId)
-      //   .update({
-      //     instructions: map
-      //   })
-      //   .catch(function(error) {
-      //     console.error("Error writing document: ", error);
-      //   });
 
     }
   }
