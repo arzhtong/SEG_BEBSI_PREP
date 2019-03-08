@@ -18,17 +18,29 @@ class Appointment extends StatefulWidget {
 
 class _AppointmentState extends State<Appointment> {
   int _selectedIndex = 0;
+  AppointmentInfo _appointmentInfo;
+  AppointmentPrep _appointmentPrep;
+  DailyCheckups _dailyCheckups;
+  MessagingScreen _messagingScreen;
 
   Widget getPage(int index) {
     switch(index){
-      case 0: {return AppointmentInfo();}
-      break;
-      case 1: {return AppointmentPrep();}
-      break;
-      case 2: {return DailyCheckups(widget._appointmentID);}
-      break;
-      default: {return MessagingScreen(widget._appointmentID);}
-      break;
+      case 1:
+        return (_appointmentPrep != null)
+          ? _appointmentPrep
+          : _appointmentPrep = AppointmentPrep();
+      case 2:
+        return (_dailyCheckups != null)
+        ? _dailyCheckups
+        : _dailyCheckups = DailyCheckups(widget._appointmentID);
+      case 3:
+        return (_messagingScreen != null)
+          ? _messagingScreen
+          : _messagingScreen = MessagingScreen(widget._appointmentID);
+      default:
+        return (_appointmentInfo != null)
+          ? _appointmentInfo
+          : _appointmentInfo = AppointmentInfo();
     }
   }
 
