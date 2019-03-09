@@ -73,8 +73,7 @@ export default {
       messagesPatient: [],
       allMessages: [],
       currentUser: null,
-      isStaff: null,
-    
+      isStaff: null
     };
   },
   created() {
@@ -95,8 +94,7 @@ export default {
             var millisStr = msgDate.getTime().toString();
             var msg = decryptMessage(
               doc.data().content,
-              this.$route.params.appointmentID,
-              millisStr.substring(millisStr.length - 7)
+              this.$route.params.appointmentID
             );
             const data = {
               content: msg,
@@ -139,16 +137,13 @@ export default {
         .onSnapshot(snapshot => {
           snapshot.docChanges().forEach(change => {
             if (change.type === "added") {
-              var msgDate = change.doc.data().datetime.toDate();
-              var millisStr = msgDate.getTime().toString();
               var msg = decryptMessage(
                 change.doc.data().content,
-                this.$route.params.appointmentID,
-                millisStr.substring(millisStr.length - 7)
+                this.$route.params.appointmentID
               );
               const data = {
                 content: msg,
-                datetime: msgDate,
+                datetime: change.doc.data().datetime.toDate(),
                 isPatient: change.doc.data().isPatient,
                 seenByPatient: change.doc.data().seenByPatient,
                 timestamp: change.doc.data().datetime
@@ -183,23 +178,18 @@ export default {
       var checkMessage = document.getElementById("textArea").value.trim();
       if (checkMessage.length != 0 && checkMessage != "") {
         var message = document.getElementById("textArea").value;
-        var currentDate = new Date(Date.now());
-        var currentDatetime = firebase.firestore.Timestamp.fromDate(
-          currentDate
-        );
-        var millisStr = currentDate.getTime().toString();
-        var millisSubstring = millisStr.substring(millisStr.length - 7);
         var encryptedMessage = encryptMessage(
           message,
-          this.$route.params.appointmentID,
-          millisSubstring
+          this.$route.params.appointmentID
         );
         db.collection("appointments")
           .doc(this.$route.params.appointmentID)
           .collection("messages")
           .add({
             content: encryptedMessage,
-            datetime: currentDatetime,
+            datetime: firebase.firestore.Timestamp.fromDate(
+              new Date(Date.now())
+            ),
             isPatient: false,
             seenByStaff: true,
             seenByPatient: false
