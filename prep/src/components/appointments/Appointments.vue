@@ -116,6 +116,9 @@
         <template v-if="past==false">
           <router-link to="/add-appointment" class="btn green" style="margin:20px">Add Appointment</router-link>
         </template>
+        <template v-else>
+          <router-link to="/add-appointment" class="btn green" style="margin:20px" disabled>Add Appointment</router-link>
+        </template>
       </table>
     </div>
   </div>
