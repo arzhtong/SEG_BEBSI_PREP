@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -9,8 +11,10 @@ import './utils/query.dart';
 Future<void> main() async {
   final FirebaseApp firebaseApp = await FirebaseApp.configure(
     name: "Prep",
-    options: const FirebaseOptions(
-      googleAppID: "1:633103334646:android:c95e32521ac6a78d",
+    options: FirebaseOptions(
+      googleAppID: (Platform.isIOS)
+          ? "1:633103334646:ios:c95e32521ac6a78d"
+          : "1:633103334646:android:c95e32521ac6a78d",
       gcmSenderID: "633103334646",
       apiKey: "AIzaSyBPz3NKdjY8uyYJgZTAc56xg6ncfmMT2cs",
       projectID: "prep-232116",
