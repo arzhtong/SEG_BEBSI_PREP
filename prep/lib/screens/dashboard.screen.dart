@@ -54,11 +54,17 @@ class _DashboardState extends State<Dashboard> {
     return storage.writeData("");
   }
 
+  // Overrides the data in the codes file
+  Future<File> overrideData(String newFileState) async {
+    codeFileState = newFileState;
+    return await storage.writeData(newFileState);
+  }
+
   // Checks if a code exists in the Firestore
   Future<bool> _isCodeInFirestore (String code) async {
     List<String> liveIDs = new List();
 
-    await Firestore.instance.collection('appointments').getDocuments().then((query) {
+    await Firestore.instance.collection('appointments').where("datetime", isGreaterThan: DateTime.now().subtract(Duration(days: 1))).getDocuments().then((query) {
       query.documents.forEach((document) {
         liveIDs.add(document.documentID);
       });
@@ -83,21 +89,46 @@ class _DashboardState extends State<Dashboard> {
       });
     }
 
+    //reading file and updating codeFileState
     await storage.readData().then((String value){
       codeFileState = value;
     });
 
+    //reading appointments from the database and updating the codes file
+    documentList = new List();
+    List<Widget> calendarElements = new List();
+
+    testDocList = await Firestore.instance.collection('appointments')
+        .where("datetime", isGreaterThan: DateTime.now()
+        .subtract(Duration(days: 1))).orderBy('datetime').getDocuments();
+    documentList = testDocList.documents;
+
+    // Remove codes from the codes file that are past their date in the database
+    List<String> documentIDs = new List();
+    documentList.forEach((doc) {
+      documentIDs.add(doc.documentID);
+    });
+
+    //print("Document IDs: " + documentIDs.toString());
+    print(codeFileState.split(',').toString());
+
+    String newCodeFileState = "";
+    codeFileState.split(',').forEach((code){
+      if (documentIDs.contains(code)){
+        newCodeFileState = newCodeFileState + code + ',';
+      }
+    });
+
+    await overrideData(newCodeFileState).then((_){});
+
+    // print("NEW CODE FILE: " + newCodeFileState);
+
+    // building the return widget based on the updated (current) codes file
     if (codeFileState == null){
       return null;
     } else if (codeFileState.isEmpty) {
       return _EmptyCalendarPlaceholder();
     } else {
-      documentList = new List();
-      List<Widget> calendarElements = new List();
-
-      testDocList = await Firestore.instance.collection('appointments').orderBy('datetime').getDocuments();
-      documentList = testDocList.documents;
-
       //Generates a list of filtered appointments
       List<DocumentSnapshot> filteredDocuments= new List();
       documentList.forEach((doc){
@@ -106,19 +137,6 @@ class _DashboardState extends State<Dashboard> {
         }
       });
       documentList = filteredDocuments;
-
-      //calendar building
-//      calendarElements.add(_CalendarLabel(documentList.elementAt(0).data['datetime']));
-//      calendarElements.add(_CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime']));
-//
-//      for (int i = 1; i < documentList.length; i++){
-//        if (documentList.elementAt(i).data['datetime'] != documentList.elementAt(i - 1).data['datetime']){
-//          calendarElements.add(_CalendarLabel(documentList.elementAt(i).data['datetime']));
-//          calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
-//        } else {
-//          calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
-//        }
-//      }
 
       if (Platform.isAndroid) { //ANDROID
         calendarElements.add(_CalendarLabel(Date.and(documentList.elementAt(0).data['datetime'])));
@@ -170,6 +188,12 @@ class _DashboardState extends State<Dashboard> {
               icon: Icon(Icons.delete_sweep),
               onPressed: (){
                 clearData();
+              }
+          ),
+          IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: (){
+                setState(() {});
               }
           )
         ],
