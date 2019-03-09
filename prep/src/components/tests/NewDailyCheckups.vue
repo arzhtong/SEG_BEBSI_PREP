@@ -7,7 +7,7 @@
                 <div class="row">
                     <div class="input-field col s12">
                         <input type="text" v-model="title" required>
-                        <label>Title</label>
+                        <label>Title </label>
                     </div>
                </div>
 
@@ -46,6 +46,7 @@
 
 </template>
 <script>
+
 import db from '../firebaseInit'
     export default{
         name: 'new-dailycheckups',
@@ -53,19 +54,22 @@ import db from '../firebaseInit'
             return {
                 title: null,
                 instructions: [],
+               
                 description: null,
                 daysBeforeTest:null
             }
         },
         methods: {
             saveDailyCheckups(){
-                var array = []
-                for(var i =0 ; i < this.instructions.length; i++){
-                    array.push(this.instructions[i].value)
-                }
-                db.collection('tests').doc(this.$route.params.test_id).collection('dailyCheckups').add({
+                var map={}
+                
+                 for(var i =0 ; i < this.instructions.length; i++){
+                     map[(i+1)+" "+this.instructions[i].value]=false
+                 }
+                  
+                db.collection('tests').doc(this.$route.params.test_id).collection('dailyCheckups').add({                    
                     title: this.title,
-                    instructions: array,
+                    instructions: map,
                     description: this.description,
                     daysBeforeTest:Number(this.daysBeforeTest)
                 })
