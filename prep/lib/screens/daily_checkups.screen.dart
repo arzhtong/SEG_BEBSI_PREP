@@ -36,7 +36,7 @@ class _DailyCheckups extends State<DailyCheckups> {
       break;
       case 8: {return Icons.filter_8;}
       break;
-      case 8: {return Icons.filter_9;}
+      case 9: {return Icons.filter_9;}
       break;
       default: {return Icons.filter_9_plus;}
       break;
@@ -98,11 +98,11 @@ class _DailyCheckups extends State<DailyCheckups> {
                         // This method works fine as only one user (the patient) will
                         // be editing the data so there is no risk of race conditions
                         document.reference.updateData({
-                          ('instructions.'+ instruction): false
+                          ('instructions.'+ instruction.toString()): false
                         });
                       } else {
                         document.reference.updateData({
-                          ('instructions.'+ instruction): true
+                          ('instructions.'+ instruction.toString()): true
                         });
                       }
                     },
@@ -133,6 +133,8 @@ class _DailyCheckups extends State<DailyCheckups> {
       ],
     );
   }
+
+  // forbidden characters: ".$[]#/"
 
   @override
   Widget build(BuildContext context) {
