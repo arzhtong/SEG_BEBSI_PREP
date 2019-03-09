@@ -126,9 +126,9 @@ class _DashboardState extends State<Dashboard> {
 
         for (int i = 1; i < documentList.length; i++){
           if (Date.and(documentList.elementAt(i).data['datetime']).equals(Date.and(documentList.elementAt(i - 1).data['datetime']))){
-            calendarElements.add(_CalendarLabel(Date.and(documentList.elementAt(i).data['datetime'])));
             calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], Date.and(documentList.elementAt(i).data['datetime'])));
           } else {
+            calendarElements.add(_CalendarLabel(Date.and(documentList.elementAt(i).data['datetime'])));
             calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], Date.and(documentList.elementAt(i).data['datetime'])));
           }
         }
@@ -138,9 +138,9 @@ class _DashboardState extends State<Dashboard> {
 
         for (int i = 1; i < documentList.length; i++){
           if (Date.ios(documentList.elementAt(i).data['datetime']).equals(Date.ios(documentList.elementAt(i - 1).data['datetime']))){
-            calendarElements.add(_CalendarLabel(Date.ios(documentList.elementAt(i).data['datetime'])));
             calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], Date.ios(documentList.elementAt(i).data['datetime'])));
           } else {
+            calendarElements.add(_CalendarLabel(Date.ios(documentList.elementAt(i).data['datetime'])));
             calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], Date.ios(documentList.elementAt(i).data['datetime'])));
           }
         }
@@ -458,6 +458,7 @@ class Date {
     return day.toString() + " - " + month.toString() + " - " + year.toString();
   }
 
+  @override
   bool equals(Date other){
     return (this.year == other.year && this.month == other.month && this.day == other.day);
   }
