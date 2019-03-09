@@ -16,7 +16,7 @@
                     </div>
                 </div>
             </div>
-            <label style="font-size:25px">Uploading file... {{uploadPercentage}}%</label>
+            <label style="font-size:25px">Saving file... {{uploadPercentage}}%</label>
         </div>
     </div>
 
@@ -37,28 +37,37 @@ import { VueEditor } from 'vue2-editor';
 import firebase from "firebase";
 
 export default {
+    props: ["editorInformation", "editorImages"],
     data() {
         return {
             htmlForEditor: '',
+            images: [],
             editor: '',
             cursorLocation: '',
             uploadPercentage: 0,
             uploading: false,
             uploadEnd: false,
-            uploadTask: ''  
+            uploadTask: '',
+            fileName: ''
         }
     },
     components: {
         VueEditor
     },
- 
+    // load any editor information provided in the props 
+    created() {
+        if(this.editorInformation !== '' || this.editorImages !== '') {
+            this.htmlForEditor = this.editorInformation
+            this.images = this.editorImages
+        }
+    },
     methods: {
         handleImageAdded: function(file, Editor, cursorLocation, resetUploader) {
             
             this.editor = Editor;
             this.cursorLocation = cursorLocation;
-            let fileName = file.name;
-            let fileExtension = fileName.split('.')[fileName.split('.').length - 1].toLowerCase();
+            this.fileName = file.name;
+            let fileExtension = this.fileName.split('.')[this.fileName.split('.').length - 1].toLowerCase();
             let fileSize = file.size;
             let mbSize = (fileSize / 1048576).toFixed(2);
 
@@ -70,22 +79,29 @@ export default {
                 alert(txt);
             } else { // add image to images/ folder on firebase
                 this.uploading = true
-                this.uploadTask = firebase.storage().ref('images/' + fileName).put(file);
+                this.uploadTask = firebase.storage().ref('images/' + this.fileName).put(file)
             }
         },
-        deleteImage() {
-            firebase.storage().ref('images/' + this.fileName).delete().then(() => {
-                this.uploading = false
-                this.uploadEnd = false
-                this.uploadPercentage = 0
-                this.downloadURL = ''
-            })
-            .catch((error) => {
-                console.error(`file delete error occured: ${error}`)
-            })
-        },
         saveEditorData() {
-            this.$emit('editorData', this.htmlForEditor)
+            this.uploading = true
+            let temp = []
+            // check if any images have been removed from the editor
+            for (var i = 0; i < this.images.length; i++) { 
+                if(this.htmlForEditor.indexOf(this.images[i]) < 0) {
+                    // delete if they have been removed
+                    firebase.storage().ref('images/' + this.images[i]).delete().then(() => {
+                    })
+                    .catch((error) => {
+                        console.error(`file delete error occured: ${error}`)
+                    })
+                } else {
+                    temp.push(this.images[i])
+                }
+            };
+            // update images array
+            this.images = temp
+            this.uploading = false
+            this.$emit('editorData', [this.htmlForEditor, this.images])
         }
     },
     watch: {
@@ -104,6 +120,7 @@ export default {
                 this.uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
                 this.uploadEnd = true
                 this.uploading = false
+                this.images.push(this.fileName);
                 this.editor.insertEmbed(this.cursorLocation, 'image', downloadURL) // place in editor
                 })
             });
