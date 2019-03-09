@@ -52,13 +52,18 @@
           </div>
         </div>
       </form>
-      <router-link to="/view-appointments" class="btn" style="margin-bottom:10px;">Go Back</router-link>
+      <template v-if="this.$route.params.expired == false">
+        <router-link to="/view-appointments" class="btn" style="margin-bottom:10px;">Go Back</router-link>
+      </template>
+      <template v-else>
+        <router-link to="/past-appointments" class="btn" style="margin-bottom:10px;">Go Back</router-link>
+      </template>
     </div>
   </div>
 </template>
 <script>
 import db from "../firebaseInit";
-import firebase from "firebase";
+import firebase, { firestore } from "firebase";
 import { encryptMessage, decryptMessage, generateKey } from "./AES.js";
 export default {
   name: "message",
@@ -66,30 +71,63 @@ export default {
     return {
       messages: [],
       messagesPatient: [],
+      allMessages: [],
       currentUser: null,
-      isStaff: null
+      isStaff: null,
+    
     };
   },
   created() {
-    this.fetchData();
     this.clearNot();
+    this.fetchData();
+    this.getAllMessages();
   },
   methods: {
+    getAllMessages() {
+      db.collection("appointments")
+        .doc(this.$route.params.appointmentID)
+        .collection("messages")
+        .orderBy("datetime", "asc")
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            var msgDate = doc.data().datetime.toDate();
+            var millisStr = msgDate.getTime().toString();
+            var msg = decryptMessage(
+              doc.data().content,
+              this.$route.params.appointmentID,
+              millisStr.substring(millisStr.length - 7)
+            );
+            const data = {
+              content: msg,
+              datetime: msgDate,
+              isPatient: doc.data().isPatient,
+              seenByPatient: doc.data().seenByPatient,
+              timestamp: doc.data().datetime
+            };
+
+            this.allMessages.push(data);
+            this.messages = this.allMessages;
+          });
+        });
+    },
     clearNot() {
       db.collection("appointments")
         .doc(this.$route.params.appointmentID)
         .collection("messages")
-        .where("seenByStaff", "==", false)
+        .orderBy("datetime", "asc")
         .get()
         .then(querySnapshot => {
           querySnapshot.forEach(doc => {
-            doc.ref
-              .update({
-                seenByStaff: true
-              })
-              .then(() => {
-                console.log("Updated notification count");
-              });
+            if (doc.data().seenByStaff == false) {
+              doc.ref
+                .update({
+                  seenByStaff: true
+                })
+                .then(() => {
+                  console.log("Updated notification count");
+                });
+            }
           });
         });
     },
@@ -116,7 +154,6 @@ export default {
                 timestamp: change.doc.data().datetime
               };
               this.messages.push(data);
-
               this.clearNot();
             }
             if (change.type === "modified") {
@@ -188,7 +225,6 @@ export default {
 </script>
 
 <style>
-
 #messages {
   max-height: 50vh;
   overflow-y: auto;

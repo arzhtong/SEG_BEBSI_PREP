@@ -27,7 +27,7 @@ export default {
 <style scoped>
 .dcontent {
   padding-bottom: 20px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 #dashboard-top {
