@@ -107,7 +107,7 @@ let router = new Router({
     },
     {
 
-      path: '/message/:appointmentID',
+      path: '/message/:expired/:appointmentID',
       name: 'message',
       component: Message,
       meta: {

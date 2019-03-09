@@ -52,7 +52,12 @@
           </div>
         </div>
       </form>
-      <router-link to="/view-appointments" class="btn" style="margin-bottom:10px;">Go Back</router-link>
+      <template v-if="this.$route.params.expired == false">
+        <router-link to="/view-appointments" class="btn" style="margin-bottom:10px;">Go Back</router-link>
+      </template>
+      <template v-else>
+        <router-link to="/past-appointments" class="btn" style="margin-bottom:10px;">Go Back</router-link>
+      </template>
     </div>
   </div>
 </template>
@@ -68,7 +73,8 @@ export default {
       messagesPatient: [],
       allMessages: [],
       currentUser: null,
-      isStaff: null
+      isStaff: null,
+    
     };
   },
   created() {

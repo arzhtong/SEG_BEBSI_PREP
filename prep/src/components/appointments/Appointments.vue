@@ -97,7 +97,7 @@
               </a>
             </td>
             <td>
-              <router-link v-bind:to="{name: 'message', params: {appointmentID: appointment.code}}">
+              <router-link v-bind:to="{name: 'message', params: {expired: past, appointmentID: appointment.code}}">
                 <i
                   class="material-icons left green-text"
                   style="margin-left:5px;font-size:30px;text-align:center"
