@@ -40,6 +40,13 @@ export default {
   },
   methods: {
     saveCategory() {
+        
+         db.collection("tests")
+        .doc(this.$route.params.test_id)
+        .collection("prepContents")
+        .doc(this.title)
+        .set({})
+        
       db.collection("tests")
         .doc(this.$route.params.test_id)
         .collection("prepCards")
