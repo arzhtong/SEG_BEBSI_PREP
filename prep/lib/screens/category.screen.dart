@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:collection';
 
 class Category extends StatefulWidget{
   String _contents;
@@ -36,11 +37,20 @@ class _CategoryState extends State<Category>{
     Map<String, dynamic> mappedData = document.data;
     List<Widget> listOfDropDowns = new List();
 
-    mappedData.values.forEach((value) {
-      Map<dynamic, dynamic> myMap = value;
-      List<dynamic> list = myMap.values.elementAt(2);
-      String name = myMap.values.elementAt(0);
-      String description = myMap.values.elementAt(1);
+    SplayTreeMap sortedCategories = new SplayTreeMap.from(mappedData, (dynamic me, dynamic other){
+      return me.toString().compareTo(other.toString());
+    });
+
+    sortedCategories.values.forEach((value) {
+      Map<dynamic, dynamic> itemList = value;
+
+      SplayTreeMap sortedMapKeys = new SplayTreeMap.from(itemList, (dynamic me, dynamic other){
+        return me.toString().compareTo(other.toString());
+      });
+
+      List<dynamic> list = sortedMapKeys.values.elementAt(1);
+      String name = sortedMapKeys.values.elementAt(2);
+      String description = sortedMapKeys.values.elementAt(0);
 
       listOfDropDowns.add(DescriptiveExpansionTile(name, description,list)
       );
