@@ -26,12 +26,12 @@ class _MessagingScreenState extends State<MessagingScreen> {
       MessagingQueries.setSeenByPatient(document.reference);
 
     String decryptedMessage = MessageCrypto.decryptMessage(
-        message['content'], message['datetime'].millisecondsSinceEpoch);
+        message['content'], message['datetime'].toDate().millisecondsSinceEpoch);
 
     // TODO: Remove seenByStaff, as the patient should not see read receipts
     _messagesView.addMessage(
       messageText: decryptedMessage,
-      datetime: message['datetime'],
+      datetime: message['datetime'].toDate(),
       isPatient: message['isPatient'],
     );
   }

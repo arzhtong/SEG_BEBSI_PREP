@@ -7,6 +7,7 @@ export 'package:cloud_firestore/cloud_firestore.dart';
 
 class MessagingQueries {
   static String _appointmentID;
+  static Firestore _firestore;
   static CollectionReference _colRef;
 
   static const MessagingQueries _singleton = MessagingQueries._internal();
@@ -18,10 +19,14 @@ class MessagingQueries {
   static Stream<QuerySnapshot> get messageSnapshots =>
       _colRef.orderBy('datetime', descending: false).snapshots();
 
+  static void setFirestoreInstance(Firestore firestore) {
+    _firestore = firestore;
+  }
+
   static void setAppointmentID(String appointmentID) {
     _appointmentID = appointmentID;
 
-    _colRef = Firestore.instance
+    _colRef = _firestore
         .collection('appointments')
         .document(_appointmentID)
         .collection('messages');
