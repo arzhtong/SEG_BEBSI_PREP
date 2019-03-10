@@ -84,24 +84,29 @@ export default {
         },
         saveEditorData() {
             this.uploading = true
-            let temp = []
-            // check if any images have been removed from the editor
-            for (var i = 0; i < this.images.length; i++) { 
-                if(this.htmlForEditor.indexOf(this.images[i]) < 0) {
-                    // delete if they have been removed
-                    firebase.storage().ref('images/' + this.images[i]).delete().then(() => {
-                    })
-                    .catch((error) => {
-                        console.error(`file delete error occured: ${error}`)
-                    })
-                } else {
-                    temp.push(this.images[i])
-                }
-            };
-            // update images array
-            this.images = temp
+            this.deleteImages()
             this.uploading = false
             this.$emit('editorData', [this.htmlForEditor, this.images])
+        },
+        deleteImages() {
+            let temp = []
+            if(!(this.images === undefined || this.images.length == 0)) {
+                // check if any images have been removed from the editor
+                for (var i = 0; i < this.images.length; i++) { 
+                    if(this.htmlForEditor.indexOf(this.images[i]) < 0) {
+                        // delete if they have been removed
+                        firebase.storage().ref('images/' + this.images[i]).delete().then(() => {
+                        })
+                        .catch((error) => {
+                            console.error(`file delete error occured: ${error}`)
+                        })
+                    } else {
+                        temp.push(this.images[i])
+                    }
+                };
+            }
+            // update images array
+            this.images = temp
         }
     },
     watch: {
