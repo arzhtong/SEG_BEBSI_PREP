@@ -26,7 +26,7 @@
             <td><router-link v-bind:to="{name: 'view-recipes', params: {test_id: test.id}}" class="btn blue">Show</router-link></td>
           </tr>
         </tbody>
-        <router-link to="/register" class="btn green" style="margin:20px">
+        <router-link to="/add-test" class="btn green" style="margin:20px">
             Add Test
         </router-link>
       </table>
