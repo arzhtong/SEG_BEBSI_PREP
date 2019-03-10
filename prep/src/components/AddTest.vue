@@ -35,11 +35,10 @@
 <script>
 import db from "./firebaseInit"
 import firebase from "firebase"
-import imageUploader from "./ImageUploader"
-import textEditor from "./TextEditor"
+import textEditor from "./shared/TextEditor"
 
 export default {
-    name: 'mainScreen',
+    name: 'newTest',
     data() {
         return {
             title: '',
@@ -50,7 +49,6 @@ export default {
         };
     },
     components: {
-        imageUploader,
         textEditor
     },
     methods: {
@@ -68,7 +66,10 @@ export default {
                 })
                 .catch(error => {
                     console.error("Error adding document: ", error);
+                    return // dont leave the page if save fails
                 });
+                // return to tests page
+                // this.$router.push({ path: '/view-tests'})
             }
         },
         validInputs() {
@@ -80,6 +81,7 @@ export default {
         }
     },     
     mounted() {
+        // initalise colapsablie component
          $(document).ready(function() {
             $('.collapsible').collapsible();
         });

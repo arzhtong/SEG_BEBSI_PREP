@@ -56,8 +56,10 @@ export default {
     },
     // load any editor information provided in the props 
     created() {
-        if(this.editorInformation !== '' || this.editorImages !== '') {
+        if(this.editorInformation !== '') {
             this.htmlForEditor = this.editorInformation
+        }
+        if (this.editorImages !== undefined && this.editorImages !== '') {
             this.images = this.editorImages
         }
     },
