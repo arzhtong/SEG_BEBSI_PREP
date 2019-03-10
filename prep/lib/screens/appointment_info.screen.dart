@@ -23,6 +23,7 @@ class _AppointmentInfoState extends State<AppointmentInfo> {
             padding: EdgeInsets.all(20.0),
             useRichText: true,  //turn this off to get the alternative parser
             onLinkTap: (url){
+              //TODO: decide how to handle hyperlinks in the HTML
               print("Handling links");
             },
             customRender: null,
