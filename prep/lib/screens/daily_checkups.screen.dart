@@ -47,69 +47,56 @@ class _DailyCheckups extends State<DailyCheckups> {
     List<Widget> instructionWidgets = new List();
     Map<dynamic, dynamic> dynamicInstructions = document['instructions'];
 
-    SplayTreeMap sortedInstruction = new SplayTreeMap.from(dynamicInstructions, (dynamic me, dynamic other){
-      int myPlace = int.parse(me.toString().substring(0,1));
-      int otherPlace = int.parse(other.toString().substring(0,1));
+    dynamicInstructions.forEach((index, map){
+      Map<dynamic, dynamic> checkupMap = map;
 
-      return myPlace - otherPlace;
-    });
-
-    // Building each row containing an instruction
-    sortedInstruction.forEach((instruction, result){
       instructionWidgets.add(
         Column(
           children: <Widget>[
             Divider(),
             Container(
-              padding: EdgeInsets.only(),
               child: Row(
                 children: <Widget>[
                   Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.only(right: 30.0),
-                            child: Text(
-                              instruction.toString().replaceAll('>', '.').substring(0,2),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey
-                              ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.only(right: 30.0),
+                          child: Text(
+                            (int.parse(index) + 1).toString(),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey
                             ),
                           ),
-
-                          Expanded(
-                            child: Text(
-                              instruction.toString().replaceAll('>', '.').substring(3, instruction.toString().length),
-                            ),
-                          )
-                        ],
-                      )
+                        ),
+                        Expanded(
+                          child: Text(
+                              checkupMap['question'].toString()
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                   Switch(
-//                    activeTrackColor: Colors.green[200],
-//                    activeColor: Colors.green,
-//                    inactiveTrackColor: Colors.grey[300],
-//                    inactiveThumbColor: Colors.grey,
-                    value: result,
-                    onChanged: (_) {
-                      if (result) {
-                        // This method works fine as only one user (the patient) will
-                        // be editing the data so there is no risk of race conditions
+                    value: checkupMap['answer'],
+                    onChanged: (_){
+                      if (checkupMap['answer']) {
+                        // Removes the old entry from the list
                         document.reference.updateData({
-                          ('instructions.'+ instruction.toString()): false
+                          ('instructions.' + index + '.answer') : false
                         });
                       } else {
                         document.reference.updateData({
-                          ('instructions.'+ instruction.toString()): true
+                          ('instructions.' + index + '.answer') : true
                         });
                       }
                     },
                   )
                 ],
               ),
-            ),
+            )
           ],
         )
       );
