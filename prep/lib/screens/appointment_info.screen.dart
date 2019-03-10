@@ -21,7 +21,7 @@ class _AppointmentInfoState extends State<AppointmentInfo> {
           child: Html(
             data: document['description'],
             padding: EdgeInsets.all(20.0),
-            useRichText: false,  //turn this off to get the alternative parser
+            useRichText: true,  //turn this off to get the alternative parser
             onLinkTap: (url){
               print("Handling links");
             },
