@@ -23,7 +23,9 @@
     <div id="app">
         <vue-editor id="editor"
         useCustomImageHandler
-        @imageAdded="handleImageAdded" v-model="htmlForEditor">
+        @imageAdded="handleImageAdded" 
+        v-model="htmlForEditor"
+        :editorToolbar="customToolbar">
         </vue-editor>
     </div>
     <div class="center-align">
@@ -48,7 +50,15 @@ export default {
             uploading: false,
             uploadEnd: false,
             uploadTask: '',
-            fileName: ''
+            fileName: '',
+            customToolbar: [
+            [{ 'header': [false, 1, 2, 3] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            ['blockquote', 'code-block'],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            [{ 'indent': '-1'}, { 'indent': '+1' }],
+            ['link', 'image', 'formula']
+          ]
         }
     },
     components: {
