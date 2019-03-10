@@ -98,7 +98,7 @@ let router = new Router({
     },
     {
 
-      path: '/edit-appointment/:id',
+      path: '/edit-appointment/:expired/:id',
       name: 'edit-appointment',
       component: EditAppointment,
       meta: {

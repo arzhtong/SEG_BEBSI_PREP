@@ -71,7 +71,7 @@
             <td style="padding-left: 20px;">{{appointment.code}}</td>
             <td>{{appointment.datetime.toDate()}}</td>
             <td>{{appointment.location}}</td>
-            <td v-for="test in tests" v-bind:key="test.title">{{test.title}}</td>
+            <td>{{tests[appointments.indexOf(appointment)].title}}</td>
 
             <td>
               <router-link
@@ -97,7 +97,9 @@
               </a>
             </td>
             <td>
-              <router-link v-bind:to="{name: 'message', params: {expired: past, appointmentID: appointment.code}}">
+              <router-link
+                v-bind:to="{name: 'message', params: {expired: past, appointmentID: appointment.code}}"
+              >
                 <i
                   class="material-icons left green-text"
                   style="margin-left:5px;font-size:30px;text-align:center"
@@ -117,7 +119,12 @@
           <router-link to="/add-appointment" class="btn green" style="margin:20px">Add Appointment</router-link>
         </template>
         <template v-else>
-          <router-link to="/add-appointment" class="btn green" style="margin:20px" disabled>Add Appointment</router-link>
+          <router-link
+            to="/add-appointment"
+            class="btn green"
+            style="margin:20px"
+            disabled
+          >Add Appointment</router-link>
         </template>
       </table>
     </div>
@@ -188,24 +195,26 @@ export default {
         .get()
         .then(querySnapshot => {
           querySnapshot.forEach(appointment => {
-            const data = {
-              code: appointment.id,
-              datetime: appointment.data().datetime,
-              staffMember: appointment.data().staffMember,
-              location: appointment.data().location,
-              id: appointment.id
-            };
-            this.testID = appointment.data().testID;
-            this.appointments.push(data);
-            this.fetchData(appointment.id);
+            if (appointment.data().staffMember == this.staffMemberID) {
+              const data = {
+                code: appointment.id,
+                datetime: appointment.data().datetime,
+                staffMember: appointment.data().staffMember,
+                location: appointment.data().location,
+                id: appointment.id
+              };
+              this.testID = appointment.data().testID;
+              this.appointments.push(data);
+              this.fetchData(appointment.id);
+              this.getDoc(appointment.data().testID);
+            }
           });
-          this.getDoc();
           this.sortByExpiration();
         });
     },
-    getDoc() {
+    getDoc(id) {
       db.collection("tests")
-        .doc(this.testID)
+        .doc(id)
         .get()
         .then(doc => {
           const data = {
