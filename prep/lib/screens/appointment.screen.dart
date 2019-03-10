@@ -7,7 +7,8 @@ import 'package:prep/screens/messaging.screen.dart';
 
 class Appointment extends StatefulWidget {
   final String _appointmentID;
-  Appointment(this._appointmentID);
+  final String _testID;
+  Appointment(this._appointmentID, this._testID);
 
   @override
   State<StatefulWidget> createState() {
@@ -40,7 +41,7 @@ class _AppointmentState extends State<Appointment> {
       default:
         return (_appointmentInfo != null)
           ? _appointmentInfo
-          : _appointmentInfo = AppointmentInfo();
+          : _appointmentInfo = AppointmentInfo(widget._testID);
     }
   }
 
