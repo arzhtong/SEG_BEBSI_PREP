@@ -177,7 +177,8 @@ export default {
     sendMessage() {
       var checkMessage = document.getElementById("textArea").value.trim();
       if (checkMessage.length != 0 && checkMessage != "") {
-        var message = document.getElementById("textArea").value;
+        var message = ""
+        message = document.getElementById("textArea").value;
         var encryptedMessage = encryptMessage(
           message,
           this.$route.params.appointmentID
@@ -220,6 +221,10 @@ export default {
   overflow-y: auto;
 }
 
+p{
+  white-space: pre;
+}
+
 .containerChat {
   word-wrap: break-word;
   border: 2px solid #dedede;
@@ -234,6 +239,7 @@ export default {
 
 #textArea {
   word-wrap: break-word;
+  white-space: normal;
   overflow: hidden;
   background-color: #f1f1f1;
   clear: both;
