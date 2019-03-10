@@ -27,7 +27,7 @@
             <td>{{testType}}</td>
             <td>
               <template v-if="past == false">
-                <router-link v-bind:to="{name: 'edit-appointment', params: {id: router}}">
+                <router-link v-bind:to="{name: 'edit-appointment', params: {expired: past, id: router}}">
                   <a class="tooltip" style="margin-right:20px">
                     <span class="tooltiptext">Edit Appointment</span>
                     <i class="material-icons">edit</i>
@@ -62,7 +62,10 @@
               <td>{{checkup.daysBeforeTest}}</td>
               <td style="padding-left:10% !important">{{checkup.description}}</td>
               <td style="padding-left:10% !important">
-                <div v-for="(instr, value) in checkup.instructions" v-bind:key="instr">
+   
+               
+                
+                <div v-for="instruction in checkup.instructions" v-bind:key="instruction">
                   <div style="float:left;">
                     <span>
                       <textarea
@@ -71,12 +74,12 @@
                         readonly="readonly"
                         type="text"
                         style="color:grey;width: 250px; word-wrap: break-word;resize: none;"
-                        :value="value"
+                        :value="instruction.question"
                         required
                       ></textarea>
                     </span>
                     <div style="float:right;">
-                      <div v-if="instr" style="margin-top:15px">
+                      <div v-if="instruction.answer" style="margin-top:15px">
                         <span style="margin:10px 0 0 5px;padding">
                           <a class="tooltip" style="margin-right:20px">
                             <span class="tooltiptext">Completed</span>
@@ -84,7 +87,7 @@
                           </a>
                         </span>
                       </div>
-                      <div v-if="instr == false" style="margin-top:15px">
+                      <div v-else style="margin-top:15px">
                         <span style="margin:10px 0 0 5px;">
                           <a class="tooltip" style="margin-right:20px">
                             <span class="tooltiptext">Not Completed</span>
@@ -95,12 +98,18 @@
                     </div>
                   </div>
                 </div>
+               
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <router-link to="/view-appointments" class="btn">Go Back</router-link>
+      <template v-if="past==false">
+       <router-link to="/view-appointments" class="btn">Go Back</router-link>
+      </template>
+      <template v-else>
+       <router-link to="/past-appointments" class="btn">Go Back</router-link>
+      </template>
     </div>
   </div>
 </template>
@@ -171,9 +180,9 @@ export default {
                 docId: change.doc.id,
                 daysBeforeTest: change.doc.data().daysBeforeTest,
                 description: change.doc.data().description,
-                instructions: change.doc.data().instructions
+                instructions: change.doc.data().instructions,
               };
-              data.instructions = data.instructions;
+          
               this.dailyCheckups.push(data);
             }
             if (change.type == "modified") {
