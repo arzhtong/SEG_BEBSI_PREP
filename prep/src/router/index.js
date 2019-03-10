@@ -2,15 +2,22 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Dashboard from '@/components/Dashboard'
 import ViewStaff from '@/components/staff/ViewStaff'
+import ViewTests from '@/components/tests/ViewTests'
+import ViewRecipes from '@/components/tests/ViewRecipes'
+import ViewRecipeInfo from '@/components/tests/ViewRecipeInfo'
+import NewRecipe from '@/components/tests/NewRecipe'
+import EditRecipe from '@/components/tests/EditRecipe'
 import EditStaff from '@/components/staff/EditStaff'
 import ViewAppointments from '@/components/appointments/ViewAppointments'
+import PastAppointments from '@/components/appointments/PastAppointments'
 import AddAppointment from '@/components/appointments/AddAppointment'
 import EditAppointment from '@/components/appointments/EditAppointment'
+import ViewAppointment from '@/components/appointments/ViewAppointment'
 import Login from '@/components/auth/Login'
 import Register from '@/components/auth/Register'
 import ResetPassword from '@/components/auth/ResetPassword'
 import Message from '@/components/messages/Message'
-import AddTest from '@/components/AddTest'
+import AddTest from '@/components/tests/AddTest'
 import firebase from 'firebase'
 
 
@@ -75,6 +82,14 @@ let router = new Router({
       }
     },
     {
+      path: '/past-appointments',
+      name: 'past-appointments',
+      component: PastAppointments,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
       path: '/add-appointment',
       name: 'add-appointment',
       component: AddAppointment,
@@ -84,7 +99,7 @@ let router = new Router({
     },
     {
 
-      path: '/edit-appointment/:id',
+      path: '/edit-appointment/:expired/:id',
       name: 'edit-appointment',
       component: EditAppointment,
       meta: {
@@ -93,7 +108,7 @@ let router = new Router({
     },
     {
 
-      path: '/message/:appointmentID',
+      path: '/message/:expired/:appointmentID',
       name: 'message',
       component: Message,
       meta: {
@@ -104,6 +119,54 @@ let router = new Router({
       path: '/add-test',
       name: 'add-test',
       component: AddTest,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/view-tests',
+      name: 'view-tests',
+      component: ViewTests,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/view-recipes/:test_id',
+      name: 'view-recipes',
+      component: ViewRecipes,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/new-recipe/:test_id',
+      name: 'new-recipe',
+      component: NewRecipe,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/view-recipe-info/:test_id/:recipe_id',
+      name: 'view-recipe-info',
+      component: ViewRecipeInfo,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/edit-recipe/:test_id/:recipe_id',
+      name: 'edit-recipe',
+      component: EditRecipe,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/view-appointment/:expired/:id',
+      name: 'view-appointment',
+      component: ViewAppointment,
       meta: {
         requiresAuth: true
       }

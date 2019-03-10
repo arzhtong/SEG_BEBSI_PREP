@@ -33,9 +33,9 @@
 </template>
 
 <script>
-import db from "./firebaseInit"
+import db from "../firebaseInit"
 import firebase from "firebase"
-import textEditor from "./shared/TextEditor"
+import textEditor from "../shared/TextEditor"
 
 export default {
     name: 'newTest',
@@ -69,7 +69,7 @@ export default {
                     return // dont leave the page if save fails
                 });
                 // return to tests page
-                // this.$router.push({ path: '/view-tests'})
+                this.$router.push({ path: '/view-tests'})
             }
         },
         validInputs() {

@@ -52,13 +52,18 @@
           </div>
         </div>
       </form>
-      <router-link to="/view-appointments" class="btn" style="margin-bottom:10px;">Go Back</router-link>
+      <template v-if="this.$route.params.expired == false">
+        <router-link to="/view-appointments" class="btn" style="margin-bottom:10px;">Go Back</router-link>
+      </template>
+      <template v-else>
+        <router-link to="/past-appointments" class="btn" style="margin-bottom:10px;">Go Back</router-link>
+      </template>
     </div>
   </div>
 </template>
 <script>
 import db from "../firebaseInit";
-import firebase from "firebase";
+import firebase, { firestore } from "firebase";
 import { encryptMessage, decryptMessage, generateKey } from "./AES.js";
 export default {
   name: "message",
@@ -66,30 +71,61 @@ export default {
     return {
       messages: [],
       messagesPatient: [],
+      allMessages: [],
       currentUser: null,
       isStaff: null
     };
   },
   created() {
-    this.fetchData();
     this.clearNot();
+    this.fetchData();
+    this.getAllMessages();
   },
   methods: {
+    getAllMessages() {
+      db.collection("appointments")
+        .doc(this.$route.params.appointmentID)
+        .collection("messages")
+        .orderBy("datetime", "asc")
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            var msgDate = doc.data().datetime.toDate();
+            var millisStr = msgDate.getTime().toString();
+            var msg = decryptMessage(
+              doc.data().content,
+              this.$route.params.appointmentID
+            );
+            const data = {
+              content: msg,
+              datetime: msgDate,
+              isPatient: doc.data().isPatient,
+              seenByPatient: doc.data().seenByPatient,
+              timestamp: doc.data().datetime
+            };
+
+            this.allMessages.push(data);
+            this.messages = this.allMessages;
+          });
+        });
+    },
     clearNot() {
       db.collection("appointments")
         .doc(this.$route.params.appointmentID)
         .collection("messages")
-        .where("seenByStaff", "==", false)
+        .orderBy("datetime", "asc")
         .get()
         .then(querySnapshot => {
           querySnapshot.forEach(doc => {
-            doc.ref
-              .update({
-                seenByStaff: true
-              })
-              .then(() => {
-                console.log("Updated notification count");
-              });
+            if (doc.data().seenByStaff == false) {
+              doc.ref
+                .update({
+                  seenByStaff: true
+                })
+                .then(() => {
+                  console.log("Updated notification count");
+                });
+            }
           });
         });
     },
@@ -101,22 +137,18 @@ export default {
         .onSnapshot(snapshot => {
           snapshot.docChanges().forEach(change => {
             if (change.type === "added") {
-              var msgDate = change.doc.data().datetime.toDate();
-              var millisStr = msgDate.getTime().toString();
               var msg = decryptMessage(
                 change.doc.data().content,
-                this.$route.params.appointmentID,
-                millisStr.substring(millisStr.length - 7)
+                this.$route.params.appointmentID
               );
               const data = {
                 content: msg,
-                datetime: msgDate,
+                datetime: change.doc.data().datetime.toDate(),
                 isPatient: change.doc.data().isPatient,
                 seenByPatient: change.doc.data().seenByPatient,
                 timestamp: change.doc.data().datetime
               };
               this.messages.push(data);
-
               this.clearNot();
             }
             if (change.type === "modified") {
@@ -145,24 +177,20 @@ export default {
     sendMessage() {
       var checkMessage = document.getElementById("textArea").value.trim();
       if (checkMessage.length != 0 && checkMessage != "") {
-        var message = document.getElementById("textArea").value;
-        var currentDate = new Date(Date.now());
-        var currentDatetime = firebase.firestore.Timestamp.fromDate(
-          currentDate
-        );
-        var millisStr = currentDate.getTime().toString();
-        var millisSubstring = millisStr.substring(millisStr.length - 7);
+        var message = ""
+        message = document.getElementById("textArea").value;
         var encryptedMessage = encryptMessage(
           message,
-          this.$route.params.appointmentID,
-          millisSubstring
+          this.$route.params.appointmentID
         );
         db.collection("appointments")
           .doc(this.$route.params.appointmentID)
           .collection("messages")
           .add({
             content: encryptedMessage,
-            datetime: currentDatetime,
+            datetime: firebase.firestore.Timestamp.fromDate(
+              new Date(Date.now())
+            ),
             isPatient: false,
             seenByStaff: true,
             seenByPatient: false
@@ -193,6 +221,10 @@ export default {
   overflow-y: auto;
 }
 
+p{
+  white-space: pre;
+}
+
 .containerChat {
   word-wrap: break-word;
   border: 2px solid #dedede;
@@ -207,6 +239,7 @@ export default {
 
 #textArea {
   word-wrap: break-word;
+  white-space: normal;
   overflow: hidden;
   background-color: #f1f1f1;
   clear: both;

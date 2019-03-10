@@ -25,7 +25,7 @@
         <form @submit.prevent="saveAppointment" class="col s12">
           <div class="row">
             <div class="input-field col s12">
-              <input type="date" class="datepicker" v-model="date" required>
+              <input type="date" min="2019-01-01" class="datepicker" v-model="date" required>
               <label>Date</label>
             </div>
           </div>
@@ -96,7 +96,7 @@ export default {
       .then(querySnapshot => {
         querySnapshot.forEach(test => {
           const data = {
-            testID: test.data().testID,
+            testID: test.id,
             title: test.data().title,
             type: test.data().type
           };
@@ -121,31 +121,6 @@ export default {
       var ID = Math.random()
         .toString(36)
         .substr(2, 9);
-      // var items = [
-      //   "2vqqyqcc7",
-      //   "bwc1xhq0a",
-      //   "jgsj5c7pg",
-      //   "1asdsada",
-      //   "2vqqyqcc7",
-      //   "bwc1xhq0a",
-      //   "jgsj5c7pg",
-      //   "2vqqyqcc7",
-      //   "bwc1xhq0a",
-      //   "jgsj5c7pg",
-      //   "2vqqyqcc7",
-      //   "bwc1xhq0a",
-      //   "jgsj5c7pg",
-      //   "2vqqyqcc7",
-      //   "bwc1xhq0a",
-      //   "jgsj5c7pg",
-      //   "2vqqyqcc7",
-      //   "bwc1xhq0a",
-      //   "jgsj5c7pg",
-      //   "2vqqyqcc7",
-      //   "bwc1xhq0a",
-      //   "jgsj5c7pg"
-      // ];
-      // var item = items[Math.floor(Math.random() * items.length)];
 
       var docRef = db.collection("appointments").doc(ID);
       return docRef
@@ -174,10 +149,29 @@ export default {
           testID: this.testID.testID
         })
         .then(docRef => {
+          this.addDailyCheckups();
           alert("Successfully created new appointment!");
           this.$router.push("/view-appointments");
         })
         .catch(error => console.log(err));
+    },
+    addDailyCheckups() {
+      db.collection("tests")
+        .doc(this.testID.testID)
+        .collection("dailyCheckups")
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            db.collection("appointments")
+              .doc(this.code)
+              .collection("dailyCheckups")
+              .add(doc.data())
+              .then(docRef => {
+                tconsole.log("Added dailyCheckup");
+              })
+              .catch(error => console.log(err));
+          });
+        });
     },
     getDocId() {
       db.collection("users")
