@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:prep/screens/appointment.screen.dart';
 
 class Dashboard extends StatefulWidget {
@@ -29,6 +31,25 @@ class _DashboardState extends State<Dashboard> {
   bool validationResultDb;
   bool validationResultFile;
 
+  // Subscribe user to message notifications
+  void _subscribeToNotifications(String appointmentID) {
+    final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+    firebaseMessaging.autoInitEnabled();
+    /* firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) {},
+      onResume: (Map<String, dynamic> message) {},
+      onLaunch: (Map<String, dynamic> message) {},
+    ); */
+    firebaseMessaging.subscribeToTopic(appointmentID);
+  }
+
+  // Unsubscribe user from all message notifications
+  // TODO: change structure of removing appointments, to allow unsubscribing from each appointment.
+  void _unsubscribeFromNotifications() {
+    final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+    firebaseMessaging.deleteInstanceID();
+  }
+
   // Checks if an appointment ID exists in the codes file
   bool _documentInCodeFile(String value) {
     return codeFileState.split(',').contains(value);
@@ -36,6 +57,7 @@ class _DashboardState extends State<Dashboard> {
 
   // Writes data to the codes file
   Future<File> writeData() async {
+    _subscribeToNotifications(codeController.text);
     //must apply set state to make sure the calendar is redrawn
     setState(() {
       codeFileState = codeFileState + codeController.text + ',';
@@ -46,6 +68,7 @@ class _DashboardState extends State<Dashboard> {
 
   // Writes data to the codes file
   Future<File> clearData() async {
+    _unsubscribeFromNotifications();
     //must apply set state to make sure the calendar is redrawn
     setState(() {
       codeFileState = "";
