@@ -7,8 +7,14 @@
         <h3>New Test</h3>
             <div class="row">
                 <div class="input-field col s12">
-                    <input type="text" v-model="title">
+                    <input type="text" v-model.trim="title">
                     <label>Title</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input type="text" v-model.trim="department">
+                    <label>Department</label>
                 </div>
             </div>
             <ul class="collapsible">
@@ -22,47 +28,6 @@
             <div>
                 <textEditor v-on:editorData="saveTest($event)"/>
             </div>
-            
-            <!-- <div v-for="(input, index) in inputs" :key="index">
-                <div v-if="input == 'image'" class="valign-wrapper row" id="imageWrapper">
-                    <div class="inline-block left-align col s6" id="images">
-                        <imageUploader v-on:downloadURL="testInformation.push($event);"/>
-                    </div>
-                    <div class="inline-block right-align col s6">
-                        <a 
-                            class="btn-floating red tooltipped" 
-                            data-position="left" 
-                            data-tooltip="remove" 
-                            id="removeText" 
-                            @click="removeInput(index)">
-                            <i class="material-icons">clear</i>
-                        </a>
-                    </div>
-                </div>
-
-                <div v-else id="textWrapper">
-                    <input type="text" v-model="testInformation[index]">
-                    <div class="right-align">
-                        <a 
-                            class="btn-floating red tooltipped" 
-                            data-position="left" 
-                            data-tooltip="remove" 
-                            id="removeText" 
-                            @click="removeInput(index)">
-                            <i class="material-icons">clear</i>
-                        </a>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="valign-wrapper flow">
-                <a class="waves-light btn-small" @click="addTextInput">Add text</a>
-                <a class="waves-light btn-small" @click="addImageInput">Add image</a>
-                <a class="waves-light btn-small" @click="saveData">finished</a>
-                <a class="waves-light btn-small">cancle</a>
-            </div> -->
-            
         </div>
     </div>
 </template>
@@ -78,6 +43,7 @@ export default {
     data() {
         return {
             title: '',
+            department: '',
             testInformation: [],
             inputs: [],
             htmlForEditor: ''
@@ -88,35 +54,31 @@ export default {
         textEditor
     },
     methods: {
-        saveData() {
-            alert(this.testInformation[0] + this.testInformation[2]);
-            // alert(this.title + this.editorData);
-        },
-        addImageInput() {
-            this.inputs.push('image')
-        },
-        addTextInput() {
-            this.inputs.push('text')
-            this.testInformation.push('')
-        },
-        removeInput(index) {
-            this.inputs.splice(index, 1)
-            this.testInformation.splice(index, 1)
-        },
-        saveTest(information) {
-            if(this.title.trim() === '') {
-                alert('Please enter a title for this test before saving')
+        saveTest(information) { //information - from the text editor
+            if(this.validInputs()) {
+                db.collection('tests').add({
+                    title: this.title,
+                    type: this.department,
+                    description: (information[0] !== undefined ? information[0] : ''), // information[0] is the editor text
+                    editorImages: (information[1] !== undefined ? information[1] : '') // information[1] is the array of image names
+                })
+                .then(docRef => {
+                    console.log("Document written with ID: ", docRef.id);
+                    alert(`New test: ` + this.title + ` saved!`)
+                })
+                .catch(error => {
+                    console.error("Error adding document: ", error);
+                });
             }
-            else {
-                alert(information)
-
-                // information[0] is the editor text
-                // information[1] is the array of image names
+        },
+        validInputs() {
+            if(this.title === '' || this.department ==='') {
+                alert('Please enter a title and department for this test before saving')
+                return false
             }
-            //information - from the text editor
-            // save this to firebase here
+            return true
         }
-    },
+    },     
     mounted() {
          $(document).ready(function() {
             $('.collapsible').collapsible();
@@ -126,22 +88,3 @@ export default {
 
 
 </script>
-
-<style scoped>
-
-#imageWrapper {
-    width: 102%;
-}
-
-#textWrapper {
-    padding-bottom: 20px;
-    padding-top: 10px;
-}
-
-.inline-block {
-  display: inline-block;
-  padding: 10px;
-  
-}
-</style>
-
