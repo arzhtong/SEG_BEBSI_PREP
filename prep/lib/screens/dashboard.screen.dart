@@ -163,26 +163,26 @@ class _DashboardState extends State<Dashboard> {
 
       if (Platform.isAndroid) { //ANDROID
         calendarElements.add(_CalendarLabel(Date.and(documentList.elementAt(0).data['datetime'])));
-        calendarElements.add(_CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], Date.and(documentList.elementAt(0).data['datetime'])));
+        calendarElements.add(_CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], Date.and(documentList.elementAt(0).data['datetime']), documentList.elementAt(0).data['testID']));
 
         for (int i = 1; i < documentList.length; i++){
           if (Date.and(documentList.elementAt(i).data['datetime']).equals(Date.and(documentList.elementAt(i - 1).data['datetime']))){
-            calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], Date.and(documentList.elementAt(i).data['datetime'])));
+            calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], Date.and(documentList.elementAt(i).data['datetime']), documentList.elementAt(i).data['testID']));
           } else {
             calendarElements.add(_CalendarLabel(Date.and(documentList.elementAt(i).data['datetime'])));
-            calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], Date.and(documentList.elementAt(i).data['datetime'])));
+            calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], Date.and(documentList.elementAt(i).data['datetime']), documentList.elementAt(i).data['testID']));
           }
         }
       } else {  //iOS
         calendarElements.add(_CalendarLabel(Date.ios(documentList.elementAt(0).data['datetime'])));
-        calendarElements.add(_CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], Date.ios(documentList.elementAt(0).data['datetime'])));
+        calendarElements.add(_CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], Date.ios(documentList.elementAt(0).data['datetime']), documentList.elementAt(0).data['testID']));
 
         for (int i = 1; i < documentList.length; i++){
           if (Date.ios(documentList.elementAt(i).data['datetime']).equals(Date.ios(documentList.elementAt(i - 1).data['datetime']))){
-            calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], Date.ios(documentList.elementAt(i).data['datetime'])));
+            calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], Date.ios(documentList.elementAt(i).data['datetime']), documentList.elementAt(i).data['testID']));
           } else {
             calendarElements.add(_CalendarLabel(Date.ios(documentList.elementAt(i).data['datetime'])));
-            calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], Date.ios(documentList.elementAt(i).data['datetime'])));
+            calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], Date.ios(documentList.elementAt(i).data['datetime']), documentList.elementAt(i).data['testID']));
           }
         }
       }
@@ -361,8 +361,9 @@ class _CalendarCard extends StatelessWidget {
   final String name;
   final String location;
   final Date dateTime;
+  final String testID;
 
-  _CalendarCard(this.name, this.location, this.dateTime);
+  _CalendarCard(this.name, this.location, this.dateTime, this.testID);
 
   @override
   Widget build(BuildContext context) {
@@ -374,7 +375,7 @@ class _CalendarCard extends StatelessWidget {
           onTap: () {
             Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Appointment(name))
+                MaterialPageRoute(builder: (context) => Appointment(name, testID))
             );
           },
           child: Column(
