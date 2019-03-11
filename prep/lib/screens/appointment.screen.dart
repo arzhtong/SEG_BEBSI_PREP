@@ -29,7 +29,7 @@ class _AppointmentState extends State<Appointment> {
       case 1:
         return (_appointmentPrep != null)
           ? _appointmentPrep
-          : _appointmentPrep = AppointmentPrep();
+          : _appointmentPrep = AppointmentPrep(widget._testID);
       case 2:
         return (_dailyCheckups != null)
         ? _dailyCheckups
