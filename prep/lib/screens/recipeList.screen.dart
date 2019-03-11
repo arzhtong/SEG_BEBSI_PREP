@@ -1,32 +1,61 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:prep/utils/prep_custom_icons.dart';
 
 const String testID = "VyyiBYwp0xX4nJyvX9oN";
 
-final List<RecipeMockUp> recipeList = [
-  RecipeMockUp(
+final _mockRecipeList = <_RecipeMockUp>[
+  _RecipeMockUp(
     name: "Fried Mushrooms",
     backgroundImage: AssetImage('assets/images/recipes/mushrooms.jpg'),
+    method: <String>[
+      "Cook some sliced mushrooms in butter and garlic, frying some tomato quarters on the side.",
+      "Serve with fried eggs and bacon, or a lamb chop."
+    ],
+    note: "Please remember processed meats including sausages are not allowed!",
   ),
-  RecipeMockUp(
-    name: "Fish and Vegetables\nin a Herb Cream Sauce",
-    backgroundImage: AssetImage('assets/images/recipes/fish.jpg'),
-  ),
-  RecipeMockUp(
+  _RecipeMockUp(
+      name: "Fish and Vegetables\nin a Herb Cream Sauce",
+      backgroundImage: AssetImage('assets/images/recipes/fish.jpg'),
+      method: <String>[
+        "Wrap up a piece of cod, haddock or tilapia topped with lemon zest, crushed garlic, fresh herbs and olive oil in foil to make a sealed parcel.",
+        "Bake the parcel in an oven dish for 20 minutes at 200° C.",
+        "While the fish is cooking, slice plenty of peppers, leeks, mushrooms and courgettes, and sauté in oil for 5-10 minutes until they are cooked how you like them.",
+        "Add 50ml cream and a handful of chopped fresh herbs, warm through, and serve with the fish."
+      ],
+      note:
+          "You cannot thicken the sauce with flour or cornflour as these are not permitted."),
+  _RecipeMockUp(
     name: "Scrambled Eggs\nmade with Cream and Butter",
     backgroundImage: AssetImage('assets/images/recipes/eggs.jpg'),
+    method: <String>[
+      "You can make scrambled eggs in a pan or a microwave.",
+      "Whisk two eggs with a tablespoon of cream.",
+      "Add a knob of butter and stir until cooked.",
+      "Serve with some chopped tomatoes and cucumber, or tomato quarters fried in a little oil.",
+    ],
+    note: "You MUST NOT add milk! Cream is optional.",
   ),
-  RecipeMockUp(
-    name: "Jerk Chicken and Salad",
-    backgroundImage: AssetImage('assets/images/recipes/chicken.jpg'),
-  ),
+  _RecipeMockUp(
+      name: "Jerk Chicken and Salad",
+      backgroundImage: AssetImage('assets/images/recipes/chicken.jpg'),
+      method: <String>[
+        "Marinade chicken pieces overnight in home-made jerk sauce.",
+        "Make the jerk sauce by mixing together chopped spring onions, grated ginger, chopped garlic, chopped scotch bonnet chillies, dried thyme, a teaspoon of allspice, salt and pepper, and vegetable oil.",
+        "You can fry bake or barbeque the chicken pieces, and serve with salad."
+      ],
+      note:
+          "you MUST NOT add sugar, flour, lemon or lime juice to jerk seasoning!"),
 ];
 
-class RecipeMockUp {
+class _RecipeMockUp {
   final String name;
   final ImageProvider backgroundImage;
+  final List<String> method;
+  final String note;
 
-  RecipeMockUp({this.name, this.backgroundImage});
+  _RecipeMockUp({this.name, this.backgroundImage, this.method, this.note});
 }
 
 class RecipeListScreen extends StatefulWidget {
@@ -68,96 +97,133 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
       ),
       body: ListView.builder(
         itemBuilder: (_, index) {
-          RecipeMockUp recipe = recipeList[index];
+          _RecipeMockUp recipe = _mockRecipeList[index];
 
-          return RecipeListItem(
+          return RecipeCardExpandable(
             title: recipe.name,
             backgroundImage: recipe.backgroundImage,
+            method: recipe.method,
+            note: recipe.note,
           );
         },
-        itemCount: recipeList.length,
+        itemCount: _mockRecipeList.length,
       ),
     );
   }
 }
 
-class RecipeListItem extends StatefulWidget {
+class RecipeCardExpandable extends StatefulWidget {
   final ImageProvider backgroundImage;
   final String title;
-  RecipeListItem({this.backgroundImage, this.title});
+  final List<String> method;
+  final String note;
 
-  _RecipeListItemState createState() => _RecipeListItemState();
+  RecipeCardExpandable(
+      {@required this.title,
+      @required this.backgroundImage,
+      @required this.method,
+      @required this.note});
+
+  _RecipeCardExpandableState createState() => _RecipeCardExpandableState();
 }
 
-class _RecipeListItemState extends State<RecipeListItem> {
-  bool isStarred = false;
+class _RecipeCardExpandableState extends State<RecipeCardExpandable> {
+  bool isFavorited;
+  bool isExpanded;
+
+  @override
+  void initState() {
+    isExpanded = false;
+    isFavorited = false; //TODO: Get actual value from database
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: Material(
-              child: Card(
-                elevation: 1.0,
-                clipBehavior: Clip.antiAlias,
-                child: InkWell(
-                  onTap: () {
-                    print(
-                        "${widget.title} WAS PRESSED!"); //TODO: Navigate to correct recipie screen.
-                  },
-                  child: Stack(
-                    children: <Widget>[
-                      RecipeCardContent(
-                        backgroundImage: widget.backgroundImage,
-                        title: widget.title,
-                      ),
-                      Positioned(
-                        top: 10.0,
-                        right: 10.0,
-                        child: IconButton(
-                          iconSize: 30.0,
-                          onPressed: () {
-                            print("${widget.title} WAS STARED!");
-
-                            setState(() {
-                              isStarred = !isStarred;
-                            });
-                          },
-                          //TODO: Change colors to Theme colors.
-                          icon: Icon(
-                            (isStarred)
-                                ? Icons.favorite
-                                : Icons.favorite_border,
-                            color: (isStarred) ? Colors.redAccent : Colors.grey,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+      width: MediaQuery.of(context).size.width,
+      child: Material(
+        child: Card(
+          elevation: 1.0,
+          clipBehavior: Clip.antiAlias,
+          child: ExpansionPanelList(
+            expansionCallback: (int index, bool isExpanded) {
+              setState(() {
+                this.isExpanded = !isExpanded;
+              });
+            },
+            children: <ExpansionPanel>[
+              new ExpansionPanel(
+                headerBuilder: (BuildContext context, bool isExpanded) =>
+                    _buildCardHeaderContent(),
+                body: RecipeCardBodyContent(
+                  method: widget.method,
+                  note: widget.note,
+                ), //Add body biulder
+                isExpanded: this.isExpanded,
               ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  //Build Recipe Card Header along with the card's favourite icon button
+  Widget _buildCardHeaderContent() {
+    return Stack(
+      children: <Widget>[
+        //Header content
+        RecipeCardHeaderContent(
+          backgroundImage: widget.backgroundImage,
+          title: widget.title,
+        ),
+        //Favorite Icon Button
+        Positioned(
+          top: 10.0,
+          right: 10.0,
+          child: IconButton(
+            iconSize: 30.0,
+            onPressed: () {
+              print("${widget.title} WAS FAVED!");
+
+              setState(() {
+                isFavorited = !isFavorited;
+              });
+            },
+            //TODO: Change colors to Theme colors.
+            icon: Icon(
+              (isFavorited) ? Icons.favorite : Icons.favorite_border,
+              color: (isFavorited)
+                  ? Colors.redAccent
+                  : Theme.of(context).disabledColor.withOpacity(0.7),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
 
-class RecipeCardContent extends StatelessWidget {
+class RecipeCardHeaderContent extends StatelessWidget {
+  static const double _backgroundImageBlurFactor = 2;
+  static const double _backgroundImageDimOpacity = 0.3;
+
   final AssetImage backgroundImage;
   final String title;
 
-  RecipeCardContent({this.title, this.backgroundImage});
+  RecipeCardHeaderContent({this.title, this.backgroundImage})
+      : assert(_backgroundImageBlurFactor >= 0),
+        assert(_backgroundImageDimOpacity >= 0 &&
+            _backgroundImageDimOpacity <= 1.0);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 180.0,
+      height: 184.0,
       child: Stack(
         children: <Widget>[
+          //The background image
           Positioned.fill(
             child: Ink.image(
               image: backgroundImage,
@@ -165,14 +231,18 @@ class RecipeCardContent extends StatelessWidget {
               child: Container(),
             ),
           ),
-          //Dim the image
+          //Dim and blur the image
           Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: Colors.black45,
+            child: BackdropFilter(
+              filter: ImageFilter.blur(
+                  sigmaX: _backgroundImageBlurFactor,
+                  sigmaY: _backgroundImageBlurFactor),
+              child: Container(
+                decoration: BoxDecoration(color: Colors.black.withOpacity(0.3)),
               ),
             ),
           ),
+          //Recipe name
           Positioned(
             bottom: 16.0,
             left: 16.0,
@@ -191,6 +261,166 @@ class RecipeCardContent extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class RecipeCardBodyContent extends StatefulWidget {
+  final List<String> method;
+  final String note;
+  RecipeCardBodyContent({this.method, this.note});
+
+  @override
+  State<StatefulWidget> createState() => _RecipeCardBodyContentState();
+}
+
+class _RecipeCardBodyContentState extends State<RecipeCardBodyContent>
+    with SingleTickerProviderStateMixin {
+  TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(vsync: this, length: 2);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  Tab _biuldTabWithName(String name) {
+    return Tab(
+      child: Text(
+        name,
+        style: Theme.of(context).textTheme.subhead.copyWith(fontSize: 18.0),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    //FIXME: TabBar displays, but adding TabBarView makes the whole columb dissappear.
+    /* return  Column(
+      children: <Widget>[
+        TabBar(
+          tabs: <Widget>[
+            _biuldTabWithName("Method"),
+            _biuldTabWithName("Ingresients"),
+          ],
+          controller: _tabController,
+        ),
+        TabBarView(
+          children: <Widget>[_buildRecipeCardBodyContent(), Text("BLOB")],
+          controller: _tabController,
+        ),
+      ],
+    ); */
+
+    return _buildRecipeCardBodyContent();
+  }
+
+  Widget _buildRecipeCardBodyContent() {
+    return Column(
+      children: [
+        _buildMethodInstructions(widget.method),
+        <Widget>[
+          RecipeNote(
+            note: widget.note,
+          )
+        ]
+      ].expand((x) => x).toList(),
+    );
+  }
+
+  List<Widget> _buildMethodInstructions(List<String> method) {
+    List<Widget> retVal = [];
+
+    for (int i = 0; i < method.length; i++) {
+      retVal.add(
+        RecipeInstruction(
+          ordering: i + 1,
+          instruction: method[i],
+        ),
+      );
+
+      //add dividers and ending padding
+      if (i != method.length - 1) {
+        retVal.add(
+          Divider(),
+        );
+      } else {
+        retVal.add(
+          SizedBox(
+            height: 16.0,
+          ),
+        );
+      }
+    }
+
+    return retVal;
+  }
+}
+
+class RecipeInstruction extends StatelessWidget {
+  final String instruction;
+  final int ordering;
+
+  RecipeInstruction({@required this.ordering, @required this.instruction});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: CircleAvatar(
+        child: Text(
+          ordering.toString(),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.black12, //TODO: Use theme colors
+        foregroundColor: Colors.black,
+      ),
+      title: Text(
+        instruction,
+        style: TextStyle(fontSize: 18.0),
+      ),
+    );
+  }
+}
+
+class RecipeNote extends StatelessWidget {
+  static const String notePrefix = "Note:";
+  final String note;
+
+  RecipeNote({@required this.note});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: <Color>[
+            Colors.red[400],
+            Colors.red[700],
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      padding: EdgeInsets.all(16.0),
+      child: Center(
+        child: Text(
+          "$notePrefix $note",
+          style: TextStyle(
+            color: Colors.white,
+            fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.bold,
+            fontSize: 16.0,
+          ),
+        ),
       ),
     );
   }
