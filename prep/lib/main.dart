@@ -29,6 +29,6 @@ Future<void> main() async {
     theme: ThemeData(
       primarySwatch: Colors.indigo,
     ),
-    home: Dashboard(),
+    home: Dashboard(firestore),
   ));
 }
