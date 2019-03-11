@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Dashboard from '@/components/Dashboard'
 import ViewStaff from '@/components/staff/ViewStaff'
 import ViewTests from '@/components/tests/ViewTests'
 import ViewRecipes from '@/components/tests/ViewRecipes'
@@ -27,8 +26,8 @@ let router = new Router({
   routes: [
     {
       path: '/',
-      name: 'dashboard',
-      component: Dashboard,
+      name: 'view-appointments',
+      component: ViewAppointments,
       meta: {
         requiresAuth: true
       }

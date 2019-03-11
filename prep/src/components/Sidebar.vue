@@ -13,7 +13,6 @@
                     <li><span id="email" class="email black-text"> {{currentUser}}</span></li>
                 </div>
                 <li><div class="divider"></div></li>
-                <li><router-link to="/" class="menuItem" exact-active-class="exact active" exact>Dashboard</router-link></li>
                 <li><router-link to="/view-appointments" class="menuItem" exact-active-class="exact active" exact>Current Appointments</router-link></li>
                 <li><router-link to="/past-appointments" class="menuItem" exact-active-class="exact active" exact>Past Appointments</router-link></li>
                 <li><router-link v-if="isAdmin == 'Admin'" to="/view-staff" class="menuItem" exact-active-class="exact active" exact>Staff</router-link></li>
