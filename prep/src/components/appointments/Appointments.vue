@@ -6,35 +6,51 @@
           <h3>
             <b>{{pastString}} Appointments</b>
           </h3>
-          <div style="padding:20px;display:flex;" class="row">
-            <div class="input-field col s12">
-              <span style="color:black !important">
-                <b>Sort by:</b>
-              </span>
-              <select id="select" @change="sort" class="browser-default" style="color:black">
-                <option value="Date" selected>Date in ascending order</option>
-                <option value="Date desc">Date in descending order</option>
-              </select>
-              <button style="margin-top:5px;" @click="resetTable" class="btn">Reset</button>
+          <div>
+            <div style="padding:20px;display:flex;" class="row">
+              <div class="input-field col s12">
+                <span style="color:black !important">
+                  <b>Sort by:</b>
+                </span>
+                <select id="select" @change="sort" class="browser-default" style="color:black">
+                  <option value="Date" selected>Date in ascending order</option>
+                  <option value="Date desc">Date in descending order</option>
+                </select>
+              </div>
+              <div class="input-field col s12" style="padding:15px;">
+                <input
+                  required
+                  id="datePicker"
+                  value
+                  type="date"
+                  min="2019-01-01"
+                  style="text-align:center"
+                >
+              </div>
+              <div>
+                <a class="blue-text tooltip" style="margin-top: 45px !important;cursor:pointer">
+                  <span class="tooltiptext">Click this calendar icon to sort by specific date</span>
+                  <i class="material-icons" @click="sortByDate">calendar_today</i>
+                </a>
+              </div>
             </div>
-            <div class="input-field col s12" style="padding:15px;">
-              <input
-                required
-                id="datePicker"
-                value
-                type="date"
-                min="2019-01-01"
-                style="text-align:center"
-              >
-            </div>
-            <div>
-              <a class="blue-text tooltip" style="margin-top: 45px !important;cursor:pointer">
-                <span class="tooltiptext">Click this calendar icon to sort by specific date</span>
-                <i class="material-icons" @click="sortByDate">calendar_today</i>
-              </a>
+            <div style="position:relative; bottom:50px;">
+              <div class="input-field col s12" style="width:70%;">
+                <label class="blue-text" for>Search By Code</label>
+                <input
+                  id="searchCode"
+                  required
+                  @keydown.enter.prevent
+                  @keydown.enter="sortByCode"
+                  class="file-path validate"
+                  type="text"
+                >
+                
+                <button @click="sortByCode" class="btn">Search</button>
+                <button style="margin-left:10px" @click="resetTable" class="btn">Reset</button>
+              </div>
             </div>
           </div>
-
           <tr style="font-size:1.5em">
             <th>
               <a class="black-text tooltip" style="margin-left: 25px !important;">
@@ -54,6 +70,12 @@
                 <i class="material-icons">location_on</i>
               </a>
             </th>
+            <th>
+              <a class="black-text tooltip">
+                <span class="tooltiptext">Completed Daily Checkups</span>
+                <i class="material-icons">done_outline</i>
+              </a>
+            </th>
             <th></th>
             <th></th>
             <th></th>
@@ -65,6 +87,12 @@
             <td style="padding-left: 20px;">{{appointment.code}}</td>
             <td>{{appointment.datetime.toDate()}}</td>
             <td>{{appointment.location}}</td>
+            <template v-for="checkup in dailyCheckups">
+              <td
+                v-bind:key="checkup.id"
+                v-if="checkup.id == appointment.code"
+              >{{checkup.count}}/{{checkup.length}}</td>
+            </template>
             <td>
               <router-link
                 v-bind:to="{name: 'view-appointment', params: {expired:past ,id:appointment.code}}"
@@ -140,7 +168,8 @@ export default {
       today: new Date(),
       yesterday: null,
       currentDate: Date.now().toLocaleString,
-      pastString: ""
+      pastString: "",
+      dailyCheckups: []
     };
   },
   created() {
@@ -196,10 +225,58 @@ export default {
                 testID: appointment.data().testID
               };
               this.appointments.push(data);
+              this.listenForDailyCheckups(appointment.id);
               this.fetchData(appointment.id);
             }
           });
           this.sortByExpiration();
+        });
+    },
+    getDailyCheckups(id, bool) {
+      var count = 0;
+      var length = 0;
+      db.collection("appointments")
+        .doc(id)
+        .collection("dailyCheckups")
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            // Get only the number of completed dailyCheckups
+            Object.values(doc.data().instructions).forEach(map => {
+              if (map.answer) {
+                count++;
+              }
+              length++;
+            });
+          });
+          const data = {
+            id: id,
+            count: count,
+            length: length
+          };
+          if(bool){
+            this.dailyCheckups.push(data);
+          }
+          for (var i = 0; i < this.dailyCheckups.length; i++) {
+            if (this.dailyCheckups[i].id == id) {
+              this.dailyCheckups[i] = data;
+              this.dailyCheckups.push();
+            }
+          }
+        });
+    },
+    listenForDailyCheckups(id) {
+      this.dailyCheckups=[]
+      this.getDailyCheckups(id, true);
+      db.collection("appointments")
+        .doc(id)
+        .collection("dailyCheckups")
+        .onSnapshot(snapshot => {
+          snapshot.docChanges().forEach(change => {
+            if (change.type == "modified") {
+              this.getDailyCheckups(id, false);
+            }
+          });
         });
     },
     fetchData(id) {
@@ -241,7 +318,8 @@ export default {
     sort() {
       var selectValue = document.getElementById("select").value;
       this.clearData();
-
+      document.getElementById("searchCode").value = "";
+      document.getElementById("datePicker").value = "";
       if (selectValue == "Date") {
         // Sort by date asc
         this.getApp("asc");
@@ -285,18 +363,47 @@ export default {
         this.getApp("asc");
         document.getElementById("datePicker").value = "";
       }
+      document.getElementById("searchCode").value = "";
       document.getElementById("select").value = "Date";
     },
     resetTable() {
       this.clearData();
       document.getElementById("select").value = "Date";
       document.getElementById("datePicker").value = "";
+      document.getElementById("searchCode").value = "";
       this.getApp("asc");
     },
     clearData() {
       this.appointments = [];
       this.notifications = [];
       this.ids = [];
+    },
+    sortByCode() {
+      var inputValue = document.getElementById("searchCode").value;
+      var codeArray = [];
+      for (var i = 0; i < this.allAppointments.length; i++) {
+        if (
+          this.allAppointments[i].code.includes(inputValue) &&
+          inputValue != ""
+        ) {
+          codeArray.push(this.allAppointments[i]);
+        }
+      }
+      if (codeArray.length != 0) {
+        this.clearData();
+        this.appointments = codeArray;
+        this.appointments.push();
+      } else {
+        if (inputValue == "") {
+          alert("Please enter a code first!");
+        } else {
+          alert("No code found for " + inputValue + " !");
+        }
+        this.clearData();
+        this.getApp("asc");
+        document.getElementById("searchCode").value = "";
+      }
+      document.getElementById("select").value = "Date";
     }
   }
 };
@@ -318,7 +425,7 @@ th {
 
 .tooltip .tooltiptext {
   visibility: hidden;
-  width: 100px;
+  width: 120px;
   background-color: #555;
   color: #fff;
   text-align: center;
@@ -327,7 +434,7 @@ th {
   position: absolute;
   z-index: 1;
   bottom: 125%;
-  left: 100%;
+  left: 60%;
   margin-left: -60px;
   opacity: 0;
   transition: opacity 0.3s;
