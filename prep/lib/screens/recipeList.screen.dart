@@ -13,6 +13,14 @@ final _mockRecipeList = <_RecipeMockUp>[
       "Cook some sliced mushrooms in butter and garlic, frying some tomato quarters on the side.",
       "Serve with fried eggs and bacon, or a lamb chop."
     ],
+    ingredients: <String>[
+      "mushrooms",
+      "butter",
+      "garlic",
+      "tomato",
+      "eggs",
+      "bacon/lamb chop"
+    ],
     note: "Please remember processed meats including sausages are not allowed!",
   ),
   _RecipeMockUp(
@@ -23,6 +31,18 @@ final _mockRecipeList = <_RecipeMockUp>[
         "Bake the parcel in an oven dish for 20 minutes at 200° C.",
         "While the fish is cooking, slice plenty of peppers, leeks, mushrooms and courgettes, and sauté in oil for 5-10 minutes until they are cooked how you like them.",
         "Add 50ml cream and a handful of chopped fresh herbs, warm through, and serve with the fish."
+      ],
+      ingredients: <String>[
+        "1 fillet of cod/haddock/tilapia",
+        "1 lemon",
+        "2 cloves of garlic",
+        "fresh herbs of choice",
+        "1 tablespoons of olive oil",
+        "1-2 bell pepper",
+        "1 leek",
+        "150g of mushrooms",
+        "1 courgette",
+        "50ml of cream",
       ],
       note:
           "You cannot thicken the sauce with flour or cornflour as these are not permitted."),
@@ -36,14 +56,30 @@ final _mockRecipeList = <_RecipeMockUp>[
       "Serve with some chopped tomatoes and cucumber, or tomato quarters fried in a little oil.",
     ],
     note: "You MUST NOT add milk! Cream is optional.",
+    ingredients: <String>[
+      "2 eggs",
+      "1 tablespoon cream (optional)",
+      "2 tablespoons butter",
+    ],
   ),
   _RecipeMockUp(
       name: "Jerk Chicken and Salad",
       backgroundImage: AssetImage('assets/images/recipes/chicken.jpg'),
       method: <String>[
-        "Marinade chicken pieces overnight in home-made jerk sauce.",
         "Make the jerk sauce by mixing together chopped spring onions, grated ginger, chopped garlic, chopped scotch bonnet chillies, dried thyme, a teaspoon of allspice, salt and pepper, and vegetable oil.",
+        "Marinade chicken pieces overnight in home-made jerk sauce.",
         "You can fry bake or barbeque the chicken pieces, and serve with salad."
+      ],
+      ingredients: <String>[
+        "1 handful of spring onions",
+        "1 tablespoon of ginger (grated)",
+        "2 cloves of garlic",
+        "scotch bonnet chillies to taste",
+        "dried thyme",
+        "1 teaspoon of allspice",
+        "salt",
+        "pepper",
+        "1-2 tablespoons of vegetable oil",
       ],
       note:
           "you MUST NOT add sugar, flour, lemon or lime juice to jerk seasoning!"),
@@ -53,9 +89,15 @@ class _RecipeMockUp {
   final String name;
   final ImageProvider backgroundImage;
   final List<String> method;
+  final List<String> ingredients;
   final String note;
 
-  _RecipeMockUp({this.name, this.backgroundImage, this.method, this.note});
+  _RecipeMockUp(
+      {@required this.name,
+      @required this.backgroundImage,
+      @required this.method,
+      @required this.ingredients,
+      @required this.note});
 }
 
 class RecipeListScreen extends StatefulWidget {
@@ -102,6 +144,7 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
           return RecipeCardExpandable(
             title: recipe.name,
             backgroundImage: recipe.backgroundImage,
+            ingredients: recipe.ingredients,
             method: recipe.method,
             note: recipe.note,
           );
@@ -115,12 +158,14 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
 class RecipeCardExpandable extends StatefulWidget {
   final ImageProvider backgroundImage;
   final String title;
+  final List<String> ingredients;
   final List<String> method;
   final String note;
 
   RecipeCardExpandable(
       {@required this.title,
       @required this.backgroundImage,
+      @required this.ingredients,
       @required this.method,
       @required this.note});
 
@@ -153,10 +198,11 @@ class _RecipeCardExpandableState extends State<RecipeCardExpandable> {
               });
             },
             children: <ExpansionPanel>[
-              new ExpansionPanel(
+              ExpansionPanel(
                 headerBuilder: (BuildContext context, bool isExpanded) =>
                     _buildCardHeaderContent(),
                 body: RecipeCardBodyContent(
+                  ingredients: widget.ingredients,
                   method: widget.method,
                   note: widget.note,
                 ), //Add body biulder
@@ -266,72 +312,53 @@ class RecipeCardHeaderContent extends StatelessWidget {
   }
 }
 
-class RecipeCardBodyContent extends StatefulWidget {
+class RecipeCardBodyContent extends StatelessWidget {
+  final List<String> ingredients;
   final List<String> method;
   final String note;
-  RecipeCardBodyContent({this.method, this.note});
 
-  @override
-  State<StatefulWidget> createState() => _RecipeCardBodyContentState();
-}
-
-class _RecipeCardBodyContentState extends State<RecipeCardBodyContent>
-    with SingleTickerProviderStateMixin {
-  TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(vsync: this, length: 2);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  Tab _biuldTabWithName(String name) {
-    return Tab(
-      child: Text(
-        name,
-        style: Theme.of(context).textTheme.subhead.copyWith(fontSize: 18.0),
-      ),
-    );
-  }
+  RecipeCardBodyContent({this.ingredients, this.method, this.note});
 
   @override
   Widget build(BuildContext context) {
-    //FIXME: TabBar displays, but adding TabBarView makes the whole columb dissappear.
-    /* return  Column(
-      children: <Widget>[
-        TabBar(
-          tabs: <Widget>[
-            _biuldTabWithName("Method"),
-            _biuldTabWithName("Ingresients"),
-          ],
-          controller: _tabController,
-        ),
-        TabBarView(
-          children: <Widget>[_buildRecipeCardBodyContent(), Text("BLOB")],
-          controller: _tabController,
-        ),
-      ],
-    ); */
-
-    return _buildRecipeCardBodyContent();
-  }
-
-  Widget _buildRecipeCardBodyContent() {
     return Column(
       children: [
-        _buildMethodInstructions(widget.method),
         <Widget>[
+          _buildIngredientList(ingredients, context),
+          SizedBox(
+            height: 16.0,
+          ),
+        ],
+        _buildMethodInstructions(method),
+        <Widget>[
+          SizedBox(
+            height: 16.0,
+          ),
           RecipeNote(
-            note: widget.note,
-          )
-        ]
+            note: note,
+          ),
+        ],
       ].expand((x) => x).toList(),
+    );
+  }
+
+  Widget _buildIngredientList(List<String> ingredients, BuildContext context) {
+    List<Widget> _ingredientListItems = [];
+
+    for (String ingredient in ingredients) {
+      _ingredientListItems.add(
+        IngredientListItem(ingredient),
+      );
+    }
+
+    return ExpansionTile(
+      title: Text(
+        "Show ingredients",
+        style: Theme.of(context).textTheme.button,
+      ),
+      children: _ingredientListItems,
+      backgroundColor: Colors.black12,
+      initiallyExpanded: false,
     );
   }
 
@@ -351,16 +378,40 @@ class _RecipeCardBodyContentState extends State<RecipeCardBodyContent>
         retVal.add(
           Divider(),
         );
-      } else {
-        retVal.add(
-          SizedBox(
-            height: 16.0,
-          ),
-        );
       }
     }
 
     return retVal;
+  }
+}
+
+class IngredientListItem extends StatelessWidget {
+  final String ingredient;
+
+  IngredientListItem(this.ingredient);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        SizedBox(width: 32.0),
+        Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Icon(Icons.chevron_right),
+        ),
+        SizedBox(width: 8.0),
+        Expanded(
+          child: Text(
+            ingredient,
+            style: TextStyle(
+              fontSize: 14.0,
+              color: Theme.of(context).textTheme.body2.color,
+            ),
+            softWrap: true,
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -378,14 +429,15 @@ class RecipeInstruction extends StatelessWidget {
           ordering.toString(),
           style: TextStyle(
             fontWeight: FontWeight.bold,
+            color: Theme.of(context).textTheme.body2.color,
           ),
         ),
         backgroundColor: Colors.black12, //TODO: Use theme colors
-        foregroundColor: Colors.black,
+        //foregroundColor: Colors.black,
       ),
       title: Text(
         instruction,
-        style: TextStyle(fontSize: 18.0),
+        style: TextStyle(fontSize: 16.0),
       ),
     );
   }
@@ -414,11 +466,12 @@ class RecipeNote extends StatelessWidget {
       child: Center(
         child: Text(
           "$notePrefix $note",
+          textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
             fontStyle: FontStyle.italic,
             fontWeight: FontWeight.bold,
-            fontSize: 16.0,
+            fontSize: 15.0,
           ),
         ),
       ),
