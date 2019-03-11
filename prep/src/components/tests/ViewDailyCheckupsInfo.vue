@@ -7,25 +7,32 @@
             <li class="collection-item"><b>Id:</b> {{code}}</li>
             <li class="collection-item"><b>Title:</b> {{title}}</li>
             <li class="collection-item"><b>Number of Days Before Test:</b> {{daysBeforeTest}}</li>
+            <li v-if="description" class="collection-item"><b>Description:</b> {{description}}</li> 
             <li class="collection-item"><b>Instructions:</b>         
                 <ul v-for="(value, key) in instructions" :key="key">
-                <ol>{{key}}: {{value}}</ol>           
+                   <ol>Instruction {{key}}: </ol> 
+
+                   <ol v-for="(value,key) in value" :key="key">
+                     <ol>{{key}}:{{value}}</ol>
+                   </ol>
                 </ul>          
             </li> 
             
-            <li v-if="description" class="collection-item"><b>Description:</b> {{description}}</li> 
-             <li class="collection-item">
+           
+            <li class="collection-item">
              
-           <router-link v-bind:to="{name: 'edit-dailycheckups', params: {test_id: test_id, daily_id:title}}" class="btn green">
-            Edit
-            </router-link>
-            <router-link v-bind:to="{name: 'view-dailycheckups', params: {test_id: test_id}}" class="btn grey">Back</router-link>
+               <router-link v-bind:to="{name: 'edit-dailycheckups', params: {test_id: test_id, daily_id:title}}" class="btn green">
+                  Edit
+               </router-link>
+
+               <router-link v-bind:to="{name: 'view-dailycheckups', params: {test_id: test_id}}">
+                   <button @click="deleteDailyCheckups" class="btn red">
+                       Delete
+                   </button>
+               </router-link>
+
+               <router-link v-bind:to="{name: 'view-dailycheckups', params: {test_id: test_id}}" class="btn grey">Back</router-link>
             
-             <router-link v-bind:to="{name: 'view-dailycheckups', params: {test_id: test_id}}">
-            <button @click="deleteDailyCheckups" class="btn red">
-            Delete
-            </button>
-            </router-link>
 
             </li>
            

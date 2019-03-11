@@ -25,11 +25,14 @@
                     </div>
                </div>
 
+     
+
                <button @click="addInstruction" class="btn green">new instruction</button>
         <div class="row">
           <div v-for="instr in allInstr.length" v-bind:key="instr" class="input-field col s12">
             <span>Instruction</span>
-            <input type="text" v-model="allInstr[instr - 1]" required>   
+            <input type="text" v-model="allInstr[instr - 1]" required> 
+              
             <button @click="deleteInstruction(instr -1)" class="btn red">remove instruction</button>
           </div>
         </div>
@@ -66,7 +69,7 @@ export default {
         querySnapshot.forEach(doc => {
             (this.allInstr = doc.data().instructions),
             (this.description = doc.data().description),
-            (this.daysBeforeTest = doc.data().daysBeforeTest),
+            (this.daysBeforeTest = doc.data().daysBeforeTest);
             (this.title = doc.data().title);
         });
       });

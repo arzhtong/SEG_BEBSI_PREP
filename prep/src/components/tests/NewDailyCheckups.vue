@@ -24,11 +24,11 @@
                         <label>Number of Days Before Test:</label>
                     </div>
                </div>
-
+              
                <button @click="addInstruction" class="btn green"> new instruction</button>
                 <div class="row">
                     <div v-for="instruction in instructions" v-bind:key="instruction" class="input-field col s12">
-                        <input type="text" v-model="instruction.value" required>
+                        <input type="text"  v-model="instruction.value" required>
                         <label>Instructions</label>
                         <button class="btn red" @click="deleteInstruction(instructions.indexOf(instruction))"> remove instruction</button>
                     </div>
@@ -48,6 +48,7 @@
 <script>
 
 import db from '../firebaseInit'
+   
     export default{
         name: 'new-dailycheckups',
         data() {
@@ -62,9 +63,9 @@ import db from '../firebaseInit'
         methods: {
             saveDailyCheckups(){
                 var map={}
-                
+                               
                  for(var i =0 ; i < this.instructions.length; i++){
-                     map[(i+1)+" "+this.instructions[i].value]=false
+                    map[i]={answer:false,question:this.instructions[i].value}                   
                  }
                   
                 db.collection('tests').doc(this.$route.params.test_id).collection('dailyCheckups').add({                    
