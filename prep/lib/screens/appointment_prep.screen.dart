@@ -20,6 +20,7 @@ class _AppointmentPrepState extends State<AppointmentPrep> {
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const Text('Loading...');
           return ListView.builder(
+            padding: EdgeInsets.only(top: 10.0),
             itemCount: snapshot.data.documents.length,
             itemBuilder: (context, index) =>_makeData(context,snapshot.data.documents[index])
           );
@@ -82,7 +83,7 @@ class CategoryCard extends StatelessWidget {
 
     switch (type) {
       case "informations":
-        return Navigator.push(context, MaterialPageRoute(builder: (context) => Category(contents)));
+        return null; //Navigator.push(context, MaterialPageRoute(builder: (context) => Category(contents)));
       case "categoryList":
         return null;
       case "recipieView":
