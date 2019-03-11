@@ -54,12 +54,6 @@
                 <i class="material-icons">location_on</i>
               </a>
             </th>
-            <th>
-              <a class="black-text tooltip">
-                <span class="tooltiptext">Test info</span>
-                <i class="material-icons">info</i>
-              </a>
-            </th>
             <th></th>
             <th></th>
             <th></th>
@@ -67,12 +61,10 @@
         </thead>
 
         <tbody class="collection-item">
-          <tr v-for="appointment in appointments" v-bind:key="appointment.datetime">
+          <tr v-for="appointment in appointments" v-bind:key="appointment">
             <td style="padding-left: 20px;">{{appointment.code}}</td>
             <td>{{appointment.datetime.toDate()}}</td>
             <td>{{appointment.location}}</td>
-            <td v-for="test in tests" v-bind:key="test.title">{{test.title}}</td>
-
             <td>
               <router-link
                 v-bind:to="{name: 'view-appointment', params: {expired:past ,id:appointment.code}}"
@@ -97,7 +89,9 @@
               </a>
             </td>
             <td>
-              <router-link v-bind:to="{name: 'message', params: {expired: past, appointmentID: appointment.code}}">
+              <router-link
+                v-bind:to="{name: 'message', params: {expired: past, appointmentID: appointment.code}}"
+              >
                 <i
                   class="material-icons left green-text"
                   style="margin-left:5px;font-size:30px;text-align:center"
@@ -116,6 +110,14 @@
         <template v-if="past==false">
           <router-link to="/add-appointment" class="btn green" style="margin:20px">Add Appointment</router-link>
         </template>
+        <template v-else>
+          <router-link
+            to="/add-appointment"
+            class="btn green"
+            style="margin:20px"
+            disabled
+          >Add Appointment</router-link>
+        </template>
       </table>
     </div>
   </div>
@@ -131,12 +133,10 @@ export default {
   data() {
     return {
       appointments: [],
-      tests: [],
-      testID: null,
+      allAppointments: [],
       staffMemberID: null,
       notifications: [],
       ids: [],
-      id: null,
       today: new Date(),
       yesterday: null,
       currentDate: Date.now().toLocaleString,
@@ -166,6 +166,7 @@ export default {
       } else {
         this.appointments = currentAppointments;
       }
+      this.allAppointments = this.appointments;
     },
     getApp(dir) {
       db.collection("users")
@@ -185,31 +186,20 @@ export default {
         .get()
         .then(querySnapshot => {
           querySnapshot.forEach(appointment => {
-            const data = {
-              code: appointment.id,
-              datetime: appointment.data().datetime,
-              staffMember: appointment.data().staffMember,
-              location: appointment.data().location,
-              id: appointment.id
-            };
-            this.testID = appointment.data().testID;
-            this.appointments.push(data);
-            this.fetchData(appointment.id);
+            if (appointment.data().staffMember == this.staffMemberID) {
+              const data = {
+                code: appointment.id,
+                datetime: appointment.data().datetime,
+                staffMember: appointment.data().staffMember,
+                location: appointment.data().location,
+                id: appointment.id,
+                testID: appointment.data().testID
+              };
+              this.appointments.push(data);
+              this.fetchData(appointment.id);
+            }
           });
-          this.getDoc();
           this.sortByExpiration();
-        });
-    },
-    getDoc() {
-      db.collection("tests")
-        .doc(this.testID)
-        .get()
-        .then(doc => {
-          const data = {
-            title: doc.data().title,
-            type: doc.data().type
-          };
-          this.tests.push(data);
         });
     },
     fetchData(id) {
@@ -220,7 +210,6 @@ export default {
         .where("isPatient", "==", true)
         .onSnapshot(snapshot => {
           snapshot.docChanges().forEach(change => {
-            this.id = id;
             var count = snapshot.size;
             if (this.ids.indexOf(id) != -1) {
               var index = this.ids.indexOf(id);
@@ -263,11 +252,10 @@ export default {
     },
     sortByDate() {
       var value = document.getElementById("datePicker").value;
-
       var newDay = new Date(value);
       var newAppointments = [];
-      for (var i = 0; i < this.appointments.length; i++) {
-        var date = this.appointments[i].datetime.toDate();
+      for (var i = 0; i < this.allAppointments.length; i++) {
+        var date = this.allAppointments[i].datetime.toDate();
         var wholeDate =
           date.getDate().toString() +
           date.getMonth().toString() +
@@ -278,8 +266,9 @@ export default {
           newDay.getFullYear().toString();
 
         if (wholeDate == convertWholeDate) {
-          newAppointments.push(this.appointments[i]);
-          this.fetchData(this.appointments[i].id);
+          newAppointments.push(this.allAppointments[i]);
+          // Get the notifications
+          this.fetchData(this.allAppointments[i].id);
         }
       }
       if (newAppointments.length != 0) {
@@ -306,7 +295,6 @@ export default {
     },
     clearData() {
       this.appointments = [];
-      this.tests = [];
       this.notifications = [];
       this.ids = [];
     }
