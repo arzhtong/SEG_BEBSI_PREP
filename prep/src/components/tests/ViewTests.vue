@@ -38,8 +38,9 @@
               >Show</router-link>
             </td>
           </tr>
-        </tbody>
-        <router-link to="/register" class="btn green" style="margin:20px">Add Test</router-link>
+        <router-link to="/add-test" class="btn green" style="margin:20px">
+            Add Test
+        </router-link>
       </table>
     </div>
   </div>
