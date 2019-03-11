@@ -8,6 +8,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:prep/screens/appointment.screen.dart';
 
 class Dashboard extends StatefulWidget {
+  Firestore db;
+  Dashboard(this.db);
+
   @override
   State<StatefulWidget> createState() {
     return _DashboardState();
@@ -87,7 +90,7 @@ class _DashboardState extends State<Dashboard> {
   Future<bool> _isCodeInFirestore (String code) async {
     List<String> liveIDs = new List();
 
-    await Firestore.instance.collection('appointments').where("datetime", isGreaterThan: DateTime.now().subtract(Duration(days: 1))).getDocuments().then((query) {
+    await widget.db.collection('appointments').where("datetime", isGreaterThan: DateTime.now().subtract(Duration(days: 1))).getDocuments().then((query) {
       query.documents.forEach((document) {
         liveIDs.add(document.documentID);
       });
@@ -121,7 +124,7 @@ class _DashboardState extends State<Dashboard> {
     documentList = new List();
     List<Widget> calendarElements = new List();
 
-    testDocList = await Firestore.instance.collection('appointments')
+    testDocList = await widget.db.collection('appointments')
         .where("datetime", isGreaterThan: DateTime.now()
         .subtract(Duration(days: 1))).orderBy('datetime').getDocuments();
     documentList = testDocList.documents;
@@ -161,29 +164,15 @@ class _DashboardState extends State<Dashboard> {
       });
       documentList = filteredDocuments;
 
-      if (Platform.isAndroid) { //ANDROID
-        calendarElements.add(_CalendarLabel(Date.and(documentList.elementAt(0).data['datetime'])));
-        calendarElements.add(_CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], Date.and(documentList.elementAt(0).data['datetime']), documentList.elementAt(0).data['testID']));
+      calendarElements.add(_CalendarLabel(documentList.elementAt(0).data['datetime'].toDate()));
+      calendarElements.add(_CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime'].toDate(), documentList.elementAt(0).data['testID']));
 
-        for (int i = 1; i < documentList.length; i++){
-          if (Date.and(documentList.elementAt(i).data['datetime']).equals(Date.and(documentList.elementAt(i - 1).data['datetime']))){
-            calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], Date.and(documentList.elementAt(i).data['datetime']), documentList.elementAt(i).data['testID']));
-          } else {
-            calendarElements.add(_CalendarLabel(Date.and(documentList.elementAt(i).data['datetime'])));
-            calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], Date.and(documentList.elementAt(i).data['datetime']), documentList.elementAt(i).data['testID']));
-          }
-        }
-      } else {  //iOS
-        calendarElements.add(_CalendarLabel(Date.ios(documentList.elementAt(0).data['datetime'])));
-        calendarElements.add(_CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], Date.ios(documentList.elementAt(0).data['datetime']), documentList.elementAt(0).data['testID']));
-
-        for (int i = 1; i < documentList.length; i++){
-          if (Date.ios(documentList.elementAt(i).data['datetime']).equals(Date.ios(documentList.elementAt(i - 1).data['datetime']))){
-            calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], Date.ios(documentList.elementAt(i).data['datetime']), documentList.elementAt(i).data['testID']));
-          } else {
-            calendarElements.add(_CalendarLabel(Date.ios(documentList.elementAt(i).data['datetime'])));
-            calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], Date.ios(documentList.elementAt(i).data['datetime']), documentList.elementAt(i).data['testID']));
-          }
+      for (int i = 1; i < documentList.length; i++){
+        if (documentList.elementAt(i).data['datetime'].toDate() == (documentList.elementAt(i - 1).data['datetime'].toDate())){
+          calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime'].toDate(), documentList.elementAt(i).data['testID']));
+        } else {
+          calendarElements.add(_CalendarLabel(documentList.elementAt(i).data['datetime'].toDate()));
+          calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime'].toDate(), documentList.elementAt(i).data['testID']));
         }
       }
 
@@ -304,7 +293,7 @@ class _DashboardState extends State<Dashboard> {
 }
 
 class _CalendarLabel extends StatelessWidget {
-  final Date dateTime;
+  final DateTime dateTime;
 
   _CalendarLabel(this.dateTime);
 
@@ -321,7 +310,7 @@ class _CalendarLabel extends StatelessWidget {
     );
   }
 
-  String dateTimeFormater(Date datetime){
+  String dateTimeFormater(DateTime datetime){
     String formattedString = datetime.day.toString();
 
     switch(datetime.month){
@@ -360,7 +349,7 @@ class _CalendarLabel extends StatelessWidget {
 class _CalendarCard extends StatelessWidget {
   final String name;
   final String location;
-  final Date dateTime;
+  final DateTime dateTime;
   final String testID;
 
   _CalendarCard(this.name, this.location, this.dateTime, this.testID);
@@ -400,7 +389,7 @@ class _CalendarCard extends StatelessWidget {
               ListTile(
                 leading: Icon(Icons.today),
                 title: Text(name),
-                subtitle: Text(location + " - " + dateTime.getDate()),
+                subtitle: Text(location + " - " + dateTime.toString()),
                 //subtitle: Text("St. Thomas Hospital - 11:00 am"),
               ),
             ],
@@ -480,34 +469,4 @@ class Storage {
   }
 }
 
-class Date {
-  int year = 0;
-  int month = 0;
-  int day = 0;
-  int hour = 0;
-  int minute = 0;
-  int second = 0;
-
-  Date();
-
-  Date.and(DateTime datetime) {
-    year = datetime.year;
-    month = datetime.month;
-    day = datetime.day;
-  }
-
-  Date.ios(Timestamp timestamp) {
-    year = timestamp.toDate().year;
-    month = timestamp.toDate().month;
-    day = timestamp.toDate().day;
-  }
-
-  String getDate(){
-    return day.toString() + " - " + month.toString() + " - " + year.toString();
-  }
-
-  @override
-  bool equals(Date other){
-    return (this.year == other.year && this.month == other.month && this.day == other.day);
-  }
-}
+//return (this.year == other.year && this.month == other.month && this.day == other.day);
