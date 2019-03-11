@@ -26,7 +26,7 @@ let router = new Router({
   routes: [
     {
       path: '/',
-      name: 'view-appointments',
+      name: 'dashboard',
       component: ViewAppointments,
       meta: {
         requiresAuth: true

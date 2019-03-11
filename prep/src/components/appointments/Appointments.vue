@@ -61,7 +61,7 @@
         </thead>
 
         <tbody class="collection-item">
-          <tr v-for="appointment in appointments" v-bind:key="appointment">
+          <tr v-for="appointment in appointments" v-bind:key="appointment.code">
             <td style="padding-left: 20px;">{{appointment.code}}</td>
             <td>{{appointment.datetime.toDate()}}</td>
             <td>{{appointment.location}}</td>

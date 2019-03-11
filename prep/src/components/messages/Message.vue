@@ -3,7 +3,7 @@
     <div class="containerChat" id="top">
       <div id="messages">
         <ul>
-          <li v-for="message in messages" v-bind:key="message.datetime">
+          <li v-for="message in messages" v-bind:key="message.msgKey">
             <div v-if="message.isPatient == false" class="containerChat" style="max-width:100%;">
               <p>{{message.content}}</p>
               <span class="time-left">{{message.datetime}}</span>
@@ -97,6 +97,7 @@ export default {
               this.$route.params.appointmentID
             );
             const data = {
+              msgKey: doc.data().content,
               content: msg,
               datetime: msgDate,
               isPatient: doc.data().isPatient,
