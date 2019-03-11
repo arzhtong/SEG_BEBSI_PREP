@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'information_parser.screen.dart';
 import './category.screen.dart';
 
 class AppointmentPrep extends StatefulWidget {
@@ -30,7 +30,7 @@ class _AppointmentPrepState extends State<AppointmentPrep> {
 
   Widget _makeData(BuildContext context, DocumentSnapshot document) {
     return CategoryCard(document['contents'].toString(),
-        document['title'].toString(), document['type'].toString());
+        document['title'].toString(), document['type'].toString(), widget._testID);
   }
 }
 
@@ -38,8 +38,9 @@ class CategoryCard extends StatelessWidget {
   final String contents;
   final String title;
   final String type;
+  final String _testID;
 
-  CategoryCard(this.contents, this.title, this.type);
+  CategoryCard(this.contents, this.title, this.type, this._testID);
 
   Widget _getCategoryIcon(String type) {
     switch (type) {
@@ -83,7 +84,7 @@ class CategoryCard extends StatelessWidget {
 
     switch (type) {
       case "informations":
-        return null; //Navigator.push(context, MaterialPageRoute(builder: (context) => Category(contents)));
+        return Navigator.push(context, MaterialPageRoute(builder: (context) => InformationParser(_testID, contents)));
       case "categoryList":
         return null;
       case "recipieView":
