@@ -17,6 +17,7 @@ import Register from '@/components/auth/Register'
 import ResetPassword from '@/components/auth/ResetPassword'
 import Message from '@/components/messages/Message'
 import AddTest from '@/components/tests/AddTest'
+import EditTest from '@/components/tests/EditTest'
 import firebase from 'firebase'
 
 
@@ -118,6 +119,14 @@ let router = new Router({
       path: '/add-test',
       name: 'add-test',
       component: AddTest,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/edit-test/:test_id',
+      name: 'edit-test',
+      component: EditTest,
       meta: {
         requiresAuth: true
       }
