@@ -65,7 +65,7 @@ export default {
         VueEditor
     },
     // load any editor information provided in the props 
-    created() {
+    mounted() {
         if(this.editorInformation !== '') {
             this.htmlForEditor = this.editorInformation
         }
