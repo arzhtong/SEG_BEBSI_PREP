@@ -107,7 +107,7 @@
                 </a>
               </router-link>
             </td>
-            <td>
+            <td v-if="past==false">
               <a class="tooltip">
                 <span class="tooltiptext">Make Appointment Expired</span>
                 <i
