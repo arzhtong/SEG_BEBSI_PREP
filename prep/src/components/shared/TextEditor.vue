@@ -28,9 +28,9 @@
         :editorToolbar="customToolbar">
         </vue-editor>
     </div>
-    <div class="center-align">
+    <!-- <div class="center-align">
         <a class="btn green" @click="saveEditorData">Done</a>
-    </div>
+    </div> -->
 </div>
 </template>
  
@@ -98,7 +98,7 @@ export default {
             this.uploading = true
             this.deleteImages()
             this.uploading = false
-            this.$emit('editorData', [this.htmlForEditor, this.images])
+            // this.$emit('editorData', [this.htmlForEditor, this.images])
         },
         deleteImages() {
             let temp = []
