@@ -7,6 +7,22 @@ const String testID = "VyyiBYwp0xX4nJyvX9oN";
 
 final _mockRecipeList = <_RecipeMockUp>[
   _RecipeMockUp(
+    name: "Scrambled Eggs\nmade with Cream and Butter",
+    backgroundImage: AssetImage('assets/images/recipes/eggs.jpg'),
+    method: <String>[
+      "You can make scrambled eggs in a pan or a microwave.",
+      "Whisk two eggs with a tablespoon of cream.",
+      "Add a knob of butter and stir until cooked.",
+      "Serve with some chopped tomatoes and cucumber, or tomato quarters fried in a little oil.",
+    ],
+    note: "You MUST NOT add milk! Cream is optional.",
+    ingredients: <String>[
+      "2 eggs",
+      "1 tablespoon cream (optional)",
+      "2 tablespoons butter",
+    ],
+  ),
+  _RecipeMockUp(
       name: "Jerk Chicken and Salad",
       backgroundImage: AssetImage('assets/images/recipes/chicken.jpg'),
       method: <String>[
