@@ -7,14 +7,14 @@
         <h3>New Test</h3>
             <div class="row">
                 <div class="input-field col s12">
+                    <p>Title</p>
                     <input type="text" v-model.trim="title">
-                    <label>Title</label>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col s12">
+                    <p>Department</p>
                     <input type="text" v-model.trim="department">
-                    <label>Department</label>
                 </div>
             </div>
             <ul class="collapsible">
@@ -26,7 +26,15 @@
                 </li>
             </ul>
             <div>
-                <textEditor v-on:editorData="saveTest($event)"/>
+                <textEditor ref="textEditor"/>
+            </div>
+            <div class="navButtons">
+                <button type="submit" class="btn" @click="saveTest">Submit</button>
+
+                <router-link
+                to="/view-tests"
+                class="btn grey"
+                >Cancel</router-link>
             </div>
         </div>
     </div>
@@ -52,13 +60,16 @@ export default {
         textEditor
     },
     methods: {
-        saveTest(information) { //information - from the text editor
+        saveTest() { 
             if(this.validInputs()) {
+                // run the editors save method
+                this.$refs.textEditor.saveEditorData()
+                // save the document
                 db.collection('tests').add({
                     title: this.title,
                     type: this.department,
-                    description: (information[0] !== undefined ? information[0] : ''), // information[0] is the editor text
-                    editorImages: (information[1] !== undefined ? information[1] : '') // information[1] is the array of image names
+                    description: this.$refs.textEditor.htmlForEditor, 
+                    editorImages: this.$refs.textEditor.images
                 })
                 .then(docRef => {
                     console.log("Document written with ID: ", docRef.id);
@@ -88,5 +99,20 @@ export default {
     }
 }
 
-
 </script>
+
+<style scoped>
+.navButtons {
+    padding-top: 10px;
+}
+p {
+  color: #2196f3;
+}
+h3 {
+  font-weight: bold;
+  margin-left: 20px;
+}
+.collapsible-header {
+    color: #2196f3;
+}
+</style>

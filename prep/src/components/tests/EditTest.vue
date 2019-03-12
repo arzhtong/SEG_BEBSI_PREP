@@ -45,7 +45,18 @@
                 </div>
             </div>
             <div v-if="dataLoaded">
-                <textEditor v-on:editorData="saveTest($event)" :editorInformation="htmlForEditor" :editorImages="imagesForEditor"/>
+                <textEditor 
+                :editorInformation="htmlForEditor" 
+                :editorImages="imagesForEditor"
+                ref="textEditor"/>
+            </div>
+            <div class="navButtons">
+                <button type="submit" class="btn" @click="updateTest">Submit</button>
+
+                <router-link
+                to="/view-tests"
+                class="btn grey"
+                >Cancel</router-link>
             </div>
         </div>
     </div>
@@ -104,8 +115,36 @@ export default {
                 }
                 });
             },
-        check() {
-            alert(this.htmlForEditor)
+        updateTest() {
+            if(this.validInputs()) {
+                // run the editors save method
+                this.$refs.textEditor.saveEditorData()
+                // update the document
+                db.collection("tests")
+                    .doc(this.$route.params.test_id)
+                    .update({
+                        title: this.title,
+                        type: this.department,
+                        description: this.$refs.textEditor.htmlForEditor,
+                        editorImages: this.$refs.textEditor.images
+                    })
+                    .then(() => {
+                        alert("Test info updated!")
+                    })
+                    .catch(function(error) {
+                        console.error("Error writing document: ", error)
+                        return // dont leave the page if save fails
+                    })
+                    // return to tests page
+                    this.$router.push("/view-tests")
+            }
+        },
+        validInputs() {
+            if(this.title === '' || this.department ==='') {
+                alert('Please enter a title and department for this test before saving')
+                return false
+            }
+            return true
         }
     },
     mounted() {
@@ -118,6 +157,9 @@ export default {
 </script>
 
 <style scoped>
+.navButtons {
+    padding-top: 10px;
+}
 p {
   color: #2196f3;
 }
