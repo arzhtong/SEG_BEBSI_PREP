@@ -3,9 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:prep/screens/appointment.screen.dart';
 
 class Dashboard extends StatefulWidget {
+  Firestore db;
+  Dashboard(this.db);
+
   @override
   State<StatefulWidget> createState() {
     return _DashboardState();
@@ -29,6 +34,25 @@ class _DashboardState extends State<Dashboard> {
   bool validationResultDb;
   bool validationResultFile;
 
+  // Subscribe user to message notifications
+  void _subscribeToNotifications(String appointmentID) {
+    final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+    firebaseMessaging.autoInitEnabled();
+    /* firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) {},
+      onResume: (Map<String, dynamic> message) {},
+      onLaunch: (Map<String, dynamic> message) {},
+    ); */
+    firebaseMessaging.subscribeToTopic(appointmentID);
+  }
+
+  // Unsubscribe user from all message notifications
+  // TODO: change structure of removing appointments, to allow unsubscribing from each appointment.
+  void _unsubscribeFromNotifications() {
+    final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+    firebaseMessaging.deleteInstanceID();
+  }
+
   // Checks if an appointment ID exists in the codes file
   bool _documentInCodeFile(String value) {
     return codeFileState.split(',').contains(value);
@@ -36,6 +60,7 @@ class _DashboardState extends State<Dashboard> {
 
   // Writes data to the codes file
   Future<File> writeData() async {
+    _subscribeToNotifications(codeController.text);
     //must apply set state to make sure the calendar is redrawn
     setState(() {
       codeFileState = codeFileState + codeController.text + ',';
@@ -46,6 +71,7 @@ class _DashboardState extends State<Dashboard> {
 
   // Writes data to the codes file
   Future<File> clearData() async {
+    _unsubscribeFromNotifications();
     //must apply set state to make sure the calendar is redrawn
     setState(() {
       codeFileState = "";
@@ -54,11 +80,17 @@ class _DashboardState extends State<Dashboard> {
     return storage.writeData("");
   }
 
+  // Overrides the data in the codes file
+  Future<File> overrideData(String newFileState) async {
+    codeFileState = newFileState;
+    return await storage.writeData(newFileState);
+  }
+
   // Checks if a code exists in the Firestore
   Future<bool> _isCodeInFirestore (String code) async {
     List<String> liveIDs = new List();
 
-    await Firestore.instance.collection('appointments').getDocuments().then((query) {
+    await widget.db.collection('appointments').where("datetime", isGreaterThan: DateTime.now().subtract(Duration(days: 1))).getDocuments().then((query) {
       query.documents.forEach((document) {
         liveIDs.add(document.documentID);
       });
@@ -83,21 +115,46 @@ class _DashboardState extends State<Dashboard> {
       });
     }
 
+    //reading file and updating codeFileState
     await storage.readData().then((String value){
       codeFileState = value;
     });
 
+    //reading appointments from the database and updating the codes file
+    documentList = new List();
+    List<Widget> calendarElements = new List();
+
+    testDocList = await widget.db.collection('appointments')
+        .where("datetime", isGreaterThan: DateTime.now()
+        .subtract(Duration(days: 1))).orderBy('datetime').getDocuments();
+    documentList = testDocList.documents;
+
+    // Remove codes from the codes file that are past their date in the database
+    List<String> documentIDs = new List();
+    documentList.forEach((doc) {
+      documentIDs.add(doc.documentID);
+    });
+
+    //print("Document IDs: " + documentIDs.toString());
+    print(codeFileState.split(',').toString());
+
+    String newCodeFileState = "";
+    codeFileState.split(',').forEach((code){
+      if (documentIDs.contains(code)){
+        newCodeFileState = newCodeFileState + code + ',';
+      }
+    });
+
+    await overrideData(newCodeFileState).then((_){});
+
+    // print("NEW CODE FILE: " + newCodeFileState);
+
+    // building the return widget based on the updated (current) codes file
     if (codeFileState == null){
       return null;
     } else if (codeFileState.isEmpty) {
       return _EmptyCalendarPlaceholder();
     } else {
-      documentList = new List();
-      List<Widget> calendarElements = new List();
-
-      testDocList = await Firestore.instance.collection('appointments').orderBy('datetime').getDocuments();
-      documentList = testDocList.documents;
-
       //Generates a list of filtered appointments
       List<DocumentSnapshot> filteredDocuments= new List();
       documentList.forEach((doc){
@@ -107,42 +164,15 @@ class _DashboardState extends State<Dashboard> {
       });
       documentList = filteredDocuments;
 
-      //calendar building
-//      calendarElements.add(_CalendarLabel(documentList.elementAt(0).data['datetime']));
-//      calendarElements.add(_CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime']));
-//
-//      for (int i = 1; i < documentList.length; i++){
-//        if (documentList.elementAt(i).data['datetime'] != documentList.elementAt(i - 1).data['datetime']){
-//          calendarElements.add(_CalendarLabel(documentList.elementAt(i).data['datetime']));
-//          calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
-//        } else {
-//          calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime']));
-//        }
-//      }
+      calendarElements.add(_CalendarLabel(documentList.elementAt(0).data['datetime'].toDate()));
+      calendarElements.add(_CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime'].toDate(), documentList.elementAt(0).data['testID']));
 
-      if (Platform.isAndroid) { //ANDROID
-        calendarElements.add(_CalendarLabel(Date.and(documentList.elementAt(0).data['datetime'])));
-        calendarElements.add(_CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], Date.and(documentList.elementAt(0).data['datetime'])));
-
-        for (int i = 1; i < documentList.length; i++){
-          if (Date.and(documentList.elementAt(i).data['datetime']).equals(Date.and(documentList.elementAt(i - 1).data['datetime']))){
-            calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], Date.and(documentList.elementAt(i).data['datetime'])));
-          } else {
-            calendarElements.add(_CalendarLabel(Date.and(documentList.elementAt(i).data['datetime'])));
-            calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], Date.and(documentList.elementAt(i).data['datetime'])));
-          }
-        }
-      } else {  //iOS
-        calendarElements.add(_CalendarLabel(Date.ios(documentList.elementAt(0).data['datetime'])));
-        calendarElements.add(_CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], Date.ios(documentList.elementAt(0).data['datetime'])));
-
-        for (int i = 1; i < documentList.length; i++){
-          if (Date.ios(documentList.elementAt(i).data['datetime']).equals(Date.ios(documentList.elementAt(i - 1).data['datetime']))){
-            calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], Date.ios(documentList.elementAt(i).data['datetime'])));
-          } else {
-            calendarElements.add(_CalendarLabel(Date.ios(documentList.elementAt(i).data['datetime'])));
-            calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], Date.ios(documentList.elementAt(i).data['datetime'])));
-          }
+      for (int i = 1; i < documentList.length; i++){
+        if (documentList.elementAt(i).data['datetime'].toDate() == (documentList.elementAt(i - 1).data['datetime'].toDate())){
+          calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime'].toDate(), documentList.elementAt(i).data['testID']));
+        } else {
+          calendarElements.add(_CalendarLabel(documentList.elementAt(i).data['datetime'].toDate()));
+          calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime'].toDate(), documentList.elementAt(i).data['testID']));
         }
       }
 
@@ -170,6 +200,12 @@ class _DashboardState extends State<Dashboard> {
               icon: Icon(Icons.delete_sweep),
               onPressed: (){
                 clearData();
+              }
+          ),
+          IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: (){
+                setState(() {});
               }
           )
         ],
@@ -257,7 +293,7 @@ class _DashboardState extends State<Dashboard> {
 }
 
 class _CalendarLabel extends StatelessWidget {
-  final Date dateTime;
+  final DateTime dateTime;
 
   _CalendarLabel(this.dateTime);
 
@@ -274,7 +310,7 @@ class _CalendarLabel extends StatelessWidget {
     );
   }
 
-  String dateTimeFormater(Date datetime){
+  String dateTimeFormater(DateTime datetime){
     String formattedString = datetime.day.toString();
 
     switch(datetime.month){
@@ -313,9 +349,10 @@ class _CalendarLabel extends StatelessWidget {
 class _CalendarCard extends StatelessWidget {
   final String name;
   final String location;
-  final Date dateTime;
+  final DateTime dateTime;
+  final String testID;
 
-  _CalendarCard(this.name, this.location, this.dateTime);
+  _CalendarCard(this.name, this.location, this.dateTime, this.testID);
 
   @override
   Widget build(BuildContext context) {
@@ -327,7 +364,7 @@ class _CalendarCard extends StatelessWidget {
           onTap: () {
             Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Appointment(name))
+                MaterialPageRoute(builder: (context) => Appointment(name, testID, 0))
             );
           },
           child: Column(
@@ -352,7 +389,7 @@ class _CalendarCard extends StatelessWidget {
               ListTile(
                 leading: Icon(Icons.today),
                 title: Text(name),
-                subtitle: Text(location + " - " + dateTime.getDate()),
+                subtitle: Text(location + " - " + dateTime.toString()),
                 //subtitle: Text("St. Thomas Hospital - 11:00 am"),
               ),
             ],
@@ -432,34 +469,4 @@ class Storage {
   }
 }
 
-class Date {
-  int year = 0;
-  int month = 0;
-  int day = 0;
-  int hour = 0;
-  int minute = 0;
-  int second = 0;
-
-  Date();
-
-  Date.and(DateTime datetime) {
-    year = datetime.year;
-    month = datetime.month;
-    day = datetime.day;
-  }
-
-  Date.ios(Timestamp timestamp) {
-    year = timestamp.toDate().year;
-    month = timestamp.toDate().month;
-    day = timestamp.toDate().day;
-  }
-
-  String getDate(){
-    return day.toString() + " - " + month.toString() + " - " + year.toString();
-  }
-
-  @override
-  bool equals(Date other){
-    return (this.year == other.year && this.month == other.month && this.day == other.day);
-  }
-}
+//return (this.year == other.year && this.month == other.month && this.day == other.day);

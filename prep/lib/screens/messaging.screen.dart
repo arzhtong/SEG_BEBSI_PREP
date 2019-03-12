@@ -25,8 +25,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
     if (!message['seenByPatient'])
       MessagingQueries.setSeenByPatient(document.reference);
 
-    String decryptedMessage = MessageCrypto.decryptMessage(
-        message['content'], message['datetime'].toDate().millisecondsSinceEpoch);
+    String decryptedMessage = MessageCrypto.decryptMessage(message['content']);
 
     // TODO: Remove seenByStaff, as the patient should not see read receipts
     _messagesView.addMessage(
@@ -142,10 +141,8 @@ class _TextComposerState extends State<_TextComposer> {
   void _sendMessage(String messageText) {
     if (_hasTyped) {
       setState(() => _hasTyped = false);
-      DateTime now = DateTime.now();
-      String encryptedMessage =
-          MessageCrypto.encryptMessage(messageText, now.millisecondsSinceEpoch);
-      MessagingQueries.sendMessage(encryptedMessage, now);
+      String encryptedMessage = MessageCrypto.encryptMessage(messageText);
+      MessagingQueries.sendMessage(encryptedMessage);
       _textController.clear();
     }
   }

@@ -22,7 +22,7 @@ class MessageCrypto {
     _appointmentID = appointmentID;
   }
 
-  static String encryptMessage(String message, int millisSinceEpoch) {
+  static String encryptMessage(String message) {
     Random rand = Random.secure();
     int ivArrayLength = 16;
     Uint8List iv = Uint8List(ivArrayLength);
@@ -30,36 +30,32 @@ class MessageCrypto {
       iv[i] = rand.nextInt(256);
     }
 
-    String encodedIV = HEX.encode(iv);
-    PaddedBlockCipher cipher = getCipher(true, iv, millisSinceEpoch);
-
-    String encodedMessage =
-        HEX.encode(cipher.process(utf8.encode(message)));
-    String encodedText = encodedIV + encodedMessage;
+    PaddedBlockCipher cipher = getCipher(true, iv);
+    String encodedText =
+        HEX.encode(iv) + HEX.encode(cipher.process(utf8.encode(message)));
     return encodedText;
   }
 
-  static String decryptMessage(String message, int millisSinceEpoch) {
+  static String decryptMessage(String message) {
     String encodedIV = message.substring(0, 32);
     Uint8List iv = HEX.decode(encodedIV);
-    PaddedBlockCipher cipher = getCipher(false, iv, millisSinceEpoch);
 
+    PaddedBlockCipher cipher = getCipher(false, iv);
     String encodedMessage = message.substring(32);
     String decodedMessage =
         utf8.decode(cipher.process(HEX.decode(encodedMessage)));
     return decodedMessage;
   }
 
-  static PaddedBlockCipher getCipher(bool mode, Uint8List iv, int millisSinceEpoch) {
-    String millisStr = millisSinceEpoch.toString();
-    String keyToEncode =
-        _appointmentID + millisStr.substring(millisStr.length - 7);
-
-    String keyEncoded = HEX.encode(utf8.encode(keyToEncode));
-    List<int> keyEncodedList = utf8.encode(keyEncoded);
+  static PaddedBlockCipher getCipher(bool mode, Uint8List iv) {
+    Digest md5 = Digest("MD5");
+    String hexEncryptedIV = HEX.encode(md5.process(iv));
+    Uint8List keyArray = utf8.encode(_appointmentID + hexEncryptedIV);
+    String hexEncryptedKey = HEX.encode(md5.process(keyArray));
+    Uint8List encryptedKeyArray = utf8.encode(hexEncryptedKey);
 
     Mac mac = new Mac("SHA-512/HMAC");
-    mac.init(KeyParameter(keyEncodedList));
+    mac.init(KeyParameter(encryptedKeyArray));
     String keyHash = HEX.encode(mac.process(Uint8List(0))).substring(0, 32);
     Uint8List keyHashList = utf8.encode(keyHash);
 

@@ -32,9 +32,9 @@ class MessagingQueries {
         .collection('messages');
   }
 
-  static void sendMessage(String message, DateTime datetime) => _colRef.add({
+  static void sendMessage(String message) => _colRef.add({
         'content': message,
-        'datetime': datetime,
+        'datetime': DateTime.now(),
         'isPatient': true,
         'seenByPatient': true,
         'seenByStaff': false
