@@ -19,64 +19,30 @@ class _AppointmentPrepState extends State<AppointmentPrep> {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: Firestore.instance.collection('tests')
-          .document(widget._testID).collection('prepCards').getDocuments().asStream(),
+          .document(widget._testID).collection('prepCards').snapshots(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return const Text('Loading...');
-          return ListView.builder(
-            itemCount: 1,
-            itemBuilder: (context, index) =>_buildWidget(context,snapshot.data)
+        if (!snapshot.hasData) return const Align(alignment: Alignment.topCenter, child: LinearProgressIndicator(),);
+          return GridView.builder(
+            padding: EdgeInsets.only(top: 10),
+            //gridDelegate: new SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 300, childAspectRatio: (3/2)),
+            gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: (MediaQuery.of(context).orientation == Orientation.portrait) ? 2 : 3, childAspectRatio: (3/1.5)),
+            itemCount: snapshot.data.documents.length,
+            itemBuilder: (context, index) =>_buildGrid(context,snapshot.data.documents[index])
           );
         }
     );
   }
 
-  Widget _buildWidget(BuildContext context, QuerySnapshot snapshot) {
-    List<Widget> lists = new List();
-    List<Widget> informations = new List();
-    List<Widget> recipes = new List();
-    List<Widget> faqs = new List();
-
-    snapshot.documents.forEach((document){
-      //print(document.documentID);
-
-      if (document['type'] == "categoryList") {
-        lists.add(CategoryCard(document['contents'],
-            document['title'],
-            document['type'],
-            widget._testID,
-            widget._appointmentID,
-            Colors.blue[50]));
-      } else if (document['type'] == "informations") {
-        informations.add(CategoryCard(document['contents'],
-            document['title'],
-            document['type'],
-            widget._testID,
-            widget._appointmentID,
-            Colors.purple[50]));
-      } else if (document['type'] == "faqs") {
-        faqs.add(CategoryCard(document['contents'],
-            document['title'],
-            document['type'],
-            widget._testID,
-            widget._appointmentID,
-            Colors.green[50]));
-      } else {
-        recipes.add(CategoryCard(document['contents'],
-            document['title'],
-            document['type'],
-            widget._testID,
-            widget._appointmentID,
-            Colors.red[50]));
-      }
-    });
-
-    return Column(
-      children: <Widget>[
-        CategoryExpansionTile("Information", informations, Colors.deepPurple, Icons.info),
-        CategoryExpansionTile("FAQs", faqs, Colors.green, Icons.question_answer),
-        CategoryExpansionTile("Lists", lists, Colors.blue, Icons.list),
-        CategoryExpansionTile("Recipes", recipes, Colors.red, Icons.fastfood),
-      ],
+  Widget _buildGrid(BuildContext context, DocumentSnapshot document) {
+    return GridTile(
+      child: CategoryCard(document['contents'],
+        document['title'],
+        document['type'],
+        widget._testID,
+        widget._appointmentID,
+        Colors.white,
+        Icons.android
+      ),
     );
   }
 }
@@ -116,8 +82,9 @@ class CategoryCard extends StatelessWidget {
   final String _testID;
   final String _appointmentID;
   final Color color;
+  final IconData icon;
 
-  CategoryCard(this.contents, this.title, this.type, this._testID, this._appointmentID, this.color);
+  CategoryCard(this.contents, this.title, this.type, this._testID, this._appointmentID, this.color, this.icon);
 
   Future _navigate(dynamic context) {
     //TODO: add links to the relevant pages
@@ -134,22 +101,64 @@ class CategoryCard extends StatelessWidget {
     }
   }
 
+  CircleAvatar _getIcon(){
+    if (type == "categoryList") {
+        return CircleAvatar(
+          backgroundColor: Colors.blue,
+          child: Icon(
+            Icons.list,
+            color: Colors.white,
+          ),
+        );
+    } else if (type == "informations") {
+      return CircleAvatar(
+        backgroundColor: Colors.deepPurple,
+        child: Icon(
+          Icons.info,
+          color: Colors.white,
+        ),
+      );
+    } else if (type == "faqs") {
+      return CircleAvatar(
+        backgroundColor: Colors.green,
+        child: Icon(
+          Icons.question_answer,
+          color: Colors.white,
+        ),
+      );
+    } else {
+      return CircleAvatar(
+        backgroundColor: Colors.red,
+        child: Icon(
+          Icons.fastfood,
+          color: Colors.white,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.only(right: 10.0, left: 10.0, top: 5.0, bottom: 5.0),
+      padding: EdgeInsets.only(right: 10.0, left: 10.0, top: 5.0, bottom: 5.0),
         child: Card(
           color: color,
           elevation: 3.0,
           child: InkWell(
-              onTap: () {
-                _navigate(context);
-              },
+            onTap: () {
+              _navigate(context);
+            },
+            child: Center(
               child: ListTile(
-                title: Text(title),
-              )
+                leading: _getIcon(),
+                title: Text(
+                  title,
+                  maxLines: 3,
+                ),
+              ),
+            )
           ),
-        )
+        ),
     );
   }
 }
