@@ -150,7 +150,7 @@ export default {
         })
         .then(docRef => {
           this.addDailyCheckups();
-          alert("Successfully created new appointment!");
+          alert("Successfully created new appointment with code " + this.code + " !");
           this.$router.push("/view-appointments");
         })
         .catch(error => console.log(err));

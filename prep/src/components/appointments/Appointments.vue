@@ -306,7 +306,7 @@ export default {
           .delete()
           .then(() => {
             console.log("Document successfully deleted!");
-            alert(`Successfully deleted Appointment`);
+            alert(`Successfully deleted appointment ` + code);
             location.reload();
           })
           .catch(function(error) {
