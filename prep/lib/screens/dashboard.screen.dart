@@ -364,7 +364,7 @@ class _CalendarCard extends StatelessWidget {
           onTap: () {
             Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Appointment(name, testID))
+                MaterialPageRoute(builder: (context) => Appointment(name, testID, 0))
             );
           },
           child: Column(

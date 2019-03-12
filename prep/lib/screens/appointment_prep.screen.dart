@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'information_parser.screen.dart';
+import 'faq_parser.screen.dart';
 import './category.screen.dart';
 
 class AppointmentPrep extends StatefulWidget {
   final String _testID;
+  final String _appointmentID;
 
-  AppointmentPrep(this._testID);
+  AppointmentPrep(this._testID, this._appointmentID);
 
   @override
   _AppointmentPrepState createState() => _AppointmentPrepState();
@@ -30,7 +32,8 @@ class _AppointmentPrepState extends State<AppointmentPrep> {
 
   Widget _makeData(BuildContext context, DocumentSnapshot document) {
     return CategoryCard(document['contents'].toString(),
-        document['title'].toString(), document['type'].toString(), widget._testID);
+        document['title'].toString(), document['type'].toString(),
+        widget._testID, widget._appointmentID);
   }
 }
 
@@ -39,8 +42,9 @@ class CategoryCard extends StatelessWidget {
   final String title;
   final String type;
   final String _testID;
+  final String _appointmentID;
 
-  CategoryCard(this.contents, this.title, this.type, this._testID);
+  CategoryCard(this.contents, this.title, this.type, this._testID, this._appointmentID);
 
   Widget _getCategoryIcon(String type) {
     switch (type) {
@@ -60,7 +64,7 @@ class CategoryCard extends StatelessWidget {
             color: Colors.white,
           ),
         );
-      case "recipieView":
+      case "recipeView":
         return CircleAvatar(
           backgroundColor: Colors.redAccent,
           child: Icon(
@@ -72,7 +76,7 @@ class CategoryCard extends StatelessWidget {
         return CircleAvatar(
           backgroundColor: Colors.red,
           child: Icon(
-            Icons.info,
+            Icons.question_answer,
             color: Colors.white,
           ),
         );
@@ -90,7 +94,7 @@ class CategoryCard extends StatelessWidget {
       case "recipieView":
         return null;
       default:
-        return null;
+        return Navigator.push(context, MaterialPageRoute(builder: (context) => FaqParser(_testID, _appointmentID)));
     }
   }
 

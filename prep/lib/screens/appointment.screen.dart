@@ -8,28 +8,32 @@ import 'package:prep/screens/messaging.screen.dart';
 class Appointment extends StatefulWidget {
   final String _appointmentID;
   final String _testID;
-  Appointment(this._appointmentID, this._testID);
+  final int index;
+
+  Appointment(this._appointmentID, this._testID, this.index);
 
   @override
   State<StatefulWidget> createState() {
     print("Appointment screen recieved: " + _appointmentID);
-    return _AppointmentState();
+    return _AppointmentState(index);
   }
 }
 
 class _AppointmentState extends State<Appointment> {
-  int _selectedIndex = 0;
+  int _selectedIndex;
   AppointmentInfo _appointmentInfo;
   AppointmentPrep _appointmentPrep;
   DailyCheckups _dailyCheckups;
   MessagingScreen _messagingScreen;
+
+  _AppointmentState(this._selectedIndex);
 
   Widget getPage(int index) {
     switch(index){
       case 1:
         return (_appointmentPrep != null)
           ? _appointmentPrep
-          : _appointmentPrep = AppointmentPrep(widget._testID);
+          : _appointmentPrep = AppointmentPrep(widget._testID, widget._appointmentID);
       case 2:
         return (_dailyCheckups != null)
         ? _dailyCheckups
@@ -47,6 +51,7 @@ class _AppointmentState extends State<Appointment> {
 
   @override
   Widget build(BuildContext context) {
+    print("APPOINTMENT SCREEN BUILD METHOD RUN");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.indigo,
