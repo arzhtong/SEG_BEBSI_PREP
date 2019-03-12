@@ -168,7 +168,7 @@ export default {
               .collection("dailyCheckups")
               .add(doc.data())
               .then(docRef => {
-                tconsole.log("Added dailyCheckup");
+                console.log("Added dailyCheckup");
               })
               .catch(error => console.log(err));
           });
