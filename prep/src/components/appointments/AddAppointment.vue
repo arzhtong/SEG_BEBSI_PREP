@@ -146,11 +146,12 @@ export default {
           ),
           location: this.location,
           staffMember: this.staffMember,
-          testID: this.testID.testID
+          testID: this.testID.testID,
+          expired: false
         })
         .then(docRef => {
           this.addDailyCheckups();
-          alert("Successfully created new appointment!");
+          alert("Successfully created new appointment with code " + this.code + " !");
           this.$router.push("/view-appointments");
         })
         .catch(error => console.log(err));
@@ -167,7 +168,7 @@ export default {
               .collection("dailyCheckups")
               .add(doc.data())
               .then(docRef => {
-                tconsole.log("Added dailyCheckup");
+                console.log("Added dailyCheckup");
               })
               .catch(error => console.log(err));
           });
