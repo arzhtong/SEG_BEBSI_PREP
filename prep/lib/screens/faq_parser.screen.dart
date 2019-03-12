@@ -51,7 +51,7 @@ class _FaqParserState extends State<FaqParser> {
                 (document['informationShortcut'])
                   ? IconButton(
                       icon: Icon(Icons.info),
-                      color: Colors.purple,
+                      color: Colors.deepPurple,
                       onPressed: () {
                         Navigator.push(
                             context, MaterialPageRoute(builder: (context) =>

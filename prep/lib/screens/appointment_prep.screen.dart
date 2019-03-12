@@ -23,7 +23,6 @@ class _AppointmentPrepState extends State<AppointmentPrep> {
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const Text('Loading...');
           return ListView.builder(
-            //padding: EdgeInsets.only(top: 10.0),
             itemCount: 1,
             itemBuilder: (context, index) =>_buildWidget(context,snapshot.data)
           );
@@ -38,94 +37,74 @@ class _AppointmentPrepState extends State<AppointmentPrep> {
     List<Widget> faqs = new List();
 
     snapshot.documents.forEach((document){
-      print(document.documentID);
+      //print(document.documentID);
 
       if (document['type'] == "categoryList") {
         lists.add(CategoryCard(document['contents'],
             document['title'],
             document['type'],
             widget._testID,
-            widget._appointmentID));
+            widget._appointmentID,
+            Colors.blue[50]));
       } else if (document['type'] == "informations") {
         informations.add(CategoryCard(document['contents'],
             document['title'],
             document['type'],
             widget._testID,
-            widget._appointmentID));
+            widget._appointmentID,
+            Colors.purple[50]));
       } else if (document['type'] == "faqs") {
         faqs.add(CategoryCard(document['contents'],
             document['title'],
             document['type'],
             widget._testID,
-            widget._appointmentID));
+            widget._appointmentID,
+            Colors.green[50]));
       } else {
         recipes.add(CategoryCard(document['contents'],
             document['title'],
             document['type'],
             widget._testID,
-            widget._appointmentID));
+            widget._appointmentID,
+            Colors.red[50]));
       }
     });
 
     return Column(
       children: <Widget>[
-        ExpansionTile(
-          initiallyExpanded: true,
-          title: ListTile(
-            leading: CircleAvatar(
-              backgroundColor: Colors.deepPurple,
-              child: Icon(
-                Icons.info,
-                color: Colors.white,
-              ),
-            ),
-            title: Text("Information"),
-          ),
-          children: informations,
-        ),
-        ExpansionTile(
-          initiallyExpanded: true,
-          title: ListTile(
-            leading: CircleAvatar(
-              backgroundColor: Colors.blue,
-              child: Icon(
-                Icons.list,
-                color: Colors.white,
-              ),
-            ),
-            title: Text("Lists"),
-          ),
-          children: lists,
-        ),
-        ExpansionTile(
-          initiallyExpanded: true,
-          title: ListTile(
-            leading: CircleAvatar(
-              backgroundColor: Colors.redAccent,
-              child: Icon(
-                Icons.fastfood,
-                color: Colors.white,
-              ),
-            ),
-            title: Text("Repiceps"),
-          ),
-          children: recipes,
-        ),
-        ExpansionTile(
-          initiallyExpanded: true,
-          title: ListTile(
-            leading: CircleAvatar(
-              backgroundColor: Colors.green,
-              child: Icon(
-                Icons.question_answer,
-                color: Colors.white,
-              ),
-            ),
-            title: Text("FAQs"),
-          ),
-          children: faqs,
-        ),
+        CategoryExpansionTile("Information", informations, Colors.deepPurple, Icons.info),
+        CategoryExpansionTile("FAQs", faqs, Colors.green, Icons.question_answer),
+        CategoryExpansionTile("Lists", lists, Colors.blue, Icons.list),
+        CategoryExpansionTile("Recipes", recipes, Colors.red, Icons.fastfood),
       ],
+    );
+  }
+}
+
+class CategoryExpansionTile extends StatelessWidget {
+  final String name;
+  final List<Widget> contents;
+  final Color color;
+  final IconData icon;
+
+  CategoryExpansionTile(this.name, this.contents, this.color, this.icon);
+
+  @override
+  Widget build(BuildContext context) {
+    return ExpansionTile(
+      initiallyExpanded: true,
+      title: ListTile(
+        contentPadding: EdgeInsets.only(left: 0.0),
+        leading: CircleAvatar(
+          backgroundColor: color,
+          child: Icon(
+            icon,
+            color: Colors.white,
+          ),
+        ),
+        title: Text(name),
+      ),
+      children: contents
     );
   }
 }
@@ -136,45 +115,9 @@ class CategoryCard extends StatelessWidget {
   final String type;
   final String _testID;
   final String _appointmentID;
+  final Color color;
 
-  CategoryCard(this.contents, this.title, this.type, this._testID, this._appointmentID);
-
-  Widget _getCategoryIcon(String type) {
-    switch (type) {
-      case "informations":
-        return CircleAvatar(
-          backgroundColor: Colors.grey[300],
-          child: Icon(
-            Icons.info,
-            color: Colors.white,
-          ),
-        );
-      case "categoryList":
-        return CircleAvatar(
-          backgroundColor: Colors.grey[300],
-          child: Icon(
-            Icons.list,
-            color: Colors.white,
-          ),
-        );
-      case "recipeView":
-        return CircleAvatar(
-          backgroundColor: Colors.grey[300],
-          child: Icon(
-            Icons.fastfood,
-            color: Colors.white,
-          ),
-        );
-      default:
-        return CircleAvatar(
-          backgroundColor: Colors.grey[300],
-          child: Icon(
-            Icons.question_answer,
-            color: Colors.white,
-          ),
-        );
-    }
-  }
+  CategoryCard(this.contents, this.title, this.type, this._testID, this._appointmentID, this.color);
 
   Future _navigate(dynamic context) {
     //TODO: add links to the relevant pages
@@ -184,7 +127,7 @@ class CategoryCard extends StatelessWidget {
         return Navigator.push(context, MaterialPageRoute(builder: (context) => InformationParser(_testID, contents)));
       case "categoryList":
         return null;
-      case "recipieView":
+      case "recipeView":
         return null;
       default:
         return Navigator.push(context, MaterialPageRoute(builder: (context) => FaqParser(_testID, _appointmentID)));
@@ -196,13 +139,13 @@ class CategoryCard extends StatelessWidget {
     return Container(
         padding: EdgeInsets.only(right: 10.0, left: 10.0, top: 5.0, bottom: 5.0),
         child: Card(
+          color: color,
           elevation: 3.0,
           child: InkWell(
               onTap: () {
                 _navigate(context);
               },
               child: ListTile(
-                //leading: _getCategoryIcon(type),
                 title: Text(title),
               )
           ),
