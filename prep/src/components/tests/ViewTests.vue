@@ -16,26 +16,54 @@
             <th>Preparation cards</th>
             <th>Preparation contents</th>
             <th>Recipes</th>
+            <th>edit</th>
           </tr>
         </thead>
 
         <tbody v-for="test in tests" v-bind:key="test.id" class="collection-item">
           <tr>
-            <td style="padding: 20px;">{{test.title}}</td>
+            <td style="padding: 20px;">{{test.title}}{{test.hasRecipes}}</td>
             <td>
-              <router-link to class="btn blue">Show</router-link>
+                <div id="badge">
+                    <span class="new badge red center-align" data-badge-caption="Incomplete"></span>
+                </div>
+                <div>
+                    <router-link to class="btn blue">Show</router-link>
+                </div>
             </td>
             <td>
-              <router-link to class="btn blue">Show</router-link>
+                <div id="badge">
+                    <span class="new badge red center-align" data-badge-caption="Incomplete"></span>
+                </div>
+                <div>
+                    <router-link to class="btn blue">Show</router-link>
+                </div>
             </td>
             <td>
-              <router-link to class="btn blue">Show</router-link>
+                <div id="badge">
+                    <span class="new badge red center-align" data-badge-caption="Incomplete"></span>
+                </div>
+                <div>
+                    <router-link to class="btn blue">Show</router-link>
+                    <!-- <button @click="incomplete(test.id, 'recipes')">test</button> -->
+                </div>
             </td>
             <td>
-              <router-link
-                v-bind:to="{name: 'view-recipes', params: {test_id: test.id}}"
-                class="btn blue"
-              >Show</router-link>
+                <div id="badge">
+                    <span class="new badge red center-align" data-badge-caption="Incomplete"></span>
+                </div>
+                <div>
+                <router-link
+                    v-bind:to="{name: 'view-recipes', params: {test_id: test.id}}"
+                    class="btn blue"
+                >Show</router-link>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <router-link 
+                    v-bind:to="{name: 'edit-test', params: {test_id: test.id}}" class="btn blue">Edit</router-link>
+                </div>
             </td>
           </tr>
         </tbody>
@@ -65,13 +93,33 @@ export default {
           const data = {
             id: doc.id,
             test_id: doc.data().testID,
-            title: doc.data().title
+            title: doc.data().title,
+            // hasDailyCheckups: ,
+            // hasRecipes: ,
           };
           this.tests.push(data);
         });
       });
+  },
+  methods: {
+    subcollectionEmpty(testID, collection) {
+        return db.collection("tests")
+            .doc(testID)
+            .collection(collection)
+            .get()
+            .then(querySnapshot => {
+                return querySnapshot.size === 0
+            })
+    }
   }
 };
 </script>
 
+<style scoped>
+
+#badge {
+    padding: 3px;
+}
+
+</style>
 
