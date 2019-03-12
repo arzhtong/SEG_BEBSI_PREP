@@ -146,7 +146,8 @@ export default {
           ),
           location: this.location,
           staffMember: this.staffMember,
-          testID: this.testID.testID
+          testID: this.testID.testID,
+          expired: false
         })
         .then(docRef => {
           this.addDailyCheckups();

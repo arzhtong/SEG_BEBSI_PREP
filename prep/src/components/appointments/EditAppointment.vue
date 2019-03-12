@@ -160,7 +160,7 @@ export default {
 
       db.collection("appointments")
         .doc(this.$route.params.id)
-        .set({
+        .update({
           location: this.location,
           testID: this.testID.testID,
           datetime: firebase.firestore.Timestamp.fromDate(

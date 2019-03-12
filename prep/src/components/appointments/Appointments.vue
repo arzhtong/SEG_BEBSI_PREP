@@ -79,6 +79,7 @@
             <th></th>
             <th></th>
             <th></th>
+            <th></th>
           </tr>
         </thead>
 
@@ -105,6 +106,16 @@
                   >remove_red_eye</i>
                 </a>
               </router-link>
+            </td>
+            <td>
+              <a class="tooltip">
+                <span class="tooltiptext">Make Appointment Expired</span>
+                <i
+                  @click="expireAppointment(appointment.code, false)"
+                  class="orange-text material-icons"
+                  style="position:relative;text-align:center;cursor:pointer;"
+                >timer_off</i>
+              </a>
             </td>
             <td>
               <a class="tooltip">
@@ -184,9 +195,18 @@ export default {
       var pastAppointments = [];
       var currentAppointments = [];
       for (var i = 0; i < this.appointments.length; i++) {
-        if (this.appointments[i].datetime.toDate() < this.today) {
+        if (
+          this.appointments[i].datetime.toDate() < this.today ||
+          this.appointments[i].expired == true
+        ) {
+          if (this.appointments[i].expired == false) {
+            this.expireAppointment(this.appointments[i].code, true);
+          }
           pastAppointments.push(this.appointments[i]);
-        } else if (this.appointments[i].datetime.toDate() > this.yesterday) {
+        } else if (
+          this.appointments[i].datetime.toDate() > this.yesterday &&
+          this.appointments[i].expired == false
+        ) {
           currentAppointments.push(this.appointments[i]);
         }
       }
@@ -222,7 +242,8 @@ export default {
                 staffMember: appointment.data().staffMember,
                 location: appointment.data().location,
                 id: appointment.id,
-                testID: appointment.data().testID
+                testID: appointment.data().testID,
+                expired: appointment.data().expired
               };
               this.appointments.push(data);
               this.listenForDailyCheckups(appointment.id);
@@ -254,7 +275,7 @@ export default {
             count: count,
             length: length
           };
-          if(bool){
+          if (bool) {
             this.dailyCheckups.push(data);
           }
           for (var i = 0; i < this.dailyCheckups.length; i++) {
@@ -266,7 +287,7 @@ export default {
         });
     },
     listenForDailyCheckups(id) {
-      this.dailyCheckups=[]
+      this.dailyCheckups = [];
       this.getDailyCheckups(id, true);
       db.collection("appointments")
         .doc(id)
@@ -312,6 +333,41 @@ export default {
           .catch(function(error) {
             console.error("Error removing document: ", error);
             alert(`There was an error: ${error}`);
+          });
+      }
+    },
+    expireAppointment(id, bool) {
+      // Make a specific appointment expired
+      if (bool == false) {
+        if (
+          confirm(
+            "Are you sure you want to mark appointment " + id + " as expired?"
+          )
+        ) {
+          db.collection("appointments")
+            .doc(id)
+            .update({
+              expired: true
+            })
+            .then(function() {
+              location.reload();
+              console.log("Document successfully over-written!");
+            })
+            .catch(function(error) {
+              console.error("Error writing document: ", error);
+            });
+        }
+      } else {
+        db.collection("appointments")
+          .doc(id)
+          .update({
+            expired: true
+          })
+          .then(function() {
+            console.log("Document successfully over-written!");
+          })
+          .catch(function(error) {
+            console.error("Error writing document: ", error);
           });
       }
     },
@@ -394,9 +450,7 @@ export default {
         this.appointments = codeArray;
         this.appointments.push();
       } else {
-        if (inputValue == "") {
-          alert("Please enter a code first!");
-        } else {
+        if (inputValue != "") {
           alert("No code found for " + inputValue + " !");
         }
         this.clearData();
