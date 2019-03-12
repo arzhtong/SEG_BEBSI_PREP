@@ -18,22 +18,115 @@ class _AppointmentPrepState extends State<AppointmentPrep> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: Firestore.instance.collection('tests').document(widget._testID).collection('prepCards').snapshots(),
+      stream: Firestore.instance.collection('tests')
+          .document(widget._testID).collection('prepCards').getDocuments().asStream(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const Text('Loading...');
           return ListView.builder(
-            padding: EdgeInsets.only(top: 10.0),
-            itemCount: snapshot.data.documents.length,
-            itemBuilder: (context, index) =>_makeData(context,snapshot.data.documents[index])
+            //padding: EdgeInsets.only(top: 10.0),
+            itemCount: 1,
+            itemBuilder: (context, index) =>_buildWidget(context,snapshot.data)
           );
         }
     );
   }
 
-  Widget _makeData(BuildContext context, DocumentSnapshot document) {
-    return CategoryCard(document['contents'].toString(),
-        document['title'].toString(), document['type'].toString(),
-        widget._testID, widget._appointmentID);
+  Widget _buildWidget(BuildContext context, QuerySnapshot snapshot) {
+    List<Widget> lists = new List();
+    List<Widget> informations = new List();
+    List<Widget> recipes = new List();
+    List<Widget> faqs = new List();
+
+    snapshot.documents.forEach((document){
+      print(document.documentID);
+
+      if (document['type'] == "categoryList") {
+        lists.add(CategoryCard(document['contents'],
+            document['title'],
+            document['type'],
+            widget._testID,
+            widget._appointmentID));
+      } else if (document['type'] == "informations") {
+        informations.add(CategoryCard(document['contents'],
+            document['title'],
+            document['type'],
+            widget._testID,
+            widget._appointmentID));
+      } else if (document['type'] == "faqs") {
+        faqs.add(CategoryCard(document['contents'],
+            document['title'],
+            document['type'],
+            widget._testID,
+            widget._appointmentID));
+      } else {
+        recipes.add(CategoryCard(document['contents'],
+            document['title'],
+            document['type'],
+            widget._testID,
+            widget._appointmentID));
+      }
+    });
+
+    return Column(
+      children: <Widget>[
+        ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: Colors.deepPurple,
+              child: Icon(
+                Icons.info,
+                color: Colors.white,
+              ),
+            ),
+            title: Text("Information"),
+          ),
+          children: informations,
+        ),
+        ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: Colors.blue,
+              child: Icon(
+                Icons.list,
+                color: Colors.white,
+              ),
+            ),
+            title: Text("Lists"),
+          ),
+          children: lists,
+        ),
+        ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: Colors.redAccent,
+              child: Icon(
+                Icons.fastfood,
+                color: Colors.white,
+              ),
+            ),
+            title: Text("Repiceps"),
+          ),
+          children: recipes,
+        ),
+        ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: Colors.green,
+              child: Icon(
+                Icons.question_answer,
+                color: Colors.white,
+              ),
+            ),
+            title: Text("FAQs"),
+          ),
+          children: faqs,
+        ),
+      ],
+    );
   }
 }
 
@@ -50,7 +143,7 @@ class CategoryCard extends StatelessWidget {
     switch (type) {
       case "informations":
         return CircleAvatar(
-          backgroundColor: Colors.deepPurple,
+          backgroundColor: Colors.grey[300],
           child: Icon(
             Icons.info,
             color: Colors.white,
@@ -58,7 +151,7 @@ class CategoryCard extends StatelessWidget {
         );
       case "categoryList":
         return CircleAvatar(
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.grey[300],
           child: Icon(
             Icons.list,
             color: Colors.white,
@@ -66,7 +159,7 @@ class CategoryCard extends StatelessWidget {
         );
       case "recipeView":
         return CircleAvatar(
-          backgroundColor: Colors.redAccent,
+          backgroundColor: Colors.grey[300],
           child: Icon(
             Icons.fastfood,
             color: Colors.white,
@@ -74,7 +167,7 @@ class CategoryCard extends StatelessWidget {
         );
       default:
         return CircleAvatar(
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.grey[300],
           child: Icon(
             Icons.question_answer,
             color: Colors.white,
@@ -109,7 +202,7 @@ class CategoryCard extends StatelessWidget {
                 _navigate(context);
               },
               child: ListTile(
-                leading: _getCategoryIcon(type),
+                //leading: _getCategoryIcon(type),
                 title: Text(title),
               )
           ),
