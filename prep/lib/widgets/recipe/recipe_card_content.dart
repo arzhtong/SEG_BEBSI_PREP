@@ -11,17 +11,21 @@ class RecipeCardContent extends StatelessWidget {
 
   RecipeCardContent({this.ingredients, this.method, this.note});
 
+  static const String _ingredientListHeadline = "Show ingredients";
+  static const String _preparationsHeadline = "Preparations";
+
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         <Widget>[
-          _buildIngredientList(ingredients, context),
+          _buildShowIngredientExpansionTile(ingredients, context),
           SizedBox(
             height: 16.0,
           ),
         ],
-        _buildMethodInstructions(method),
+        _buildPreparations(method, context),
         <Widget>[
           SizedBox(
             height: 16.0,
@@ -34,7 +38,8 @@ class RecipeCardContent extends StatelessWidget {
     );
   }
 
-  Widget _buildIngredientList(List<String> ingredients, BuildContext context) {
+  Widget _buildShowIngredientExpansionTile(
+      List<String> ingredients, BuildContext context) {
     List<Widget> _ingredientListItems = [];
 
     for (String ingredient in ingredients) {
@@ -45,7 +50,7 @@ class RecipeCardContent extends StatelessWidget {
 
     return ExpansionTile(
       title: Text(
-        "Show ingredients",
+        _ingredientListHeadline,
         style: Theme.of(context).textTheme.button,
       ),
       children: _ingredientListItems,
@@ -54,8 +59,16 @@ class RecipeCardContent extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildMethodInstructions(List<String> method) {
-    List<Widget> retVal = [];
+  List<Widget> _buildPreparations(List<String> method, BuildContext context) {
+    List<Widget> retVal = [
+      Padding(
+        padding: const EdgeInsets.fromLTRB(16.0, 4.0, 0, 16.0),
+        child: Text(
+          _preparationsHeadline,
+          style: Theme.of(context).textTheme.headline.copyWith(fontSize: 18.0),
+        ),
+      ),
+    ];
 
     for (int i = 0; i < method.length; i++) {
       retVal.add(

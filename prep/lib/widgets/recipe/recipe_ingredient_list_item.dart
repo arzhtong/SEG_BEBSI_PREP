@@ -12,7 +12,7 @@ class RecipeIngredientListItem extends StatelessWidget {
         SizedBox(width: 32.0),
         Padding(
           padding: EdgeInsets.all(8.0),
-          child: Icon(Icons.chevron_right),
+          child: Icon(Icons.check),
         ),
         SizedBox(width: 8.0),
         Expanded(
