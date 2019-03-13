@@ -4,7 +4,8 @@ import 'dart:collection';
 
 class DailyCheckups extends StatefulWidget {
   final String _appointmentID;
-  DailyCheckups(this._appointmentID);
+  final DateTime _appointmentDateTime;
+  DailyCheckups(this._appointmentID, this._appointmentDateTime);
 
   @override
   State<StatefulWidget> createState() {
@@ -114,16 +115,41 @@ class _DailyCheckups extends State<DailyCheckups> {
         elevation: 3.0,
         child: ExpansionTile(
           initiallyExpanded: true,
-          leading: Icon(_assignIcon(document['daysBeforeTest'])),
-          title: _getDailyCheckupTitle(document['daysBeforeTest'].toString()),
+          leading: (document['daysBeforeTest'] != 0)
+              ? Icon(_assignIcon(document['daysBeforeTest']))
+              : CircleAvatar(
+                  backgroundColor: Colors.indigo,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        widget._appointmentDateTime.day.toString(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0
+                        ),
+                      ),
+                      Text(
+                        //TODO: Use the already written month name parser to apply month correctly
+                        "Mar",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10.0
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+          title: _getDailyCheckupTitle(document),
           children: instructionWidgets
         ),
       ),
     );
   }
 
-  Text _getDailyCheckupTitle(String daysBeforeTest) {
-    switch (daysBeforeTest) {
+  Text _getDailyCheckupTitle(DocumentSnapshot document) {
+    switch (document['daysBeforeTest'].toString()) {
       case "1": return Text("Day to your appointment");
       case "0": return Text("Your appointment is today");
       default: return Text("Days to your appointment");

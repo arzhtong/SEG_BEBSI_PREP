@@ -7,8 +7,9 @@ import './category.screen.dart';
 class AppointmentPrep extends StatefulWidget {
   final String _testID;
   final String _appointmentID;
+  final DateTime _appointmentDatetime;
 
-  AppointmentPrep(this._testID, this._appointmentID);
+  AppointmentPrep(this._testID, this._appointmentID, this._appointmentDatetime);
 
   @override
   _AppointmentPrepState createState() => _AppointmentPrepState();
@@ -41,7 +42,8 @@ class _AppointmentPrepState extends State<AppointmentPrep> {
         widget._testID,
         widget._appointmentID,
         Colors.white,
-        Icons.android
+        Icons.android,
+        widget._appointmentDatetime
       ),
     );
   }
@@ -83,8 +85,9 @@ class CategoryCard extends StatelessWidget {
   final String _appointmentID;
   final Color color;
   final IconData icon;
+  final DateTime _appointmentDatetime;
 
-  CategoryCard(this.contents, this.title, this.type, this._testID, this._appointmentID, this.color, this.icon);
+  CategoryCard(this.contents, this.title, this.type, this._testID, this._appointmentID, this.color, this.icon, this._appointmentDatetime);
 
   Future _navigate(dynamic context) {
     //TODO: add links to the relevant pages
@@ -97,7 +100,7 @@ class CategoryCard extends StatelessWidget {
       case "recipeView":
         return null;
       default:
-        return Navigator.push(context, MaterialPageRoute(builder: (context) => FaqParser(_testID, _appointmentID)));
+        return Navigator.push(context, MaterialPageRoute(builder: (context) => FaqParser(_testID, _appointmentID, _appointmentDatetime)));
     }
   }
 

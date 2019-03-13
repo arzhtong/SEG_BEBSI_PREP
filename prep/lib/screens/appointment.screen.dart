@@ -9,8 +9,9 @@ class Appointment extends StatefulWidget {
   final String _appointmentID;
   final String _testID;
   final int index;
+  final DateTime _appointmentDatetime;
 
-  Appointment(this._appointmentID, this._testID, this.index);
+  Appointment(this._appointmentID, this._testID, this.index, this._appointmentDatetime);
 
   @override
   State<StatefulWidget> createState() {
@@ -33,11 +34,11 @@ class _AppointmentState extends State<Appointment> {
       case 1:
         return (_appointmentPrep != null)
           ? _appointmentPrep
-          : _appointmentPrep = AppointmentPrep(widget._testID, widget._appointmentID);
+          : _appointmentPrep = AppointmentPrep(widget._testID, widget._appointmentID, widget._appointmentDatetime);
       case 2:
         return (_dailyCheckups != null)
         ? _dailyCheckups
-        : _dailyCheckups = DailyCheckups(widget._appointmentID);
+        : _dailyCheckups = DailyCheckups(widget._appointmentID, widget._appointmentDatetime);
       case 3:
         return (_messagingScreen != null)
           ? _messagingScreen
