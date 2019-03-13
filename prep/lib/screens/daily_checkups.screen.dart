@@ -3,6 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:prep/utils/query.dart';
 
 class DailyCheckups extends StatefulWidget {
+  final DateTime _appointmentDateTime;
+
+  DailyCheckups(this._appointmentDateTime);
+
   @override
   State<StatefulWidget> createState() => _DailyCheckups();
 }
@@ -37,74 +41,106 @@ class _DailyCheckups extends State<DailyCheckups> {
         Column(
           children: <Widget>[
             Divider(),
-            Container(
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.only(right: 30.0),
-                          child: Text(
-                            (int.parse(index) + 1).toString(),
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Text(
-                              checkupMap['question'].toString()
-                          ),
-                        )
-                      ],
+            ListTile(
+              leading: Container(
+                //color: Colors.red,
+                child: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  radius: 23.0,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.grey[300],
+                    radius: 14.0,
+                    child: Text(
+                      (int.parse(index) + 1).toString(),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold
+                      ),
                     ),
                   ),
-                  Switch(
-                    value: checkupMap['answer'],
-                    onChanged: (_){
-                      if (checkupMap['answer']) {
-                        // Removes the old entry from the list
-                        document.reference.updateData({
-                          ('instructions.' + index + '.answer') : false
-                        });
-                      } else {
-                        document.reference.updateData({
-                          ('instructions.' + index + '.answer') : true
-                        });
-                      }
-                    },
-                  )
-                ],
+                ),
               ),
+              title: Text(
+                  checkupMap['question'],
+                ),
+              trailing: Container(
+                //color: Colors.red,
+                child: Switch(
+                  value: checkupMap['answer'],
+                  onChanged: (_){
+                    if (checkupMap['answer']) {
+                      // Removes the old entry from the list
+                      document.reference.updateData({
+                        ('instructions.' + index + '.answer') : false
+                      });
+                    } else {
+                      document.reference.updateData({
+                        ('instructions.' + index + '.answer') : true
+                      });
+                    }
+                  },
+                ),
+              )
             )
           ],
         )
       );
     });
 
-    return ExpansionTile(
-      initiallyExpanded: true,
-      leading: Icon(_assignIcon(document['daysBeforeTest'])),
-      title: Text(document['title']),
-      children: <Widget>[
-        ListTile(
-          contentPadding: EdgeInsets.fromLTRB(30.0, 0.0, 0.0, 0.0),
-          title: Container(
-            padding: EdgeInsets.only(right: 20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: instructionWidgets
-            ),
-          ),
+    instructionWidgets.add(
+      Divider(
+        height: 9.0,
+        color: Colors.white,
+      )
+    );
+
+    return Container(
+      padding: EdgeInsets.only(right: 10.0, left: 10.0, top: 5.0, bottom: 5.0),
+      child: Card(
+        elevation: 3.0,
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          leading: (document['daysBeforeTest'] != 0)
+              ? Icon(_assignIcon(document['daysBeforeTest']))
+              : CircleAvatar(
+                  backgroundColor: Colors.indigo,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        widget._appointmentDateTime.day.toString(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0
+                        ),
+                      ),
+                      Text(
+                        //TODO: Use the already written month name parser to apply month correctly
+                        "Mar",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10.0
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+          title: _getDailyCheckupTitle(document),
+          children: instructionWidgets
         ),
-      ],
+      ),
     );
   }
 
-  // forbidden characters: ".$[]#/"
+  Text _getDailyCheckupTitle(DocumentSnapshot document) {
+    switch (document['daysBeforeTest'].toString()) {
+      case "1": return Text("Day to your appointment");
+      case "0": return Text("Your appointment is today");
+      default: return Text("Days to your appointment");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,6 +149,7 @@ class _DailyCheckups extends State<DailyCheckups> {
       builder: (context, snapshot) {
       if (!snapshot.hasData) return const Align(alignment: Alignment.topCenter, child: LinearProgressIndicator(),);
       return ListView.builder(
+        padding: EdgeInsets.only(top: 10),
         itemCount: snapshot.data.documents.length,
         itemBuilder: (context, index) => _buildListItem(context, snapshot.data.documents[index]),
       );},

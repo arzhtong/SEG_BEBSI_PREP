@@ -8,8 +8,9 @@ import 'package:prep/utils/query.dart';
 
 class Appointment extends StatefulWidget {
   final int index;
+  final DateTime _appointmentDateTime;
 
-  Appointment(appointmentID, testID, this.index) {
+  Appointment(appointmentID, testID, this.index, this._appointmentDateTime) {
     Queries.setAppointmentInfo(appointmentID, testID);
   }
 
@@ -31,11 +32,11 @@ class _AppointmentState extends State<Appointment> {
       case 1:
         return (_appointmentPrep != null)
           ? _appointmentPrep
-          : _appointmentPrep = AppointmentPrep();
+          : _appointmentPrep = AppointmentPrep(widget._appointmentDateTime);
       case 2:
         return (_dailyCheckups != null)
         ? _dailyCheckups
-        : _dailyCheckups = DailyCheckups();
+        : _dailyCheckups = DailyCheckups(widget._appointmentDateTime);
       case 3:
         return (_messagingScreen != null)
           ? _messagingScreen
