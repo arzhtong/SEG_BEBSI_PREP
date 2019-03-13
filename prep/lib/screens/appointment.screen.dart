@@ -4,20 +4,18 @@ import 'package:prep/screens/appointment_info.screen.dart';
 import 'package:prep/screens/appointment_prep.screen.dart';
 import 'package:prep/screens/daily_checkups.screen.dart';
 import 'package:prep/screens/messaging.screen.dart';
+import 'package:prep/utils/query.dart';
 
 class Appointment extends StatefulWidget {
-  final String _appointmentID;
-  final String _testID;
   final int index;
-  final DateTime _appointmentDatetime;
+  final DateTime _appointmentDateTime;
 
-  Appointment(this._appointmentID, this._testID, this.index, this._appointmentDatetime);
+  Appointment(appointmentID, testID, this.index, this._appointmentDateTime) {
+    Queries.setAppointmentInfo(appointmentID, testID);
+  }
 
   @override
-  State<StatefulWidget> createState() {
-    print("Appointment screen recieved: " + _appointmentID);
-    return _AppointmentState(index);
-  }
+  State<StatefulWidget> createState() => _AppointmentState(index);
 }
 
 class _AppointmentState extends State<Appointment> {
@@ -34,19 +32,19 @@ class _AppointmentState extends State<Appointment> {
       case 1:
         return (_appointmentPrep != null)
           ? _appointmentPrep
-          : _appointmentPrep = AppointmentPrep(widget._testID, widget._appointmentID, widget._appointmentDatetime);
+          : _appointmentPrep = AppointmentPrep(widget._appointmentDateTime);
       case 2:
         return (_dailyCheckups != null)
         ? _dailyCheckups
-        : _dailyCheckups = DailyCheckups(widget._appointmentID, widget._appointmentDatetime);
+        : _dailyCheckups = DailyCheckups(widget._appointmentDateTime);
       case 3:
         return (_messagingScreen != null)
           ? _messagingScreen
-          : _messagingScreen = MessagingScreen(widget._appointmentID);
+          : _messagingScreen = MessagingScreen();
       default:
         return (_appointmentInfo != null)
           ? _appointmentInfo
-          : _appointmentInfo = AppointmentInfo(widget._testID);
+          : _appointmentInfo = AppointmentInfo();
     }
   }
 

@@ -1,46 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:collection';
+import 'package:prep/utils/query.dart';
 
 class DailyCheckups extends StatefulWidget {
-  final String _appointmentID;
   final DateTime _appointmentDateTime;
-  DailyCheckups(this._appointmentID, this._appointmentDateTime);
+
+  DailyCheckups(this._appointmentDateTime);
 
   @override
-  State<StatefulWidget> createState() {
-    print("DailyCheckups screen recieved: " + _appointmentID);
-    return _DailyCheckups();
-  }
+  State<StatefulWidget> createState() => _DailyCheckups();
 }
 
 class _DailyCheckups extends State<DailyCheckups> {
   List<Widget> myList = new List<Widget>();
 
   IconData _assignIcon(int index) {
-    switch(index){
+    switch(index) {
       case 0: {return Icons.event;}
-      break;
       case 1: {return Icons.filter_1;}
-      break;
       case 2: {return Icons.filter_2;}
-      break;
       case 3: {return Icons.filter_3;}
-      break;
       case 4: {return Icons.filter_4;}
-      break;
       case 5: {return Icons.filter_5;}
-      break;
       case 6: {return Icons.filter_6;}
-      break;
       case 7: {return Icons.filter_7;}
-      break;
       case 8: {return Icons.filter_8;}
-      break;
       case 9: {return Icons.filter_9;}
-      break;
       default: {return Icons.filter_9_plus;}
-      break;
     }
   }
 
@@ -159,7 +145,7 @@ class _DailyCheckups extends State<DailyCheckups> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: Firestore.instance.collection('appointments').document(widget._appointmentID).collection('dailyCheckups').orderBy('daysBeforeTest', descending: true).snapshots(),
+      stream: Queries.dailyCheckupsSnapshots,
       builder: (context, snapshot) {
       if (!snapshot.hasData) return const Align(alignment: Alignment.topCenter, child: LinearProgressIndicator(),);
       return ListView.builder(
