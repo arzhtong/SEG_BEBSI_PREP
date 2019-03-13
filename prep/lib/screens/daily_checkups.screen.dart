@@ -102,10 +102,10 @@ class _DailyCheckups extends State<DailyCheckups> {
     });
 
     instructionWidgets.add(
-        Divider(
-          height: 9.0,
-          color: Colors.white,
-        )
+      Divider(
+        height: 9.0,
+        color: Colors.white,
+      )
     );
 
     return Container(
@@ -115,11 +115,19 @@ class _DailyCheckups extends State<DailyCheckups> {
         child: ExpansionTile(
           initiallyExpanded: true,
           leading: Icon(_assignIcon(document['daysBeforeTest'])),
-          title: Text(document['title']),
+          title: _getDailyCheckupTitle(document['daysBeforeTest'].toString()),
           children: instructionWidgets
         ),
       ),
     );
+  }
+
+  Text _getDailyCheckupTitle(String daysBeforeTest) {
+    switch (daysBeforeTest) {
+      case "1": return Text("Day to your appointment");
+      case "0": return Text("Your appointment is today");
+      default: return Text("Days to your appointment");
+    }
   }
 
   @override
