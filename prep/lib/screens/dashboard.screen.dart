@@ -310,39 +310,18 @@ class _CalendarLabel extends StatelessWidget {
     );
   }
 
-  String dateTimeFormater(DateTime datetime){
-    String formattedString = datetime.day.toString();
+  String dateTimeFormater(DateTime datetime) {
+    const List<String> months = [
+      "January", "February", "March", "April",
+      "May", "June", "July", "August",
+      "September", "October", "November", "December"
+    ];
 
-    switch(datetime.month){
-      case 1: {formattedString = formattedString + " January";}
-      break;
-      case 2: {formattedString = formattedString + " February";}
-      break;
-      case 3: {formattedString = formattedString + " March";}
-      break;
-      case 4: {formattedString = formattedString + " April";}
-      break;
-      case 5: {formattedString = formattedString + " May";}
-      break;
-      case 6: {formattedString = formattedString + " June";}
-      break;
-      case 7: {formattedString = formattedString + " July";}
-      break;
-      case 8: {formattedString = formattedString + " August";}
-      break;
-      case 9: {formattedString = formattedString + " September";}
-      break;
-      case 10: {formattedString = formattedString + " October";}
-      break;
-      case 11: {formattedString = formattedString + " November";}
-      break;
-      case 12: {formattedString = formattedString + " December";}
-      break;
-      default: {formattedString = formattedString + " Error";}
-      break;
-    }
+    String day = datetime.day.toString();
+    String month = months[datetime.month - 1];
+    String year = datetime.year.toString();
 
-    return formattedString + " " + datetime.year.toString();
+    return day + " " + month + " " + year;
   }
 }
 
