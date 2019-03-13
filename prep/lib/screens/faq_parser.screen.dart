@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:prep/screens/appointment.screen.dart';
+import 'package:prep/utils/query.dart';
 
 class FaqParser extends StatefulWidget {
-  final String _testID;
-  final String _appointmentID;
-
-  FaqParser(this._testID, this._appointmentID);
-
   @override
-  State<StatefulWidget> createState() {
-    print("Appointment info recieved: " + _testID);
-    return _FaqParserState();
-  }
+  State<StatefulWidget> createState() => _FaqParserState();
 }
 
 class _FaqParserState extends State<FaqParser> {
@@ -43,7 +36,7 @@ class _FaqParserState extends State<FaqParser> {
                       onPressed: () {
                         Navigator.push(
                             context, MaterialPageRoute(builder: (context) =>
-                            Appointment(widget._appointmentID, widget._testID, 3))
+                            Appointment(Queries.appointmentID, Queries.testID, 3))
                         );
                       }
                     )
@@ -55,7 +48,7 @@ class _FaqParserState extends State<FaqParser> {
                       onPressed: () {
                         Navigator.push(
                             context, MaterialPageRoute(builder: (context) =>
-                            Appointment(widget._appointmentID, widget._testID, 1))
+                            Appointment(Queries.appointmentID, Queries.testID, 1))
                         );
                       }
                     )
@@ -76,8 +69,7 @@ class _FaqParserState extends State<FaqParser> {
         title: Text("FAQ"),
       ),
       body: StreamBuilder(
-        stream: Firestore.instance.collection('tests')
-            .document(widget._testID).collection('faqs').snapshots(),
+        stream: Queries.faqSnapshots,
         builder: (context, snapshot) {
           if (!snapshot.hasData) return const Align(alignment: Alignment.topCenter, child: LinearProgressIndicator(),);
           return ListView.builder(

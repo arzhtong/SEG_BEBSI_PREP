@@ -7,11 +7,6 @@ import '../utils/query.dart';
 import '../utils/message_crypto.dart';
 
 class MessagingScreen extends StatefulWidget {
-  MessagingScreen(appointmentID) {
-    MessagingQueries.setAppointmentID(appointmentID);
-    MessageCrypto.setAppointmentID(appointmentID);
-  }
-
   @override
   State createState() => _MessagingScreenState();
 }
@@ -23,7 +18,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
   void _addNewMessage(DocumentSnapshot document) {
     Map<String, dynamic> message = document.data;
     if (!message['seenByPatient'])
-      MessagingQueries.setSeenByPatient(document.reference);
+      Queries.setSeenByPatient(document.reference);
 
     String decryptedMessage = MessageCrypto.decryptMessage(message['content']);
 
@@ -40,9 +35,8 @@ class _MessagingScreenState extends State<MessagingScreen> {
     super.initState();
 
     _messageStreamSubscription =
-        MessagingQueries.messageSnapshots.listen((QuerySnapshot snapshot) {
+        Queries.messageSnapshots.listen((QuerySnapshot snapshot) {
       snapshot.documentChanges.forEach((DocumentChange change) {
-        print("CHANGE DETECTED");
         if (change.type == DocumentChangeType.added)
           _addNewMessage(change.document);
       });
@@ -142,7 +136,7 @@ class _TextComposerState extends State<_TextComposer> {
     if (_hasTyped) {
       setState(() => _hasTyped = false);
       String encryptedMessage = MessageCrypto.encryptMessage(messageText);
-      MessagingQueries.sendMessage(encryptedMessage);
+      Queries.sendMessage(encryptedMessage);
       _textController.clear();
     }
   }

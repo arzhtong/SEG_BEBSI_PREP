@@ -2,16 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:html/dom.dart' as dom;
+import 'package:prep/utils/query.dart';
 
 class AppointmentInfo extends StatefulWidget {
-  final String _testID;
-  AppointmentInfo(this._testID);
-
   @override
-  State<StatefulWidget> createState() {
-    print("Appointment info recieved: " + _testID);
-    return _AppointmentInfoState();
-  }
+  State<StatefulWidget> createState() => _AppointmentInfoState();
 }
 
 class _AppointmentInfoState extends State<AppointmentInfo> {
@@ -35,8 +30,7 @@ class _AppointmentInfoState extends State<AppointmentInfo> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: Firestore.instance.collection('tests')
-          .document(widget._testID).get().asStream(),
+      stream: Queries.testSnapshots,
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const Align(alignment: Alignment.topCenter, child: LinearProgressIndicator(),);
         return _buildListItem(context, snapshot.data);

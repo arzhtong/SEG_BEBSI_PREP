@@ -2,14 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'information_parser.screen.dart';
 import 'faq_parser.screen.dart';
-import './category.screen.dart';
+import 'package:prep/screens/category.screen.dart';
+import 'package:prep/utils/query.dart';
 
 class AppointmentPrep extends StatefulWidget {
-  final String _testID;
-  final String _appointmentID;
-
-  AppointmentPrep(this._testID, this._appointmentID);
-
   @override
   _AppointmentPrepState createState() => _AppointmentPrepState();
 }
@@ -18,8 +14,7 @@ class _AppointmentPrepState extends State<AppointmentPrep> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: Firestore.instance.collection('tests')
-          .document(widget._testID).collection('prepCards').snapshots(),
+      stream: Queries.prepCardsSnapshots,
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const Align(alignment: Alignment.topCenter, child: LinearProgressIndicator(),);
           return GridView.builder(
@@ -38,8 +33,6 @@ class _AppointmentPrepState extends State<AppointmentPrep> {
       child: CategoryCard(document['contents'],
         document['title'],
         document['type'],
-        widget._testID,
-        widget._appointmentID,
         Colors.white,
         Icons.android
       ),
@@ -79,25 +72,23 @@ class CategoryCard extends StatelessWidget {
   final String contents;
   final String title;
   final String type;
-  final String _testID;
-  final String _appointmentID;
   final Color color;
   final IconData icon;
 
-  CategoryCard(this.contents, this.title, this.type, this._testID, this._appointmentID, this.color, this.icon);
+  CategoryCard(this.contents, this.title, this.type, this.color, this.icon);
 
   Future _navigate(dynamic context) {
     //TODO: add links to the relevant pages
 
     switch (type) {
       case "informations":
-        return Navigator.push(context, MaterialPageRoute(builder: (context) => InformationParser(_testID, contents)));
+        return Navigator.push(context, MaterialPageRoute(builder: (context) => InformationParser(contents)));
       case "categoryList":
         return null;
       case "recipeView":
         return null;
       default:
-        return Navigator.push(context, MaterialPageRoute(builder: (context) => FaqParser(_testID, _appointmentID)));
+        return Navigator.push(context, MaterialPageRoute(builder: (context) => FaqParser()));
     }
   }
 

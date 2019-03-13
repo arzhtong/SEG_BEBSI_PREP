@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+import 'package:prep/utils/query.dart';
 import 'package:prep/screens/appointment.screen.dart';
 
 class Dashboard extends StatefulWidget {
-  Firestore db;
-  Dashboard(this.db);
-
   @override
   State<StatefulWidget> createState() {
     return _DashboardState();
@@ -90,7 +86,7 @@ class _DashboardState extends State<Dashboard> {
   Future<bool> _isCodeInFirestore (String code) async {
     List<String> liveIDs = new List();
 
-    await widget.db.collection('appointments').where("datetime", isGreaterThan: DateTime.now().subtract(Duration(days: 1))).getDocuments().then((query) {
+    await DatabaseHandler.db.collection('appointments').where("datetime", isGreaterThan: DateTime.now().subtract(Duration(days: 1))).getDocuments().then((query) {
       query.documents.forEach((document) {
         liveIDs.add(document.documentID);
       });
@@ -124,7 +120,7 @@ class _DashboardState extends State<Dashboard> {
     documentList = new List();
     List<Widget> calendarElements = new List();
 
-    testDocList = await widget.db.collection('appointments')
+    testDocList = await DatabaseHandler.db.collection('appointments')
         .where("datetime", isGreaterThan: DateTime.now()
         .subtract(Duration(days: 1))).orderBy('datetime').getDocuments();
     documentList = testDocList.documents;

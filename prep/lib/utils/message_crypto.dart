@@ -9,18 +9,14 @@ import 'package:pointycastle/paddings/pkcs7.dart';
 import 'package:pointycastle/block/aes_fast.dart';
 import 'package:pointycastle/block/modes/cbc.dart';
 
-class MessageCrypto {
-  static String _appointmentID;
+import 'package:prep/utils/query.dart';
 
+class MessageCrypto {
   static const MessageCrypto _singleton = MessageCrypto._internal();
 
   factory MessageCrypto() => _singleton;
 
   const MessageCrypto._internal();
-
-  static void setAppointmentID(String appointmentID) {
-    _appointmentID = appointmentID;
-  }
 
   static String encryptMessage(String message) {
     Random rand = Random.secure();
@@ -50,7 +46,8 @@ class MessageCrypto {
   static PaddedBlockCipher getCipher(bool mode, Uint8List iv) {
     Digest md5 = Digest("MD5");
     String hexEncryptedIV = HEX.encode(md5.process(iv));
-    Uint8List keyArray = utf8.encode(_appointmentID + hexEncryptedIV);
+    Uint8List keyArray =
+        utf8.encode(Queries.appointmentID + hexEncryptedIV);
     String hexEncryptedKey = HEX.encode(md5.process(keyArray));
     Uint8List encryptedKeyArray = utf8.encode(hexEncryptedKey);
 
