@@ -20,7 +20,7 @@
 
                <div class="row">
                     <div class="input-field col s12">
-                        <input type="number" v-model="daysBeforeTest" required>
+                        <input type="number"  min="0" v-model="daysBeforeTest" required>
                         <label>Number of Days Before Test:</label>
                     </div>
                </div>
