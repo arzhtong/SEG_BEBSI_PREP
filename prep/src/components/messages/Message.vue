@@ -82,6 +82,9 @@ export default {
     this.getAllMessages();
   },
   methods: {
+    /*
+      This method gets all the messages on page load (after decrypting them).
+    */
     getAllMessages() {
       db.collection("appointments")
         .doc(this.$route.params.appointmentID)
@@ -110,6 +113,10 @@ export default {
           });
         });
     },
+    /*
+      This method set all messages sent by the user(Patient)
+      to seen by the Staff Member.
+    */
     clearNot() {
       db.collection("appointments")
         .doc(this.$route.params.appointmentID)
@@ -130,6 +137,10 @@ export default {
           });
         });
     },
+    /*
+      This method listens for any changes in the messages collection
+      and gets if any new messages have been sent (after decrypting them)
+    */
     fetchData() {
       db.collection("appointments")
         .doc(this.$route.params.appointmentID)
@@ -137,6 +148,7 @@ export default {
         .orderBy("datetime", "asc")
         .onSnapshot(snapshot => {
           snapshot.docChanges().forEach(change => {
+            // get the newest message
             if (change.type === "added") {
               var msg = decryptMessage(
                 change.doc.data().content,
@@ -152,6 +164,7 @@ export default {
               this.messages.push(data);
               this.clearNot();
             }
+            // if the collection has been changed mark as seen
             if (change.type === "modified") {
               for (var i = 0; i < this.messages.length; i++) {
                 if (
@@ -175,6 +188,10 @@ export default {
           this.scroll();
         });
     },
+    /*
+      This method sends(adds) the specified message to the firestore,
+      after encrypting it.
+    */
     sendMessage() {
       var checkMessage = document.getElementById("textArea").value.trim();
       if (checkMessage.length != 0 && checkMessage != "") {
@@ -208,6 +225,10 @@ export default {
           });
       }
     },
+    /*
+      This method automatically scrolls the message component to
+      the bottom or newest message so it is visible to the user.
+    */
     scroll() {
       var elmnt = document.getElementById("messages");
       elmnt.scrollTop = elmnt.scrollHeight;

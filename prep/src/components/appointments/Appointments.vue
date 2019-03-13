@@ -192,6 +192,11 @@ export default {
     }
   },
   methods: {
+    /*
+      This method sorts the appointments collection into two 
+      collections of past and current appointments. It takes into account
+      the expired boolean as well as the date.
+    */
     sortByExpiration() {
       var pastAppointments = [];
       var currentAppointments = [];
@@ -211,6 +216,7 @@ export default {
           currentAppointments.push(this.appointments[i]);
         }
       }
+      // Assign the appropriate array to the appointments array
       if (this.past) {
         this.appointments = pastAppointments;
       } else {
@@ -218,6 +224,11 @@ export default {
       }
       this.allAppointments = this.appointments;
     },
+    /*
+      This method makes sure it will take the
+      information only for the currently logged in
+      user. 
+    */
     getApp(dir) {
       db.collection("users")
         .where("email", "==", firebase.auth().currentUser.email)
@@ -230,6 +241,11 @@ export default {
           this.getAppointments(dir);
         });
     },
+    /*
+      This method gets all the appointments for the
+      logged in user and orders them either asc or decs
+      datetime.
+    */
     getAppointments(dir) {
       db.collection("appointments")
         .orderBy("datetime", dir)
@@ -251,9 +267,13 @@ export default {
               this.fetchData(appointment.id);
             }
           });
-          this.sortByExpiration();
+          this.sortByExpiration(); // sorts the array by date
         });
     },
+    /*
+      This method gets the number of dailyCheckups marked
+      as true as well as the length of the instructions array.
+    */
     getDailyCheckups(id, bool) {
       var count = 0;
       var length = 0;
@@ -276,6 +296,7 @@ export default {
             count: count,
             length: length
           };
+          // if true it means sth. needs to be pushed to the array
           if (bool) {
             this.dailyCheckups.push(data);
           }
@@ -287,6 +308,10 @@ export default {
           }
         });
     },
+    /*
+      This method listen live to the changes on the firestore
+      and gets any changes made to the dailyCheckups collection.
+    */
     listenForDailyCheckups(id) {
       this.dailyCheckups = [];
       this.getDailyCheckups(id, true);
@@ -296,11 +321,17 @@ export default {
         .onSnapshot(snapshot => {
           snapshot.docChanges().forEach(change => {
             if (change.type == "modified") {
+              // just edit the dailyCheckups
               this.getDailyCheckups(id, false);
             }
           });
         });
     },
+    /*
+      This method listens live to the firestore in order
+      to get if any unseen messages have been received from
+      a user(patient).
+    */
     fetchData(id) {
       db.collection("appointments")
         .doc(id)
@@ -321,6 +352,10 @@ export default {
           });
         });
     },
+    /*
+      This method deletes an appointment with a specified
+      code (doc id).
+    */
     deleteAppointment(code) {
       if (confirm(`Are you sure you want to delete this appointment`)) {
         db.collection("appointments")
@@ -337,6 +372,11 @@ export default {
           });
       }
     },
+    /*
+      This method marks an appointment as expired,
+      meaning it will be sent to the past appointments
+      collection.
+    */
     expireAppointment(id, bool) {
       // Make a specific appointment expired
       if (bool == false) {
@@ -372,9 +412,13 @@ export default {
           });
       }
     },
+    /*
+      This method sorts the appointments either in asc or
+      desc order.
+    */
     sort() {
       var selectValue = document.getElementById("select").value;
-      this.clearData();
+      this.clearData(); // clears all input field values and arrays
       document.getElementById("searchCode").value = "";
       document.getElementById("datePicker").value = "";
       if (selectValue == "Date") {
@@ -385,6 +429,10 @@ export default {
         this.getApp("desc");
       }
     },
+    /*
+      This method sorts the appointments by a specific
+      date specified by the user.
+    */
     sortByDate() {
       var value = document.getElementById("datePicker").value;
       var newDay = new Date(value);
@@ -406,6 +454,7 @@ export default {
           this.fetchData(this.allAppointments[i].id);
         }
       }
+      // if a match has been found
       if (newAppointments.length != 0) {
         this.clearData();
         this.appointments = newAppointments;
@@ -423,6 +472,11 @@ export default {
       document.getElementById("searchCode").value = "";
       document.getElementById("select").value = "Date";
     },
+    /*
+      This method resets all the input field values
+      as well as the arrays and runs the query again to
+      get all appointments.
+    */
     resetTable() {
       this.clearData();
       document.getElementById("select").value = "Date";
@@ -430,11 +484,20 @@ export default {
       document.getElementById("searchCode").value = "";
       this.getApp("asc");
     },
+    /*
+      This method sets all arrays except, 
+      dailyCheckups and tests, to empty.
+    */
     clearData() {
       this.appointments = [];
       this.notifications = [];
       this.ids = [];
     },
+    /*
+      This method sorts the appointments by a specified code.
+      If there is a substring that matches the whole appointment(s)
+      will be returned,
+    */
     sortByCode() {
       var inputValue = document.getElementById("searchCode").value;
       var codeArray = [];
@@ -446,6 +509,7 @@ export default {
           codeArray.push(this.allAppointments[i]);
         }
       }
+      // if there is a match
       if (codeArray.length != 0) {
         this.clearData();
         this.appointments = codeArray;

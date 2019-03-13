@@ -63,6 +63,10 @@ export default {
         }
     },
     methods: {
+        /*
+            This function creates a new user on firestore as well
+            as google authentication service
+        */
         register: function(e) {
             if(this.name != null && this.dept != null && this.role != null){
                 firebase.auth()

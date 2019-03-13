@@ -73,6 +73,8 @@ export default {
     };
   },
   created() {
+    // Gets all the information from the
+    // users collection
       db
         .collection("users")
         .get()
@@ -89,6 +91,10 @@ export default {
           });
         });
   },
+  /*
+    This method is ran before the router navigates to the page.
+    It preloads the input boxes with appointments information.
+  */
   beforeRouteEnter(to, from, next) {
     db.collection("appointments")
       .doc(to.params.id)
@@ -118,6 +124,10 @@ export default {
     $route: "fetchData"
   },
   methods: {
+    /*
+      This method collects data for the specified 
+      appointment from the router navigation bar.
+    */
     fetchData() {
       db.collection("appointments")
         .doc(this.$route.params.id)
@@ -131,6 +141,10 @@ export default {
           }
         });
     },
+    /*
+      This method updates the information
+      for the specified appointment on firestore.
+    */
     updateAppointment() {
       db.collection("appointments")
         .doc(this.$route.params.id)

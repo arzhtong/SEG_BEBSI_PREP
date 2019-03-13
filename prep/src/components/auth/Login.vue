@@ -39,6 +39,10 @@ export default {
     };
   },
   methods: {
+    /*
+    Verify the user by sending a request to the firestore
+    and create a new Session.
+   */
     login: function(e) {
       firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
       firebase

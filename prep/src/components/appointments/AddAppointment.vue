@@ -91,6 +91,7 @@ export default {
   created() {
     this.checkIfCodeExists();
     this.getDocId();
+    // Get all the information from tests collection
     db.collection("tests")
       .get()
       .then(querySnapshot => {
@@ -105,18 +106,29 @@ export default {
       });
   },
   methods: {
+    /*
+      This method checks if the generated code
+      exists in firestore. It also calls the method
+      that generates the code.
+    */
     checkIfCodeExists() {
       this.generateCode().then(foc => {
-        if (foc == true) {
+        if (foc == true) { // recursively generate a new code
           document.getElementById("mainScreen").style.display = "none";
           this.checkIfCodeExists();
-        } else {
+        } else { // hide loader and show main screen
           document.getElementById("el").classList.remove("active");
           document.getElementById("loader").style.display = "none";
           document.getElementById("mainScreen").style.display = null;
         }
       });
     },
+    /*
+      This method generates a random code of length 9
+      and puts it as the doc id in the appointments' collection.
+
+      @return Promise
+    */
     generateCode() {
       var ID = Math.random()
         .toString(36)
@@ -137,6 +149,10 @@ export default {
           alert(error);
         });
     },
+    /*
+      This method creates a new appointment and
+      sets each field. 
+    */
     saveAppointment() {
       db.collection("appointments")
         .doc(this.code)
@@ -156,6 +172,10 @@ export default {
         })
         .catch(error => console.log(err));
     },
+    /*
+      This method gets the dailyCheckup collection
+      from tests and adds it to the newly created appointment.
+    */
     addDailyCheckups() {
       db.collection("tests")
         .doc(this.testID.testID)
@@ -174,6 +194,10 @@ export default {
           });
         });
     },
+    /*
+      This method gets the document id of
+      the currently logged in person.
+    */
     getDocId() {
       db.collection("users")
         .where("email", "==", this.currentUser)
