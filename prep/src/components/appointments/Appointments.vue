@@ -46,8 +46,8 @@
                   type="text"
                 >
                 <div>
-                  <button @click="sortByCode" class="btn">Search</button>
-                  <button @click="resetTable" class="btn">Reset</button>
+                  <button style="margin:5px" @click="sortByCode" class="btn">Search</button>
+                  <button style="margin:5px" @click="resetTable" class="btn">Reset</button>
                 </div>
               </div>
             </div>
