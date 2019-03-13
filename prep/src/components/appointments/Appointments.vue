@@ -36,7 +36,7 @@
             </div>
             <div style="position:relative; bottom:50px;">
               <div class="input-field col s12" style="width:70%;">
-                <label class="blue-text" for>Search By Code</label>
+                <span class="blue-text" for>Search By Code</span>
                 <input
                   id="searchCode"
                   required
@@ -45,9 +45,10 @@
                   class="file-path validate"
                   type="text"
                 >
-                
-                <button @click="sortByCode" class="btn">Search</button>
-                <button style="margin-left:10px" @click="resetTable" class="btn">Reset</button>
+                <div>
+                  <button @click="sortByCode" class="btn">Search</button>
+                  <button @click="resetTable" class="btn">Reset</button>
+                </div>
               </div>
             </div>
           </div>
