@@ -86,7 +86,7 @@ class _DashboardState extends State<Dashboard> {
   Future<bool> _isCodeInFirestore (String code) async {
     List<String> liveIDs = new List();
 
-    await DatabaseHandler.db.collection('appointments').where("datetime", isGreaterThan: DateTime.now().subtract(Duration(days: 1))).getDocuments().then((query) {
+    await Queries.appointmentCodes.then((query) {
       query.documents.forEach((document) {
         liveIDs.add(document.documentID);
       });
@@ -120,9 +120,7 @@ class _DashboardState extends State<Dashboard> {
     documentList = new List();
     List<Widget> calendarElements = new List();
 
-    testDocList = await DatabaseHandler.db.collection('appointments')
-        .where("datetime", isGreaterThan: DateTime.now()
-        .subtract(Duration(days: 1))).orderBy('datetime').getDocuments();
+    testDocList = await Queries.appointmentCodes;
     documentList = testDocList.documents;
 
     // Remove codes from the codes file that are past their date in the database

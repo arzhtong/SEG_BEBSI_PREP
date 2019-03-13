@@ -48,13 +48,20 @@ class Queries {
     testID = newTestID;
   }
 
-  static DocumentReference get _testReference => DatabaseHandler.db
-      .collection('tests')
-      .document(Queries.testID);
+  static Future<QuerySnapshot> get appointmentCodes => _appointmentsCollection
+      .where("datetime",
+          isGreaterThan: DateTime.now().subtract(Duration(days: 1)))
+      .orderBy('datetime')
+      .getDocuments();
 
-  static DocumentReference get _appointmentReference => DatabaseHandler.db
-      .collection('appointments')
-      .document(Queries.appointmentID);
+  static DocumentReference get _testReference =>
+      DatabaseHandler.db.collection('tests').document(Queries.testID);
+
+  static CollectionReference get _appointmentsCollection =>
+      DatabaseHandler.db.collection('appointments');
+
+  static DocumentReference get _appointmentReference =>
+      _appointmentsCollection.document(Queries.appointmentID);
 
   static CollectionReference get _messagesCollection =>
       _appointmentReference.collection('messages');
