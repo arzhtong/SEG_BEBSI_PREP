@@ -5,8 +5,9 @@ import 'package:prep/screens/appointment.screen.dart';
 class FaqParser extends StatefulWidget {
   final String _testID;
   final String _appointmentID;
+  final DateTime _appointmentDateTime;
 
-  FaqParser(this._testID, this._appointmentID);
+  FaqParser(this._testID, this._appointmentID, this._appointmentDateTime);
 
   @override
   State<StatefulWidget> createState() {
@@ -43,7 +44,7 @@ class _FaqParserState extends State<FaqParser> {
                       onPressed: () {
                         Navigator.push(
                             context, MaterialPageRoute(builder: (context) =>
-                            Appointment(widget._appointmentID, widget._testID, 3))
+                            Appointment(widget._appointmentID, widget._testID, 3, widget._appointmentDateTime))
                         );
                       }
                     )
@@ -55,7 +56,7 @@ class _FaqParserState extends State<FaqParser> {
                       onPressed: () {
                         Navigator.push(
                             context, MaterialPageRoute(builder: (context) =>
-                            Appointment(widget._appointmentID, widget._testID, 1))
+                            Appointment(widget._appointmentID, widget._testID, 1, widget._appointmentDateTime))
                         );
                       }
                     )
