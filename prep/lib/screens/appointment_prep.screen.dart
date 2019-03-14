@@ -45,34 +45,6 @@ class _AppointmentPrepState extends State<AppointmentPrep> {
   }
 }
 
-//class CategoryExpansionTile extends StatelessWidget {
-//  final String name;
-//  final List<Widget> contents;
-//  final Color color;
-//  final IconData icon;
-//
-//  CategoryExpansionTile(this.name, this.contents, this.color, this.icon);
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return ExpansionTile(
-//      initiallyExpanded: true,
-//      title: ListTile(
-//        contentPadding: EdgeInsets.only(left: 0.0),
-//        leading: CircleAvatar(
-//          backgroundColor: color,
-//          child: Icon(
-//            icon,
-//            color: Colors.white,
-//          ),
-//        ),
-//        title: Text(name),
-//      ),
-//      children: contents
-//    );
-//  }
-//}
-
 class CategoryCard extends StatelessWidget {
   final String contents;
   final String title;

@@ -331,7 +331,7 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                               });
 
                               if(_parent._formKey.currentState.validate()){
-                                _parent.writeData();  //this already has a set state in it so by using it I don't have to call parent.setState().
+                                _parent.writeData();
                                 Navigator.pop(context);
                               }
                             }
