@@ -404,40 +404,48 @@ class _CalendarCard extends StatelessWidget {
       padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
       child:  Card(
         elevation: 3.0,
-        child: InkWell(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Appointment(name, testID, 0, dateTime))
-            );
-          },
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    stops: [0.1, 0.9],
-                    colors: [
-                      Colors.blue[200],
-                      Colors.green[200],
-                    ],
+        child: Stack(
+          children: <Widget>[
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      stops: [0.1, 0.9],
+                      colors: [
+                        Colors.red[400],
+                        Colors.yellow[400],
+                      ],
+                    ),
                   ),
+                  height: 200.0,
                 ),
-                height: 200.0,
+                ListTile(
+                  leading: Icon(Icons.today),
+                  title: Text(name),
+                  subtitle: Text(location + " - " + dateTime.toString()),
+                  //subtitle: Text("St. Thomas Hospital - 11:00 am"),
+                ),
+              ],
+            ),
+            Positioned.fill(
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Appointment(name, testID, 0, dateTime))
+                      );
+                    }),
               ),
-              ListTile(
-                leading: Icon(Icons.today),
-                title: Text(name),
-                subtitle: Text(location + " - " + dateTime.toString()),
-                //subtitle: Text("St. Thomas Hospital - 11:00 am"),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
