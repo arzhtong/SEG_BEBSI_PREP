@@ -52,9 +52,14 @@ class _MessagingScreenState extends State<MessagingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Column(children: <Widget>[
         Flexible(
-          child: _messagesView,
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+            child: _messagesView,
+          ),
         ),
         Divider(height: 1.0),
         Container(
