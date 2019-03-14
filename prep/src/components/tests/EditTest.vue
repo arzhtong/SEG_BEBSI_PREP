@@ -4,64 +4,86 @@
         style="background-color:white; padding: 10px 50px 10px 50px; margin-top:10px"
     >
         <div id="mainScreen">
-        <h3>Edit Test</h3>
-            <div class="row">
-                <div class="input-field col s12">
-                    <p>Title</p>
-                    <input type="text" v-model.trim="title">
-                </div>
+        <h4 style="font-size:3em;">
+            <b>{{title}}</b>
+        </h4>
+        <h5 style="padding:10px;">
+            <b>Department: {{department}}</b>
+        </h5>
+            <div class="info">
+                <ul class="collapsible">
+                    <li>
+                    <div class="collapsible-header"><i class="small material-icons">info_outline</i>Info</div>
+                    <div class="collapsible-body"><span></span></div>
+                    </li>
+                </ul>
             </div>
-            <div class="row">
-                <div class="input-field col s12">
-                    <p>Department</p>
-                    <input type="text" v-model.trim="department">
-                </div>
-            </div>
-            <ul class="collapsible">
-                <li>
-                <div class="collapsible-header"><i class="small material-icons">info_outline</i>Info</div>
-                <div class="collapsible-body"><span>Please use the text area below to enter information about this test. If this information is not currently available, 
-                you can leave this blank for now and edit the information later.<br><br>Images can also be uploaded by clicking on the 
-                image icon. Images should be placed inbetween blocks of text so that they correctly display in the app.</span></div>
+            <ul class="collection">
+                <li class="collection-item avatar">
+                    <i class="material-icons circle green">create</i>
+                    <h5 class="titles">Test description</h5>
+                    <p>Incomplete</p>
+                    <router-link 
+                        v-bind:to="{name: 'edit-test', params: {test_id: test_id}}" 
+                        class="btn blue secondary-content"
+                    >Show/Edit</router-link>
+                </li>
+                <li class="collection-item avatar">
+                    <i class="material-icons circle green">done_all</i>
+                    <h5 class="titles">Daily check-ups</h5>
+                    <p>First Line <br>
+                        Second Line
+                    </p>
+                    <router-link 
+                        to="" 
+                        class="btn blue secondary-content"
+                    >Show/Edit</router-link>
+                </li>
+                <li class="collection-item avatar">
+                    <i class="material-icons circle blue">assignment</i>
+                    <h5 class="titles">Articles</h5>
+                    <p>First Line <br>
+                        Second Line
+                    </p>
+                    <router-link 
+                        to="" 
+                        class="btn blue secondary-content"
+                    >Show/Edit</router-link>
+                </li>
+                <li class="collection-item avatar">
+                    <i class="material-icons circle blue">list</i>
+                    <h5 class="titles">Lists</h5>
+                    <p>First Line <br>
+                        Second Line
+                    </p>
+                    <router-link 
+                        to="" 
+                        class="btn blue secondary-content"
+                    >Show/Edit</router-link>
+                </li>
+                <li class="collection-item avatar">
+                    <i class="material-icons circle orange">help_outline</i>
+                    <h5 class="titles">FAQs</h5>
+                    <p>First Line <br>
+                        Second Line
+                    </p>
+                    <router-link 
+                        to="" 
+                        class="btn blue secondary-content"
+                    >Show/Edit</router-link>
+                </li>
+                <li class="collection-item avatar">
+                    <i class="material-icons circle red">local_dining</i>
+                    <h5 class="titles">Recipes</h5>
+                    <router-link
+                        v-bind:to="{name: 'view-recipes', params: {test_id: test_id}}"
+                        class="btn blue secondary-content"
+                    >Show/Edit</router-link>
                 </li>
             </ul>
-            <div class="loaderWrapper">
-                <!-- Spinner that displays during image upload -->
-                <div v-if="!dataLoaded" id="loader">
-                    <div id="el" class="preloader-wrapper big active">
-                        <div class="spinner-layer spinner-blue-only">
-                            <div class="circle-clipper left">
-                                <div class="circle"></div>
-                            </div>
-                            <div class="gap-patch">
-                                <div class="circle"></div>
-                            </div>
-                            <div class="circle-clipper right">
-                                <div class="circle"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <label style="font-size:25px">Loading... please wait</label>
-                </div>
-            </div>
-            <div v-if="dataLoaded">
-                <textEditor 
-                :editorInformation="htmlForEditor" 
-                :editorImages="imagesForEditor"
-                ref="textEditor"/>
-            </div>
-            <div class="navButtons">
-                <button type="submit" class="btn" @click="updateTest">Submit</button>
-
-                <router-link
-                to="/view-tests"
-                class="btn grey"
-                >Cancel</router-link>
-            </div>
         </div>
     </div>
 </template>
-
 <script>
 import db from "../firebaseInit"
 import firebase from "firebase"
@@ -71,17 +93,12 @@ export default {
     name: 'editTest',
     data() {
         return {
+            test_id: this.$route.params.test_id,
             title: '',
-            department: '',
-            imagesForEditor: [],
-            htmlForEditor: '',
-            dataLoaded: false
-        };
+            department: ''
+        }
     },
-    components: {
-        textEditor
-    },
-    beforeRouteEnter(to,from,next) {
+        beforeRouteEnter(to,from,next) {
         db.collection('tests')
           .doc(to.params.test_id)
           .get()
@@ -90,9 +107,6 @@ export default {
                   next(vm => {
                       vm.title = doc.data().title
                       vm.department = doc.data().type
-                      vm.htmlForEditor = doc.data().description
-                      vm.imagesForEditor = doc.data().editorImages
-                      vm.dataLoaded = true 
                   })
               }
           })
@@ -109,43 +123,9 @@ export default {
                 if (doc.exists) {
                     this.title = doc.data().title
                     this.department = doc.data().type
-                    this.htmlForEditor = doc.data().description
-                    this.imagesForEditor = doc.data().editorImages
-                    this.dataLoaded = true
                 }
                 });
             },
-        updateTest() {
-            if(this.validInputs()) {
-                // run the editors save method
-                this.$refs.textEditor.saveEditorData()
-                // update the document
-                db.collection("tests")
-                    .doc(this.$route.params.test_id)
-                    .update({
-                        title: this.title,
-                        type: this.department,
-                        description: this.$refs.textEditor.htmlForEditor,
-                        editorImages: this.$refs.textEditor.images
-                    })
-                    .then(() => {
-                        alert("Test info updated!")
-                    })
-                    .catch(function(error) {
-                        console.error("Error writing document: ", error)
-                        return // dont leave the page if save fails
-                    })
-                    // return to tests page
-                    this.$router.push("/view-tests")
-            }
-        },
-        validInputs() {
-            if(this.title === '' || this.department ==='') {
-                alert('Please enter a title and department for this test before saving')
-                return false
-            }
-            return true
-        }
     },
     mounted() {
         // initalise colapsablie component
@@ -157,15 +137,11 @@ export default {
 </script>
 
 <style scoped>
-.navButtons {
-    padding-top: 10px;
+.titles {
+    font-size: 17pt;
 }
-p {
-  color: #2196f3;
-}
-h3 {
-  font-weight: bold;
-  margin-left: 20px;
+.info {
+    padding-bottom: 20px;
 }
 .collapsible-header {
     color: #2196f3;
