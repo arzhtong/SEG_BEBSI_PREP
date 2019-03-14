@@ -61,7 +61,7 @@ class CategoryCard extends StatelessWidget {
       case "informations":
         return Navigator.push(context, MaterialPageRoute(builder: (context) => InformationParser(contents)));
       case "categoryList":
-        return null;
+        return Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryListParser(contents)));
       case "recipeView":
         return null;
       default:

@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:collection';
+import 'package:prep/utils/query.dart';
 
-class Category extends StatefulWidget{
-  String _contents;
-  Category(this._contents);
+class CategoryListParser extends StatefulWidget{
+  final String _contents;
+  
+  CategoryListParser(this._contents);
 
   @override
   State<StatefulWidget> createState() {
-    return _CategoryState();
+    return _CategoryListState();
   }
 }
-class _CategoryState extends State<Category>{
-  @override
+
+class _CategoryListState extends State<CategoryListParser>{
   Widget build(BuildContext context) {
     print("Contents received in category state: X" + widget._contents + "X");
     return Scaffold(
@@ -20,58 +21,46 @@ class _CategoryState extends State<Category>{
         backgroundColor: Colors.indigo,
         title: Text('Appointments'),
       ),
-      body: StreamBuilder(
-      stream: Firestore.instance.collection('tests').document('VyyiBYwp0xX4nJyvX9oN').collection('prepContents').document(widget._contents).get().asStream(),
-      builder: (context, snapshot){
-        if (!snapshot.hasData) return const Text("Loading...");
-        return ListView.builder(
-          itemCount: 1,
-          itemBuilder: (context, index) => _buildDropDownList(context, snapshot.data),
-        );
-      }
-    ),
+        body: StreamBuilder(
+        stream: Queries.categoryListSnapshots(widget._contents),
+        builder: (context, snapshot){
+          if (!snapshot.hasData) return const Align(alignment: Alignment.topCenter, child: LinearProgressIndicator(),);
+          return ListView.builder(
+            padding: EdgeInsets.all(10.0),
+            itemCount: 1,
+            itemBuilder: (context, index) => _buildDropDownList(context,snapshot.data)
+          );
+        }
+      ),
     );
   }
+ Widget _buildDropDownList(BuildContext context, DocumentSnapshot document){
+  List<Widget> dropDowns = new List();
+  print(document['maps']);
 
-  Widget _buildDropDownList(BuildContext context, DocumentSnapshot document){
-    Map<String, dynamic> mappedData = document.data;
-    List<Widget> listOfDropDowns = new List();
+  List<dynamic> mappedData = document['maps'];
 
-    SplayTreeMap sortedCategories = new SplayTreeMap.from(mappedData, (dynamic me, dynamic other){
-      return me.toString().compareTo(other.toString());
-    });
+  mappedData.forEach((value){
+    dropDowns.add(DescriptiveExpansionTile(value['name'], value['description'], value['list']));
+  });
 
-    sortedCategories.values.forEach((value) {
-      Map<dynamic, dynamic> itemList = value;
-
-      SplayTreeMap sortedMapKeys = new SplayTreeMap.from(itemList, (dynamic me, dynamic other){
-        return me.toString().compareTo(other.toString());
-      });
-
-      List<dynamic> list = sortedMapKeys.values.elementAt(1);
-      String name = sortedMapKeys.values.elementAt(2);
-      String description = sortedMapKeys.values.elementAt(0);
-
-      listOfDropDowns.add(DescriptiveExpansionTile(name, description,list)
-      );
-    });
-
-    return Column(
-      children: listOfDropDowns,
-    );
-  }
+  return Column(
+    children: dropDowns
+  );
+   }
 }
-
-class DescriptiveExpansionTile extends StatelessWidget {
+class DescriptiveExpansionTile extends StatefulWidget {
   String category;
   String description;
   List<Widget> columnChildren;
-
-  DescriptiveExpansionTile(String category, String description,List<dynamic> items){
-    this.category = category;
-    this.description =description;
+  List<dynamic> items;
+ State<StatefulWidget> createState() {
+    
+    return _DescriptiveExpansionTileState();
+  }
+  DescriptiveExpansionTile(this.category,this.description,this.items){
     columnChildren=new List();
-        if (description.isNotEmpty){
+         if (description.isNotEmpty){
       columnChildren.add(
         Text(
           description,
@@ -97,66 +86,37 @@ class DescriptiveExpansionTile extends StatelessWidget {
       )
     );
   }
-  
-  @override
-  Widget build(BuildContext context) {
-    return ExpansionTile(
-      leading: Icon(Icons.free_breakfast),
-      title: Text(category),
+   String formatItemList(List<dynamic> elementlist){
+    String rawItems="";
+
+    elementlist.forEach((value){
+      rawItems+=value + " " "•" + " ";
+    });
+
+    rawItems=rawItems.replaceRange(rawItems.length-2,rawItems.length-1,' ');
+    return rawItems;
+  }
+}
+ 
+
+ class _DescriptiveExpansionTileState extends State<DescriptiveExpansionTile>{
+    Widget build(BuildContext context) {
+    return Card(
+      child: ExpansionTile(
+      title: Text(widget.category),
       children: <Widget>[
         ListTile(
-          contentPadding: EdgeInsets.fromLTRB(70.0, 0.0, 0.0, 0.0),
+          //contentPadding: EdgeInsets.fromLTRB(40.0, 0.0, 0.0, 0.0),
           title: Container(
             padding: EdgeInsets.only(right: 50.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: columnChildren,
-               
-              
+              children: widget.columnChildren,
             ),
           ),
         )
       ],
+    ),
     );
-    
   }
-}
-     
-    // print(mappedData);
-
-    // print("Keys--------------");
-    // mappedData.keys.forEach((value) {
-    //   print(value);
-    // });
-
-    // print("Values-----------");
-    // mappedData.values.forEach((value) {
-    //   print(value);
-    // });
-
-    // print("Sub values----------");
-    // mappedData.values.forEach((value) {
-    //   Map<dynamic, dynamic> myMap = value;
-    //   print(myMap.values);
-    // });
-
-    // print("Sub Listsss----------");
-    // mappedData.values.forEach((value) {
-    //   Map<dynamic, dynamic> myMap = value;
-    //   print(myMap.values.elementAt(2));
-    // });
-
-
-
-
-  String formatItemList(List<dynamic> elementlist){
-   String rawItems="";
-
-   elementlist.forEach((value){
-     rawItems+=value + " " "•" + " ";
-   }
-   
-   );
-   rawItems=rawItems.replaceRange(rawItems.length-2,rawItems.length-1,' ');
-    return rawItems;
-  }
+ }

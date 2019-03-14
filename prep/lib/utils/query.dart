@@ -101,4 +101,7 @@ class Queries {
           .document(documentName)
           .get()
           .asStream();
+
+  static Stream<DocumentSnapshot> categoryListSnapshots(String contents) =>
+  _testReference.collection('lists').document(contents).get().asStream();
 }
