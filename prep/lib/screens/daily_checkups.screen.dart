@@ -1,45 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:collection';
+import 'package:prep/utils/query.dart';
 
 class DailyCheckups extends StatefulWidget {
-  final String _appointmentID;
-  DailyCheckups(this._appointmentID);
+  final DateTime _appointmentDateTime;
+
+  DailyCheckups(this._appointmentDateTime);
 
   @override
-  State<StatefulWidget> createState() {
-    print("DailyCheckups screen recieved: " + _appointmentID);
-    return _DailyCheckups();
-  }
+  State<StatefulWidget> createState() => _DailyCheckups();
 }
 
 class _DailyCheckups extends State<DailyCheckups> {
   List<Widget> myList = new List<Widget>();
 
-  IconData _assignIcon(int index) {
-    switch(index){
-      case 0: {return Icons.event;}
-      break;
-      case 1: {return Icons.filter_1;}
-      break;
-      case 2: {return Icons.filter_2;}
-      break;
-      case 3: {return Icons.filter_3;}
-      break;
-      case 4: {return Icons.filter_4;}
-      break;
-      case 5: {return Icons.filter_5;}
-      break;
-      case 6: {return Icons.filter_6;}
-      break;
-      case 7: {return Icons.filter_7;}
-      break;
-      case 8: {return Icons.filter_8;}
-      break;
-      case 9: {return Icons.filter_9;}
-      break;
-      default: {return Icons.filter_9_plus;}
-      break;
+  String monthAbbreviation(DateTime datetime) {
+    const List<String> months = [
+      "January", "February", "March", "April",
+      "May", "June", "July", "August",
+      "September", "October", "November", "December"
+    ];
+    
+    return months[datetime.month - 1].substring(0,3);
+  }
+
+  CircleAvatar _getDailyCheckupIcon(int daysBeforeTest) {
+    return CircleAvatar(
+      backgroundColor: (daysBeforeTest == 0) ? Colors.red[700] : Colors.indigo,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            widget._appointmentDateTime.subtract(Duration(days: daysBeforeTest)).day.toString(),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18.0,
+              //fontWeight: FontWeight.bold
+            ),
+          ),
+          Text(
+            //TODO: Use the already written month name parser to apply month correctly
+            monthAbbreviation(widget._appointmentDateTime),
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 10.0
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Text _getDailyCheckupText(int daysBeforeTest) {
+    switch (daysBeforeTest) {
+      case 1: return Text("Your appointment is tomorrow");
+      case 0: return Text("Your appointment is today!");
+      default: return Text(daysBeforeTest.toString() + " days to your appointment");
     }
   }
 
@@ -54,82 +71,84 @@ class _DailyCheckups extends State<DailyCheckups> {
         Column(
           children: <Widget>[
             Divider(),
-            Container(
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.only(right: 30.0),
-                          child: Text(
-                            (int.parse(index) + 1).toString(),
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Text(
-                              checkupMap['question'].toString()
-                          ),
-                        )
-                      ],
+            ListTile(
+              leading: Container(
+                //color: Colors.red,
+                child: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  radius: 23.0,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.grey[300],
+                    radius: 14.0,
+                    child: Text(
+                      (int.parse(index) + 1).toString(),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold
+                      ),
                     ),
                   ),
-                  Switch(
-                    value: checkupMap['answer'],
-                    onChanged: (_){
-                      if (checkupMap['answer']) {
-                        // Removes the old entry from the list
-                        document.reference.updateData({
-                          ('instructions.' + index + '.answer') : false
-                        });
-                      } else {
-                        document.reference.updateData({
-                          ('instructions.' + index + '.answer') : true
-                        });
-                      }
-                    },
-                  )
-                ],
+                ),
               ),
+              title: Text(
+                  checkupMap['question'],
+                ),
+              trailing: Container(
+                //color: Colors.red,
+                child: Switch(
+                  activeColor: Colors.green[600],
+                  activeTrackColor: Colors.green[100],
+                  value: checkupMap['answer'],
+                  onChanged: (_){
+                    if (checkupMap['answer']) {
+                      // Removes the old entry from the list
+                      document.reference.updateData({
+                        ('instructions.' + index + '.answer') : false
+                      });
+                    } else {
+                      document.reference.updateData({
+                        ('instructions.' + index + '.answer') : true
+                      });
+                    }
+                  },
+                ),
+              )
             )
           ],
         )
       );
     });
 
-    return ExpansionTile(
-      initiallyExpanded: true,
-      leading: Icon(_assignIcon(document['daysBeforeTest'])),
-      title: Text(document['title']),
-      children: <Widget>[
-        ListTile(
-          contentPadding: EdgeInsets.fromLTRB(30.0, 0.0, 0.0, 0.0),
-          title: Container(
-            padding: EdgeInsets.only(right: 20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: instructionWidgets
-            ),
-          ),
+    instructionWidgets.add(
+      Divider(
+        height: 9.0,
+        color: Colors.white,
+      )
+    );
+
+    return Container(
+      padding: EdgeInsets.only(right: 10.0, left: 10.0, top: 5.0, bottom: 5.0),
+      child: Card(
+        elevation: 3.0,
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          leading: _getDailyCheckupIcon(document['daysBeforeTest']),
+          title: _getDailyCheckupText(document['daysBeforeTest']),
+          children: instructionWidgets
         ),
-      ],
+      ),
     );
   }
-
-  // forbidden characters: ".$[]#/"
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: Firestore.instance.collection('appointments').document(widget._appointmentID).collection('dailyCheckups').orderBy('daysBeforeTest', descending: true).snapshots(),
+      stream: Queries.dailyCheckupsSnapshots,
       builder: (context, snapshot) {
       if (!snapshot.hasData) return const Align(alignment: Alignment.topCenter, child: LinearProgressIndicator(),);
       return ListView.builder(
+        padding: EdgeInsets.only(top: 10),
         itemCount: snapshot.data.documents.length,
         itemBuilder: (context, index) => _buildListItem(context, snapshot.data.documents[index]),
       );},
