@@ -223,64 +223,135 @@ class _DashboardState extends State<Dashboard> {
           print(codeFileState);
           showDialog(
             context: context,
-            builder: (_) => AlertDialog(
-              title: new Text("Enter appointment code"),
-              content: SingleChildScrollView(
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      TextFormField(
-                        controller: codeController,
-                        validator: (value) {
-                          if (value.isEmpty){
-                            return "Please enter a code";
-                          } else {
-                            if (validationResultFile) {
-                              return "This appointment is in your calendar";
-                            } else {
-                              if (validationResultDb){
-                                return null;
-                              } else {
-                                return "Invalid code";
-                              }
-                            }
-                          }
-                        },
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(top: 20.0),
+            builder: (_) => _NewAppointmentDialog(this)
+          );
+        }
+      ),
+    );
+  }
+}
+
+class _NewAppointmentDialog extends StatefulWidget {
+  _DashboardState _parent;
+
+  _NewAppointmentDialog(this._parent);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _NewAppointmentDialogState(_parent);
+  }
+}
+
+class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
+  bool loading = false;
+  _DashboardState _parent;
+
+  _NewAppointmentDialogState(this._parent);
+
+  // Checks if an appointment ID exists in the codes file
+  bool _documentInCodeFile(String value) {
+    return _parent.codeFileState.split(',').contains(value);
+  }
+
+  Future<bool> _isCodeInFirestore (String code) async {
+    List<String> liveIDs = new List();
+
+    await Queries.appointmentCodes.then((query) {
+      query.documents.forEach((document) {
+        liveIDs.add(document.documentID);
+      });
+    });
+
+    if (liveIDs.contains(code)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      contentPadding: EdgeInsets.all(10.0),
+      title: new Text("Enter appointment code"),
+      content: SingleChildScrollView(
+        child: Form(
+          key: _parent._formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.all(10.0),
+                child:  TextFormField(
+                  controller: _parent.codeController,
+                  validator: (value) {
+                    if (value.isEmpty){
+                      return "Please enter a code";
+                    } else {
+                      if (_parent.validationResultFile) {
+                        return "This appointment is in your calendar";
+                      } else {
+                        if (_parent.validationResultDb){
+                          return null;
+                        } else {
+                          return "Invalid code";
+                        }
+                      }
+                    }
+                  },
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.all(10.0),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
                         child: RaisedButton(
                           onPressed: () async {
-                            if (codeController.text.isEmpty){
-                              _formKey.currentState.validate();
+                            if (loading) {
+                              return null;
+                            }
+
+                            if (_parent.codeController.text.isEmpty){
+                              _parent._formKey.currentState.validate();
                             } else {
-                              bool inFile = _documentInCodeFile(codeController.text);
-                              bool inDatabase = await _isCodeInFirestore(codeController.text);
+                              setState(() {
+                                loading = true;
+                              });
 
-                              //every time this setState runs, _getDocData is executed. It's inefficient.
-                              //setState(() {
-                                this.validationResultDb = inDatabase;
-                                this.validationResultFile = inFile;
-                              //});
+                              bool inFile = _documentInCodeFile(_parent.codeController.text);
+                              bool inDatabase = await _isCodeInFirestore(_parent.codeController.text);
 
-                              if(_formKey.currentState.validate()){
-                                writeData();
+                              _parent.validationResultDb = inDatabase;
+                              _parent.validationResultFile = inFile;
+
+                              setState(() {
+                                loading = false;
+                              });
+
+                              if(_parent._formKey.currentState.validate()){
+                                _parent.writeData();
                                 Navigator.pop(context);
                               }
                             }
                           },
                           child: Text('SUBMIT'),
                         ),
-                      ),
-                    ],
-                  ),
+                      )
+                    ),
+                    Expanded(
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: (loading) ? CircularProgressIndicator() : Container(),
+                        )
+                    )
+                  ],
                 ),
-              ),
-            )
-          );
-        }
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -441,5 +512,3 @@ class Storage {
     return file.writeAsString("$data");
   }
 }
-
-//return (this.year == other.year && this.month == other.month && this.day == other.day);

@@ -4,6 +4,7 @@ import 'information_parser.screen.dart';
 import 'faq_parser.screen.dart';
 import 'package:prep/screens/category.screen.dart';
 import 'package:prep/utils/query.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class AppointmentPrep extends StatefulWidget {
   final DateTime _appointmentDatetime;
@@ -21,54 +22,25 @@ class _AppointmentPrepState extends State<AppointmentPrep> {
       stream: Queries.prepCardsSnapshots,
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const Align(alignment: Alignment.topCenter, child: LinearProgressIndicator(),);
-          return GridView.builder(
-            padding: EdgeInsets.only(top: 10),
-            //gridDelegate: new SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 300, childAspectRatio: (3/2)),
-            gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: (MediaQuery.of(context).orientation == Orientation.portrait) ? 2 : 3, childAspectRatio: (3/1.5)),
+          return StaggeredGridView.countBuilder(
+            padding: EdgeInsets.all(10.0),
+            crossAxisCount: 4,
             itemCount: snapshot.data.documents.length,
-            itemBuilder: (context, index) =>_buildGrid(context,snapshot.data.documents[index])
+            itemBuilder: (context, index) =>_buildGrid(context,snapshot.data.documents[index]),
+            staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
+            mainAxisSpacing: 5.0,
+            crossAxisSpacing: 5.0,
           );
         }
     );
   }
 
   Widget _buildGrid(BuildContext context, DocumentSnapshot document) {
-    return GridTile(
-      child: CategoryCard(document['contents'],
-        document['title'],
-        document['type'],
-        Colors.white,
-        Icons.android,
-        widget._appointmentDatetime
-      ),
-    );
-  }
-}
-
-class CategoryExpansionTile extends StatelessWidget {
-  final String name;
-  final List<Widget> contents;
-  final Color color;
-  final IconData icon;
-
-  CategoryExpansionTile(this.name, this.contents, this.color, this.icon);
-
-  @override
-  Widget build(BuildContext context) {
-    return ExpansionTile(
-      initiallyExpanded: true,
-      title: ListTile(
-        contentPadding: EdgeInsets.only(left: 0.0),
-        leading: CircleAvatar(
-          backgroundColor: color,
-          child: Icon(
-            icon,
-            color: Colors.white,
-          ),
-        ),
-        title: Text(name),
-      ),
-      children: contents
+    return CategoryCard(document['contents'],
+      document['title'],
+      document['type'],
+      Colors.white,
+      widget._appointmentDatetime
     );
   }
 }
@@ -78,10 +50,9 @@ class CategoryCard extends StatelessWidget {
   final String title;
   final String type;
   final Color color;
-  final IconData icon;
   final DateTime _appointmentDateTime;
 
-  CategoryCard(this.contents, this.title, this.type, this.color, this.icon, this._appointmentDateTime);
+  CategoryCard(this.contents, this.title, this.type, this.color, this._appointmentDateTime);
 
   Future _navigate(dynamic context) {
     //TODO: add links to the relevant pages
@@ -134,28 +105,51 @@ class CategoryCard extends StatelessWidget {
     }
   }
 
+  String _getCategory(){
+    switch (type) {
+      case "informations":
+        return "Information";
+      case "categoryList":
+        return "List";
+      case "recipeView":
+        return "Recipe";
+      default:
+        return "FAQ";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(right: 10.0, left: 10.0, top: 5.0, bottom: 5.0),
-        child: Card(
-          color: color,
-          elevation: 3.0,
-          child: InkWell(
-            onTap: () {
-              _navigate(context);
-            },
-            child: Center(
-              child: ListTile(
+    return Card(
+      color: color,
+      elevation: 3.0,
+      child: InkWell(
+        onTap: () {
+          _navigate(context);
+        },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              ListTile(
+                title: Text(
+                  _getCategory(),
+                  style: TextStyle(
+                    color: Colors.grey[400],
+                    fontStyle: FontStyle.italic
+                  ),
+                ),
                 leading: _getIcon(),
+              ),
+              ListTile(
                 title: Text(
                   title,
-                  maxLines: 3,
+                  //maxLines: 3,
                 ),
               ),
-            )
-          ),
-        ),
+            ],
+          )
+      ),
     );
   }
 }

@@ -14,19 +14,49 @@ class DailyCheckups extends StatefulWidget {
 class _DailyCheckups extends State<DailyCheckups> {
   List<Widget> myList = new List<Widget>();
 
-  IconData _assignIcon(int index) {
-    switch(index) {
-      case 0: {return Icons.event;}
-      case 1: {return Icons.filter_1;}
-      case 2: {return Icons.filter_2;}
-      case 3: {return Icons.filter_3;}
-      case 4: {return Icons.filter_4;}
-      case 5: {return Icons.filter_5;}
-      case 6: {return Icons.filter_6;}
-      case 7: {return Icons.filter_7;}
-      case 8: {return Icons.filter_8;}
-      case 9: {return Icons.filter_9;}
-      default: {return Icons.filter_9_plus;}
+  String monthAbbreviation(DateTime datetime) {
+    const List<String> months = [
+      "January", "February", "March", "April",
+      "May", "June", "July", "August",
+      "September", "October", "November", "December"
+    ];
+    
+    return months[datetime.month - 1].substring(0,3);
+  }
+
+  CircleAvatar _getDailyCheckupIcon(int daysBeforeTest) {
+    return CircleAvatar(
+      backgroundColor: (daysBeforeTest == 0) ? Colors.red[700] : Colors.indigo,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            widget._appointmentDateTime.subtract(Duration(days: daysBeforeTest)).day.toString(),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18.0,
+              //fontWeight: FontWeight.bold
+            ),
+          ),
+          Text(
+            //TODO: Use the already written month name parser to apply month correctly
+            monthAbbreviation(widget._appointmentDateTime),
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 10.0
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Text _getDailyCheckupText(int daysBeforeTest) {
+    switch (daysBeforeTest) {
+      case 1: return Text("Your appointment is tomorrow");
+      case 0: return Text("Your appointment is today!");
+      default: return Text(daysBeforeTest.toString() + " days to your appointment");
     }
   }
 
@@ -67,6 +97,8 @@ class _DailyCheckups extends State<DailyCheckups> {
               trailing: Container(
                 //color: Colors.red,
                 child: Switch(
+                  activeColor: Colors.green[600],
+                  activeTrackColor: Colors.green[100],
                   value: checkupMap['answer'],
                   onChanged: (_){
                     if (checkupMap['answer']) {
@@ -101,45 +133,12 @@ class _DailyCheckups extends State<DailyCheckups> {
         elevation: 3.0,
         child: ExpansionTile(
           initiallyExpanded: true,
-          leading: (document['daysBeforeTest'] != 0)
-              ? Icon(_assignIcon(document['daysBeforeTest']))
-              : CircleAvatar(
-                  backgroundColor: Colors.indigo,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        widget._appointmentDateTime.day.toString(),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18.0
-                        ),
-                      ),
-                      Text(
-                        //TODO: Use the already written month name parser to apply month correctly
-                        "Mar",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.0
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-          title: _getDailyCheckupTitle(document),
+          leading: _getDailyCheckupIcon(document['daysBeforeTest']),
+          title: _getDailyCheckupText(document['daysBeforeTest']),
           children: instructionWidgets
         ),
       ),
     );
-  }
-
-  Text _getDailyCheckupTitle(DocumentSnapshot document) {
-    switch (document['daysBeforeTest'].toString()) {
-      case "1": return Text("Day to your appointment");
-      case "0": return Text("Your appointment is today");
-      default: return Text("Days to your appointment");
-    }
   }
 
   @override
