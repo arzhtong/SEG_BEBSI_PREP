@@ -24,7 +24,7 @@ class _CategoryListState extends State<CategoryListParser>{
         body: StreamBuilder(
         stream: Queries.categoryListSnapshots(widget._contents),
         builder: (context, snapshot){
-          if (!snapshot.hasData) return const Text("Loading...");
+          if (!snapshot.hasData) return const Align(alignment: Alignment.topCenter, child: LinearProgressIndicator(),);
           return ListView.builder(
             padding: EdgeInsets.all(10.0),
             itemCount: 1,
