@@ -65,5 +65,10 @@ export default {
 body {
   background: #007bff;
   background: linear-gradient(to right, #4b0082, #0062e6);
+  margin: 0;
+  position: relative;
+  top: 50%;
+  left: 7%;
+  overflow: hidden;
 }
 </style>
