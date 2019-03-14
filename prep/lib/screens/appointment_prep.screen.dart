@@ -98,7 +98,7 @@ class CategoryCard extends StatelessWidget {
       return CircleAvatar(
         backgroundColor: Colors.red,
         child: Icon(
-          Icons.fastfood,
+          Icons.local_dining,
           color: Colors.white,
         ),
       );

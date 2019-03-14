@@ -395,14 +395,44 @@ class _CalendarCard extends StatelessWidget {
   final String location;
   final DateTime dateTime;
   final String testID;
+  List<Color> colors = [Colors.green[300], Colors.red[300], Colors.blue[300], Colors.orange[300]];
+  Color color;
 
-  _CalendarCard(this.name, this.location, this.dateTime, this.testID);
+  _CalendarCard(this.name, this.location, this.dateTime, this.testID) {
+    print(name.hashCode);
+    color = colors[name.hashCode % 4];
+  }
 
+  String dateFormater(DateTime datetime) {
+    const List<String> months = [
+      "January", "February", "March", "April",
+      "May", "June", "July", "August",
+      "September", "October", "November", "December"
+    ];
+
+    String day = datetime.day.toString();
+    String month = months[datetime.month - 1];
+    String year = datetime.year.toString();
+    String hour = datetime.hour.toString();
+    String minute = datetime.minute.toString();
+
+    return day + " " + month + " " + year;
+  }
+
+  String timeFormater(DateTime datetime) {
+    String hour = (datetime.hour < 10) ? "0" + datetime.hour.toString() : datetime.hour.toString();
+    String minute = (datetime.minute < 10) ? "0" + datetime.minute.toString() : datetime.minute.toString();
+
+    //String timeOfDay = (int.parse(hour) < 12) ? "am" : "pm";
+
+    return hour + " : " + minute;
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-      child:  Card(
+      child: Card(
         elevation: 3.0,
         child: Stack(
           children: <Widget>[
@@ -412,23 +442,84 @@ class _CalendarCard extends StatelessWidget {
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      stops: [0.1, 0.9],
-                      colors: [
-                        Colors.red[400],
-                        Colors.yellow[400],
+                    borderRadius: BorderRadius.all(Radius.circular(3.0)),
+//                    gradient: LinearGradient(
+//                      begin: Alignment.topLeft,
+//                      end: Alignment.bottomRight,
+//                      stops: [0.1, 0.9],
+//                      colors: [
+//                        Colors.blue[300],
+//                        Colors.green[300],
+//                      ],
+//                    ),
+                  color: color
+                  ),
+                  //height: 200.0,
+                  child: Container(
+                    padding: EdgeInsets.all(10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Column(
+                          children: <Widget>[
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "FDG PET cardiac imagery examination",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Divider(
+                              color: Colors.transparent,
+                              height: 30.0,
+                            ),
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                location,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                dateFormater(dateTime),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                timeFormater(dateTime),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
-                  ),
-                  height: 200.0,
+                  )
                 ),
                 ListTile(
-                  leading: Icon(Icons.today),
+                  leading: Icon(Icons.code),
                   title: Text(name),
-                  subtitle: Text(location + " - " + dateTime.toString()),
                   //subtitle: Text("St. Thomas Hospital - 11:00 am"),
                 ),
               ],
@@ -437,12 +528,13 @@ class _CalendarCard extends StatelessWidget {
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Appointment(name, testID, 0, dateTime))
-                      );
-                    }),
+                  splashColor: Color.fromRGBO(255, 255, 255, 0.2),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Appointment(name, testID, 0, dateTime))
+                    );
+                  }),
               ),
             ),
           ],
