@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'package:path_provider/path_provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+import 'package:prep/widgets/dashboard/calendar_label.dart';
+import 'package:prep/widgets/dashboard/calendar_card.dart';
+import 'package:prep/widgets/dashboard/empty_calendar_placeholder.dart';
+import 'package:prep/utils/storage.dart';
 import 'package:prep/utils/query.dart';
-import 'package:prep/screens/appointment.screen.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -129,9 +131,6 @@ class _DashboardState extends State<Dashboard> {
       documentIDs.add(doc.documentID);
     });
 
-    //print("Document IDs: " + documentIDs.toString());
-    print(codeFileState.split(',').toString());
-
     String newCodeFileState = "";
     codeFileState.split(',').forEach((code){
       if (documentIDs.contains(code)){
@@ -141,13 +140,11 @@ class _DashboardState extends State<Dashboard> {
 
     await overrideData(newCodeFileState).then((_){});
 
-    // print("NEW CODE FILE: " + newCodeFileState);
-
     // building the return widget based on the updated (current) codes file
     if (codeFileState == null){
       return null;
     } else if (codeFileState.isEmpty) {
-      return _EmptyCalendarPlaceholder();
+      return EmptyCalendarPlaceholder();
     } else {
       //Generates a list of filtered appointments
       List<DocumentSnapshot> filteredDocuments= new List();
@@ -158,15 +155,15 @@ class _DashboardState extends State<Dashboard> {
       });
       documentList = filteredDocuments;
 
-      calendarElements.add(_CalendarLabel(documentList.elementAt(0).data['datetime'].toDate()));
-      calendarElements.add(_CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime'].toDate(), documentList.elementAt(0).data['testID'], documentList.elementAt(0).data['doctor'], documentList.elementAt(0).data['testName']));
+      calendarElements.add(CalendarLabel(documentList.elementAt(0).data['datetime'].toDate()));
+      calendarElements.add(CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime'].toDate(), documentList.elementAt(0).data['testID'], documentList.elementAt(0).data['doctor'], documentList.elementAt(0).data['testName']));
 
       for (int i = 1; i < documentList.length; i++){
         if (_datesAreEqual(documentList.elementAt(i).data['datetime'].toDate(), (documentList.elementAt(i - 1).data['datetime'].toDate()))){
-          calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime'].toDate(), documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['doctor'], documentList.elementAt(i).data['testName']));
+          calendarElements.add(CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime'].toDate(), documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['doctor'], documentList.elementAt(i).data['testName']));
         } else {
-          calendarElements.add(_CalendarLabel(documentList.elementAt(i).data['datetime'].toDate()));
-          calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime'].toDate(), documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['doctor'], documentList.elementAt(i).data['testName']));
+          calendarElements.add(CalendarLabel(documentList.elementAt(i).data['datetime'].toDate()));
+          calendarElements.add(CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime'].toDate(), documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['doctor'], documentList.elementAt(i).data['testName']));
         }
       }
 
@@ -236,7 +233,7 @@ class _DashboardState extends State<Dashboard> {
 }
 
 class _NewAppointmentDialog extends StatefulWidget {
-  _DashboardState _parent;
+  final _DashboardState _parent;
 
   _NewAppointmentDialog(this._parent);
 
@@ -358,256 +355,5 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
         ),
       ),
     );
-  }
-}
-
-class _CalendarLabel extends StatelessWidget {
-  final DateTime dateTime;
-
-  _CalendarLabel(this.dateTime);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.only(left: 10.0, top: 5.0, bottom: 5.0),
-        child: Text(
-          dateTimeFormater(dateTime),
-          style: TextStyle(
-              fontWeight: FontWeight.bold
-          ),
-        )
-    );
-  }
-
-  String dateTimeFormater(DateTime datetime) {
-    const List<String> months = [
-      "January", "February", "March", "April",
-      "May", "June", "July", "August",
-      "September", "October", "November", "December"
-    ];
-
-    String day = datetime.day.toString();
-    String month = months[datetime.month - 1];
-    String year = datetime.year.toString();
-
-    return day + " " + month + " " + year;
-  }
-}
-
-class _CalendarCard extends StatelessWidget {
-  final String name;
-  final String location;
-  final DateTime dateTime;
-  final String testID;
-  final String doctorName;
-  final String testName;
-  List<Color> colors = [Colors.green[300], Colors.red[300], Colors.blue[300], Colors.orange[300]];
-  Color color;
-
-  _CalendarCard(this.name, this.location, this.dateTime, this.testID, this.doctorName, this.testName) {
-    print(name.hashCode);
-    color = colors[name.hashCode % 4];
-  }
-
-  String dateFormater(DateTime datetime) {
-    const List<String> months = [
-      "January", "February", "March", "April",
-      "May", "June", "July", "August",
-      "September", "October", "November", "December"
-    ];
-
-    String day = datetime.day.toString();
-    String month = months[datetime.month - 1];
-    String year = datetime.year.toString();
-    String hour = datetime.hour.toString();
-    String minute = datetime.minute.toString();
-
-    return day + " " + month + " " + year;
-  }
-
-  String timeFormater(DateTime datetime) {
-    String hour = (datetime.hour < 10) ? "0" + datetime.hour.toString() : datetime.hour.toString();
-    String minute = (datetime.minute < 10) ? "0" + datetime.minute.toString() : datetime.minute.toString();
-
-    //String timeOfDay = (int.parse(hour) < 12) ? "am" : "pm";
-
-    return hour + " : " + minute;
-  }
-
-  Widget _informationRow(String label, String content) {
-    return Container(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Expanded(
-            child: Text(
-              label,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20.0,
-                fontWeight: FontWeight.w300,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              content,
-              textAlign: TextAlign.end,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20.0,
-                fontWeight: FontWeight.w300,
-              ),
-            ),
-          )
-        ],
-      )
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-      child: Card(
-        elevation: 3.0,
-        child: Stack(
-          children: <Widget>[
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(3.0)),
-                  color: color
-                  ),
-                  child: Container(
-                    padding: EdgeInsets.all(10.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Column(
-                          children: <Widget>[
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                testName,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 30.0,
-                                    fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Divider(
-                              color: Colors.transparent,
-                              height: 30.0,
-                            ),
-                            _informationRow("Location: ", location),
-                            _informationRow("Staff member: ", doctorName),
-                            _informationRow("Date: ", dateFormater(dateTime)),
-                            _informationRow("Time: ", timeFormater(dateTime)),
-                          ],
-                        ),
-                      ],
-                    ),
-                  )
-                ),
-                ListTile(
-                  leading: Icon(Icons.code),
-                  title: Text(name),
-                ),
-              ],
-            ),
-            Positioned.fill(
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  splashColor: Color.fromRGBO(255, 255, 255, 0.2),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Appointment(name, testID, 0, dateTime))
-                    );
-                  }),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _EmptyCalendarPlaceholder extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Text(
-          "Your calendar is empty",
-          style: TextStyle(
-            fontSize: 40.0,
-            color: Colors.grey,
-            fontWeight: FontWeight.bold,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        Padding(
-          padding: EdgeInsets.all(20.0),
-        ),
-        Text(
-          "Add some appointments",
-          style: TextStyle(
-            fontSize: 30.0,
-            color: Colors.grey,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ],
-    );
-  }
-}
-
-class Storage {
-  Future<String> get localPath async {
-    final dir = await getApplicationDocumentsDirectory();
-    return dir.path;
-  }
-
-  Future<File> get localFile async {
-    final path = await localPath;
-    return File('$path/prepApCode.txt');
-  }
-
-  Future<String> readData() async {
-    try {
-      final file = await localFile;
-      String body = await file.readAsString();
-      return body;
-    } catch (e) {
-      return e.toString();
-    }
-  }
-
-  Future<bool> codeFileExists() async {
-    try {
-      final file = await localFile;
-      int length = await file.length();
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  Future<File> writeData(String data) async {
-    final file = await localFile;
-    return file.writeAsString("$data");
   }
 }
