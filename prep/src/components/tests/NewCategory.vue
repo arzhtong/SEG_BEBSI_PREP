@@ -43,7 +43,7 @@ export default {
         
          db.collection("tests")
         .doc(this.$route.params.test_id)
-        .collection("prepContents")
+        .collection("lists")
         .doc(this.title)
         .set({})
         

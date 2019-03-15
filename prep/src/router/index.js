@@ -10,6 +10,7 @@ import EditRecipe from '@/components/tests/EditRecipe'
 import ViewPrepCategories from '@/components/tests/ViewPrepCategories'
 import NewCategory from '@/components/tests/NewCategory'
 import ViewPrepList from '@/components/tests/ViewPrepList'
+import EditPrepList from '@/components/tests/EditPrepList'
 import EditStaff from '@/components/staff/EditStaff'
 import ViewAppointments from '@/components/appointments/ViewAppointments'
 import AddAppointment from '@/components/appointments/AddAppointment'
@@ -159,6 +160,14 @@ let router = new Router({
       path: '/view-prep-list/:test_id/:contents',
       name: 'view-prep-list',
       component: ViewPrepList,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/edit-prep-list/:test_id/:contents',
+      name: 'edit-prep-list',
+      component: EditPrepList,
       meta: {
         requiresAuth: true
       }

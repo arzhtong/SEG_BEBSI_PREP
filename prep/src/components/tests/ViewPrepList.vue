@@ -7,20 +7,24 @@
           v-bind:to="{name: 'view-prep-categories', params: {test_id: test_id}}"
           class="btn grey"
         >Back</router-link>
+         <router-link
+          v-bind:to="{name: 'edit-prep-list', params: {test_id: test_id, contents: this.$route.params.contents}}"
+          class="btn green"
+        >Edit</router-link>
         <button @click="deleteList" class="btn red">Delete</button>
       </li>
       <li class="collection-item">
         <b>
           <h5>Lists:</h5>
         </b>
-        <div v-for="map in maps[0]" v-bind:key="map">
+        <div v-for="map in maps" v-bind:key="map">
           <li class="collection-item">
-            <h6>{{map.name}}</h6>
+            <h6><B>Name:</B> {{map.name}}</h6>
           </li>
           <ul>
             <li v-for="item in map.list" v-bind:key="item">{{item}}</li>
           </ul>
-          <li v-if="map.description" class="collection-item">{{map.description}}</li>
+          <li v-if="map.description" class="collection-item"> <B>Description: </B> {{map.description}}</li>
         </div>
       </li>
     </ul>
@@ -42,13 +46,13 @@ export default {
   created() {
     db.collection("tests")
       .doc(this.$route.params.test_id)
-      .collection("prepContents")
+      .collection("lists")
       .doc(this.$route.params.contents)
       .get()
       .then(doc => {
-        const data = doc.data();
-
-        this.maps.push(data);
+        (doc.data().maps).forEach((map) => {
+              this.maps.push(map)
+          })
       });
   },
   methods: {
@@ -57,7 +61,7 @@ export default {
         db.collection("tests")
           .doc(this.$route.params.test_id)
           .collection("prepCards")
-          .where("title", "==", this.$route.params.contents)
+          .where("contents", "==", this.$route.params.contents)
           .get()
           .then(querySnapshot => {
             querySnapshot.forEach(doc => {
@@ -66,7 +70,7 @@ export default {
           });
         db.collection("tests")
           .doc(this.$route.params.test_id)
-          .collection("prepContents")
+          .collection("lists")
           .doc(this.$route.params.contents)
           .get()
           .then(doc => {
