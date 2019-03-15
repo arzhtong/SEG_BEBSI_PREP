@@ -44,7 +44,10 @@
           </div>
         </div>
                 <button type="submit" class="btn">Submit</button>
-                 
+                
+                <router-link v-bind:to="{name: 'view-dailycheckups-info', params: {test_id:test_id, daily_id:title}}" class="btn grey">
+                Cancel
+                </router-link>
                  
             </form>
        </div>
