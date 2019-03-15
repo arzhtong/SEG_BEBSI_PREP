@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:prep/screens/recipeList.screen.dart';
 import 'information_parser.screen.dart';
 import 'faq_parser.screen.dart';
 import 'package:prep/screens/category.screen.dart';
@@ -63,21 +64,22 @@ class CategoryCard extends StatelessWidget {
       case "categoryList":
         return Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryListParser(contents)));
       case "recipeView":
-        return null;
+        return Navigator.push(context,
+            MaterialPageRoute(builder: (context) => RecipeListScreen()));
       default:
         return Navigator.push(context, MaterialPageRoute(builder: (context) => FaqParser(_appointmentDateTime)));
     }
   }
 
-  CircleAvatar _getIcon(){
+  CircleAvatar _getIcon() {
     if (type == "categoryList") {
-        return CircleAvatar(
-          backgroundColor: Colors.blue,
-          child: Icon(
-            Icons.list,
-            color: Colors.white,
-          ),
-        );
+      return CircleAvatar(
+        backgroundColor: Colors.blue,
+        child: Icon(
+          Icons.list,
+          color: Colors.white,
+        ),
+      );
     } else if (type == "informations") {
       return CircleAvatar(
         backgroundColor: Colors.deepPurple,
