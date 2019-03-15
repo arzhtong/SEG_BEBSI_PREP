@@ -131,9 +131,6 @@ class _DashboardState extends State<Dashboard> {
       documentIDs.add(doc.documentID);
     });
 
-    //print("Document IDs: " + documentIDs.toString());
-    print(codeFileState.split(',').toString());
-
     String newCodeFileState = "";
     codeFileState.split(',').forEach((code){
       if (documentIDs.contains(code)){
@@ -142,8 +139,6 @@ class _DashboardState extends State<Dashboard> {
     });
 
     await overrideData(newCodeFileState).then((_){});
-
-    // print("NEW CODE FILE: " + newCodeFileState);
 
     // building the return widget based on the updated (current) codes file
     if (codeFileState == null){
