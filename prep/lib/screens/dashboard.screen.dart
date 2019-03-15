@@ -5,7 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:prep/widgets/dashboard/calendar_label.dart';
 import 'package:prep/widgets/dashboard/calendar_card.dart';
 import 'package:prep/widgets/dashboard/empty_calendar_placeholder.dart';
-import 'package:prep/widgets/dashboard/storage.dart';
+import 'package:prep/utils/storage.dart';
 import 'package:prep/utils/query.dart';
 
 class Dashboard extends StatefulWidget {
