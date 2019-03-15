@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:prep/utils/query.dart';
 
 class DailyCheckups extends StatefulWidget {
@@ -40,7 +41,6 @@ class _DailyCheckups extends State<DailyCheckups> {
             ),
           ),
           Text(
-            //TODO: Use the already written month name parser to apply month correctly
             monthAbbreviation(widget._appointmentDateTime),
             style: TextStyle(
                 color: Colors.white,
