@@ -6,9 +6,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:prep/widgets/dashboard/calendar_label.dart';
 import 'package:prep/widgets/dashboard/calendar_card.dart';
 import 'package:prep/widgets/dashboard/empty_calendar_placeholder.dart';
+import 'package:prep/widgets/dashboard/storage.dart';
+
 
 import 'package:prep/utils/query.dart';
-import 'package:prep/screens/appointment.screen.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -362,42 +363,5 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
         ),
       ),
     );
-  }
-}
-
-class Storage {
-  Future<String> get localPath async {
-    final dir = await getApplicationDocumentsDirectory();
-    return dir.path;
-  }
-
-  Future<File> get localFile async {
-    final path = await localPath;
-    return File('$path/prepApCode.txt');
-  }
-
-  Future<String> readData() async {
-    try {
-      final file = await localFile;
-      String body = await file.readAsString();
-      return body;
-    } catch (e) {
-      return e.toString();
-    }
-  }
-
-  Future<bool> codeFileExists() async {
-    try {
-      final file = await localFile;
-      int length = await file.length();
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  Future<File> writeData(String data) async {
-    final file = await localFile;
-    return file.writeAsString("$data");
   }
 }
