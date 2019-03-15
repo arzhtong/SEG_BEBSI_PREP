@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:prep/screens/appointment.screen.dart';
 import 'package:prep/utils/query.dart';
 
-class FaqParser extends StatefulWidget {
+class FaqParser extends StatelessWidget {
   final DateTime _appointmentDateTime;
 
   FaqParser(this._appointmentDateTime);
 
-  @override
-  State<StatefulWidget> createState() => _FaqParserState();
-}
-
-class _FaqParserState extends State<FaqParser> {
   Widget _buildListItem(BuildContext context, DocumentSnapshot document){
     return Container(
       padding: EdgeInsets.only(right: 10.0, left: 10.0, top: 5.0, bottom: 5.0),
@@ -40,7 +36,9 @@ class _FaqParserState extends State<FaqParser> {
                       onPressed: () {
                         Navigator.push(
                             context, MaterialPageRoute(builder: (context) =>
-                            Appointment(Queries.appointmentID, Queries.testID, 3, widget._appointmentDateTime))
+                            Appointment(Queries.appointmentID, Queries.testID,
+                                3, _appointmentDateTime)
+                        )
                         );
                       }
                     )
@@ -52,7 +50,9 @@ class _FaqParserState extends State<FaqParser> {
                       onPressed: () {
                         Navigator.push(
                             context, MaterialPageRoute(builder: (context) =>
-                            Appointment(Queries.appointmentID, Queries.testID, 1, widget._appointmentDateTime))
+                            Appointment(Queries.appointmentID, Queries.testID,
+                                1, _appointmentDateTime)
+                        )
                         );
                       }
                     )
