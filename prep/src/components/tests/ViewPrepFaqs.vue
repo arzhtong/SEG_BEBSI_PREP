@@ -4,25 +4,51 @@
       <li class="collection-header">
         <div class="container" style="width:100%;height:100%">
           <router-link
-            v-bind:to="{name: 'new-recipe', params: {test_id: testID}}"
+            v-bind:to="{name: 'new-prep-faq', params: {test_id: testID, contents: this.$route.params.contents}}"
             class="btn green"
             style="margin:20px"
           >Add FAQ</router-link>
+          <router-link
+            v-bind:to="{name: 'view-prep-categories', params: {test_id: testID}}"
+            class="btn grey"
+          >Back</router-link>
         </div>
 
-        <ul class="collapsible"> 
-            <li v-for="faq in faqs" v-bind:key="faq.id">
-              <div class="collapsible-header"><b>Question: </b> &nbsp; {{faq.question}}</div>
-              <div class="collapsible-body">
-                <span><ul>
-                    <li><b>Answer: </b>&nbsp; {{faq.answer}}</li>
-                    <li v-if="faq.chatShortcut"> <b>Has a chat shortcut: </b>&nbsp;Yes</li>
-                    <li v-else><b>Has a chat shortcut: </b>&nbsp;No</li>
-                    <li v-if="faq.informationShortcut"> <b>Has an information shortcut: </b>&nbsp;Yes</li>
-                    <li v-else><b>Has an information shortcut: </b>&nbsp;No</li>
-                    </ul></span>
-              </div>
-            </li>
+        <ul class="collapsible">
+          <li v-for="faq in faqs" v-bind:key="faq.id">
+            <div class="collapsible-header">
+              <b>Question:</b>
+              &nbsp; {{faq.question}}
+            </div>
+            <div class="collapsible-body">
+              <span>
+                <ul>
+                  <li>
+                    <b>Answer:</b>
+                    &nbsp; {{faq.answer}}
+                  </li>
+                  <li v-if="faq.chatShortcut">
+                    <b>Has a chat shortcut:</b>&nbsp;Yes
+                  </li>
+                  <li v-else>
+                    <b>Has a chat shortcut:</b>&nbsp;No
+                  </li>
+                  <li v-if="faq.informationShortcut">
+                    <b>Has an information shortcut:</b>&nbsp;Yes
+                  </li>
+                  <li v-else>
+                    <b>Has an information shortcut:</b>&nbsp;No
+                  </li>
+                  <li>
+                    <button
+                      @click="deleteFAQ(faq.id)"
+                      class="waves-effect waves-light btn-small red"
+                    >delete</button>
+                  </li>
+                </ul>
+              </span>
+            </div>
+          </li>
         </ul>
       </li>
     </ul>
@@ -60,6 +86,24 @@ export default {
   },
   mounted() {
     M.AutoInit();
+  },
+  methods: {
+    deleteFAQ(id) {
+      if (confirm("Are you sure?")) {
+        db.collection("tests")
+          .doc(this.$route.params.test_id)
+          .collection("faqs")
+          .doc(id)
+          .get()
+          .then(doc => {
+            doc.ref.delete();
+          })
+          .then(() => {
+            console.log("FAQ successfully deleted!");
+            location.reload();
+          });
+      }
+    }
   }
 };
 </script>
