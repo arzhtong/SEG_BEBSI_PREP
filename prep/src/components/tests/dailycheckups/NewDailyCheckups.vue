@@ -47,7 +47,7 @@
 </template>
 <script>
 
-import db from '../firebaseInit'
+import db from '../../firebaseInit'
    
     export default{
         name: 'new-dailycheckups',

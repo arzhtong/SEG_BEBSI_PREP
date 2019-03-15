@@ -44,9 +44,8 @@
           </div>
         </div>
                 <button type="submit" class="btn">Submit</button>
-                
                 <router-link v-bind:to="{name: 'view-dailycheckups-info', params: {test_id:test_id, daily_id:title}}" class="btn grey">
-                Cancel
+                  Cancel
                 </router-link>
                  
             </form>
@@ -56,7 +55,7 @@
 </template>
 
 <script>
-import db from "../firebaseInit";
+import db from "../../firebaseInit";
 
 export default {
   name: "edit-dailycheckups",

@@ -30,9 +30,10 @@
                                 <i class="material-icons circle green">done_all</i>
                                 <h5 class="titles">Daily check-ups</h5>
                                 <router-link 
-                                    to=""
+                                    v-bind:to="{name: 'view-dailycheckups', params: {test_id: test.id}}"
                                     class="btn blue secondary-content"
                                 >Show/Edit</router-link>
+                               
                             </li>
                             <li class="collection-item avatar">
                                 <i class="material-icons circle blue">assignment</i>
