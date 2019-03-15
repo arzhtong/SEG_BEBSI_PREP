@@ -101,22 +101,26 @@ class DescriptiveExpansionTile extends StatefulWidget {
 
  class _DescriptiveExpansionTileState extends State<DescriptiveExpansionTile>{
     Widget build(BuildContext context) {
-    return Card(
-      child: ExpansionTile(
-      title: Text(widget.category),
-      children: <Widget>[
-        ListTile(
-          //contentPadding: EdgeInsets.fromLTRB(40.0, 0.0, 0.0, 0.0),
-          title: Container(
-            padding: EdgeInsets.only(right: 50.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: widget.columnChildren,
-            ),
-          ),
-        )
-      ],
-    ),
+    return Container(
+      padding: EdgeInsets.only(bottom: 5.0),
+      child: Card(
+        elevation: 3.0,
+        child: ExpansionTile(
+          title: Text(widget.category),
+          children: <Widget>[
+            ListTile(
+              //contentPadding: EdgeInsets.fromLTRB(40.0, 0.0, 0.0, 0.0),
+              title: Container(
+                padding: EdgeInsets.only(right: 50.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: widget.columnChildren,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
  }

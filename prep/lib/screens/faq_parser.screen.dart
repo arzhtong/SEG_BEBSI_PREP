@@ -36,7 +36,7 @@ class _FaqParserState extends State<FaqParser> {
                 (document['chatShortcut'])
                   ? IconButton(
                       icon: Icon(Icons.chat),
-                      color: Colors.indigo,
+                      color: Colors.indigo[400],
                       onPressed: () {
                         Navigator.push(
                             context, MaterialPageRoute(builder: (context) =>
@@ -48,7 +48,7 @@ class _FaqParserState extends State<FaqParser> {
                 (document['informationShortcut'])
                   ? IconButton(
                       icon: Icon(Icons.info),
-                      color: Colors.deepPurple,
+                      color: Colors.deepPurple[400],
                       onPressed: () {
                         Navigator.push(
                             context, MaterialPageRoute(builder: (context) =>

@@ -49,8 +49,8 @@ class Queries {
   }
 
   static Future<QuerySnapshot> get appointmentCodes => _appointmentsCollection
-      .where("datetime",
-          isGreaterThan: DateTime.now().subtract(Duration(days: 1)))
+      .where('expired', isEqualTo: false)
+      .where('datetime', isGreaterThan: DateTime.now().subtract(Duration(days: 1)))
       .orderBy('datetime')
       .getDocuments();
 
