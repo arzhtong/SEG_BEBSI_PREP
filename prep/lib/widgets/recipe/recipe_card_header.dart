@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import "package:prep/utils/document_data_provider.dart";
+
 import 'package:cached_network_image/cached_network_image.dart';
 
-class RecipeCardImage extends StatelessWidget {
-  static const double _backgroundImageBlurFactor = 2;
-  static const double _backgroundImageDimOpacity = 0.3;
+import 'package:prep/utils/document_data_provider.dart';
+import 'package:prep/utils/query.dart';
 
-  RecipeCardImage()
-      : assert(_backgroundImageBlurFactor >= 0),
-        assert(_backgroundImageDimOpacity >= 0 &&
-            _backgroundImageDimOpacity <= 1.0);
-
+class RecipeCardHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -21,16 +16,59 @@ class RecipeCardImage extends StatelessWidget {
           Positioned.fill(
             child: _loadRecipeImageOrDefault(context),
           ),
+          //Recipe chips
+          Positioned(
+            bottom: 0.0,
+            right: 6.0,
+            child: SizedBox(
+              width: (MediaQuery.of(context).size.width * 2.5 / 3.0),
+              child: Wrap(
+                crossAxisAlignment: WrapCrossAlignment.start,
+                verticalDirection: VerticalDirection.up,
+                direction: Axis.horizontal,
+                spacing: 4.0,
+                alignment: WrapAlignment.end,
+                children: _buildRecipeLabels(context),
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
+
+  List<Widget> _buildRecipeLabels(BuildContext context) {
+    var dynamicLabels =
+        FirestoreDocumentDataProvider.of(context).documentData['labels'];
+
+    if (dynamicLabels == null) return [];
+
+    List<Chip> chipList = [];
+
+    for (String label in convertDynamicListToStringList(dynamicLabels)) {
+      chipList.add(
+        _buildChipWithLabel(label, context),
+      );
+    }
+    return chipList;
+  }
+
+  Chip _buildChipWithLabel(String label, BuildContext context) => Chip(
+        label: Text(
+          label,
+          style: Theme.of(context).textTheme.body1,
+        ),
+        clipBehavior: Clip.antiAlias,
+        elevation: 2.0,
+        backgroundColor: Theme.of(context).cardColor,
+      );
 
   CachedNetworkImage _loadRecipeImageOrDefault(BuildContext context) {
     var backgroundImageUrl = FirestoreDocumentDataProvider.of(context)
         .documentData['backgroundImage'];
     var recipeType =
         FirestoreDocumentDataProvider.of(context).documentData['type'];
+
     assert(backgroundImageUrl is String);
     if (recipeType != null) {
       assert(recipeType is String);

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
+import 'package:prep/utils/query.dart';
+import 'package:prep/utils/document_data_provider.dart';
 import 'package:prep/widgets/recipe/recipe_note.dart';
 import 'package:prep/widgets/recipe/recipe_ingredient_list_item.dart';
 import 'package:prep/widgets/recipe/recipe_instruction.dart';
-import 'package:prep/utils/document_data_provider.dart';
 
 class RecipeCardContent extends StatelessWidget {
-
   static const String _ingredientListHeadline = "Show ingredients";
   static const String _preparationsHeadline = "Preparations";
 
@@ -41,15 +41,10 @@ class RecipeCardContent extends StatelessWidget {
     var dynamicIngredients =
         FirestoreDocumentDataProvider.of(context).documentData['ingredients'];
 
-    List<String> ingredients = [];
-
-    for (dynamic ingredient in dynamicIngredients) {
-      ingredients.add(ingredient.toString());
-    }
-
     List<Widget> _ingredientListItems = [];
 
-    for (String ingredient in ingredients) {
+    for (String ingredient
+        in convertDynamicListToStringList(dynamicIngredients)) {
       _ingredientListItems.add(
         RecipeIngredientListItem(ingredient),
       );
@@ -70,11 +65,8 @@ class RecipeCardContent extends StatelessWidget {
     var dynamicMethodInstructions =
         FirestoreDocumentDataProvider.of(context).documentData['method'];
 
-    List<String> methodInstructions = [];
-
-    for (dynamic methodInstruction in dynamicMethodInstructions) {
-      methodInstructions.add(methodInstruction.toString());
-    }
+    List<String> methodInstructions =
+        convertDynamicListToStringList(dynamicMethodInstructions);
 
     List<Widget> retVal = [
       Padding(

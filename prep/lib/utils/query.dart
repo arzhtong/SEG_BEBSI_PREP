@@ -108,3 +108,13 @@ class Queries {
   static Stream<DocumentSnapshot> categoryListSnapshots(String contents) =>
       _testReference.collection('lists').document(contents).get().asStream();
 }
+
+List<String> convertDynamicListToStringList(List<dynamic> dynamicList) {
+  if (dynamicList == null) return [];
+  
+  List<String> stringList = [];
+  for (dynamic dynamicItem in dynamicList) {
+    stringList.add(dynamicItem.toString());
+  }
+  return stringList;
+}

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:prep/utils/document_data_provider.dart';
 import 'package:prep/widgets/recipe/recipe_card_body.dart';
-import 'package:prep/widgets/recipe/recipe_card_image.dart';
+import 'package:prep/widgets/recipe/recipe_card_header.dart';
 
 class RecipeCard extends StatelessWidget {
   final DocumentSnapshot snapshot;
@@ -22,23 +22,13 @@ class RecipeCard extends StatelessWidget {
             clipBehavior: Clip.antiAlias,
             child: Column(
               children: <Widget>[
-                _buildCardImageAndCategoryChips(),
+                RecipeCardHeader(),
                 RecipeCardBody(),
               ],
             ),
           ),
         ),
       ),
-    );
-  }
-
-  //Build Recipe Card Header along with the recipe categories
-  Widget _buildCardImageAndCategoryChips() {
-    return Stack(
-      children: <Widget>[
-        //Header content
-        RecipeCardImage(),
-      ],
     );
   }
 }
