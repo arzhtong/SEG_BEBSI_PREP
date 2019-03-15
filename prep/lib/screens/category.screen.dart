@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:prep/utils/query.dart';
 
 class CategoryListParser extends StatefulWidget{
@@ -15,7 +16,6 @@ class CategoryListParser extends StatefulWidget{
 
 class _CategoryListState extends State<CategoryListParser>{
   Widget build(BuildContext context) {
-    print("Contents received in category state: X" + widget._contents + "X");
     return Scaffold(
      appBar: AppBar(
         backgroundColor: Colors.indigo,
@@ -34,33 +34,31 @@ class _CategoryListState extends State<CategoryListParser>{
       ),
     );
   }
- Widget _buildDropDownList(BuildContext context, DocumentSnapshot document){
-  List<Widget> dropDowns = new List();
-  print(document['maps']);
 
-  List<dynamic> mappedData = document['maps'];
+  Widget _buildDropDownList(BuildContext context, DocumentSnapshot document){
+    List<Widget> dropDowns = new List();
+    List<dynamic> mappedData = document['maps'];
 
-  mappedData.forEach((value){
-    dropDowns.add(DescriptiveExpansionTile(value['name'], value['description'], value['list']));
-  });
+    mappedData.forEach((value){
+      dropDowns.add(DescriptiveExpansionTile(value['name'], value['description'], value['list']));
+    });
 
-  return Column(
-    children: dropDowns
-  );
-   }
-}
-class DescriptiveExpansionTile extends StatefulWidget {
-  String category;
-  String description;
-  List<Widget> columnChildren;
-  List<dynamic> items;
- State<StatefulWidget> createState() {
-    
-    return _DescriptiveExpansionTileState();
+    return Column(
+      children: dropDowns
+    );
   }
+}
+
+class DescriptiveExpansionTile extends StatelessWidget {
+  final String category;
+  final String description;
+  List<Widget> columnChildren;
+  final List<dynamic> items;
+
   DescriptiveExpansionTile(this.category,this.description,this.items){
-    columnChildren=new List();
-         if (description.isNotEmpty){
+    columnChildren = new List();
+
+    if (description.isNotEmpty){
       columnChildren.add(
         Text(
           description,
@@ -72,7 +70,7 @@ class DescriptiveExpansionTile extends StatefulWidget {
 
       columnChildren.add(
         Divider(
-          color: Colors.white,
+          color: Colors.transparent,
         ),
       );
     }
@@ -86,35 +84,33 @@ class DescriptiveExpansionTile extends StatefulWidget {
       )
     );
   }
-   String formatItemList(List<dynamic> elementlist){
-    String rawItems="";
 
-    elementlist.forEach((value){
-      rawItems+=value + " " "•" + " ";
+  String formatItemList(List<dynamic> elementList){
+    String rawItems = "";
+
+    elementList.forEach((value){
+      rawItems += value + " " "•" + " ";
     });
 
-    rawItems=rawItems.replaceRange(rawItems.length-2,rawItems.length-1,' ');
+    rawItems = rawItems.replaceRange(rawItems.length - 2, rawItems.length - 1,' ');
+
     return rawItems;
   }
-}
- 
 
- class _DescriptiveExpansionTileState extends State<DescriptiveExpansionTile>{
-    Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(bottom: 5.0),
       child: Card(
         elevation: 3.0,
         child: ExpansionTile(
-          title: Text(widget.category),
+          title: Text(category),
           children: <Widget>[
             ListTile(
-              //contentPadding: EdgeInsets.fromLTRB(40.0, 0.0, 0.0, 0.0),
               title: Container(
                 padding: EdgeInsets.only(right: 50.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: widget.columnChildren,
+                  children: columnChildren,
                 ),
               ),
             )
@@ -123,4 +119,4 @@ class DescriptiveExpansionTile extends StatefulWidget {
       ),
     );
   }
- }
+}
