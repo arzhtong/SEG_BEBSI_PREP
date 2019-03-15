@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:prep/screens/recipeList.screen.dart';
 import 'package:prep/screens/information_parser.screen.dart';
-import 'package:prep/screens/category.screen.dart';
+import 'package:prep/screens/list_parser.screen.dart';
 import 'package:prep/screens/faq_parser.screen.dart';
 
 class CategoryCard extends StatelessWidget {
