@@ -17,8 +17,10 @@ import Register from '@/components/auth/Register'
 import ResetPassword from '@/components/auth/ResetPassword'
 import Message from '@/components/messages/Message'
 import AddTest from '@/components/tests/AddTest'
-import EditTest from '@/components/tests/EditTest'
 import EditTestDescription from '@/components/tests/EditTestDescription'
+import ViewArticles from '@/components/tests/articles/ViewArticles'
+import AddArticle from '@/components/tests/articles/AddArticle'
+import EditArticle from '@/components/tests/articles/EditArticle'
 import firebase from 'firebase'
 
 
@@ -125,14 +127,6 @@ let router = new Router({
       }
     },
     {
-      path: '/edit-test/:test_id',
-      name: 'edit-test',
-      component: EditTest,
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
       path: '/edit-test-description/:test_id',
       name: 'edit-test-description',
       component: EditTestDescription,
@@ -144,6 +138,30 @@ let router = new Router({
       path: '/view-tests',
       name: 'view-tests',
       component: ViewTests,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/view-articles/:test_id/:title',
+      name: 'view-articles',
+      component: ViewArticles,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/add-article/:test_id/:title',
+      name: 'add-article',
+      component: AddArticle,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/edit-article/:test_id/:article_id/:test_title',
+      name: 'edit-article',
+      component: EditArticle,
       meta: {
         requiresAuth: true
       }
