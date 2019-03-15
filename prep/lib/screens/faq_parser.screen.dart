@@ -11,7 +11,7 @@ class FaqParser extends StatelessWidget {
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot document){
     return Container(
-      padding: EdgeInsets.only(right: 10.0, left: 10.0, top: 5.0, bottom: 5.0),
+      padding: EdgeInsets.only(right: 10.0, left: 10.0, bottom: 5.0),
       child: Card(
         elevation: 3.0,
         child: ExpansionTile(
