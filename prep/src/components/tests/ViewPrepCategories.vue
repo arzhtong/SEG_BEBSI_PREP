@@ -63,6 +63,9 @@
                 if(categoryType === 'categoryList'){
                     this.$router.push({name: 'view-prep-list', params: {test_id: this.$route.params.test_id, contents: categoryContents}})
                 }
+                else if(categoryType === 'faqs'){
+                    this.$router.push({name: 'view-prep-faqs', params: {test_id: this.$route.params.test_id, contents: categoryContents}})
+                }
             }
         }
     }
