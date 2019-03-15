@@ -10,7 +10,7 @@ class CalendarLabel extends StatelessWidget {
     return Container(
         padding: EdgeInsets.only(left: 10.0, top: 5.0, bottom: 5.0),
         child: Text(
-          dateTimeFormater(dateTime),
+          dateTimeFormatter(dateTime),
           style: TextStyle(
               fontWeight: FontWeight.bold
           ),
@@ -18,7 +18,7 @@ class CalendarLabel extends StatelessWidget {
     );
   }
 
-  String dateTimeFormater(DateTime datetime) {
+  String dateTimeFormatter(DateTime datetime) {
     const List<String> months = [
       "January", "February", "March", "April",
       "May", "June", "July", "August",
