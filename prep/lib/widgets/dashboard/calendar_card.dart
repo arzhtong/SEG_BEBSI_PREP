@@ -8,15 +8,14 @@ class CalendarCard extends StatelessWidget {
   final String testID;
   final String doctorName;
   final String testName;
-  List<Color> colors = [Colors.green[300], Colors.red[300], Colors.blue[300], Colors.orange[300]];
+  final List<Color> colors = [Colors.green[300], Colors.red[300], Colors.blue[300], Colors.orange[300]];
   Color color;
 
   CalendarCard(this.name, this.location, this.dateTime, this.testID, this.doctorName, this.testName) {
-    print(name.hashCode);
-    color = colors[name.hashCode % 4];
+    this.color = colors[name.hashCode % 4];
   }
 
-  String dateFormater(DateTime datetime) {
+  String dateFormatter(DateTime datetime) {
     const List<String> months = [
       "January", "February", "March", "April",
       "May", "June", "July", "August",
@@ -26,17 +25,13 @@ class CalendarCard extends StatelessWidget {
     String day = datetime.day.toString();
     String month = months[datetime.month - 1];
     String year = datetime.year.toString();
-    String hour = datetime.hour.toString();
-    String minute = datetime.minute.toString();
 
     return day + " " + month + " " + year;
   }
 
-  String timeFormater(DateTime datetime) {
+  String timeFormatter(DateTime datetime) {
     String hour = (datetime.hour < 10) ? "0" + datetime.hour.toString() : datetime.hour.toString();
     String minute = (datetime.minute < 10) ? "0" + datetime.minute.toString() : datetime.minute.toString();
-
-    //String timeOfDay = (int.parse(hour) < 12) ? "am" : "pm";
 
     return hour + " : " + minute;
   }
@@ -116,8 +111,8 @@ class CalendarCard extends StatelessWidget {
                               ),
                               _informationRow("Location: ", location),
                               _informationRow("Staff member: ", doctorName),
-                              _informationRow("Date: ", dateFormater(dateTime)),
-                              _informationRow("Time: ", timeFormater(dateTime)),
+                              _informationRow("Date: ", dateFormatter(dateTime)),
+                              _informationRow("Time: ", timeFormatter(dateTime)),
                             ],
                           ),
                         ],

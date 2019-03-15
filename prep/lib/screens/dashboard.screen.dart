@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'package:path_provider/path_provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:prep/widgets/dashboard/calendar_label.dart';
 import 'package:prep/widgets/dashboard/calendar_card.dart';
 import 'package:prep/widgets/dashboard/empty_calendar_placeholder.dart';
 import 'package:prep/widgets/dashboard/storage.dart';
-
-
 import 'package:prep/utils/query.dart';
 
 class Dashboard extends StatefulWidget {
@@ -241,7 +238,7 @@ class _DashboardState extends State<Dashboard> {
 }
 
 class _NewAppointmentDialog extends StatefulWidget {
-  _DashboardState _parent;
+  final _DashboardState _parent;
 
   _NewAppointmentDialog(this._parent);
 
