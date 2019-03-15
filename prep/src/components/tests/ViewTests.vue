@@ -22,21 +22,18 @@
         <tbody v-for="test in tests" v-bind:key="test.id" class="collection-item">
           <tr>
             <td style="padding: 20px;">{{test.title}}</td>
-            <td>
-              <router-link to class="btn blue">Show</router-link>
-            </td>
-            <td>
-              <router-link to class="btn blue">Show</router-link>
-            </td>
-            <td>
-              <router-link to class="btn blue">Show</router-link>
-            </td>
+
+            <td><router-link v-bind:to="{name: 'view-dailycheckups', params: {test_id: test.id}}" class="btn blue">Show</router-link></td>
+            <td><router-link to="" class="btn blue">Show</router-link></td>
+            <td><router-link to="" class="btn blue">Show</router-link></td>
+          
             <td>
               <router-link
                 v-bind:to="{name: 'view-recipes', params: {test_id: test.id}}"
                 class="btn blue"
               >Show</router-link>
             </td>
+
           </tr>
         </tbody>
         <router-link to="/add-test" class="btn green" style="margin:20px">
@@ -48,30 +45,28 @@
 </template>
 
 <script>
-import db from "../firebaseInit";
+    import db from '../firebaseInit'
 
-export default {
-  name: "view-tests",
-  data() {
-    return {
-      tests: []
-    };
-  },
-  created() {
-    db.collection("tests")
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          const data = {
-            id: doc.id,
-            test_id: doc.data().testID,
-            title: doc.data().title
-          };
-          this.tests.push(data);
-        });
-      });
-  }
-};
+    export default{
+        name: 'view-tests',
+        data() {
+            return {
+                tests: []
+            }
+        },
+        created () {
+            db.collection('tests').get().then(querySnapshot => {
+                querySnapshot.forEach(doc => {
+                    const data = {
+                        'id': doc.id,
+                        'title': doc.data().title,
+
+                    }
+                    this.tests.push(data)
+                })
+            })
+        }
+    }
 </script>
 
 
