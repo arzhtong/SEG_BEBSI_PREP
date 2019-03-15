@@ -162,7 +162,7 @@ class _DashboardState extends State<Dashboard> {
       calendarElements.add(_CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime'].toDate(), documentList.elementAt(0).data['testID'], documentList.elementAt(0).data['doctor'], documentList.elementAt(0).data['testName']));
 
       for (int i = 1; i < documentList.length; i++){
-        if (documentList.elementAt(i).data['datetime'].toDate() == (documentList.elementAt(i - 1).data['datetime'].toDate())){
+        if (_datesAreEqual(documentList.elementAt(i).data['datetime'].toDate(), (documentList.elementAt(i - 1).data['datetime'].toDate()))){
           calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime'].toDate(), documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['doctor'], documentList.elementAt(i).data['testName']));
         } else {
           calendarElements.add(_CalendarLabel(documentList.elementAt(i).data['datetime'].toDate()));
@@ -171,7 +171,7 @@ class _DashboardState extends State<Dashboard> {
       }
 
       return ListView(
-        padding: EdgeInsets.only(top: 20.0, bottom: 80.0, left: 10.0, right: 10.0),
+        padding: EdgeInsets.only(top: 10.0, bottom: 80.0, left: 10.0, right: 10.0),
         children: <Widget>[
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,6 +180,10 @@ class _DashboardState extends State<Dashboard> {
         ],
       );
     }
+  }
+
+  bool _datesAreEqual(DateTime date1, DateTime date2) {
+    return (date1.day == date2.day && date1.month == date2.month && date1.year == date2.year);
   }
 
   @override
@@ -365,7 +369,7 @@ class _CalendarLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.only(left: 10.0),
+        padding: EdgeInsets.only(left: 10.0, top: 5.0, bottom: 5.0),
         child: Text(
           dateTimeFormater(dateTime),
           style: TextStyle(
@@ -465,7 +469,7 @@ class _CalendarCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+      padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
       child: Card(
         elevation: 3.0,
         child: Stack(
@@ -479,7 +483,6 @@ class _CalendarCard extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.circular(3.0)),
                   color: color
                   ),
-                  //height: 200.0,
                   child: Container(
                     padding: EdgeInsets.all(10.0),
                     child: Column(
