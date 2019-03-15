@@ -159,14 +159,14 @@ class _DashboardState extends State<Dashboard> {
       documentList = filteredDocuments;
 
       calendarElements.add(_CalendarLabel(documentList.elementAt(0).data['datetime'].toDate()));
-      calendarElements.add(_CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime'].toDate(), documentList.elementAt(0).data['testID']));
+      calendarElements.add(_CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime'].toDate(), documentList.elementAt(0).data['testID'], documentList.elementAt(0).data['doctor'], documentList.elementAt(0).data['testName']));
 
       for (int i = 1; i < documentList.length; i++){
         if (documentList.elementAt(i).data['datetime'].toDate() == (documentList.elementAt(i - 1).data['datetime'].toDate())){
-          calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime'].toDate(), documentList.elementAt(i).data['testID']));
+          calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime'].toDate(), documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['doctor'], documentList.elementAt(i).data['testName']));
         } else {
           calendarElements.add(_CalendarLabel(documentList.elementAt(i).data['datetime'].toDate()));
-          calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime'].toDate(), documentList.elementAt(i).data['testID']));
+          calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime'].toDate(), documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['doctor'], documentList.elementAt(i).data['testName']));
         }
       }
 
@@ -395,10 +395,12 @@ class _CalendarCard extends StatelessWidget {
   final String location;
   final DateTime dateTime;
   final String testID;
+  final String doctorName;
+  final String testName;
   List<Color> colors = [Colors.green[300], Colors.red[300], Colors.blue[300], Colors.orange[300]];
   Color color;
 
-  _CalendarCard(this.name, this.location, this.dateTime, this.testID) {
+  _CalendarCard(this.name, this.location, this.dateTime, this.testID, this.doctorName, this.testName) {
     print(name.hashCode);
     color = colors[name.hashCode % 4];
   }
@@ -427,7 +429,39 @@ class _CalendarCard extends StatelessWidget {
 
     return hour + " : " + minute;
   }
-  
+
+  Widget _informationRow(String label, String content) {
+    return Container(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              label,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20.0,
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              content,
+              textAlign: TextAlign.end,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20.0,
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+          )
+        ],
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -443,15 +477,6 @@ class _CalendarCard extends StatelessWidget {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(3.0)),
-//                    gradient: LinearGradient(
-//                      begin: Alignment.topLeft,
-//                      end: Alignment.bottomRight,
-//                      stops: [0.1, 0.9],
-//                      colors: [
-//                        Colors.blue[300],
-//                        Colors.green[300],
-//                      ],
-//                    ),
                   color: color
                   ),
                   //height: 200.0,
@@ -466,7 +491,8 @@ class _CalendarCard extends StatelessWidget {
                             Container(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                "FDG PET cardiac imagery examination",
+                                testName,
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 30.0,
@@ -478,39 +504,10 @@ class _CalendarCard extends StatelessWidget {
                               color: Colors.transparent,
                               height: 30.0,
                             ),
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                location,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.w300,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                dateFormater(dateTime),
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.w300,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                timeFormater(dateTime),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.w300,
-                                ),
-                              ),
-                            ),
+                            _informationRow("Location: ", location),
+                            _informationRow("Staff member: ", doctorName),
+                            _informationRow("Date: ", dateFormater(dateTime)),
+                            _informationRow("Time: ", timeFormater(dateTime)),
                           ],
                         ),
                       ],
@@ -520,7 +517,6 @@ class _CalendarCard extends StatelessWidget {
                 ListTile(
                   leading: Icon(Icons.code),
                   title: Text(name),
-                  //subtitle: Text("St. Thomas Hospital - 11:00 am"),
                 ),
               ],
             ),
