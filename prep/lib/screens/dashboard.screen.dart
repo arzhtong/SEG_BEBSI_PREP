@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:prep/widgets/dashboard/calendar_label.dart';
 
 import 'package:prep/utils/query.dart';
 import 'package:prep/screens/appointment.screen.dart';
@@ -158,14 +159,14 @@ class _DashboardState extends State<Dashboard> {
       });
       documentList = filteredDocuments;
 
-      calendarElements.add(_CalendarLabel(documentList.elementAt(0).data['datetime'].toDate()));
+      calendarElements.add(CalendarLabel(documentList.elementAt(0).data['datetime'].toDate()));
       calendarElements.add(_CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime'].toDate(), documentList.elementAt(0).data['testID'], documentList.elementAt(0).data['doctor'], documentList.elementAt(0).data['testName']));
 
       for (int i = 1; i < documentList.length; i++){
         if (_datesAreEqual(documentList.elementAt(i).data['datetime'].toDate(), (documentList.elementAt(i - 1).data['datetime'].toDate()))){
           calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime'].toDate(), documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['doctor'], documentList.elementAt(i).data['testName']));
         } else {
-          calendarElements.add(_CalendarLabel(documentList.elementAt(i).data['datetime'].toDate()));
+          calendarElements.add(CalendarLabel(documentList.elementAt(i).data['datetime'].toDate()));
           calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime'].toDate(), documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['doctor'], documentList.elementAt(i).data['testName']));
         }
       }
@@ -358,39 +359,6 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
         ),
       ),
     );
-  }
-}
-
-class _CalendarLabel extends StatelessWidget {
-  final DateTime dateTime;
-
-  _CalendarLabel(this.dateTime);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.only(left: 10.0, top: 5.0, bottom: 5.0),
-        child: Text(
-          dateTimeFormater(dateTime),
-          style: TextStyle(
-              fontWeight: FontWeight.bold
-          ),
-        )
-    );
-  }
-
-  String dateTimeFormater(DateTime datetime) {
-    const List<String> months = [
-      "January", "February", "March", "April",
-      "May", "June", "July", "August",
-      "September", "October", "November", "December"
-    ];
-
-    String day = datetime.day.toString();
-    String month = months[datetime.month - 1];
-    String year = datetime.year.toString();
-
-    return day + " " + month + " " + year;
   }
 }
 
