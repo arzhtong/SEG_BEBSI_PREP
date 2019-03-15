@@ -49,6 +49,11 @@ export default {
       role: null
     };
   },
+  /*
+    This method is executed before page load,
+    in order to fill all the fields with the
+    needed user information.
+  */
   beforeRouteEnter(to, from, next) {
     db.collection("users")
       .where("email", "==", to.params.email)
@@ -68,6 +73,9 @@ export default {
     $route: "fetchData"
   },
   methods: {
+    /*
+      This method gets the currently clicked user information.
+    */
     fetchData() {
       db.collection("users")
         .where("email", "==", this.$route.params.email)
@@ -81,6 +89,10 @@ export default {
           });
         });
     },
+    /*
+      This method updates the user information on
+      firestore.
+    */
     updateUser() {
       db.collection("users")
         .where("email", "==", this.$route.params.email)

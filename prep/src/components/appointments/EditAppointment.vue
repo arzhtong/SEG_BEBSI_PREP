@@ -36,15 +36,6 @@
 
         <div class="row">
           <div class="input-field col s12">
-            <p>Change Referenced Test:</p>
-            <select class="browser-default" style="color:black" v-model="testID">
-              <option v-for="test in tests" v-bind:key="test.testID" :value="test">{{test.title}}</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="input-field col s12">
             <p>Change Referenced Staff:</p>
             <select class="browser-default" style="color:black" v-model="staffMember">
               <option v-for="user in users" v-bind:key="user.Ucode" :value="user">{{user.name}}</option>
@@ -75,28 +66,15 @@ export default {
       time: "",
       code: null,
       location: null,
-      testID: null,
       staffMember: null,
-      tests: [],
       users: [],
       router: this.$route.params.id,
       expired: this.$route.params.expired
     };
   },
   created() {
-    db
-      .collection("tests")
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(test => {
-          const data = {
-            testID: test.id,
-            title: test.data().title,
-            type: test.data().type
-          };
-          this.tests.push(data);
-        });
-      }),
+    // Gets all the information from the
+    // users collection
       db
         .collection("users")
         .get()
@@ -113,6 +91,10 @@ export default {
           });
         });
   },
+  /*
+    This method is ran before the router navigates to the page.
+    It preloads the input boxes with appointments information.
+  */
   beforeRouteEnter(to, from, next) {
     db.collection("appointments")
       .doc(to.params.id)
@@ -142,6 +124,10 @@ export default {
     $route: "fetchData"
   },
   methods: {
+    /*
+      This method collects data for the specified 
+      appointment from the router navigation bar.
+    */
     fetchData() {
       db.collection("appointments")
         .doc(this.$route.params.id)
@@ -150,23 +136,25 @@ export default {
           if (doc.exists) {
             this.location = doc.data().location;
             this.datetime = doc.data().datetime;
-            this.testID = doc.data().testID;
             this.staffMember = doc.data().staffMember;
             this.code = doc.id;
           }
         });
     },
+    /*
+      This method updates the information
+      for the specified appointment on firestore.
+    */
     updateAppointment() {
-
       db.collection("appointments")
         .doc(this.$route.params.id)
-        .set({
+        .update({
           location: this.location,
-          testID: this.testID.testID,
           datetime: firebase.firestore.Timestamp.fromDate(
             new Date(Date.parse(this.date + "T" + this.time + "Z"))
           ),
-          staffMember: this.staffMember.Ucode
+          staffMember: this.staffMember.Ucode,
+          doctor: this.staffMember.name
         })
         .then(() => {
           alert("Appointments info updated!");

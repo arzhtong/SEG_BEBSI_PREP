@@ -2,6 +2,10 @@ const aes = require("aes-js");
 const crypto = require("crypto");
 const md5 = require('md5');
 
+/*
+  This function encrypts the sent message
+  using AES cbc algorithm and md5.
+*/
 function encryptMessage(message, id) {
   var iv_array = generateIV();
   var hexIv = md5(iv_array)
@@ -14,21 +18,36 @@ function encryptMessage(message, id) {
   return encryptedHex;
 }
 
+/*
+  This function generates an encryption key
+  using an Hmac and returns the first 32 chars
+  from its digest.
+*/
 function generateKey(key) {
   const hmac = crypto.createHmac('sha512', md5(key));
   var digest = hmac.digest('hex')
   return digest.substring(0, 32)
 }
 
+/*
+  This method generates a random IV
+  as an array of 16 bytes
+*/
 function generateIV() {
   return crypto.randomBytes(16);
 }
 
+/*
+  This method returns the IV from the hashed message itself
+*/
 function getIV(encryptedHex) {
   return encryptedHex.substring(0, 32);
 }
 
-
+/*
+  This method decrypts the sent message using AES cbc algorithm
+  and md5.
+*/
 function decryptMessage(encryptedHex, id) {
   var hexIv = getIV(encryptedHex)
   var md5IV = md5(Array.from(aes.utils.hex.toBytes(hexIv)))
