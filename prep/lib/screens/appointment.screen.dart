@@ -19,6 +19,7 @@ class Appointment extends StatefulWidget {
 }
 
 class _AppointmentState extends State<Appointment> {
+  bool _unseenMessages = false;
   int _selectedIndex;
   AppointmentInfo _appointmentInfo;
   AppointmentPrep _appointmentPrep;
@@ -64,7 +65,7 @@ class _AppointmentState extends State<Appointment> {
           BottomNavigationBarItem(icon: Icon(Icons.update), title: Text('Information')),
           BottomNavigationBarItem(icon: Icon(Icons.accessibility_new), title: Text('Preparation')),
           BottomNavigationBarItem(icon: Icon(Icons.done_all), title: Text('Checkups')),
-          BottomNavigationBarItem(icon: Icon(Icons.chat), title: Text('Dr. Chat')),
+          BottomNavigationBarItem(icon: _buildChatIcon(), title: Text('Dr. Chat')),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
@@ -74,9 +75,31 @@ class _AppointmentState extends State<Appointment> {
     );
   }
 
+  Widget _buildChatIcon() {
+    return (_selectedIndex == 3)
+        ? Icon(Icons.chat)
+        : StreamBuilder(
+            stream: Queries.messageSnapshots,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                snapshot.data.documentChanges.forEach((change) {
+                  if (change.type == DocumentChangeType.added &&
+                      !change.document.data['seenByPatient']) {
+                    _unseenMessages = true;
+                  }
+                });
+              }
+              return (_unseenMessages)
+                  ? Icon(Icons.chat, color: Colors.red)
+                  : Icon(Icons.chat);
+            },
+          );
+  }
+
   void _onItemTapped(int index){
     setState(() {
       _selectedIndex = index;
+      if (_selectedIndex == 3) _unseenMessages = false;
     });
   }
 }
