@@ -1,12 +1,16 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import ViewStaff from '@/components/staff/ViewStaff'
+import EditStaff from '@/components/staff/EditStaff'
 import ViewTests from '@/components/tests/ViewTests'
 import ViewRecipes from '@/components/tests/ViewRecipes'
 import ViewRecipeInfo from '@/components/tests/ViewRecipeInfo'
 import NewRecipe from '@/components/tests/NewRecipe'
 import EditRecipe from '@/components/tests/EditRecipe'
-import EditStaff from '@/components/staff/EditStaff'
+import ViewDailyCheckups from '@/components/tests/ViewDailyCheckups'
+import NewDailyCheckups from '@/components/tests/NewDailyCheckups'
+import ViewDailyCheckupsInfo from '@/components/tests/ViewDailyCheckupsInfo'
+import EditDailyCheckups from '@/components/tests/EditDailyCheckups'
 import ViewAppointments from '@/components/appointments/ViewAppointments'
 import PastAppointments from '@/components/appointments/PastAppointments'
 import AddAppointment from '@/components/appointments/AddAppointment'
@@ -16,6 +20,7 @@ import Login from '@/components/auth/Login'
 import Register from '@/components/auth/Register'
 import ResetPassword from '@/components/auth/ResetPassword'
 import Message from '@/components/messages/Message'
+import AddTest from '@/components/tests/AddTest'
 import firebase from 'firebase'
 
 
@@ -25,7 +30,7 @@ let router = new Router({
   routes: [
     {
       path: '/',
-      name: 'view-appointments',
+      name: 'dashboard',
       component: ViewAppointments,
       meta: {
         requiresAuth: true
@@ -114,6 +119,14 @@ let router = new Router({
       }
     },
     {
+      path: '/add-test',
+      name: 'add-test',
+      component: AddTest,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
       path: '/view-tests',
       name: 'view-tests',
       component: ViewTests,
@@ -149,6 +162,38 @@ let router = new Router({
       path: '/edit-recipe/:test_id/:recipe_id',
       name: 'edit-recipe',
       component: EditRecipe,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/view-dailycheckups/:test_id',
+      name: 'view-dailycheckups',
+      component: ViewDailyCheckups,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/new-dailycheckups/:test_id',
+      name: 'new-dailycheckups',
+      component: NewDailyCheckups,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/view-dailycheckups-info/:test_id/:daily_id',
+      name: 'view-dailycheckups-info',
+      component: ViewDailyCheckupsInfo,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/edit-dailycheckups/:test_id/:daily_id',
+      name: 'edit-dailycheckups',
+      component: EditDailyCheckups,
       meta: {
         requiresAuth: true
       }

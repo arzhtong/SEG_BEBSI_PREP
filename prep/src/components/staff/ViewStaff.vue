@@ -68,6 +68,10 @@ export default {
     };
   },
   created() {
+    /*
+      Get the information specifically for the
+      currently logged in user.
+    */
     if (firebase.auth().currentUser) {
       db.collection("users")
         .where("email", "==", firebase.auth().currentUser.email)
@@ -79,6 +83,9 @@ export default {
           });
         });
     }
+    /*
+      Get the information for all users in the firestore.
+    */
     db.collection("users")
       .where("email", "<", "\uf8ff")
       .get()
@@ -95,6 +102,10 @@ export default {
       });
   },
   methods: {
+    /*
+      This method deletes the clicked user
+      from firestore and removes it from the user table.
+    */
     deleteUser(userEmail) {
       if (confirm(`Are you sure you want to delete user ${userEmail}`)) {
         db.collection("users")

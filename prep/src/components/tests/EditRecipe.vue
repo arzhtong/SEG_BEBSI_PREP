@@ -51,6 +51,7 @@ export default {
     db.collection("tests")
       .doc(this.$route.params.test_id)
       .collection("recipes")
+      .where("title", "==", this.$route.params.recipe_id)
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {

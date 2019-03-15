@@ -137,6 +137,10 @@ export default {
     this.getAppointmentInfo();
   },
   methods: {
+    /*
+      This method gets the information for the specified
+      appointment with doc id given by the router.
+    */
     getAppointmentInfo() {
       db.collection("appointments")
         .doc(this.$route.params.id)
@@ -160,6 +164,11 @@ export default {
           this.getTestInfo();
         });
     },
+    /*
+      This methid gets the needed information from the 
+      tests collection with a doc id specified in the
+      clicked appointment.
+    */
     getTestInfo() {
       db.collection("tests")
         .doc(this.appointments[0].testID)
@@ -168,6 +177,11 @@ export default {
           (this.testName = doc.data().title), (this.testType = doc.data().type);
         });
     },
+    /*
+      This method listens live to the dailyCheckups 
+      collection in the clicked appointment in order
+      to get if any changes were made.
+    */
     listenDailyCheckups() {
       db.collection("appointments")
         .doc(this.$route.params.id)
@@ -175,6 +189,7 @@ export default {
         .orderBy("daysBeforeTest", "desc")
         .onSnapshot(snapshot => {
           snapshot.docChanges().forEach(change => {
+            // on page load
             if (change.type == "added") {
               const data = {
                 docId: change.doc.id,
@@ -185,6 +200,7 @@ export default {
           
               this.dailyCheckups.push(data);
             }
+            // if modified (e.g set to true)
             if (change.type == "modified") {
               for (var i = 0; i < this.dailyCheckups.length; i++) {
                 if (
@@ -201,6 +217,11 @@ export default {
           });
         });
     },
+    /*
+      This method enables the dailyCheckyps to be modified.
+      Note: This method is left here for expandability purposes
+      and it does not function in this current website version.
+    */
     enableEditMode(currentCheckup) {
       var inputArray = document.getElementsByClassName("dailyInput");
       var inputList = Array.from(inputArray);

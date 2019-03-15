@@ -31,6 +31,5 @@ export default {
     overflow: auto;
     max-height: 90vh;
     padding-top: 30px;
-    
   }
 </style>
