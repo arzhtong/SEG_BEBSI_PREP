@@ -25,7 +25,7 @@
         <form @submit.prevent="saveAppointment" class="col s12">
           <div class="row">
             <div class="input-field col s12">
-              <input type="date" class="datepicker" v-model="date" required>
+              <input type="date" min="2019-01-01" class="datepicker" v-model="date" required>
               <label>Date</label>
             </div>
           </div>
@@ -85,18 +85,21 @@ export default {
       testID: null,
       currentUser: firebase.auth().currentUser.email,
       code: null,
-      tests: []
+      tests: [],
+      doctor: "",
+      testName: ""
     };
   },
   created() {
     this.checkIfCodeExists();
     this.getDocId();
+    // Get all the information from tests collection
     db.collection("tests")
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(test => {
           const data = {
-            testID: test.data().testID,
+            testID: test.id,
             title: test.data().title,
             type: test.data().type
           };
@@ -105,47 +108,33 @@ export default {
       });
   },
   methods: {
+    /*
+      This method checks if the generated code
+      exists in firestore. It also calls the method
+      that generates the code.
+    */
     checkIfCodeExists() {
       this.generateCode().then(foc => {
-        if (foc == true) {
+        if (foc == true) { // recursively generate a new code
           document.getElementById("mainScreen").style.display = "none";
           this.checkIfCodeExists();
-        } else {
+        } else { // hide loader and show main screen
           document.getElementById("el").classList.remove("active");
           document.getElementById("loader").style.display = "none";
           document.getElementById("mainScreen").style.display = null;
         }
       });
     },
+    /*
+      This method generates a random code of length 9
+      and puts it as the doc id in the appointments' collection.
+
+      @return Promise
+    */
     generateCode() {
       var ID = Math.random()
         .toString(36)
         .substr(2, 9);
-      // var items = [
-      //   "2vqqyqcc7",
-      //   "bwc1xhq0a",
-      //   "jgsj5c7pg",
-      //   "1asdsada",
-      //   "2vqqyqcc7",
-      //   "bwc1xhq0a",
-      //   "jgsj5c7pg",
-      //   "2vqqyqcc7",
-      //   "bwc1xhq0a",
-      //   "jgsj5c7pg",
-      //   "2vqqyqcc7",
-      //   "bwc1xhq0a",
-      //   "jgsj5c7pg",
-      //   "2vqqyqcc7",
-      //   "bwc1xhq0a",
-      //   "jgsj5c7pg",
-      //   "2vqqyqcc7",
-      //   "bwc1xhq0a",
-      //   "jgsj5c7pg",
-      //   "2vqqyqcc7",
-      //   "bwc1xhq0a",
-      //   "jgsj5c7pg"
-      // ];
-      // var item = items[Math.floor(Math.random() * items.length)];
 
       var docRef = db.collection("appointments").doc(ID);
       return docRef
@@ -162,6 +151,10 @@ export default {
           alert(error);
         });
     },
+    /*
+      This method creates a new appointment and
+      sets each field. 
+    */
     saveAppointment() {
       db.collection("appointments")
         .doc(this.code)
@@ -171,14 +164,44 @@ export default {
           ),
           location: this.location,
           staffMember: this.staffMember,
-          testID: this.testID.testID
+          testID: this.testID.testID,
+          expired: false,
+          doctor: this.doctor,
+          testName: this.testID.title
         })
         .then(docRef => {
-          alert("Successfully created new appointment!");
+          this.addDailyCheckups();
+          alert("Successfully created new appointment with code " + this.code + " !");
           this.$router.push("/view-appointments");
         })
         .catch(error => console.log(err));
     },
+    /*
+      This method gets the dailyCheckup collection
+      from tests and adds it to the newly created appointment.
+    */
+    addDailyCheckups() {
+      db.collection("tests")
+        .doc(this.testID.testID)
+        .collection("dailyCheckups")
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            db.collection("appointments")
+              .doc(this.code)
+              .collection("dailyCheckups")
+              .add(doc.data())
+              .then(docRef => {
+                console.log("Added dailyCheckup");
+              })
+              .catch(error => console.log(err));
+          });
+        });
+    },
+    /*
+      This method gets the document id of
+      the currently logged in person.
+    */
     getDocId() {
       db.collection("users")
         .where("email", "==", this.currentUser)
@@ -186,6 +209,7 @@ export default {
         .then(querySnapshot => {
           querySnapshot.forEach(doc => {
             this.staffMember = doc.id;
+            this.doctor = doc.data().name;
             return;
           });
         });
