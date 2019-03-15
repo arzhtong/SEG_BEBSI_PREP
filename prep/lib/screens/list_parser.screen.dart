@@ -2,19 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:prep/utils/query.dart';
+import 'package:prep/widgets/list_parser/description_expansion_tile.dart';
 
-class CategoryListParser extends StatefulWidget{
+class CategoryListParser extends StatelessWidget {
   final String _contents;
-  
+
   CategoryListParser(this._contents);
 
-  @override
-  State<StatefulWidget> createState() {
-    return _CategoryListState();
-  }
-}
-
-class _CategoryListState extends State<CategoryListParser>{
   Widget build(BuildContext context) {
     return Scaffold(
      appBar: AppBar(
@@ -22,7 +16,7 @@ class _CategoryListState extends State<CategoryListParser>{
         title: Text('Appointments'),
       ),
         body: StreamBuilder(
-        stream: Queries.categoryListSnapshots(widget._contents),
+        stream: Queries.categoryListSnapshots(_contents),
         builder: (context, snapshot){
           if (!snapshot.hasData) return const Align(alignment: Alignment.topCenter, child: LinearProgressIndicator(),);
           return ListView.builder(
@@ -45,78 +39,6 @@ class _CategoryListState extends State<CategoryListParser>{
 
     return Column(
       children: dropDowns
-    );
-  }
-}
-
-class DescriptiveExpansionTile extends StatelessWidget {
-  final String category;
-  final String description;
-  List<Widget> columnChildren;
-  final List<dynamic> items;
-
-  DescriptiveExpansionTile(this.category,this.description,this.items){
-    columnChildren = new List();
-
-    if (description.isNotEmpty){
-      columnChildren.add(
-        Text(
-          description,
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
-      );
-
-      columnChildren.add(
-        Divider(
-          color: Colors.transparent,
-        ),
-      );
-    }
-
-    columnChildren.add(
-      Text(
-        formatItemList(items),
-        style: TextStyle(
-          color: Colors.grey,
-        ),
-      )
-    );
-  }
-
-  String formatItemList(List<dynamic> elementList){
-    String rawItems = "";
-
-    elementList.forEach((value){
-      rawItems += value + " " "•" + " ";
-    });
-
-    rawItems = rawItems.replaceRange(rawItems.length - 2, rawItems.length - 1,' ');
-
-    return rawItems;
-  }
-
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(bottom: 5.0),
-      child: Card(
-        elevation: 3.0,
-        child: ExpansionTile(
-          title: Text(category),
-          children: <Widget>[
-            ListTile(
-              title: Container(
-                padding: EdgeInsets.only(right: 50.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: columnChildren,
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
     );
   }
 }
