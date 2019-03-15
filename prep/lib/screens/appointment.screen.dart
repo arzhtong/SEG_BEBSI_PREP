@@ -51,7 +51,6 @@ class _AppointmentState extends State<Appointment> {
 
   @override
   Widget build(BuildContext context) {
-    print("APPOINTMENT SCREEN BUILD METHOD RUN");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.indigo,
