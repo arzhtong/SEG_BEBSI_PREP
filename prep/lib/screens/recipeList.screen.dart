@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prep/utils/query.dart';
 
 import 'package:prep/widgets/recipe/recipe_card.dart';
 import 'package:prep/utils/prep_custom_icons.dart';
@@ -45,7 +46,26 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
           ),
         ],
       ),
-      body: ListView.builder(
+      body: StreamBuilder(
+        stream: Queries.recipeSnapshots,
+        builder: (context, collectionSnapshot) {
+          if (!collectionSnapshot.hasData) {
+            return Text("Loading recipes...");
+          }
+          return ListView.builder(
+            itemBuilder: (_, index) {
+              //RecipeMockUp recipe = mockRecipeList[index];
+
+              return RecipeCard(
+                snapshot: collectionSnapshot.data.documents[index],
+              );
+            },
+            itemCount: collectionSnapshot.data.documents.length,
+          );
+        },
+      ),
+
+      /* ListView.builder(
         itemBuilder: (_, index) {
           RecipeMockUp recipe = mockRecipeList[index];
 
@@ -58,7 +78,7 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
           );
         },
         itemCount: mockRecipeList.length,
-      ),
+      ), */
     );
   }
 }

@@ -3,29 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:prep/widgets/recipe/recipe_note.dart';
 import 'package:prep/widgets/recipe/recipe_ingredient_list_item.dart';
 import 'package:prep/widgets/recipe/recipe_instruction.dart';
+import 'package:prep/utils/document_data_provider.dart';
 
 class RecipeCardContent extends StatelessWidget {
-  final List<String> ingredients;
-  final List<String> method;
-  final String note;
-
-  RecipeCardContent({this.ingredients, this.method, this.note});
 
   static const String _ingredientListHeadline = "Show ingredients";
   static const String _preparationsHeadline = "Preparations";
 
   @override
   Widget build(BuildContext context) {
+    var note = FirestoreDocumentDataProvider.of(context).documentData['note'];
+    assert(note.runtimeType == String);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         <Widget>[
-          _buildShowIngredientExpansionTile(ingredients, context),
+          _buildShowIngredientExpansionTile(context),
           SizedBox(
             height: 16.0,
           ),
         ],
-        _buildPreparations(method, context),
+        _buildPreparationsList(context),
         <Widget>[
           SizedBox(
             height: 16.0,
@@ -38,8 +37,16 @@ class RecipeCardContent extends StatelessWidget {
     );
   }
 
-  Widget _buildShowIngredientExpansionTile(
-      List<String> ingredients, BuildContext context) {
+  Widget _buildShowIngredientExpansionTile(BuildContext context) {
+    var dynamicIngredients =
+        FirestoreDocumentDataProvider.of(context).documentData['ingredients'];
+
+    List<String> ingredients = [];
+
+    for (dynamic ingredient in dynamicIngredients) {
+      ingredients.add(ingredient.toString());
+    }
+
     List<Widget> _ingredientListItems = [];
 
     for (String ingredient in ingredients) {
@@ -59,7 +66,16 @@ class RecipeCardContent extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildPreparations(List<String> method, BuildContext context) {
+  List<Widget> _buildPreparationsList(BuildContext context) {
+    var dynamicMethodInstructions =
+        FirestoreDocumentDataProvider.of(context).documentData['method'];
+
+    List<String> methodInstructions = [];
+
+    for (dynamic methodInstruction in dynamicMethodInstructions) {
+      methodInstructions.add(methodInstruction.toString());
+    }
+
     List<Widget> retVal = [
       Padding(
         padding: const EdgeInsets.fromLTRB(16.0, 4.0, 0, 16.0),
@@ -70,16 +86,16 @@ class RecipeCardContent extends StatelessWidget {
       ),
     ];
 
-    for (int i = 0; i < method.length; i++) {
+    for (int i = 0; i < methodInstructions.length; i++) {
       retVal.add(
         RecipeInstruction(
           ordering: i + 1,
-          instruction: method[i],
+          instruction: methodInstructions[i],
         ),
       );
 
       //add dividers and ending padding
-      if (i != method.length - 1) {
+      if (i != methodInstructions.length - 1) {
         retVal.add(
           Divider(),
         );

@@ -95,6 +95,9 @@ class Queries {
   static Stream<DocumentSnapshot> get testSnapshots =>
       _testReference.get().asStream();
 
+  static Stream<QuerySnapshot> get recipeSnapshots =>
+      _testReference.collection('recipes').snapshots();
+
   static Stream<DocumentSnapshot> informationSnapshots(documentName) =>
       _testReference
           .collection('informations')
@@ -103,5 +106,5 @@ class Queries {
           .asStream();
 
   static Stream<DocumentSnapshot> categoryListSnapshots(String contents) =>
-  _testReference.collection('lists').document(contents).get().asStream();
+      _testReference.collection('lists').document(contents).get().asStream();
 }

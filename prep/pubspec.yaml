@@ -14,7 +14,7 @@ environment:
 
 dependencies:
   # The following adds local file reading and writing functionality
-  path_provider: ^0.4.0
+  path_provider: ^0.5.0+1
 
   # This is an alternative to WebView (official flutter tool) for viewing web content
   flutter_html: ^0.9.4
@@ -28,7 +28,12 @@ dependencies:
   # The following adds staggered grid views (dynamically sized grid views)
   flutter_staggered_grid_view: ^0.2.7
 
-  #firebase_auth:
+  #The following adds image cashing and error handling
+  cached_network_image: ^0.7.0
+  flutter_cache_manager: ^0.3.2
+
+  #The following generated the apps launcher icons
+  flutter_launcher_icons: "^0.7.0"
 
   # The following adds encryption
   pointycastle: ^1.0.1
@@ -36,8 +41,6 @@ dependencies:
 
   flutter:
     sdk: flutter
-
-  flutter_launcher_icons: "^0.7.0"
 
 flutter_icons:
   android: true
