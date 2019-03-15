@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:prep/widgets/dashboard/calendar_label.dart';
 import 'package:prep/widgets/dashboard/calendar_card.dart';
+import 'package:prep/widgets/dashboard/empty_calendar_placeholder.dart';
 
 import 'package:prep/utils/query.dart';
 import 'package:prep/screens/appointment.screen.dart';
@@ -150,7 +151,7 @@ class _DashboardState extends State<Dashboard> {
     if (codeFileState == null){
       return null;
     } else if (codeFileState.isEmpty) {
-      return _EmptyCalendarPlaceholder();
+      return EmptyCalendarPlaceholder();
     } else {
       //Generates a list of filtered appointments
       List<DocumentSnapshot> filteredDocuments= new List();
@@ -360,38 +361,6 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _EmptyCalendarPlaceholder extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Text(
-          "Your calendar is empty",
-          style: TextStyle(
-            fontSize: 40.0,
-            color: Colors.grey,
-            fontWeight: FontWeight.bold,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        Padding(
-          padding: EdgeInsets.all(20.0),
-        ),
-        Text(
-          "Add some appointments",
-          style: TextStyle(
-            fontSize: 30.0,
-            color: Colors.grey,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ],
     );
   }
 }
