@@ -5,18 +5,14 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:prep/utils/query.dart';
 
-class AppointmentInfo extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _AppointmentInfoState();
-}
+class AppointmentInfo extends StatelessWidget {
 
-class _AppointmentInfoState extends State<AppointmentInfo> {
   Widget _buildListItem(BuildContext context, DocumentSnapshot document){
     return Container(
         child: SingleChildScrollView(
           child: Html(
             data: document['description'],
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(20.0),
             useRichText: true,  //turn this off to get the alternative parser
             onLinkTap: (url){
               _launchURL(url);
