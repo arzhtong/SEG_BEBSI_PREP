@@ -153,7 +153,8 @@ export default {
           datetime: firebase.firestore.Timestamp.fromDate(
             new Date(Date.parse(this.date + "T" + this.time + "Z"))
           ),
-          staffMember: this.staffMember.Ucode
+          staffMember: this.staffMember.Ucode,
+          doctor: this.staffMember.name
         })
         .then(() => {
           alert("Appointments info updated!");

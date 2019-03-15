@@ -85,7 +85,9 @@ export default {
       testID: null,
       currentUser: firebase.auth().currentUser.email,
       code: null,
-      tests: []
+      tests: [],
+      doctor: "",
+      testName: ""
     };
   },
   created() {
@@ -163,7 +165,9 @@ export default {
           location: this.location,
           staffMember: this.staffMember,
           testID: this.testID.testID,
-          expired: false
+          expired: false,
+          doctor: this.doctor,
+          testName: this.testID.title
         })
         .then(docRef => {
           this.addDailyCheckups();
@@ -205,6 +209,7 @@ export default {
         .then(querySnapshot => {
           querySnapshot.forEach(doc => {
             this.staffMember = doc.id;
+            this.doctor = doc.data().name;
             return;
           });
         });
