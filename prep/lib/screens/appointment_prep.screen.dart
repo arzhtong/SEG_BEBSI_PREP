@@ -74,7 +74,7 @@ class CategoryCard extends StatelessWidget {
   CircleAvatar _getIcon() {
     if (type == "categoryList") {
       return CircleAvatar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.blue[400],
         child: Icon(
           Icons.list,
           color: Colors.white,
@@ -82,7 +82,7 @@ class CategoryCard extends StatelessWidget {
       );
     } else if (type == "informations") {
       return CircleAvatar(
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.deepPurple[400],
         child: Icon(
           Icons.info,
           color: Colors.white,
@@ -90,17 +90,17 @@ class CategoryCard extends StatelessWidget {
       );
     } else if (type == "faqs") {
       return CircleAvatar(
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.green[400],
         child: Icon(
-          Icons.question_answer,
+          Icons.live_help,
           color: Colors.white,
         ),
       );
     } else {
       return CircleAvatar(
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.red[400],
         child: Icon(
-          Icons.fastfood,
+          Icons.local_dining,
           color: Colors.white,
         ),
       );
@@ -110,7 +110,7 @@ class CategoryCard extends StatelessWidget {
   String _getCategory(){
     switch (type) {
       case "informations":
-        return "Information";
+        return "Info";
       case "categoryList":
         return "List";
       case "recipeView":

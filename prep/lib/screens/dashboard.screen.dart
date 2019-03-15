@@ -159,19 +159,19 @@ class _DashboardState extends State<Dashboard> {
       documentList = filteredDocuments;
 
       calendarElements.add(_CalendarLabel(documentList.elementAt(0).data['datetime'].toDate()));
-      calendarElements.add(_CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime'].toDate(), documentList.elementAt(0).data['testID']));
+      calendarElements.add(_CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime'].toDate(), documentList.elementAt(0).data['testID'], documentList.elementAt(0).data['doctor'], documentList.elementAt(0).data['testName']));
 
       for (int i = 1; i < documentList.length; i++){
-        if (documentList.elementAt(i).data['datetime'].toDate() == (documentList.elementAt(i - 1).data['datetime'].toDate())){
-          calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime'].toDate(), documentList.elementAt(i).data['testID']));
+        if (_datesAreEqual(documentList.elementAt(i).data['datetime'].toDate(), (documentList.elementAt(i - 1).data['datetime'].toDate()))){
+          calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime'].toDate(), documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['doctor'], documentList.elementAt(i).data['testName']));
         } else {
           calendarElements.add(_CalendarLabel(documentList.elementAt(i).data['datetime'].toDate()));
-          calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime'].toDate(), documentList.elementAt(i).data['testID']));
+          calendarElements.add(_CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime'].toDate(), documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['doctor'], documentList.elementAt(i).data['testName']));
         }
       }
 
       return ListView(
-        padding: EdgeInsets.only(top: 20.0, bottom: 80.0, left: 10.0, right: 10.0),
+        padding: EdgeInsets.only(top: 10.0, bottom: 80.0, left: 10.0, right: 10.0),
         children: <Widget>[
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,6 +180,10 @@ class _DashboardState extends State<Dashboard> {
         ],
       );
     }
+  }
+
+  bool _datesAreEqual(DateTime date1, DateTime date2) {
+    return (date1.day == date2.day && date1.month == date2.month && date1.year == date2.year);
   }
 
   @override
@@ -365,7 +369,7 @@ class _CalendarLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.only(left: 10.0),
+        padding: EdgeInsets.only(left: 10.0, top: 5.0, bottom: 5.0),
         child: Text(
           dateTimeFormater(dateTime),
           style: TextStyle(
@@ -395,49 +399,144 @@ class _CalendarCard extends StatelessWidget {
   final String location;
   final DateTime dateTime;
   final String testID;
+  final String doctorName;
+  final String testName;
+  List<Color> colors = [Colors.green[300], Colors.red[300], Colors.blue[300], Colors.orange[300]];
+  Color color;
 
-  _CalendarCard(this.name, this.location, this.dateTime, this.testID);
+  _CalendarCard(this.name, this.location, this.dateTime, this.testID, this.doctorName, this.testName) {
+    print(name.hashCode);
+    color = colors[name.hashCode % 4];
+  }
+
+  String dateFormater(DateTime datetime) {
+    const List<String> months = [
+      "January", "February", "March", "April",
+      "May", "June", "July", "August",
+      "September", "October", "November", "December"
+    ];
+
+    String day = datetime.day.toString();
+    String month = months[datetime.month - 1];
+    String year = datetime.year.toString();
+    String hour = datetime.hour.toString();
+    String minute = datetime.minute.toString();
+
+    return day + " " + month + " " + year;
+  }
+
+  String timeFormater(DateTime datetime) {
+    String hour = (datetime.hour < 10) ? "0" + datetime.hour.toString() : datetime.hour.toString();
+    String minute = (datetime.minute < 10) ? "0" + datetime.minute.toString() : datetime.minute.toString();
+
+    //String timeOfDay = (int.parse(hour) < 12) ? "am" : "pm";
+
+    return hour + " : " + minute;
+  }
+
+  Widget _informationRow(String label, String content) {
+    return Container(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              label,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20.0,
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              content,
+              textAlign: TextAlign.end,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20.0,
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+          )
+        ],
+      )
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-      child:  Card(
+      padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+      child: Card(
         elevation: 3.0,
-        child: InkWell(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Appointment(name, testID, 0, dateTime))
-            );
-          },
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    stops: [0.1, 0.9],
-                    colors: [
-                      Colors.blue[200],
-                      Colors.green[200],
-                    ],
+        child: Stack(
+          children: <Widget>[
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(3.0)),
+                  color: color
                   ),
+                  child: Container(
+                    padding: EdgeInsets.all(10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Column(
+                          children: <Widget>[
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                testName,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Divider(
+                              color: Colors.transparent,
+                              height: 30.0,
+                            ),
+                            _informationRow("Location: ", location),
+                            _informationRow("Staff member: ", doctorName),
+                            _informationRow("Date: ", dateFormater(dateTime)),
+                            _informationRow("Time: ", timeFormater(dateTime)),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
                 ),
-                height: 200.0,
+                ListTile(
+                  leading: Icon(Icons.code),
+                  title: Text(name),
+                ),
+              ],
+            ),
+            Positioned.fill(
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  splashColor: Color.fromRGBO(255, 255, 255, 0.2),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Appointment(name, testID, 0, dateTime))
+                    );
+                  }),
               ),
-              ListTile(
-                leading: Icon(Icons.today),
-                title: Text(name),
-                subtitle: Text(location + " - " + dateTime.toString()),
-                //subtitle: Text("St. Thomas Hospital - 11:00 am"),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

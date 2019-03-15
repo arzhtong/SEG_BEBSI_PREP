@@ -26,7 +26,7 @@ class _DailyCheckups extends State<DailyCheckups> {
 
   CircleAvatar _getDailyCheckupIcon(int daysBeforeTest) {
     return CircleAvatar(
-      backgroundColor: (daysBeforeTest == 0) ? Colors.red[700] : Colors.indigo,
+      backgroundColor: (daysBeforeTest == 0) ? Colors.red[400] : Colors.indigo[400],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -97,7 +97,7 @@ class _DailyCheckups extends State<DailyCheckups> {
               trailing: Container(
                 //color: Colors.red,
                 child: Switch(
-                  activeColor: Colors.green[600],
+                  activeColor: Colors.green[400],
                   activeTrackColor: Colors.green[100],
                   value: checkupMap['answer'],
                   onChanged: (_){
