@@ -8,23 +8,23 @@
                         <form @submit.prevent="saveUser">
                             <div class="input-field">
                                 <i class="material-icons prefix">email</i>
-                                <input type="text" name="email" id="email" v-model="email" required>
-                                <label class="blue-text" for="email">Email</label>
+                                <input placeholder="Email" type="text" name="email" id="email" v-model="email" required>
                             </div>
                             <div class="input-field">
-                                <i class="material-icons prefix">lock</i>
-                                <input type="password" name="password" id="password" v-model="password" required>
-                                <label class="blue-text" for="password">Password</label>
+                               <i class="material-icons prefix">lock</i>  
+                               <input placeholder="Password" type="password" name="password" id="password" v-model="password" required> 
                             </div>
+                            
                             <div class="input-field">
-                                <i class="material-icons prefix">face</i>
-                                <input type="text" name="first" id="first" v-model="name" required>
-                                <label class="blue-text" for="name">Name</label>
+                               <i class="material-icons prefix">face</i>
+                                
+                                <input placeholder="Name" type="text" name="first" id="first" v-model="name" required>
+                                
+                                
                             </div>
                             <div class="input-field">
                                 <i class="material-icons prefix">assignment</i>
-                                <input type="text" name="department" id="department" v-model="dept" required>
-                                <label class="blue-text" for="dept">Department</label>
+                                <input placeholder="Department" type="text" name="department" id="department" v-model="dept" required>
                             </div>
                             
                             <div class="input-field"> 

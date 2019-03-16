@@ -37,8 +37,9 @@
           </div>
           <div class="row">
             <div class="input-field col s12">
+              <span>Location</span>
               <input type="text" v-model="location" required>
-              <label>Location</label>
+              
             </div>
           </div>
           <div class="row">
