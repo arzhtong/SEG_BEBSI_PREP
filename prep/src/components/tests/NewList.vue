@@ -10,6 +10,7 @@
           </div>
         </div>
         <button type="submit" class="btn">Submit</button>
+        <!-- cancel button -->
         <router-link
           v-bind:to="{name: 'view-prep-lists', params: {test_id: this.$route.params.test_id}}"
           class="btn grey"
@@ -31,13 +32,13 @@ export default {
   },
   methods: {
     saveList() {
-        
+        // makes a new document in the list collection in the database
          db.collection("tests")
         .doc(this.$route.params.test_id)
         .collection("lists")
         .doc(this.title)
         .set({})
-        
+        // adds a new card to the database
       db.collection("tests")
         .doc(this.$route.params.test_id)
         .collection("prepCards")
@@ -46,6 +47,7 @@ export default {
           contents: this.title,
           type: this.category
         })
+        // reroutes to all the lists
         .then(docRef => {
           this.$router.push({
             name: "view-prep-lists",

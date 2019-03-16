@@ -18,10 +18,13 @@
               </tr>
             </thead>
 
+            <!-- gets all lists -->
             <tbody v-for="list  in lists" v-bind:key="list.id" class="collection-item">
               <tr>
+                <!-- display the list id which is its name -->
                 <td style="padding: 20px;">{{list.id}}</td>
                 <td>
+                  <!-- more info about the list -->
                   <router-link
                     v-bind:to="{name: 'view-prep-list', params: {test_id: test_id, contents: list.id}}"
                     class="btn blue"
@@ -30,6 +33,7 @@
                 </td>
               </tr>
             </tbody>
+            <!-- add a new list -->
             <router-link
               v-bind:to="{name: 'new-list', params: {test_id: test_id}}"
               class="btn green"
@@ -61,7 +65,7 @@ export default {
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
           const data = {
-            id: doc.id
+            id: doc.id // the document id in the database
           };
           this.lists.push(data);
         });

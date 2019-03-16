@@ -3,18 +3,21 @@
     <h3>New FAQ</h3>
     <div class="row">
       <form @submit.prevent="saveFAQ" class="col s12">
+          <!-- adds a question input field -->
         <div class="row">
           <div class="input-field col s12">
             <input type="text" v-model="question" required>
             <label>Question</label>
           </div>
         </div>
+        <!-- adds an answer input field -->
         <div class="row">
           <div class="input-field col s12">
             <input type="text" v-model="answer" required>
             <label>Answer</label>
           </div>
         </div>
+        <!-- adds 2 checkboxes representing shortcuts in the app -->
         <div class="input-field">
           <p style="margin-right: 100%">
             <label>
@@ -37,6 +40,7 @@
           </p>
         </div>
         <button type="submit" class="btn">Submit</button>
+        <!-- cancel button -->
         <router-link
           v-bind:to="{name: 'view-prep-faqs', params: {test_id: this.$route.params.test_id}}"
           class="btn grey"
@@ -60,6 +64,7 @@ export default {
   },
   methods: {
     saveFAQ() {
+        // gets the value of the checkboxes
       if (document.getElementById("chatCheck").checked) {
         this.chatShortcut = true;
       }
@@ -75,6 +80,7 @@ export default {
           chatShortcut: this.chatShortcut,
           informationShortcut: this.informationShortcut
         })
+        // reroutes to faqs page
         .then(docRef => {
           this.$router.push({
             name: "view-prep-faqs",

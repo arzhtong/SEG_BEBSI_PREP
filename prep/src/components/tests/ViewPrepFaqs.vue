@@ -14,6 +14,7 @@
           >Back</router-link>
         </div>
 
+        <!-- adds a dropdown -->
         <ul class="collapsible">
           <li v-for="faq in faqs" v-bind:key="faq.id">
             <div class="collapsible-header">
@@ -40,10 +41,12 @@
                     <b>Has an information shortcut:</b>&nbsp;No
                   </li>
                   <li>
+                      <!-- delete faq -->
                     <button
                       @click="deleteFAQ(faq.id)"
                       class="waves-effect waves-light btn-small red"
                     >delete</button>
+                    <!-- edit faq -->
                     <router-link
                       v-bind:to="{name: 'edit-prep-faq', params: {test_id: testID, faq_id: faq.id}}"
                       class="waves-effect waves-light btn-small green"
@@ -78,7 +81,7 @@ export default {
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
           const data = {
-            id: doc.id,
+            id: doc.id, // the id of the document in the database
             answer: doc.data().answer,
             chatShortcut: doc.data().chatShortcut,
             informationShortcut: doc.data().informationShortcut,
@@ -89,9 +92,10 @@ export default {
       });
   },
   mounted() {
-    M.AutoInit();
+    M.AutoInit(); // initializes materialize components for the dropdowns
   },
   methods: {
+      // delete an faq from the database
     deleteFAQ(id) {
       if (confirm("Are you sure?")) {
         db.collection("tests")
@@ -103,6 +107,7 @@ export default {
             doc.ref.delete();
           })
           .then(() => {
+              // refresh page
             console.log("FAQ successfully deleted!");
             location.reload();
           });

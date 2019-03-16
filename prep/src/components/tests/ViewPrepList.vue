@@ -2,11 +2,14 @@
   <div id="view-prep-list">
     <ul class="collection with-header">
       <li class="collection-header">
+        <!-- title of the list -->
         <h4>{{this.$route.params.contents}}:</h4>
+        <!-- route to all the lists -->
         <router-link
           v-bind:to="{name: 'view-prep-lists', params: {test_id: test_id}}"
           class="btn grey"
         >Back</router-link>
+        <!-- edit the list -->
          <router-link
           v-bind:to="{name: 'edit-prep-list', params: {test_id: test_id, contents: this.$route.params.contents}}"
           class="btn green"
@@ -17,6 +20,7 @@
         <b>
           <h5>Lists:</h5>
         </b>
+        <!-- shows all the maps in the database -->
         <div v-for="map in maps" v-bind:key="map">
           <li class="collection-item">
             <h6><B>Name:</B> {{map.name}}</h6>
@@ -50,12 +54,14 @@ export default {
       .doc(this.$route.params.contents)
       .get()
       .then(doc => {
+        // gets all the maps and pushes them seperately into an array
         (doc.data().maps).forEach((map) => {
               this.maps.push(map)
           })
       });
   },
   methods: {
+    // deletes the list from the database as well as its card
     deleteList() {
       if (confirm("Are you sure?")) {
         db.collection("tests")
