@@ -3,10 +3,12 @@ import Router from 'vue-router'
 import ViewStaff from '@/components/staff/ViewStaff'
 import EditStaff from '@/components/staff/EditStaff'
 import ViewTests from '@/components/tests/ViewTests'
-import ViewRecipes from '@/components/tests/ViewRecipes'
-import ViewRecipeInfo from '@/components/tests/ViewRecipeInfo'
-import NewRecipe from '@/components/tests/NewRecipe'
-import EditRecipe from '@/components/tests/EditRecipe'
+import AddTest from '@/components/tests/AddTest'
+import EditTestDescription from '@/components/tests/EditTestDescription'
+import ViewRecipes from '@/components/tests/recipes/ViewRecipes'
+import ViewRecipeInfo from '@/components/tests/recipes/ViewRecipeInfo'
+import NewRecipe from '@/components/tests/recipes/NewRecipe'
+import EditRecipe from '@/components/tests/recipes/EditRecipe'
 import ViewDailyCheckups from '@/components/tests/dailycheckups/ViewDailyCheckups'
 import NewDailyCheckups from '@/components/tests/dailycheckups/NewDailyCheckups'
 import ViewDailyCheckupsInfo from '@/components/tests/dailycheckups/ViewDailyCheckupsInfo'
@@ -20,8 +22,6 @@ import Login from '@/components/auth/Login'
 import Register from '@/components/auth/Register'
 import ResetPassword from '@/components/auth/ResetPassword'
 import Message from '@/components/messages/Message'
-import AddTest from '@/components/tests/AddTest'
-import EditTestDescription from '@/components/tests/EditTestDescription'
 import ViewArticles from '@/components/tests/articles/ViewArticles'
 import AddArticle from '@/components/tests/articles/AddArticle'
 import EditArticle from '@/components/tests/articles/EditArticle'
@@ -40,6 +40,9 @@ let router = new Router({
         requiresAuth: true
       }
     },
+    
+    // Authentification routes
+
     {
       path: '/login',
       name: 'login',
@@ -80,10 +83,21 @@ let router = new Router({
         requiresAuth: true
       }
     },
+        
+    // Appointment routes
+
     {
       path: '/view-appointments',
       name: 'view-appointments',
       component: ViewAppointments,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/view-appointment/:expired/:id',
+      name: 'view-appointment',
+      component: ViewAppointment,
       meta: {
         requiresAuth: true
       }
@@ -113,6 +127,9 @@ let router = new Router({
         requiresAuth: true
       }
     },
+        
+    // Message routes
+
     {
 
       path: '/message/:expired/:appointmentID',
@@ -122,6 +139,9 @@ let router = new Router({
         requiresAuth: true
       }
     },
+        
+    // Test routes
+
     {
       path: '/add-test',
       name: 'add-test',
@@ -146,6 +166,9 @@ let router = new Router({
         requiresAuth: true
       }
     },
+        
+    // Article routes
+
     {
       path: '/view-articles/:test_id/:title',
       name: 'view-articles',
@@ -170,6 +193,9 @@ let router = new Router({
         requiresAuth: true
       }
     },
+    
+    // Recipe routes
+
     {
       path: '/view-recipes/:test_id',
       name: 'view-recipes',
@@ -202,6 +228,9 @@ let router = new Router({
         requiresAuth: true
       }
     },
+        
+    // Dailycheckup routes
+
     {
       path: '/view-dailycheckups/:test_id',
       name: 'view-dailycheckups',
@@ -230,14 +259,6 @@ let router = new Router({
       path: '/edit-dailycheckups/:test_id/:daily_id',
       name: 'edit-dailycheckups',
       component: EditDailyCheckups,
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
-      path: '/view-appointment/:expired/:id',
-      name: 'view-appointment',
-      component: ViewAppointment,
       meta: {
         requiresAuth: true
       }
