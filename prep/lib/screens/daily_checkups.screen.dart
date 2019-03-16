@@ -97,7 +97,7 @@ class _DailyCheckups extends State<DailyCheckups> {
               trailing: Container(
                 //color: Colors.red,
                 child: Switch(
-                  activeColor: Colors.green[400],
+                  activeColor: Colors.green[500],
                   activeTrackColor: Colors.green[100],
                   value: checkupMap['answer'],
                   onChanged: (_){
