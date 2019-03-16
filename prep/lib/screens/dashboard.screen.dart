@@ -4,7 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:prep/widgets/dashboard/calendar_label.dart';
 import 'package:prep/widgets/dashboard/calendar_card.dart';
-import 'package:prep/widgets/dashboard/empty_calendar_placeholder.dart';
+import 'package:prep/screens/empty_screen_placeholder.dart';
 import 'package:prep/utils/storage.dart';
 import 'package:prep/utils/query.dart';
 
@@ -144,7 +144,7 @@ class _DashboardState extends State<Dashboard> {
     if (codeFileState == null) {
       return null;
     } else if (codeFileState.isEmpty) {
-      return EmptyCalendarPlaceholder();
+      return EmptyScreenPlaceholder("Your calendar is empty", "Add some appointments");
     } else {
       //Generates a list of filtered appointments
       List<DocumentSnapshot> filteredDocuments = new List();
