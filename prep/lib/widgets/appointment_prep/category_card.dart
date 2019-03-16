@@ -12,7 +12,11 @@ class CategoryCard extends StatelessWidget {
   final Color color;
   final DateTime _appointmentDateTime;
 
-  CategoryCard(this.contents, this.title, this.type, this.color, this._appointmentDateTime);
+  CategoryCard(this.contents,
+      this.title,
+      this.type,
+      this.color,
+      this._appointmentDateTime);
 
   Future _navigate(dynamic context) {
     switch (type) {

@@ -9,10 +9,12 @@ class CalendarCard extends StatelessWidget {
   final String testID;
   final String doctorName;
   final String testName;
-  final List<Color> colors = [Colors.green[300], Colors.red[300], Colors.blue[300], Colors.orange[300]];
+  final List<Color> colors = [Colors.green[300], Colors.red[300],
+  Colors.blue[300], Colors.orange[300]];
   Color color;
 
-  CalendarCard(this.name, this.location, this.dateTime, this.testID, this.doctorName, this.testName) {
+  CalendarCard(this.name, this.location, this.dateTime, this.testID,
+      this.doctorName, this.testName) {
     this.color = colors[name.hashCode % 4];
   }
 
@@ -44,6 +46,7 @@ class CalendarCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Expanded(
+              flex: 4,
               child: Text(
                 label,
                 style: TextStyle(
@@ -54,6 +57,7 @@ class CalendarCard extends StatelessWidget {
               ),
             ),
             Expanded(
+              flex: 6,
               child: Text(
                 content,
                 textAlign: TextAlign.end,
