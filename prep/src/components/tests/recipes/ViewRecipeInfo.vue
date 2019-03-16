@@ -11,73 +11,77 @@
             </ol> 
             
             </li> 
-            <li v-if="notes" class="collection-item"><b>Notes:</b> {{notes}}</li> 
+            <li v-if="note" class="collection-item"><b>Notes:</b> {{note}}</li> 
         </ul>
-        <router-link v-bind:to="{name: 'view-recipes', params: {test_id: test_id}}" class="btn grey">
-            Back
-            </router-link>
-            <router-link v-bind:to="{name: 'edit-recipe', params: {test_id: test_id, recipe_id: title}}" class="btn green">
-            Edit
-            </router-link>
-            <button @click="deleteRecipe" class="btn red">
-            Delete
-            </button>
-         <div class="fixed-action-btn">
-        </div>
+        <router-link v-bind:to="{name: 'view-recipes', params: {test_id: test_id}}" class="btn grey">Back</router-link>
+        <router-link v-bind:to="{name: 'edit-recipe', params: {test_id: test_id, recipe_id: recipe_id}}" class="btn green">Edit</router-link>
+        <button @click="deleteRecipe" class="btn red">Delete</button>
     </div>
 </template>
 
 <script>
-    import db from '../../firebaseInit'
+import db from '../../firebaseInit'
 
-    export default{
-        name: 'view-recipe-info',
-        data() {
-            return {
-                title: null,
-                instructions: [],
-                notes: null,
-                test_id: this.$route.params.test_id
-            }
-        },
-        beforeRouteEnter (to, from, next) {
-            db.collection('tests').doc(to.params.test_id).collection('recipes').where('title', '==', to.params.recipe_id).get()
-            .then(querySnapshot => {
-                querySnapshot.forEach(doc => {
-                    next(vm => {
-                        vm.title = doc.data().title
-                        vm.instructions = doc.data().instructions
-                        vm.notes = doc.data().notes
-                    })
+export default {
+    name: 'view-recipe-info',
+    data() {
+        return {
+            title: null,
+            recipe_id: this.$route.params.recipe_id,
+            instructions: [],
+            note: null,
+            test_id: this.$route.params.test_id
+        }
+    },
+    beforeRouteEnter (to, from, next) {
+        db.collection('tests')
+          .doc(to.params.test_id)
+          .collection('recipes')
+          .doc(to.params.recipe_id)
+          .get()
+          .then(doc => {
+              if(doc.exists) {
+                next(vm => {
+                    vm.title = doc.data().title
+                    vm.instructions = doc.data().method
+                    vm.note = doc.data().note
                 })
-            })
+              }
+          })
+    },
+    watch: {
+        '$route': 'fetchData'
+    },
+    methods: {
+        fetchData () {
+            db.collection('tests')
+              .doc(this.$route.params.test_id)
+              .collection('recipes')
+              .doc(this.$route.params.recipe_id)
+              .get()
+              .then(doc => {
+                if(doc.exists) {
+                    this.title = doc.data().title
+                    this.instructions = doc.data().method
+                    this.note = doc.data().note
+                }
+              })
         },
-        watch: {
-            '$route': 'fetchData'
-        },
-        methods: {
-            fetchData (){
-                db.collection('tests').doc(this.$route.params.test_id).collection('recipes').where('title', '==', this.$route.params.recipe_id).get()
-                .then(querySnapshot => {
-                    querySnapshot.forEach(doc => {
-                        this.title = doc.data().title
-                        this.instructions = doc.data().instructions
-                        this.notes = doc.data().notes
-                    })
-                })
-            },
-            deleteRecipe (){
-                if(confirm('Are you sure?')){
-                     db.collection('tests').doc(this.$route.params.test_id).collection('recipes').where('title', '==', this.$route.params.recipe_id).get()
-                    .then(querySnapshot => {
+        deleteRecipe () {
+            if(confirm('Are you sure?')) {
+                    db.collection('tests')
+                      .doc(this.$route.params.test_id)
+                      .collection('recipes')
+                      .doc(this.$route.params.recipe_id)
+                      .get()
+                      .then(querySnapshot => {
                         querySnapshot.forEach(doc => {
                             doc.ref.delete()
                         })
                         this.$router.push({name: 'view-recipes', params: {test_id: this.$route.params.test_id}})
-                    })
-                }
+                      })
             }
-            
-        }
+        }   
     }
+}
 </script>
