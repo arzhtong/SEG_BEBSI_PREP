@@ -76,7 +76,7 @@ class CalendarCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+      padding: EdgeInsets.only(top: 2.5, bottom: 2.5),
       child: Card(
         elevation: 3.0,
         child: Stack(
@@ -138,7 +138,7 @@ class CalendarCard extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Appointment(name, testID, 0, dateTime))
+                          MaterialPageRoute(builder: (context) => Appointment(name, testID, testName, 0, dateTime))
                       );
                     }),
               ),

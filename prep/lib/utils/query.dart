@@ -36,6 +36,7 @@ class DatabaseHandler {
 class Queries {
   static String appointmentID;
   static String testID;
+  static String appointmentName;
 
   static const Queries _singleton = Queries._internal();
 
@@ -43,9 +44,10 @@ class Queries {
 
   const Queries._internal();
 
-  static void setAppointmentInfo(newAppointmentID, newTestID) {
+  static void setAppointmentInfo(newAppointmentID, newTestID, newAppointmentName) {
     appointmentID = newAppointmentID;
     testID = newTestID;
+    appointmentName = newAppointmentName;
   }
 
   static Future<QuerySnapshot> get appointmentCodes => _appointmentsCollection

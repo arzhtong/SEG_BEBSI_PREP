@@ -7,8 +7,9 @@ import 'package:prep/utils/query.dart';
 
 class InformationParser extends StatelessWidget {
   final String _documentName;
+  final String _categoryName;
 
-  InformationParser(this._documentName);
+  InformationParser(this._documentName, this._categoryName);
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot document){
     return Container(
@@ -39,7 +40,7 @@ class InformationParser extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.indigo,
-        title: Text("Information"),
+        title: Text(_categoryName),
       ),
       body: StreamBuilder(
         stream: Queries.informationSnapshots(_documentName),

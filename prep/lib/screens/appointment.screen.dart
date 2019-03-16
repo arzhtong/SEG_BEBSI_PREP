@@ -10,8 +10,8 @@ class Appointment extends StatefulWidget {
   final int index;
   final DateTime _appointmentDateTime;
 
-  Appointment(appointmentID, testID, this.index, this._appointmentDateTime) {
-    Queries.setAppointmentInfo(appointmentID, testID);
+  Appointment(appointmentID, testID, appointmentName, this.index, this._appointmentDateTime) {
+    Queries.setAppointmentInfo(appointmentID, testID, appointmentName);
   }
 
   @override
@@ -54,7 +54,7 @@ class _AppointmentState extends State<Appointment> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.indigo,
-        title: Text('Appointments'),
+        title: Text(Queries.appointmentName),
       ),
       body: Center(
         child: getPage(_selectedIndex),

@@ -189,7 +189,7 @@ class _DashboardState extends State<Dashboard> {
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         backgroundColor: Colors.indigo,
-        title: Text("Dashboard"),
+        title: Text("Calendar"),
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.delete_sweep),
