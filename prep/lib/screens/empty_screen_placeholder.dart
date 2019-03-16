@@ -8,31 +8,31 @@ class EmptyScreenPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Text(
-          title,
-          style: TextStyle(
-            fontSize: 35.0,
-            color: Colors.grey,
-            fontWeight: FontWeight.bold,
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 35.0,
+              color: Colors.grey,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          textAlign: TextAlign.center,
-        ),
         Padding(
           padding: EdgeInsets.all(20.0),
         ),
-        Text(
-          subtitle,
-          style: TextStyle(
-            fontSize: 25.0,
-            color: Colors.grey,
+          Text(
+            subtitle,
+            style: TextStyle(
+              fontSize: 25.0,
+              color: Colors.grey,
+            ),
           ),
-          textAlign: TextAlign.center,
-        ),
-      ],
+        ],
+      )
     );
   }
 }
