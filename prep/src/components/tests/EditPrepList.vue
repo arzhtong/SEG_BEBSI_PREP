@@ -1,14 +1,9 @@
 <template>
   <div id="edit-prep-list">
     <h3>Edit Preperation List</h3>
+    <h4>{{title}}</h4>
     <div class="row">
       <form @submit.prevent="updatePrepList" class="col s12">
-        <div class="row">
-          <div class="input-field col s12">
-            <span>Title</span>
-            <input type="text" v-model="title">
-          </div>
-        </div>
         <div class="row">
           <div v-for="data in allData" v-bind:key="data" class="input-field col s12">
             <span>name</span>
@@ -69,58 +64,51 @@ export default {
       .doc(this.$route.params.contents)
       .get()
       .then(doc => {
-        (doc.data().maps).forEach((map) => {
-              this.allData.push(map)
-          })
+        doc.data().maps.forEach(map => {
+          this.allData.push(map);
+        });
       });
-  
+
     this.getTitle();
   },
   methods: {
-    updatePrepList() { 
-      if(this.allMaps.length > 0) {
-        var theMaps = this.allData.concat(this.allMaps)
-         db.collection("tests")
-        .doc(this.$route.params.test_id)
-        .collection("lists")
-        .doc(this.$route.params.contents)
-        .set( 
-         {
-           maps: theMaps
-         }
-        )
-      }
-      else{
-         db.collection("tests")
-        .doc(this.$route.params.test_id)
-        .collection("lists")
-        .doc(this.$route.params.contents)
-        .set(
-         {
-           maps: this.allData
-         }
-        )
-      }
-
-      db.collection("tests")
-        .doc(this.$route.params.test_id)
-        .collection("prepCards")
-        .where("contents", "==", this.$route.params.contents)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            doc.ref
-              .update({
-                contents: this.title
-              })
-              .then(() => {
-                this.$router.push({
-                  name: "view-prep-list",
-                  params: { test_id: this.$route.params.test_id, contents: this.$route.params.contents }
-                });
-              });
+    updatePrepList() {
+      if (this.allMaps.length > 0) {
+        var theMaps = this.allData.concat(this.allMaps);
+        db.collection("tests")
+          .doc(this.$route.params.test_id)
+          .collection("lists")
+          .doc(this.$route.params.contents)
+          .set({
+            maps: theMaps
+          })
+          .then(() => {
+            this.$router.push({
+              name: "view-prep-list",
+              params: {
+                test_id: this.$route.params.test_id,
+                contents: this.$route.params.contents
+              }
+            });
           });
-        });
+      } else {
+        db.collection("tests")
+          .doc(this.$route.params.test_id)
+          .collection("lists")
+          .doc(this.$route.params.contents)
+          .set({
+            maps: this.allData
+          })
+          .then(() => {
+            this.$router.push({
+              name: "view-prep-list",
+              params: {
+                test_id: this.$route.params.test_id,
+                contents: this.$route.params.contents
+              }
+            });
+          });
+      }
     },
     addMap() {
       let data = new Object();
@@ -130,8 +118,8 @@ export default {
       this.allMaps.push(data);
     },
     addToList(map) {
-      const data = ""
-      map.list.push(data)
+      const data = "";
+      map.list.push(data);
     },
     addToOldList(newData) {
       const data = "";
@@ -143,7 +131,7 @@ export default {
     deleteFromOldList(newData, index) {
       newData.list.splice(index, 1);
     },
-     deleteOldMap(index) {
+    deleteOldMap(index) {
       this.allData.splice(index, 1);
     },
     deleteMap(index) {

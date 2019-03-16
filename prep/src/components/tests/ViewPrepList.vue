@@ -4,7 +4,7 @@
       <li class="collection-header">
         <h4>{{this.$route.params.contents}}:</h4>
         <router-link
-          v-bind:to="{name: 'view-prep-categories', params: {test_id: test_id}}"
+          v-bind:to="{name: 'view-prep-lists', params: {test_id: test_id}}"
           class="btn grey"
         >Back</router-link>
          <router-link
@@ -76,7 +76,7 @@ export default {
           .then(doc => {
             doc.ref.delete();
             this.$router.push({
-              name: "view-prep-categories",
+              name: "view-prep-lists",
               params: { test_id: this.$route.params.test_id }
             });
           });

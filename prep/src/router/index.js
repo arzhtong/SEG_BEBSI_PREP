@@ -7,11 +7,12 @@ import ViewRecipes from '@/components/tests/ViewRecipes'
 import ViewRecipeInfo from '@/components/tests/ViewRecipeInfo'
 import NewRecipe from '@/components/tests/NewRecipe'
 import EditRecipe from '@/components/tests/EditRecipe'
-import ViewPrepCategories from '@/components/tests/ViewPrepCategories'
-import NewCategory from '@/components/tests/NewCategory'
+import ViewPrepLists from '@/components/tests/ViewPrepLists'
+import NewList from '@/components/tests/NewList'
 import ViewPrepList from '@/components/tests/ViewPrepList'
 import ViewPrepFaqs from '@/components/tests/ViewPrepFaqs'
 import NewPrepFaq from '@/components/tests/NewPrepFaq'
+import EditPrepFaq from '@/components/tests/EditPrepFaq'
 import EditPrepList from '@/components/tests/EditPrepList'
 import EditStaff from '@/components/staff/EditStaff'
 import ViewAppointments from '@/components/appointments/ViewAppointments'
@@ -127,9 +128,9 @@ let router = new Router({
       }
     },
     {
-      path: '/view-prep-categories/:test_id',
-      name: 'view-prep-categories',
-      component: ViewPrepCategories,
+      path: '/view-prep-lists/:test_id',
+      name: 'view-prep-lists',
+      component: ViewPrepLists,
       meta: {
         requiresAuth: true
       }
@@ -143,9 +144,9 @@ let router = new Router({
       }
     },
     {
-      path: '/new-category/:test_id',
-      name: 'new-category',
-      component: NewCategory,
+      path: '/new-list/:test_id',
+      name: 'new-list',
+      component: NewList,
       meta: {
         requiresAuth: true
       }
@@ -167,7 +168,7 @@ let router = new Router({
       }
     },
     {
-      path: '/new-prep-faq/:test_id/:contents',
+      path: '/new-prep-faq/:test_id/',
       name: 'new-prep-faq',
       component: NewPrepFaq,
       meta: {
@@ -175,7 +176,15 @@ let router = new Router({
       }
     },
     {
-      path: '/view-prep-faqs/:test_id/:contents',
+      path: '/edit-prep-faq/:test_id/:faq_id',
+      name: 'edit-prep-faq',
+      component: EditPrepFaq,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/view-prep-faqs/:test_id/',
       name: 'view-prep-faqs',
       component: ViewPrepFaqs,
       meta: {
@@ -183,7 +192,7 @@ let router = new Router({
       }
     },
     {
-      path: '/edit-prep-list/:test_id/:contents',
+      path: '/edit-prep-list/:test_id/',
       name: 'edit-prep-list',
       component: EditPrepList,
       meta: {

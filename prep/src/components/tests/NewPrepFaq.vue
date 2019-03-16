@@ -38,7 +38,7 @@
         </div>
         <button type="submit" class="btn">Submit</button>
         <router-link
-          v-bind:to="{name: 'view-prep-faqs', params: {test_id: this.$route.params.test_id, contents: this.$route.params.contents}}"
+          v-bind:to="{name: 'view-prep-faqs', params: {test_id: this.$route.params.test_id}}"
           class="btn grey"
         >Cancel</router-link>
       </form>
@@ -79,8 +79,7 @@ export default {
           this.$router.push({
             name: "view-prep-faqs",
             params: {
-              test_id: this.$route.params.test_id,
-              contents: this.$route.params.contents
+              test_id: this.$route.params.test_id
             }
           });
         })

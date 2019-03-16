@@ -4,7 +4,7 @@
       <li class="collection-header">
         <div class="container" style="width:100%;height:100%">
           <router-link
-            v-bind:to="{name: 'new-prep-faq', params: {test_id: testID, contents: this.$route.params.contents}}"
+            v-bind:to="{name: 'new-prep-faq', params: {test_id: testID}}"
             class="btn green"
             style="margin:20px"
           >Add FAQ</router-link>
@@ -44,6 +44,10 @@
                       @click="deleteFAQ(faq.id)"
                       class="waves-effect waves-light btn-small red"
                     >delete</button>
+                    <router-link
+                      v-bind:to="{name: 'edit-prep-faq', params: {test_id: testID, faq_id: faq.id}}"
+                      class="waves-effect waves-light btn-small green"
+                    >Edit</router-link>
                   </li>
                 </ul>
               </span>
