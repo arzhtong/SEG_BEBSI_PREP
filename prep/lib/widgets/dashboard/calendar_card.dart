@@ -9,10 +9,12 @@ class CalendarCard extends StatelessWidget {
   final String testID;
   final String doctorName;
   final String testName;
-  final List<Color> colors = [Colors.green[300], Colors.red[300], Colors.blue[300], Colors.orange[300]];
+  final List<Color> colors = [Colors.green[300], Colors.red[300],
+  Colors.blue[300], Colors.orange[300]];
   Color color;
 
-  CalendarCard(this.name, this.location, this.dateTime, this.testID, this.doctorName, this.testName) {
+  CalendarCard(this.name, this.location, this.dateTime, this.testID,
+      this.doctorName, this.testName) {
     this.color = colors[name.hashCode % 4];
   }
 
@@ -44,6 +46,7 @@ class CalendarCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Expanded(
+              flex: 4,
               child: Text(
                 label,
                 style: TextStyle(
@@ -54,6 +57,7 @@ class CalendarCard extends StatelessWidget {
               ),
             ),
             Expanded(
+              flex: 6,
               child: Text(
                 content,
                 textAlign: TextAlign.end,
@@ -72,7 +76,7 @@ class CalendarCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+      padding: EdgeInsets.only(top: 2.5, bottom: 2.5),
       child: Card(
         elevation: 3.0,
         child: Stack(
@@ -134,7 +138,7 @@ class CalendarCard extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Appointment(name, testID, 0, dateTime))
+                          MaterialPageRoute(builder: (context) => Appointment(name, testID, testName, 0, dateTime))
                       );
                     }),
               ),

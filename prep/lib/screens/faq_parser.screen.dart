@@ -36,8 +36,7 @@ class FaqParser extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                             context, MaterialPageRoute(builder: (context) =>
-                            Appointment(Queries.appointmentID, Queries.testID,
-                                3, _appointmentDateTime)
+                            Appointment(Queries.appointmentID, Queries.testID, Queries.appointmentName, 3, _appointmentDateTime)
                         )
                         );
                       }
@@ -50,8 +49,7 @@ class FaqParser extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                             context, MaterialPageRoute(builder: (context) =>
-                            Appointment(Queries.appointmentID, Queries.testID,
-                                1, _appointmentDateTime)
+                            Appointment(Queries.appointmentID, Queries.testID, Queries.appointmentName, 1, _appointmentDateTime)
                         )
                         );
                       }

@@ -218,8 +218,8 @@ class _MessageListItem extends StatelessWidget {
             ? MainAxisAlignment.end
             : MainAxisAlignment.start,
         messageBackgroundColor = (message.isPatient)
-            ? Colors.greenAccent
-            : Colors.lightBlueAccent; //TODO use Theme colors
+            ? Colors.blue[200]
+            : Colors.grey[300];
 
   final MainAxisAlignment rowAlignment;
   final Color messageBackgroundColor;

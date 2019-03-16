@@ -12,19 +12,26 @@ class CategoryCard extends StatelessWidget {
   final Color color;
   final DateTime _appointmentDateTime;
 
-  CategoryCard(this.contents, this.title, this.type, this.color, this._appointmentDateTime);
+  CategoryCard(this.contents,
+      this.title,
+      this.type,
+      this.color,
+      this._appointmentDateTime);
 
   Future _navigate(dynamic context) {
     switch (type) {
       case "informations":
-        return Navigator.push(context, MaterialPageRoute(builder: (context) => InformationParser(contents)));
+        return Navigator.push(context, MaterialPageRoute(builder:
+            (context) => InformationParser(contents, title)));
       case "categoryList":
-        return Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryListParser(contents)));
+        return Navigator.push(context, MaterialPageRoute(builder:
+            (context) => CategoryListParser(contents, title)));
       case "recipeView":
         return Navigator.push(context,
             MaterialPageRoute(builder: (context) => RecipeListScreen()));
       default:
-        return Navigator.push(context, MaterialPageRoute(builder: (context) => FaqParser(_appointmentDateTime)));
+        return Navigator.push(context, MaterialPageRoute(builder:
+            (context) => FaqParser(_appointmentDateTime)));
     }
   }
 

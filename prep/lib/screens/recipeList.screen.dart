@@ -23,6 +23,7 @@ class RecipeListScreen extends StatelessWidget {
             return Text(_errorMessagePrefix + collectionSnapshot.error);
           }
           return ListView.builder(
+            padding: EdgeInsets.all(10.0),
             itemBuilder: (_, index) =>
                 RecipeCard(
                   snapshot: collectionSnapshot.data.documents[index],
