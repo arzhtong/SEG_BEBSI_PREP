@@ -138,6 +138,9 @@ class _DashboardState extends State<Dashboard> {
       }
     });
 
+    print("newCodeFileState");
+    print(newCodeFileState);
+
     await overrideData(newCodeFileState).then((_) {});
 
     // building the return widget based on the updated (current) codes file
@@ -218,6 +221,7 @@ class _DashboardState extends State<Dashboard> {
           IconButton(
               icon: Icon(Icons.delete_sweep),
               onPressed: () {
+                print("---clear data button pressed---");
                 clearData();
               }),
           IconButton(
@@ -247,6 +251,7 @@ class _DashboardState extends State<Dashboard> {
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
+            print("codeFileState");
             print(codeFileState);
             showDialog(
                 context: context, builder: (_) => _NewAppointmentDialog(this));
