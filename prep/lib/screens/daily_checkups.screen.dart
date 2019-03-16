@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:prep/utils/query.dart';
 
 class DailyCheckups extends StatefulWidget {
@@ -40,7 +41,6 @@ class _DailyCheckups extends State<DailyCheckups> {
             ),
           ),
           Text(
-            //TODO: Use the already written month name parser to apply month correctly
             monthAbbreviation(widget._appointmentDateTime),
             style: TextStyle(
                 color: Colors.white,
@@ -128,7 +128,7 @@ class _DailyCheckups extends State<DailyCheckups> {
     );
 
     return Container(
-      padding: EdgeInsets.only(right: 10.0, left: 10.0, top: 5.0, bottom: 5.0),
+      padding: EdgeInsets.only(right: 10.0, left: 10.0, bottom: 5.0),
       child: Card(
         elevation: 3.0,
         child: ExpansionTile(
@@ -148,7 +148,7 @@ class _DailyCheckups extends State<DailyCheckups> {
       builder: (context, snapshot) {
       if (!snapshot.hasData) return const Align(alignment: Alignment.topCenter, child: LinearProgressIndicator(),);
       return ListView.builder(
-        padding: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.only(top: 10, bottom: 10),
         itemCount: snapshot.data.documents.length,
         itemBuilder: (context, index) => _buildListItem(context, snapshot.data.documents[index]),
       );},
