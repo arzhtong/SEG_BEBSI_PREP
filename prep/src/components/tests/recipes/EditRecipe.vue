@@ -20,7 +20,7 @@
         <div class="row">
           <div class="input-field col s12">
             <span>Notes</span>
-            <input type="text" v-model="notes">
+            <input type="text" v-model="note">
           </div>
         </div>
         <button type="submit" class="btn">Submit</button>
@@ -42,7 +42,7 @@ export default {
     return {
       title: null,
       allInstr: [],
-      notes: null,
+      note: null,
       test_id: this.$route.params.test_id,
       recipe_id: this.$route.params.recipe_id
     };
@@ -51,55 +51,45 @@ export default {
     db.collection("tests")
       .doc(this.$route.params.test_id)
       .collection("recipes")
-      .where("title", "==", this.$route.params.recipe_id)
+      .doc(this.$route.params.recipe_id)
       .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          (this.allInstr = doc.data().instructions),
-            (this.notes = doc.data().notes),
-            (this.title = doc.data().title);
-        });
-      });
+      .then(doc => {
+          if(doc.exists) {
+            this.allInstr = doc.data().method,
+            this.note = doc.data().note,
+            this.title = doc.data().title;
+        }
+      })
   },
   beforeRouteEnter(to, from, next) {
     db.collection("tests")
       .doc(to.params.test_id)
       .collection("recipes")
-      .where("title", "==", to.params.recipe_id)
+      .doc(to.params.recipe_id)
       .get()
-      .then(querySnapshot => {
-        fetch;
-        querySnapshot.forEach(doc => {
+      .then(doc => {
+        if(doc.exists) {
           next(vm => {
-            vm.title = doc.data().title;
-            vm.notes = doc.data().notes;
-          });
-        });
-      });
+          vm.title = doc.data().title
+          vm.note = doc.data().note
+        })
+        }
+      })
   },
   methods: {
     updateRecipe() {
       db.collection("tests")
         .doc(this.$route.params.test_id)
         .collection("recipes")
-        .where("title", "==", this.$route.params.recipe_id)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            doc.ref
-              .update({
-                title: this.title,
-                instructions: this.allInstr,
-                notes: this.notes
-              })
-              .then(() => {
-                this.$router.push({
-                  name: "view-recipes",
-                  params: { test_id: this.$route.params.test_id }
-                });
-              });
-          });
-        });
+        .doc(this.$route.params.recipe_id)
+        .update({
+          title: this.title,
+          method: this.allInstr,
+          note: this.note
+        })
+        .then(() => {
+          this.$router.push({name: "view-recipes", params: { test_id: this.$route.params.test_id }})
+        })
     },
     addInstruction() {
       const data = "";
