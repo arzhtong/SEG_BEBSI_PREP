@@ -17,8 +17,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
 
   void _addNewMessage(DocumentSnapshot document) {
     Map<String, dynamic> message = document.data;
-    if (!message['seenByPatient'])
-      Queries.setSeenByPatient(document.reference);
+    if (!message['seenByPatient']) Queries.setSeenByPatient(document.reference);
 
     String decryptedMessage = MessageCrypto.decryptMessage(message['content']);
 
@@ -150,37 +149,47 @@ class _TextComposerState extends State<_TextComposer> {
   Widget build(BuildContext context) {
     return IconTheme(
       data: IconThemeData(color: Theme.of(context).accentColor),
-      child: new Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Row(
-          children: <Widget>[
-            Flexible(
-              child: TextField(
-                maxLines: null,
-                keyboardType: TextInputType.multiline,
-                controller: _textController,
-                onChanged: (userInputText) {
-                  setState(() => _hasTyped = userInputText.length > 0);
-                },
-                //onSubmitted: MessagingQueries.sendMessage,
-                decoration:
-                    InputDecoration.collapsed(hintText: "Type a message"),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 4.0),
-              child: IconButton(
-                icon: Icon(
-                  Icons.send,
-                  //TODO Change to proper theme colors after implementation.
-                  color: (_hasTyped)
-                      ? Theme.of(context).accentColor
-                      : Theme.of(context).buttonColor,
+      child: Container(
+        padding: EdgeInsets.only(left: 8.0),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: 200),
+          child: IntrinsicHeight(
+            child: Row(
+              children: <Widget>[
+                Flexible(
+                  child: SingleChildScrollView(
+                    child: TextField(
+                      maxLines: null,
+                      keyboardType: TextInputType.multiline,
+                      controller: _textController,
+                      onChanged: (userInputText) {
+                        setState(() => _hasTyped = userInputText.length > 0);
+                      },
+                      //onSubmitted: MessagingQueries.sendMessage,
+                      decoration:
+                          InputDecoration.collapsed(hintText: "Type a message"),
+                    ),
+                  ),
                 ),
-                onPressed: () => _sendMessage(_textController.text.trim()),
-              ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(
+                        Icons.send,
+                        //TODO Change to proper theme colors after implementation.
+                        color: (_hasTyped)
+                            ? Theme.of(context).accentColor
+                            : Theme.of(context).buttonColor,
+                      ),
+                      onPressed: () =>
+                          _sendMessage(_textController.text.trim()),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
