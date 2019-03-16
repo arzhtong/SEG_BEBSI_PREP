@@ -85,7 +85,7 @@ class _DashboardState extends State<Dashboard> {
   }
 
   // Checks if a code exists in the Firestore
-  Future<bool> _isCodeInFirestore (String code) async {
+  Future<bool> _isCodeInFirestore(String code) async {
     List<String> liveIDs = new List();
 
     await Queries.appointmentCodes.then((query) {
@@ -106,15 +106,15 @@ class _DashboardState extends State<Dashboard> {
     // checking if a file already exists, if not, creating one
     if (!fileExists) {
       await storage.codeFileExists().then((result) {
-        if (!result){
-            storage.writeData("");
-            fileExists = true;
-          }
+        if (!result) {
+          storage.writeData("");
+          fileExists = true;
+        }
       });
     }
 
     //reading file and updating codeFileState
-    await storage.readData().then((String value){
+    await storage.readData().then((String value) {
       codeFileState = value;
     });
 
@@ -132,43 +132,65 @@ class _DashboardState extends State<Dashboard> {
     });
 
     String newCodeFileState = "";
-    codeFileState.split(',').forEach((code){
-      if (documentIDs.contains(code)){
+    codeFileState.split(',').forEach((code) {
+      if (documentIDs.contains(code)) {
         newCodeFileState = newCodeFileState + code + ',';
       }
     });
 
-    await overrideData(newCodeFileState).then((_){});
+    await overrideData(newCodeFileState).then((_) {});
 
     // building the return widget based on the updated (current) codes file
-    if (codeFileState == null){
+    if (codeFileState == null) {
       return null;
     } else if (codeFileState.isEmpty) {
       return EmptyCalendarPlaceholder();
     } else {
       //Generates a list of filtered appointments
-      List<DocumentSnapshot> filteredDocuments= new List();
-      documentList.forEach((doc){
+      List<DocumentSnapshot> filteredDocuments = new List();
+      documentList.forEach((doc) {
         if (_documentInCodeFile(doc.documentID)) {
           filteredDocuments.add(doc);
         }
       });
       documentList = filteredDocuments;
 
-      calendarElements.add(CalendarLabel(documentList.elementAt(0).data['datetime'].toDate()));
-      calendarElements.add(CalendarCard(documentList.elementAt(0).documentID, documentList.elementAt(0).data['location'], documentList.elementAt(0).data['datetime'].toDate(), documentList.elementAt(0).data['testID'], documentList.elementAt(0).data['doctor'], documentList.elementAt(0).data['testName']));
+      calendarElements.add(
+          CalendarLabel(documentList.elementAt(0).data['datetime'].toDate()));
+      calendarElements.add(CalendarCard(
+          documentList.elementAt(0).documentID,
+          documentList.elementAt(0).data['location'],
+          documentList.elementAt(0).data['datetime'].toDate(),
+          documentList.elementAt(0).data['testID'],
+          documentList.elementAt(0).data['doctor'],
+          documentList.elementAt(0).data['testName']));
 
-      for (int i = 1; i < documentList.length; i++){
-        if (_datesAreEqual(documentList.elementAt(i).data['datetime'].toDate(), (documentList.elementAt(i - 1).data['datetime'].toDate()))){
-          calendarElements.add(CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime'].toDate(), documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['doctor'], documentList.elementAt(i).data['testName']));
+      for (int i = 1; i < documentList.length; i++) {
+        if (_datesAreEqual(documentList.elementAt(i).data['datetime'].toDate(),
+            (documentList.elementAt(i - 1).data['datetime'].toDate()))) {
+          calendarElements.add(CalendarCard(
+              documentList.elementAt(i).documentID,
+              documentList.elementAt(i).data['location'],
+              documentList.elementAt(i).data['datetime'].toDate(),
+              documentList.elementAt(i).data['testID'],
+              documentList.elementAt(i).data['doctor'],
+              documentList.elementAt(i).data['testName']));
         } else {
-          calendarElements.add(CalendarLabel(documentList.elementAt(i).data['datetime'].toDate()));
-          calendarElements.add(CalendarCard(documentList.elementAt(i).documentID, documentList.elementAt(i).data['location'], documentList.elementAt(i).data['datetime'].toDate(), documentList.elementAt(i).data['testID'], documentList.elementAt(i).data['doctor'], documentList.elementAt(i).data['testName']));
+          calendarElements.add(CalendarLabel(
+              documentList.elementAt(i).data['datetime'].toDate()));
+          calendarElements.add(CalendarCard(
+              documentList.elementAt(i).documentID,
+              documentList.elementAt(i).data['location'],
+              documentList.elementAt(i).data['datetime'].toDate(),
+              documentList.elementAt(i).data['testID'],
+              documentList.elementAt(i).data['doctor'],
+              documentList.elementAt(i).data['testName']));
         }
       }
 
       return ListView(
-        padding: EdgeInsets.only(top: 10.0, bottom: 80.0, left: 10.0, right: 10.0),
+        padding:
+            EdgeInsets.only(top: 10.0, bottom: 80.0, left: 10.0, right: 10.0),
         children: <Widget>[
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,7 +202,9 @@ class _DashboardState extends State<Dashboard> {
   }
 
   bool _datesAreEqual(DateTime date1, DateTime date2) {
-    return (date1.day == date2.day && date1.month == date2.month && date1.year == date2.year);
+    return (date1.day == date2.day &&
+        date1.month == date2.month &&
+        date1.year == date2.year);
   }
 
   @override
@@ -193,41 +217,40 @@ class _DashboardState extends State<Dashboard> {
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.delete_sweep),
-              onPressed: (){
+              onPressed: () {
                 clearData();
-              }
-          ),
+              }),
           IconButton(
               icon: Icon(Icons.refresh),
-              onPressed: (){
+              onPressed: () {
                 setState(() {});
-              }
-          )
+              })
         ],
       ),
       body: FutureBuilder(
-        future: _getDocData(),
-        builder: (BuildContext context, AsyncSnapshot<Widget> snapshot){
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return (cachedCalendar == null) ? LinearProgressIndicator(): Stack(children: <Widget>[cachedCalendar, LinearProgressIndicator()]);
-            default:
-              cachedCalendar = snapshot.data;
-              return snapshot.data;
-          }
-        }
-      ),
+          future: _getDocData(),
+          builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                return (cachedCalendar == null)
+                    ? LinearProgressIndicator()
+                    : Stack(children: <Widget>[
+                        cachedCalendar,
+                        LinearProgressIndicator()
+                      ]);
+              default:
+                cachedCalendar = snapshot.data;
+                return snapshot.data;
+            }
+          }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          print(codeFileState);
-          showDialog(
-            context: context,
-            builder: (_) => _NewAppointmentDialog(this)
-          );
-        }
-      ),
+          child: Icon(Icons.add),
+          onPressed: () {
+            print(codeFileState);
+            showDialog(
+                context: context, builder: (_) => _NewAppointmentDialog(this));
+          }),
     );
   }
 }
@@ -254,7 +277,7 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
     return _parent.codeFileState.split(',').contains(value);
   }
 
-  Future<bool> _isCodeInFirestore (String code) async {
+  Future<bool> _isCodeInFirestore(String code) async {
     List<String> liveIDs = new List();
 
     await Queries.appointmentCodes.then((query) {
@@ -283,16 +306,16 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
             children: <Widget>[
               Container(
                 padding: EdgeInsets.all(10.0),
-                child:  TextFormField(
+                child: TextFormField(
                   controller: _parent.codeController,
                   validator: (value) {
-                    if (value.isEmpty){
+                    if (value.isEmpty) {
                       return "Please enter a code";
                     } else {
                       if (_parent.validationResultFile) {
                         return "This appointment is in your calendar";
                       } else {
-                        if (_parent.validationResultDb){
+                        if (_parent.validationResultDb) {
                           return null;
                         } else {
                           return "Invalid code";
@@ -307,46 +330,51 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                      child: Container(
-                        child: RaisedButton(
-                          onPressed: () async {
-                            if (loading) {
-                              return null;
+                        child: Container(
+                      child: RaisedButton(
+                        color: Colors.indigo,
+                        onPressed: () async {
+                          if (loading) {
+                            return null;
+                          }
+
+                          if (_parent.codeController.text.isEmpty) {
+                            _parent._formKey.currentState.validate();
+                          } else {
+                            setState(() {
+                              loading = true;
+                            });
+
+                            bool inFile = _documentInCodeFile(
+                                _parent.codeController.text);
+                            bool inDatabase = await _isCodeInFirestore(
+                                _parent.codeController.text);
+
+                            _parent.validationResultDb = inDatabase;
+                            _parent.validationResultFile = inFile;
+
+                            setState(() {
+                              loading = false;
+                            });
+
+                            if (_parent._formKey.currentState.validate()) {
+                              _parent.writeData();
+                              Navigator.pop(context);
                             }
-
-                            if (_parent.codeController.text.isEmpty){
-                              _parent._formKey.currentState.validate();
-                            } else {
-                              setState(() {
-                                loading = true;
-                              });
-
-                              bool inFile = _documentInCodeFile(_parent.codeController.text);
-                              bool inDatabase = await _isCodeInFirestore(_parent.codeController.text);
-
-                              _parent.validationResultDb = inDatabase;
-                              _parent.validationResultFile = inFile;
-
-                              setState(() {
-                                loading = false;
-                              });
-
-                              if(_parent._formKey.currentState.validate()){
-                                _parent.writeData();
-                                Navigator.pop(context);
-                              }
-                            }
-                          },
-                          child: Text('SUBMIT'),
+                          }
+                        },
+                        child: Text(
+                          'SUBMIT',
+                          style: TextStyle(color: Colors.white),
                         ),
-                      )
-                    ),
+                      ),
+                    )),
                     Expanded(
                         child: Container(
-                          alignment: Alignment.center,
-                          child: (loading) ? CircularProgressIndicator() : Container(),
-                        )
-                    )
+                      alignment: Alignment.center,
+                      child:
+                          (loading) ? CircularProgressIndicator() : Container(),
+                    ))
                   ],
                 ),
               )
