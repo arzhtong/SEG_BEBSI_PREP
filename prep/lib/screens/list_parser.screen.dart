@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:prep/utils/query.dart';
 import 'package:prep/widgets/list_parser/description_expansion_tile.dart';
+import 'package:prep/screens/empty_screen_placeholder.dart';
 
 class CategoryListParser extends StatelessWidget {
   final String _contents;
@@ -19,16 +20,23 @@ class CategoryListParser extends StatelessWidget {
       body: StreamBuilder(
           stream: Queries.categoryListSnapshots(_contents),
           builder: (context, snapshot) {
-            if (!snapshot.hasData)
+            if (!snapshot.hasData) {
               return const Align(
                 alignment: Alignment.topCenter,
                 child: LinearProgressIndicator(),
               );
-            return ListView.builder(
-                padding: EdgeInsets.all(10.0),
-                itemCount: 1,
-                itemBuilder: (context, index) =>
-                    _buildDropDownList(context, snapshot.data));
+            } else {
+              if (snapshot.data['maps'].length > 0) {
+                return ListView.builder(
+                  padding: EdgeInsets.all(10.0),
+                  itemCount: 1,
+                  itemBuilder: (context, index) =>
+                      _buildDropDownList(context, snapshot.data),
+                );
+              } else {
+                return EmptyScreenPlaceholder("No items in this list", "");
+              }
+            }
           }),
     );
   }
