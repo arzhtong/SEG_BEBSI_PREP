@@ -38,7 +38,11 @@ export default{
         }
     },
     created () {
-        db.collection('tests').doc(this.$route.params.test_id).collection('recipes').get().then(querySnapshot => {
+        db.collection('tests')
+          .doc(this.$route.params.test_id)
+          .collection('recipes')
+          .get()
+          .then(querySnapshot => {
             querySnapshot.forEach(doc => {
                 const data = {
                     'id': doc.id,

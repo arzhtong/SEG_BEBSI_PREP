@@ -4,12 +4,24 @@
             <li class="collection-header">
                 <h4>Recipe Information:</h4>
             </li>
+            <li v-if="imageURL" class="collection-item">
+                <div class="center-align">
+                    <img :src="imageURL" width="100%" style="max-height: 250px; max-width: 250px;"/>
+                </div>
+            </li>
             <li class="collection-item"><b>Dish Name:</b> {{title}}</li>
-            <li class="collection-item"><b>Instructions:</b>
-            <ol >
-                <li v-for="instruction in instructions" v-bind:key="instruction">{{instruction}}</li>
-            </ol> 
-            
+            <li v-if="category" class="collection-item"><b>Category:</b> {{category}}</li>
+            <li v-if="labels" class="collection-item"><b>Labels:</b> {{labels}}</li>
+            <li v-if="externalURL" class="collection-item"><b>Recipe link:</b> <a :href="externalURL">{{externalURL}}</a></li>
+            <li v-if="ingredients" class="collection-item"><b>Ingredients:</b>
+                <ol >
+                    <li v-for="ingredient in ingredients" v-bind:key="ingredient">{{ ingredient }}</li>
+                </ol> 
+            </li>
+            <li v-if="instructions" class="collection-item"><b>Instructions:</b>
+                <ol >
+                    <li v-for="instruction in instructions" v-bind:key="instruction">{{ instruction }}</li>
+                </ol> 
             </li> 
             <li v-if="note" class="collection-item"><b>Notes:</b> {{note}}</li> 
         </ul>
@@ -26,10 +38,15 @@ export default {
     name: 'view-recipe-info',
     data() {
         return {
-            title: null,
             recipe_id: this.$route.params.recipe_id,
+            title: null,
+            labels: null,
+            imageURL: null,
+            externalURL: null,
+            ingredients: [],
             instructions: [],
             note: null,
+            category: null,
             test_id: this.$route.params.test_id
         }
     },
@@ -43,8 +60,13 @@ export default {
               if(doc.exists) {
                 next(vm => {
                     vm.title = doc.data().title
+                    vm.labels = doc.data().labels
+                    vm.imageURL = doc.data().backgroundImage
+                    vm.externalURL = doc.data().externalURL
+                    vm.ingredients = doc.data().ingredients
                     vm.instructions = doc.data().method
                     vm.note = doc.data().note
+                    vm.type = doc.data().type
                 })
               }
           })
@@ -62,8 +84,13 @@ export default {
               .then(doc => {
                 if(doc.exists) {
                     this.title = doc.data().title
+                    this.labels = doc.data().labels
+                    this.imageURL = doc.data().backgroundImage
+                    this.externalURL = doc.data().externalURL
+                    this.ingredients = doc.data().ingredients
                     this.instructions = doc.data().method
                     this.note = doc.data().note
+                    this.type = doc.data().type
                 }
               })
         },
