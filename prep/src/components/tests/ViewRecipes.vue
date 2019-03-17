@@ -50,7 +50,7 @@
                 querySnapshot.forEach(doc => {
                     const data = {
                         'id': doc.id,
-                        'instrcutions': doc.data().instructions,
+                        'instructions': doc.data().instructions,
                         'notes': doc.data().notes,
                         'title': doc.data().title,
                     }

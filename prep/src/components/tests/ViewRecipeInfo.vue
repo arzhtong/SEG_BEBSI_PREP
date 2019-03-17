@@ -19,11 +19,9 @@
             <router-link v-bind:to="{name: 'edit-recipe', params: {test_id: test_id, recipe_id: title}}" class="btn green">
             Edit
             </router-link>
-            <router-link v-bind:to="{name: 'view-recipes', params: {test_id: test_id}}">
             <button @click="deleteRecipe" class="btn red">
             Delete
             </button>
-            </router-link>
          <div class="fixed-action-btn">
         </div>
     </div>
@@ -74,6 +72,7 @@
                     .then(querySnapshot => {
                         querySnapshot.forEach(doc => {
                             doc.ref.delete()
+                            this.$router.push({name: 'view-recipes', params: {test_id: this.$route.params.test_id}})
                         })
                     })
                 }
