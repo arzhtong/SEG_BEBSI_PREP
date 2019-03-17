@@ -18,7 +18,8 @@
           </div>
         </div>
         <!-- adds 2 checkboxes representing shortcuts on the app -->
-        <div class="input-field">
+        <div class="row">
+        <div class="input-field col s12">
           <p style="margin-right: 100%">
             <label>
               <input id="chatCheck" type="checkbox" v-model="chatShortcut" class="filled-in" style="margin-top:10px">
@@ -26,7 +27,9 @@
             </label>
           </p>
         </div>
-        <div class="input-field">
+        </div>
+        <div class="row">
+        <div class="input-field col s12">
           <p style="margin-right: 100%">
             <label>
               <input
@@ -39,6 +42,7 @@
               <span class="blue-text" style="margin-top:10px">Has information shortcut?</span>
             </label>
           </p>
+        </div>
         </div>
         <button type="submit" class="btn">Submit</button>
         <!-- cancel button -->

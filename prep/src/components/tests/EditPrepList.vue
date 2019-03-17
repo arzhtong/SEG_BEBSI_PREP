@@ -4,9 +4,13 @@
     <h4>{{title}}</h4>
     <div class="row">
       <form @submit.prevent="updatePrepList" class="col s12">
+         <router-link
+          v-bind:to="{name: 'view-prep-list', params: {test_id: this.$route.params.test_id, contents: List}}"
+          class="btn grey"
+        >Cancel</router-link>
         <div class="row">
           <!-- gets all the maps that already exist in the database -->
-          <div v-for="data in allData" v-bind:key="data" class="input-field col s12">
+          <div v-for="data in allData" v-bind:key="data.id" class="input-field col s12">
             <span>name</span>
             <input type="text" v-model="data.name" required>
             <!-- gets a description if it is found in the database -->
@@ -25,7 +29,7 @@
           </div>
           <!-- adds a new map to be added to the database -->
           <button @click="addMap" class="btn green">new List</button>
-          <div v-for="map in allMaps" v-bind:key="map" class="input-field col s12">
+          <div v-for="map in allMaps" v-bind:key="map.id" class="input-field col s12">
             <span>name</span>
             <input type="text" v-model="map.name" required>
             <span>description</span>
