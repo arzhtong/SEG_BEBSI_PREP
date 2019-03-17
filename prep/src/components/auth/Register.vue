@@ -8,37 +8,37 @@
                         <form @submit.prevent="saveUser">
                             <div class="input-field">
                                 <i class="material-icons prefix">email</i>
-                                <input type="text" name="email" id="email" v-model="email" required>
-                                <label class="blue-text" for="email">Email</label>
+                                <input placeholder="Email" type="text" name="email" id="email" v-model="email" required>
                             </div>
                             <div class="input-field">
-                                <i class="material-icons prefix">lock</i>
-                                <input type="password" name="password" id="password" v-model="password" required>
-                                <label class="blue-text" for="password">Password</label>
+                               <i class="material-icons prefix">lock</i>  
+                               <input placeholder="Password" type="password" name="password" id="password" v-model="password" required> 
                             </div>
+                            
                             <div class="input-field">
-                                <i class="material-icons prefix">face</i>
-                                <input type="text" name="first" id="first" v-model="name" required>
-                                <label class="blue-text" for="name">Name</label>
+                               <i class="material-icons prefix">face</i>
+                                
+                                <input placeholder="Name" type="text" name="first" id="first" v-model="name" required>
+                                
+                                
                             </div>
                             <div class="input-field">
                                 <i class="material-icons prefix">assignment</i>
-                                <input type="text" name="department" id="department" v-model="dept" required>
-                                <label class="blue-text" for="dept">Department</label>
+                                <input placeholder="Department" type="text" name="department" id="department" v-model="dept" required>
                             </div>
                             
                             <div class="input-field"> 
                                 
                                 <p style="margin-right: 100%">  
-                                    <i class="material-icons prefix blue-text">assignment_ind</i>     
-                            <label>   
+                                <i style="margin-left:8px" class="material-icons prefix blue-text">assignment_ind</i>     
+                            <label style="border-bottom:1px solid #9e9e9e;">   
                                 <input id="check" type="checkbox" class="filled-in" style="margin-top:10px" />
                                 <span class="blue-text" style="margin-top:10px">Admin</span>
                             </label>
                             </p>
                             </div>
-
-                        <button v-on:click="register" type="submit" class="btn btn-large blue lighten-2 black-text">Register</button>
+                        
+                        <button style="margin-top:70px" v-on:click="register" type="submit" class="btn btn-large blue lighten-2 black-text">Register</button>
                         </form>
                     </div>
                 </div>
@@ -63,6 +63,10 @@ export default {
         }
     },
     methods: {
+        /*
+            This function creates a new user on firestore as well
+            as google authentication service
+        */
         register: function(e) {
             if(this.name != null && this.dept != null && this.role != null){
                 firebase.auth()

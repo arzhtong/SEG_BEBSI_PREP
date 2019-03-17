@@ -33,6 +33,10 @@ export default {
     };
   },
   methods: {
+    /*
+      This method sends a pre-made email with a restoration
+      link.
+    */
     sendResetEmail: function(e) {
       var email = document.getElementById("email").value;
       firebase

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Dashboard from '@/components/Dashboard'
 import ViewStaff from '@/components/staff/ViewStaff'
+import EditStaff from '@/components/staff/EditStaff'
 import ViewTests from '@/components/tests/ViewTests'
 import ViewRecipes from '@/components/tests/ViewRecipes'
 import ViewRecipeInfo from '@/components/tests/ViewRecipeInfo'
@@ -15,13 +15,24 @@ import NewPrepFaq from '@/components/tests/NewPrepFaq'
 import EditPrepFaq from '@/components/tests/EditPrepFaq'
 import EditPrepList from '@/components/tests/EditPrepList'
 import EditStaff from '@/components/staff/EditStaff'
+import ViewDailyCheckups from '@/components/tests/dailycheckups/ViewDailyCheckups'
+import NewDailyCheckups from '@/components/tests/dailycheckups/NewDailyCheckups'
+import ViewDailyCheckupsInfo from '@/components/tests/dailycheckups/ViewDailyCheckupsInfo'
+import EditDailyCheckups from '@/components/tests/dailycheckups/EditDailyCheckups'
 import ViewAppointments from '@/components/appointments/ViewAppointments'
+import PastAppointments from '@/components/appointments/PastAppointments'
 import AddAppointment from '@/components/appointments/AddAppointment'
 import EditAppointment from '@/components/appointments/EditAppointment'
+import ViewAppointment from '@/components/appointments/ViewAppointment'
 import Login from '@/components/auth/Login'
 import Register from '@/components/auth/Register'
 import ResetPassword from '@/components/auth/ResetPassword'
 import Message from '@/components/messages/Message'
+import AddTest from '@/components/tests/AddTest'
+import EditTestDescription from '@/components/tests/EditTestDescription'
+import ViewArticles from '@/components/tests/articles/ViewArticles'
+import AddArticle from '@/components/tests/articles/AddArticle'
+import EditArticle from '@/components/tests/articles/EditArticle'
 import firebase from 'firebase'
 
 
@@ -32,7 +43,7 @@ let router = new Router({
     {
       path: '/',
       name: 'dashboard',
-      component: Dashboard,
+      component: ViewAppointments,
       meta: {
         requiresAuth: true
       }
@@ -86,6 +97,14 @@ let router = new Router({
       }
     },
     {
+      path: '/past-appointments',
+      name: 'past-appointments',
+      component: PastAppointments,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
       path: '/add-appointment',
       name: 'add-appointment',
       component: AddAppointment,
@@ -95,7 +114,7 @@ let router = new Router({
     },
     {
 
-      path: '/edit-appointment/:id',
+      path: '/edit-appointment/:expired/:id',
       name: 'edit-appointment',
       component: EditAppointment,
       meta: {
@@ -104,9 +123,25 @@ let router = new Router({
     },
     {
 
-      path: '/message/:appointmentID',
+      path: '/message/:expired/:appointmentID',
       name: 'message',
       component: Message,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/add-test',
+      name: 'add-test',
+      component: AddTest,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/edit-test-description/:test_id',
+      name: 'edit-test-description',
+      component: EditTestDescription,
       meta: {
         requiresAuth: true
       }
@@ -115,6 +150,30 @@ let router = new Router({
       path: '/view-tests',
       name: 'view-tests',
       component: ViewTests,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/view-articles/:test_id/:title',
+      name: 'view-articles',
+      component: ViewArticles,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/add-article/:test_id/:title',
+      name: 'add-article',
+      component: AddArticle,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/edit-article/:test_id/:article_id/:test_title',
+      name: 'edit-article',
+      component: EditArticle,
       meta: {
         requiresAuth: true
       }
@@ -203,6 +262,46 @@ let router = new Router({
       path: '/edit-recipe/:test_id/:recipe_id',
       name: 'edit-recipe',
       component: EditRecipe,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/view-dailycheckups/:test_id',
+      name: 'view-dailycheckups',
+      component: ViewDailyCheckups,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/new-dailycheckups/:test_id',
+      name: 'new-dailycheckups',
+      component: NewDailyCheckups,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/view-dailycheckups-info/:test_id/:daily_id',
+      name: 'view-dailycheckups-info',
+      component: ViewDailyCheckupsInfo,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/edit-dailycheckups/:test_id/:daily_id',
+      name: 'edit-dailycheckups',
+      component: EditDailyCheckups,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/view-appointment/:expired/:id',
+      name: 'view-appointment',
+      component: ViewAppointment,
       meta: {
         requiresAuth: true
       }

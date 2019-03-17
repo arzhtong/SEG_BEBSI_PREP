@@ -8,13 +8,11 @@
             <form>
               <div class="input-field">
                 <i class="material-icons prefix">email</i>
-                <input type="text" name="email" id="email" v-model="email">
-                <label class="blue-text" for="email">Email</label>
+                <input placeholder="Email" type="text" name="email" id="email" v-model="email">
               </div>
               <div class="input-field">
                 <i class="material-icons prefix">lock</i>
-                <input type="password" name="password" id="password" v-model="password">
-                <label class="blue-text" for="password">Password</label>
+                <input placeholder="Password" type="password" name="password" id="password" v-model="password">
               </div>
 
               <button v-on:click="login" class="btn btn-large blue lighten-2 black-text">Login</button>
@@ -39,6 +37,10 @@ export default {
     };
   },
   methods: {
+    /*
+    Verify the user by sending a request to the firestore
+    and create a new Session.
+   */
     login: function(e) {
       firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
       firebase
@@ -61,5 +63,10 @@ export default {
 body {
   background: #007bff;
   background: linear-gradient(to right, #4b0082, #0062e6);
+  margin: 0;
+  position: relative;
+  top: 50%;
+  left: 7%;
+  overflow: hidden;
 }
 </style>

@@ -1,19 +1,19 @@
 <template>
   <div>
-      <view_app v-bind:past = "past" />
+      <view_app v-bind:past = "past"/>
   </div>
 </template>
 <script>
 import view_app from "./Appointments";
 
 export default {
-  name: "view-appointments",
+  name: "past-appointments",
   components: {
     view_app
   },
   data() {
     return {
-      past:false
+      past:true
     };
   }
 };
