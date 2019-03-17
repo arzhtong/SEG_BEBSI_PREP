@@ -16,6 +16,7 @@ class Storage {
     try {
       final file = await localFile;
       String body = await file.readAsString();
+      print("Value of the file being read - IN STORAGE: " + body);
       return body;
     } catch (e) {
       return e.toString();
@@ -35,5 +36,11 @@ class Storage {
   Future<File> writeData(String data) async {
     final file = await localFile;
     return file.writeAsString("$data");
+  }
+
+  Future<bool> fileExists() async {
+    String filePath = await localPath;
+    return FileSystemEntity.typeSync(filePath + "/prepApCode.txt") !=
+        FileSystemEntityType.notFound;
   }
 }
