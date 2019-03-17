@@ -38,8 +38,8 @@
 </template>
 
 <script>
-import db from "../firebaseInit";
-import firebase from "firebase";
+import db from "../firebaseInit"
+import firebase from "firebase"
 
 export default {
     name: 'imageUploader',
@@ -57,21 +57,21 @@ export default {
     },
     methods: {
         upload(event) {
-            this.selectedFile = event.target.files[0];
+            this.selectedFile = event.target.files[0]
             this.fileName = this.selectedFile.name
-            let fileExtension = this.fileName.split('.')[this.fileName.split('.').length - 1].toLowerCase();
-            let fileSize = this.selectedFile.size;
-            let mbSize = (fileSize / 1048576).toFixed(2);
+            let fileExtension = this.fileName.split('.')[this.fileName.split('.').length - 1].toLowerCase()
+            let fileSize = this.selectedFile.size
+            let mbSize = (fileSize / 1048576).toFixed(2)
 
             // check the file for format and size 
             if (!(fileExtension === "jpg" || fileExtension === "png" || fileExtension === "gif") || fileSize > 1048576) { 
-                let txt = "File type : " + fileExtension + "\n\n";
+                let txt = "File type : " + fileExtension + "\n\n"
                 txt += "Size: " + mbSize + " MB \n\n";
-                txt += "Please make sure your file is in jpg, png or gif format and less than 1 MB.\n\n";
+                txt += "Please make sure your file is in jpg, png or gif format and less than 1 MB.\n\n"
                 alert(txt);
             } else {
                 this.uploading = true
-                this.uploadTask = firebase.storage().ref('images/' + this.fileName).put(this.selectedFile);
+                this.uploadTask = firebase.storage().ref('images/' + this.fileName).put(this.selectedFile)
             }
         },
         deleteImage() {
@@ -106,13 +106,13 @@ export default {
                 this.downloadURL = downloadURL
                 this.$emit('downloadURL', downloadURL)
                 })
-            });
-        }
-    },
-    mounted() {
-        if (this.imageURL != null) {
-            this.downloadURL = this.imageURL
-            this.uploadEnd = true
+            })
+        },
+        imageURL: function() {
+            if (this.imageURL !== null && this.imageURL !=='') {
+                this.uploadEnd = true
+                this.downloadURL = this.imageURL
+            }
         }
     }
 }
