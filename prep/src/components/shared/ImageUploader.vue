@@ -23,10 +23,10 @@
                 <img 
                 :src="downloadURL"
                 width="100%" 
-                style="max-height: 150px; max-width: 150px;"/>
+                style="max-height: 250px; max-width: 250px;"/>
                 <!-- Wrapper to use custom upload button -->
                 <div v-if="!uploadEnd && !uploading" class="upload-btn-wrapper">
-                    <a class="waves-effect waves-light btn" onclick="document.getElementById('fileButton').click()"><i class="material-icons left">add</i>Upload image</a>
+                    <a class="waves-effect waves-light btn green" onclick="document.getElementById('fileButton').click()"><i class="material-icons left">add</i>Upload image</a>
                     <input type="file" value="uplaod" id="fileButton" @change="upload">
                 </div> 
             </div>
@@ -43,7 +43,7 @@ import firebase from "firebase";
 
 export default {
     name: 'imageUploader',
-    props: 'imageURL',
+    props: ['imageURL'],
     data() {
         return {
             selectedFile: null,
@@ -75,20 +75,23 @@ export default {
             }
         },
         deleteImage() {
-            firebase.storage().ref('images/' + this.fileName).delete().then(() => {
-                this.uploading = false
-                this.uploadEnd = false
-                this.uploadPercentage = 0
-                this.downloadURL = ''
-            })
-            .catch((error) => {
-                console.error(`file delete error occured: ${error}`)
-            })
+            firebase.storage()
+                    .refFromURL(this.downloadURL)
+                    .delete()
+                    .then(() => {
+                        this.uploading = false
+                        this.uploadEnd = false
+                        this.uploadPercentage = 0
+                        this.downloadURL = ''
+                    })
+                    .catch((error) => {
+                        console.error(`file delete error occured: ${error}`)
+                    })
         }
     },
     watch: {
         uploadTask: function() {
-            this.uploadTask.on('state_changed', snapshot => {
+                this.uploadTask.on('state_changed', snapshot => {
                 var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 this.uploadPercentage = progress;
             },
@@ -104,6 +107,12 @@ export default {
                 this.$emit('downloadURL', downloadURL)
                 })
             });
+        }
+    },
+    mounted() {
+        if (this.imageURL != null) {
+            this.downloadURL = this.imageURL
+            this.uploadEnd = true
         }
     }
 }
