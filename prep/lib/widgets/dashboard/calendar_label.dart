@@ -11,6 +11,7 @@ class CalendarLabel extends StatelessWidget {
         padding: EdgeInsets.only(left: 10.0, top: 5.0, bottom: 5.0),
         child: Text(
           dateTimeFormatter(dateTime),
+          textDirection: TextDirection.ltr,
           style: TextStyle(
               fontWeight: FontWeight.bold
           ),
