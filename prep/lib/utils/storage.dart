@@ -23,16 +23,6 @@ class Storage {
     }
   }
 
-  Future<bool> codeFileExists() async {
-    try {
-      final file = await localFile;
-      int length = await file.length();
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
   Future<File> writeData(String data) async {
     final file = await localFile;
     return file.writeAsString("$data");
