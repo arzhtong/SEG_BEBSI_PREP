@@ -11,19 +11,24 @@ class CalendarLabel extends StatelessWidget {
         padding: EdgeInsets.only(left: 10.0, top: 5.0, bottom: 5.0),
         child: Text(
           dateTimeFormatter(dateTime),
-          textDirection: TextDirection.ltr,
-          style: TextStyle(
-              fontWeight: FontWeight.bold
-          ),
-        )
-    );
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ));
   }
 
   String dateTimeFormatter(DateTime datetime) {
     const List<String> months = [
-      "January", "February", "March", "April",
-      "May", "June", "July", "August",
-      "September", "October", "November", "December"
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
     ];
 
     String day = datetime.day.toString();

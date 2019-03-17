@@ -66,7 +66,6 @@ class CalendarCard extends StatelessWidget {
           flex: 4,
           child: Text(
             label,
-            textDirection: TextDirection.ltr,
             style: TextStyle(
               color: Colors.white,
               fontSize: 20.0,
@@ -78,7 +77,6 @@ class CalendarCard extends StatelessWidget {
           flex: 6,
           child: Text(
             content,
-            textDirection: TextDirection.ltr,
             textAlign: TextAlign.end,
             style: TextStyle(
               color: Colors.white,
@@ -119,7 +117,6 @@ class CalendarCard extends StatelessWidget {
                                 alignment: Alignment.centerLeft,
                                 child: Text(
                                   testName,
-                                  textDirection: TextDirection.ltr,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors.white,
@@ -145,10 +142,7 @@ class CalendarCard extends StatelessWidget {
                     )),
                 ListTile(
                   leading: Icon(Icons.code),
-                  title: Text(
-                    name,
-                    textDirection: TextDirection.ltr,
-                  ),
+                  title: Text(name),
                 ),
               ],
             ),
@@ -162,7 +156,8 @@ class CalendarCard extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) => Appointment(
-                                  name, testID, testName, 0, dateTime)));
+                                  name, testID, testName, 0, dateTime)
+                          ));
                     }),
               ),
             ),
