@@ -9,8 +9,12 @@ class CalendarCard extends StatelessWidget {
   final String testID;
   final String doctorName;
   final String testName;
-  final List<Color> colors = [Colors.green[300], Colors.red[300],
-  Colors.blue[300], Colors.orange[300]];
+  final List<Color> colors = [
+    Colors.green[300],
+    Colors.red[300],
+    Colors.blue[300],
+    Colors.orange[300]
+  ];
   Color color;
 
   CalendarCard(this.name, this.location, this.dateTime, this.testID,
@@ -20,9 +24,18 @@ class CalendarCard extends StatelessWidget {
 
   String dateFormatter(DateTime datetime) {
     const List<String> months = [
-      "January", "February", "March", "April",
-      "May", "June", "July", "August",
-      "September", "October", "November", "December"
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
     ];
 
     String day = datetime.day.toString();
@@ -33,8 +46,12 @@ class CalendarCard extends StatelessWidget {
   }
 
   String timeFormatter(DateTime datetime) {
-    String hour = (datetime.hour < 10) ? "0" + datetime.hour.toString() : datetime.hour.toString();
-    String minute = (datetime.minute < 10) ? "0" + datetime.minute.toString() : datetime.minute.toString();
+    String hour = (datetime.hour < 10)
+        ? "0" + datetime.hour.toString()
+        : datetime.hour.toString();
+    String minute = (datetime.minute < 10)
+        ? "0" + datetime.minute.toString()
+        : datetime.minute.toString();
 
     return hour + " : " + minute;
   }
@@ -42,35 +59,34 @@ class CalendarCard extends StatelessWidget {
   Widget _informationRow(String label, String content) {
     return Container(
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Expanded(
-              flex: 4,
-              child: Text(
-                label,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w300,
-                ),
-              ),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        Expanded(
+          flex: 4,
+          child: Text(
+            label,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20.0,
+              fontWeight: FontWeight.w300,
             ),
-            Expanded(
-              flex: 6,
-              child: Text(
-                content,
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w300,
-                ),
-              ),
-            )
-          ],
+          ),
+        ),
+        Expanded(
+          flex: 6,
+          child: Text(
+            content,
+            textAlign: TextAlign.end,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20.0,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
         )
-    );
+      ],
+    ));
   }
 
   @override
@@ -88,8 +104,7 @@ class CalendarCard extends StatelessWidget {
                     width: double.infinity,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(3.0)),
-                        color: color
-                    ),
+                        color: color),
                     child: Container(
                       padding: EdgeInsets.all(10.0),
                       child: Column(
@@ -116,14 +131,15 @@ class CalendarCard extends StatelessWidget {
                               ),
                               _informationRow("Location: ", location),
                               _informationRow("Staff member: ", doctorName),
-                              _informationRow("Date: ", dateFormatter(dateTime)),
-                              _informationRow("Time: ", timeFormatter(dateTime)),
+                              _informationRow(
+                                  "Date: ", dateFormatter(dateTime)),
+                              _informationRow(
+                                  "Time: ", timeFormatter(dateTime)),
                             ],
                           ),
                         ],
                       ),
-                    )
-                ),
+                    )),
                 ListTile(
                   leading: Icon(Icons.code),
                   title: Text(name),
@@ -138,8 +154,10 @@ class CalendarCard extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Appointment(name, testID, testName, 0, dateTime))
-                      );
+                          MaterialPageRoute(
+                              builder: (context) => Appointment(
+                                  name, testID, testName, 0, dateTime)
+                          ));
                     }),
               ),
             ),
