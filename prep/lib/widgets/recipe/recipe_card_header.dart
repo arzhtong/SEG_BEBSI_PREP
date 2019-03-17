@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:prep/utils/document_data_provider.dart';
-import 'package:prep/utils/query.dart';
+import 'package:prep/utils/misc_functions.dart';
 
 class RecipeCardHeader extends StatelessWidget {
   @override
@@ -69,7 +69,8 @@ class RecipeCardHeader extends StatelessWidget {
     var recipeType =
         FirestoreDocumentDataProvider.of(context).documentData['type'];
 
-    assert(backgroundImageUrl is String);
+    backgroundImageUrl ??= '';
+    recipeType ??= 'default';
     if (recipeType != null) {
       assert(recipeType is String);
     }
@@ -87,6 +88,8 @@ class RecipeCardHeader extends StatelessWidget {
     );
   }
 
+  //TODO: add bundle check for file before loading.
+  //TODO: Refactor via a list of available images.
   Image _getDefaultImageFromRecipeType(String type) {
     if (type != null) {
       switch (type.trim().toLowerCase()) {
@@ -102,6 +105,8 @@ class RecipeCardHeader extends StatelessWidget {
           return _getAssetImage('stew.jpg');
         case 'pizza':
           return _getAssetImage('pizza.jpg');
+        case 'pasta':
+          return _getAssetImage('pasta.jpg');
         case 'sandwich':
           return _getAssetImage('sandwich.jpg');
         case 'wrap':
@@ -110,8 +115,8 @@ class RecipeCardHeader extends StatelessWidget {
           return _getAssetImage('pie.jpg');
         case 'fish':
           return _getAssetImage('fish.jpg');
-        case 'beef':
-          return _getAssetImage('beef.jpg');
+        case 'steak':
+          return _getAssetImage('steak.jpg');
         case 'chicken':
           return _getAssetImage('chicken.jpg');
         case 'curry':
