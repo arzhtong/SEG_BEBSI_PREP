@@ -13,7 +13,7 @@
                         </thead> 
                         <tbody v-for="recipe in recipes" v-bind:key="recipe.id" class="collection-item" >
                             <tr >
-                                <td style="padding: 20px;">{{recipe.title}}</td>
+                                <td class="truncate" style="padding: 20px;">{{recipe.title}}</td>
                                 <td><router-link v-bind:to="{name: 'view-recipe-info', params: {test_id: testID, recipe_id: recipe.id}}" class="btn blue">Show</router-link></td>
                             </tr>
                         </tbody>
@@ -47,7 +47,6 @@ export default{
                 const data = {
                     'id': doc.id,
                     'instrcutions': doc.data().instructions,
-                    'notes': doc.data().notes,
                     'title': doc.data().title,
                 }
                 this.recipes.push(data)
@@ -57,4 +56,11 @@ export default{
 }
 </script>
 
-
+<style scoped>
+td {
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    max-width: 400px;
+}
+</style>
