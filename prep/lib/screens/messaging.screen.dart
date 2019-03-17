@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 
 import 'dart:async';
 
-import '../utils/query.dart';
-import '../utils/message_crypto.dart';
+import 'package:prep/utils/query.dart';
+import 'package:prep/utils/message_crypto.dart';
 
 class MessagingScreen extends StatefulWidget {
   @override
