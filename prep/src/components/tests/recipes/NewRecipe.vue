@@ -53,7 +53,7 @@
                         <div class="chips chips-placeholder"></div>
                     </div>
                     <div>
-                        <label id="heading">Category</label>
+                        <label id="heading">Type</label>
                         <hr>
                     </div>
                     <div class="row">
@@ -63,7 +63,7 @@
                     </div>
                     <div class="row">
                         <div class="input-field col s12">
-                            <input type="text" v-model="notes">
+                            <input type="text" v-model="note">
                             <label>Notes</label>
                         </div>
                     </div>
@@ -93,7 +93,7 @@ export default {
             instructions: [],
             types: ['salad','soup','vegetable','roast','stew','pizza','sandwich','wrap', 'pie', 'fish', 'beef', 'chicken', 'curry', 'eggs'],
             type: null,
-            notes: null,
+            note: null,
             externalURL: null
         }
     },
@@ -114,7 +114,7 @@ export default {
                 ingredients: ingredients,
                 method: instructions,
                 labels: labels,
-                notes: this.notes,
+                note: this.note,
                 type: this.type,
                 externalURL: this.externalURL
             })
@@ -162,17 +162,8 @@ export default {
                     chips.push(arr[i].tag)
                 }
             }
-            return chips
+            return (chips.length === 0 ? null : chips)
         }
-        // add() {
-        //     M.Chips.getInstance($('.chips')).addChip({
-        //         tag: 'yes'
-        //     })
-        // },
-        // test() {
-        //     var arr = M.Chips.getInstance($('.chips')).chipsData
-        //     alert(arr.length)
-        // }
     },
     mounted() {
         // initialise chips for recipe tags
