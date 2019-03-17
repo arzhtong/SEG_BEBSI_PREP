@@ -32,6 +32,7 @@ class _DashboardState extends State<Dashboard> {
   bool validationResultDb;
   bool validationResultFile;
 
+  // TODO: replace the calling of this method.
   // Subscribe user to message notifications
   void _subscribeToNotifications(String appointmentID) {
     final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
@@ -57,17 +58,6 @@ class _DashboardState extends State<Dashboard> {
   }
 
   // Writes data to the codes file
-  Future<File> writeData() async {
-    _subscribeToNotifications(codeController.text);
-    //must apply set state to make sure the calendar is redrawn
-    setState(() {
-      codeFileState = codeFileState + codeController.text + ',';
-      codeController.text = '';
-    });
-    return storage.writeData(codeFileState);
-  }
-
-  // Writes data to the codes file
   Future<File> clearData() async {
     _unsubscribeFromNotifications();
     //must apply set state to make sure the calendar is redrawn
@@ -78,15 +68,7 @@ class _DashboardState extends State<Dashboard> {
     return storage.writeData("");
   }
 
-  // Overrides the data in the codes file
-  Future<File> overrideData(String newFileState) async {
-    print("Called inside overrideData");
-    print("newFileState");
-    codeFileState = newFileState;
-    return await storage.writeData(newFileState);
-  }
-
-  // Checks if a code exists in the Firestore
+//  // Checks if a code exists in the Firestore
   Future<bool> _isCodeInFirestore(String code) async {
     List<String> liveIDs = new List();
 
@@ -105,36 +87,30 @@ class _DashboardState extends State<Dashboard> {
 
   // Retrieves data from the Firestore and builds the calendar
   Future<Widget> _getDocData() async {
-    // checking if a file already exists, if not, creating one
-    if (!fileExists) {
-      print("codes file doesn't exist");
-      await storage.codeFileExists().then((result) {
-        if (!result) {
-          print("codes file overritten with a ','");
-          storage.writeData(",");
-          fileExists = true;
-        }
-      });
+    bool fileExists = await storage.fileExists();
+
+    if (fileExists) {
+      print("--- codes file found!");
+    } else {
+      print("--- codes file NOT found, creating one containing ','");
+      await storage.writeData(",");
     }
 
-    //reading file and updating codeFileState
-    await storage.readData().then((String value) {
-      codeFileState = value;
-    });
+    codeFileState = await storage.readData();
+    print("Raw codes file - in getDocData after reading: " + codeFileState);
 
     //reading appointments from the database and updating the codes file
     documentList = new List();
-    List<Widget> calendarElements = new List();
-
     testDocList = await Queries.appointmentCodes;
     documentList = testDocList.documents;
 
-    // Remove codes from the codes file that are past their date in the database
+    // Get all the codes stored in the database
     List<String> documentIDs = new List();
     documentList.forEach((doc) {
       documentIDs.add(doc.documentID);
     });
 
+    // Store all the codes in both the database and the codes file in the var
     String newCodeFileState = "";
     codeFileState.split(',').forEach((code) {
       if (documentIDs.contains(code)) {
@@ -142,12 +118,27 @@ class _DashboardState extends State<Dashboard> {
       }
     });
 
-    print("code inside _getDocData - newCodeFileState");
-    print(newCodeFileState);
+    print("New codes files - after filtering: " + newCodeFileState);
 
-    await overrideData(newCodeFileState).then((_) {});
+    // Saving the new sequence of codes in the codes file
+    await storage.writeData(newCodeFileState);
+
+    codeFileState = newCodeFileState;
 
     // building the return widget based on the updated (current) codes file
+    return _buildCalendarWidget();
+  }
+
+  bool _datesAreEqual(DateTime date1, DateTime date2) {
+    return (date1.day == date2.day &&
+        date1.month == date2.month &&
+        date1.year == date2.year);
+  }
+
+  Widget _buildCalendarWidget() {
+    // building the return widget based on the updated (current) codes file
+    List<Widget> calendarElements = new List();
+
     if (codeFileState == null) {
       return null;
     } else if (codeFileState.isEmpty) {
@@ -197,7 +188,7 @@ class _DashboardState extends State<Dashboard> {
 
       return ListView(
         padding:
-            EdgeInsets.only(top: 10.0, bottom: 80.0, left: 10.0, right: 10.0),
+        EdgeInsets.only(top: 10.0, bottom: 80.0, left: 10.0, right: 10.0),
         children: <Widget>[
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -206,12 +197,6 @@ class _DashboardState extends State<Dashboard> {
         ],
       );
     }
-  }
-
-  bool _datesAreEqual(DateTime date1, DateTime date2) {
-    return (date1.day == date2.day &&
-        date1.month == date2.month &&
-        date1.year == date2.year);
   }
 
   @override
@@ -255,8 +240,7 @@ class _DashboardState extends State<Dashboard> {
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            print("codeFileState");
-            print(codeFileState);
+            print("floating button pressed - codeFileState: " + codeFileState);
             showDialog(
                 context: context, builder: (_) => _NewAppointmentDialog(this));
           }),
@@ -280,27 +264,6 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
   _DashboardState _parent;
 
   _NewAppointmentDialogState(this._parent);
-
-  // Checks if an appointment ID exists in the codes file
-  bool _documentInCodeFile(String value) {
-    return _parent.codeFileState.split(',').contains(value);
-  }
-
-  Future<bool> _isCodeInFirestore(String code) async {
-    List<String> liveIDs = new List();
-
-    await Queries.appointmentCodes.then((query) {
-      query.documents.forEach((document) {
-        liveIDs.add(document.documentID);
-      });
-    });
-
-    if (liveIDs.contains(code)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -354,9 +317,9 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                               loading = true;
                             });
 
-                            bool inFile = _documentInCodeFile(
+                            bool inFile = _parent._documentInCodeFile(
                                 _parent.codeController.text);
-                            bool inDatabase = await _isCodeInFirestore(
+                            bool inDatabase = await _parent._isCodeInFirestore(
                                 _parent.codeController.text);
 
                             _parent.validationResultDb = inDatabase;
@@ -367,7 +330,18 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                             });
 
                             if (_parent._formKey.currentState.validate()) {
-                              _parent.writeData();
+                              print(
+                                  "To be new code test file - NEW CODE DIALOG");
+
+                              await _parent.storage.writeData(
+                                  _parent.codeFileState +
+                                      _parent.codeController.text +
+                                      ',');
+
+                              _parent.setState(() {
+                                _parent.codeController.text = "";
+                              });
+
                               Navigator.pop(context);
                             }
                           }
