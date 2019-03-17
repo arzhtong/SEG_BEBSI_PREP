@@ -47,7 +47,7 @@
                                 <i class="material-icons circle blue">list</i>
                                 <h5 class="titles">Lists</h5>
                                 <router-link 
-                                    to="" 
+                                    v-bind:to="{name: 'view-prep-lists', params: {test_id: test.id}}"
                                     class="btn blue secondary-content"
                                 >Show/Edit</router-link>
                             </li>
@@ -55,7 +55,7 @@
                                 <i class="material-icons circle orange">help_outline</i>
                                 <h5 class="titles">FAQs</h5>
                                 <router-link 
-                                    to="" 
+                                    v-bind:to="{name: 'view-prep-faqs', params: {test_id: test.id}}" 
                                     class="btn blue secondary-content"
                                 >Show/Edit</router-link>
                             </li>

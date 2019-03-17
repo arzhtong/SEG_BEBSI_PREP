@@ -9,7 +9,7 @@
             style="margin:20px"
           >Add FAQ</router-link>
           <router-link
-            v-bind:to="{name: 'view-prep-categories', params: {test_id: testID}}"
+            to="/view-tests"
             class="btn grey"
           >Back</router-link>
         </div>
