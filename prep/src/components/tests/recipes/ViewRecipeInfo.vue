@@ -10,7 +10,7 @@
                 </div>
             </li>
             <li class="collection-item"><b>Dish Name:</b> {{title}}</li>
-            <li v-if="category" class="collection-item"><b>Category:</b> {{category}}</li>
+            <li v-if="type" class="collection-item"><b>Type:</b> {{type}}</li>
             <li v-if="labels" class="collection-item"><b>Labels:</b> {{labels}}</li>
             <li v-if="externalURL" class="collection-item"><b>Recipe link:</b> <a :href="externalURL">{{externalURL}}</a></li>
             <li v-if="ingredients" class="collection-item"><b>Ingredients:</b>
@@ -46,7 +46,7 @@ export default {
             ingredients: [],
             instructions: [],
             note: null,
-            category: null,
+            type: null,
             test_id: this.$route.params.test_id
         }
     },
