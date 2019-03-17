@@ -69,17 +69,17 @@ export default {
         },
         deleteRecipe () {
             if(confirm('Are you sure?')) {
-                    db.collection('tests')
-                      .doc(this.$route.params.test_id)
-                      .collection('recipes')
-                      .doc(this.$route.params.recipe_id)
-                      .get()
-                      .then(querySnapshot => {
-                        querySnapshot.forEach(doc => {
-                            doc.ref.delete()
-                        })
-                        this.$router.push({name: 'view-recipes', params: {test_id: this.$route.params.test_id}})
-                      })
+                db.collection('tests')
+                    .doc(this.$route.params.test_id)
+                    .collection('recipes')
+                    .doc(this.$route.params.recipe_id)
+                    .get()
+                    .then(doc => {
+                        if(doc.exists) {
+                        doc.ref.delete()
+                    }
+                    this.$router.push({name: 'view-recipes', params: {test_id: this.$route.params.test_id}})
+                    })
             }
         }   
     }

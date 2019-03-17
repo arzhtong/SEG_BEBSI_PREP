@@ -1,34 +1,36 @@
 <template>
-  <div id="edit-recipe">
-    <h3>Edit Recipe</h3>
-    <div class="row">
-      <form @submit.prevent="updateRecipe" class="col s12">
-        <div class="row">
-          <div class="input-field col s12">
-            <span>Title</span>
-            <input type="text" v-model="title" required>
+  <div id="add-article" style="background-color:white; padding: 10px 50px 10px 50px; margin-top:10px">
+    <div id="edit-recipe">
+      <h3>Edit Recipe</h3>
+      <div class="row">
+        <form @submit.prevent="updateRecipe" class="col s12">
+          <div class="row">
+            <div class="input-field col s12">
+              <span id="title">Title</span>
+              <input type="text" v-model="title" required>
+            </div>
           </div>
-        </div>
-        <button @click="addInstruction" class="btn green">new instruction</button>
-        <div class="row">
-          <div v-for="instr in allInstr.length" v-bind:key="instr" class="input-field col s12">
-            <span>Instruction</span>
-            <input type="text" v-model="allInstr[instr - 1]" required>   
-            <button @click="deleteInstruction(instr -1)" class="btn red">remove instruction</button>
+          <button @click="addInstruction" class="btn green">new instruction</button>
+          <div class="row">
+            <div v-for="instr in allInstr.length" v-bind:key="instr" class="input-field col s12">
+              <span id="title">Instruction</span>
+              <input type="text" v-model="allInstr[instr - 1]" required>   
+              <button @click="deleteInstruction(instr -1)" class="btn red">remove instruction</button>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <span>Notes</span>
-            <input type="text" v-model="note">
+          <div class="row">
+            <div class="input-field col s12">
+              <span id="title">Notes</span>
+              <input type="text" v-model="note">
+            </div>
           </div>
-        </div>
-        <button type="submit" class="btn">Submit</button>
-        <router-link
-          v-bind:to="{name: 'view-recipe-info', params: {test_id: test_id, recipe_id: recipe_id}}"
-          class="btn grey"
-        >Cancel</router-link>
-      </form>
+          <button type="submit" class="btn">Submit</button>
+          <router-link
+            v-bind:to="{name: 'view-recipe-info', params: {test_id: test_id, recipe_id: recipe_id}}"
+            class="btn grey"
+          >Cancel</router-link>
+        </form>
+      </div>
     </div>
   </div>
 </template>
@@ -96,8 +98,15 @@ export default {
       this.allInstr.push(data);
     },
     deleteInstruction(index) {
-      this.allInstr.splice(index, 1);
+      this.allInstr.splice(index, 1)
     }
   }
-};
+}
 </script>
+
+<style scoped>
+
+#title {
+  color: #2196f3;
+}
+</style>
