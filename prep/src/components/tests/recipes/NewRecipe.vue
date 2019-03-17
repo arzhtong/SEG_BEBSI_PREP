@@ -3,36 +3,53 @@
         <div id="mainScreen">
             <h3>New Recipe</h3>
             <div class="row">
+                <div class="col s12">
+                    <div class="card-panel light-blue">
+                        <span class="card-title white-text"><i class="small material-icons">info_outline</i>Info</span>
+                        <p class="white-text">Fill in the fields below and then click submit. Only a title is required, all other fields are optional.</p>
+                    </div>
+                </div>
                 <form @submit.prevent="saveRecipe" class="col s12">
                     <div class="row">
                         <div class="input-field col s12">
                             <input type="text" v-model="title" required>
-                            <label>Title</label>
+                            <label>Title *</label>
                         </div>
                     </div>
                     <div>
-                        <label id="heading">Ingredients</label>
-                        <hr>
-                    </div>
-                    <button @click="addIngredient" class="btn green"> add ingredient</button>
-                    <div class="row">
-                        <div v-for="ingredient in ingredients" :key="ingredient.id" class="input-field col s12">
-                            <input type="text" v-model="ingredient.value" required>
-                            <button class="btn red" @click="deleteIngredient(ingredients.indexOf(ingredient))"> remove ingredient</button>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input type="text" v-model="externalURL">
+                                <label>Recipe link</label>
+                            </div>
                         </div>
                     </div>
                     <div>
-                        <label id="heading">Instructions</label>
-                        <hr>
-                    </div>
-                    <button @click="addInstruction" class="btn green"> add instruction</button>
-                    <div class="row">
-                        <div v-for="instruction in instructions" :key="instruction.id" class="input-field col s12">
-                            <input type="text" v-model="instruction.value" required>
-                            <button class="btn red" @click="deleteInstruction(instructions.indexOf(instruction))"> remove instruction</button>
+                        <div>
+                            <label id="heading">Ingredients</label>
+                            <hr>
+                        </div>
+                        <button @click="addIngredient" class="btn green"> add ingredient</button>
+                        <div class="row">
+                            <div v-for="ingredient in ingredients" :key="ingredient.id" class="input-field col s12">
+                                <input type="text" v-model="ingredient.value" required>
+                                <button class="btn red" @click="deleteIngredient(ingredients.indexOf(ingredient))"> remove ingredient</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label id="heading">Instructions</label>
+                            <hr>
+                        </div>
+                        <button @click="addInstruction" class="btn green"> add instruction</button>
+                        <div class="row">
+                            <div v-for="instruction in instructions" :key="instruction.id" class="input-field col s12">
+                                <input type="text" v-model="instruction.value" required>
+                                <button class="btn red" @click="deleteInstruction(instructions.indexOf(instruction))"> remove instruction</button>
+                            </div>
                         </div>
                     </div>
                     <div id="tags">
+                        <!-- chips component for recipe tags -->
                         <div class="chips chips-placeholder"></div>
                     </div>
                     <div>
@@ -69,14 +86,15 @@ export default {
     name: 'new-recipe',
     data() {
         return {
-            idCounter: 0,
+            idCounter: 0, // unique number for v-for of ingredients and instructions
             title: null,
             imageURL: null,
             ingredients: [],
             instructions: [],
             types: ['salad','soup','vegetable','roast','stew','pizza','sandwich','wrap', 'pie', 'fish', 'beef', 'chicken', 'curry', 'eggs'],
             type: null,
-            notes: null
+            notes: null,
+            externalURL: null
         }
     },
     components: {
@@ -97,7 +115,8 @@ export default {
                 method: instructions,
                 labels: labels,
                 notes: this.notes,
-                type: this.type
+                type: this.type,
+                externalURL: this.externalURL
             })
             .then(docRef => {
                 this.$router.push({ name: 'view-recipes', params: {test_id: this.$route.params.test_id} })
@@ -126,6 +145,7 @@ export default {
         deleteIngredient(index) {
             this.ingredients.splice(index, 1)
         },
+        // get string arrays from ingredients and instructions
         getValuesArray(arrayIn) {
             var arr = []
             for(var i = 0; i < arrayIn.length; i++) {
@@ -133,6 +153,7 @@ export default {
             }
             return arr
         },
+        // get array of tag strings from chips
         getChips() {
             var arr = M.Chips.getInstance($('.chips')).chipsData
             var chips = []
@@ -154,6 +175,7 @@ export default {
         // }
     },
     mounted() {
+        // initialise chips for recipe tags
         $('.chips-placeholder').chips({
             placeholder: 'Enter a tag'
         })
