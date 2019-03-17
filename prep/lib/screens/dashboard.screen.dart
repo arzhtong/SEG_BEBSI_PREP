@@ -80,6 +80,8 @@ class _DashboardState extends State<Dashboard> {
 
   // Overrides the data in the codes file
   Future<File> overrideData(String newFileState) async {
+    print("Called inside overrideData");
+    print("newFileState");
     codeFileState = newFileState;
     return await storage.writeData(newFileState);
   }
@@ -105,9 +107,11 @@ class _DashboardState extends State<Dashboard> {
   Future<Widget> _getDocData() async {
     // checking if a file already exists, if not, creating one
     if (!fileExists) {
+      print("codes file doesn't exist");
       await storage.codeFileExists().then((result) {
         if (!result) {
-          storage.writeData("");
+          print("codes file overritten with a ','");
+          storage.writeData(",");
           fileExists = true;
         }
       });
@@ -137,6 +141,9 @@ class _DashboardState extends State<Dashboard> {
         newCodeFileState = newCodeFileState + code + ',';
       }
     });
+
+    print("code inside _getDocData - newCodeFileState");
+    print(newCodeFileState);
 
     await overrideData(newCodeFileState).then((_) {});
 
@@ -218,6 +225,7 @@ class _DashboardState extends State<Dashboard> {
           IconButton(
               icon: Icon(Icons.delete_sweep),
               onPressed: () {
+                print("---clear data button pressed---");
                 clearData();
               }),
           IconButton(
@@ -247,6 +255,7 @@ class _DashboardState extends State<Dashboard> {
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
+            print("codeFileState");
             print(codeFileState);
             showDialog(
                 context: context, builder: (_) => _NewAppointmentDialog(this));
