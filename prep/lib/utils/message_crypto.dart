@@ -26,7 +26,7 @@ class MessageCrypto {
       iv[i] = rand.nextInt(256);
     }
 
-    PaddedBlockCipher cipher = getCipher(true, iv);
+    PaddedBlockCipher cipher = _getCipher(true, iv);
     String encodedText =
         HEX.encode(iv) + HEX.encode(cipher.process(utf8.encode(message)));
     return encodedText;
@@ -36,14 +36,14 @@ class MessageCrypto {
     String encodedIV = message.substring(0, 32);
     Uint8List iv = HEX.decode(encodedIV);
 
-    PaddedBlockCipher cipher = getCipher(false, iv);
+    PaddedBlockCipher cipher = _getCipher(false, iv);
     String encodedMessage = message.substring(32);
     String decodedMessage =
         utf8.decode(cipher.process(HEX.decode(encodedMessage)));
     return decodedMessage;
   }
 
-  static PaddedBlockCipher getCipher(bool mode, Uint8List iv) {
+  static PaddedBlockCipher _getCipher(bool mode, Uint8List iv) {
     Digest md5 = Digest("MD5");
     String hexEncryptedIV = HEX.encode(md5.process(iv));
     Uint8List keyArray =
