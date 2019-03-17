@@ -88,6 +88,7 @@ export default {
           .get()
           .then(doc => {
             doc.ref.delete();
+            alert('List deleted!')
             this.$router.push({
               name: "view-prep-lists",
               params: { test_id: this.$route.params.test_id }

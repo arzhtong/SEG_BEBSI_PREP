@@ -49,6 +49,7 @@ export default {
         })
         // reroutes to all the lists
         .then(docRef => {
+          alert('List added!')
           this.$router.push({
             name: "view-prep-lists",
             params: { test_id: this.$route.params.test_id }

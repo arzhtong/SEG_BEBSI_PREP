@@ -83,6 +83,7 @@ export default {
         })
         // reroutes to faqs page
         .then(docRef => {
+          alert('FAQ added!')
           this.$router.push({
             name: "view-prep-faqs",
             params: {

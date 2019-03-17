@@ -108,6 +108,7 @@ export default {
           })
           .then(() => {
               // refresh page
+              alert('FAQ deleted')
             console.log("FAQ successfully deleted!");
             location.reload();
           });

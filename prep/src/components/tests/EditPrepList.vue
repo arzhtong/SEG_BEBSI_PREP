@@ -1,13 +1,16 @@
 <template>
   <div id="edit-prep-list">
+    <div class="fixed-action-btn">
+     <router-link
+          v-bind:to="{name: 'view-prep-list', params: {test_id: this.$route.params.test_id, contents: List}}"
+          class="btn-floating btn-large black"
+        ><i class="material-icons"> arrow_back</i></router-link>
+        </div>
     <h3>Edit Preperation List</h3>
     <h4>{{title}}</h4>
     <div class="row">
       <form @submit.prevent="updatePrepList" class="col s12">
-         <router-link
-          v-bind:to="{name: 'view-prep-list', params: {test_id: this.$route.params.test_id, contents: List}}"
-          class="btn grey"
-        >Cancel</router-link>
+         
         <div class="row">
           <!-- gets all the maps that already exist in the database -->
           <div v-for="data in allData" v-bind:key="data.id" class="input-field col s12">
@@ -99,6 +102,7 @@ export default {
           })
           .then(() => {
             // reroutes to the list
+            alert('List edited!')
             this.$router.push({
               name: "view-prep-list",
               params: {
@@ -116,6 +120,7 @@ export default {
             maps: this.allData
           })
           .then(() => {
+            alert('List edited!')
             this.$router.push({
               name: "view-prep-list",
               params: {
