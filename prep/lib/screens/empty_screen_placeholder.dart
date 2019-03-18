@@ -15,6 +15,7 @@ class EmptyScreenPlaceholder extends StatelessWidget {
         children: <Widget>[
           Text(
             title,
+            textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 35.0,
               color: Colors.grey,
@@ -27,6 +28,7 @@ class EmptyScreenPlaceholder extends StatelessWidget {
         ),
           Text(
             subtitle,
+            textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 25.0,
               color: Colors.grey,
