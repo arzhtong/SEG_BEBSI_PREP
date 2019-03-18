@@ -10,7 +10,7 @@
           class="btn grey"
         >Back</router-link>
         <!-- edit the list -->
-         <router-link
+        <router-link
           v-bind:to="{name: 'edit-prep-list', params: {test_id: test_id, contents: this.$route.params.contents}}"
           class="btn green"
         >Edit</router-link>
@@ -21,14 +21,20 @@
           <h5>Lists:</h5>
         </b>
         <!-- shows all the maps in the database -->
-        <div v-for="map in maps" v-bind:key="map">
+        <div v-for="map in maps" v-bind:key="map.id">
           <li class="collection-item">
-            <h6><B>Name:</B> {{map.name}}</h6>
+            <h6>
+              <B>Name:</B>
+              {{map.name}}
+            </h6>
           </li>
           <ul>
             <li v-for="item in map.list" v-bind:key="item">{{item}}</li>
           </ul>
-          <li v-if="map.description" class="collection-item"> <B>Description: </B> {{map.description}}</li>
+          <li v-if="map.description" class="collection-item">
+            <B>Description:</B>
+            {{map.description}}
+          </li>
         </div>
       </li>
     </ul>
@@ -55,9 +61,10 @@ export default {
       .get()
       .then(doc => {
         // gets all the maps and pushes them seperately into an array
-        (doc.data().maps).forEach((map) => {
-              this.maps.push(map)
+          doc.data().maps.forEach(map => {
+            this.maps.push(map);
           })
+        
       });
   },
   methods: {
@@ -81,6 +88,7 @@ export default {
           .get()
           .then(doc => {
             doc.ref.delete();
+            alert('List deleted!')
             this.$router.push({
               name: "view-prep-lists",
               params: { test_id: this.$route.params.test_id }
