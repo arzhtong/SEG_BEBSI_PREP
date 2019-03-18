@@ -5,7 +5,7 @@ import 'package:prep/screens/appointment_prep.screen.dart';
 import 'package:prep/screens/daily_checkups.screen.dart';
 import 'package:prep/screens/messaging.screen.dart';
 import 'package:prep/utils/query.dart';
-
+import 'package:prep/utils/help_screen.dart';
 class Appointment extends StatefulWidget {
   final int index;
   final DateTime _appointmentDateTime;
@@ -55,6 +55,7 @@ class _AppointmentState extends State<Appointment> {
       appBar: AppBar(
         backgroundColor: Colors.indigo,
         title: Text(Queries.appointmentName),
+        actions: <Widget>[MakeHelpIcon('This is a page used to give basic information regarding the appointment')]
       ),
       body: Center(
         child: getPage(_selectedIndex),

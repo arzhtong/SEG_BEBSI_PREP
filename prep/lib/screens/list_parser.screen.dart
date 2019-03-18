@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:prep/utils/query.dart';
 import 'package:prep/widgets/list_parser/description_expansion_tile.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
-
+import 'package:prep/utils/help_screen.dart';
 class CategoryListParser extends StatelessWidget {
   final String _contents;
   final String _categoryName;
@@ -16,6 +16,7 @@ class CategoryListParser extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.indigo,
         title: Text(_categoryName),
+         actions: <Widget>[MakeHelpIcon('This is a page used to give basic information regarding the foods')]
       ),
       body: StreamBuilder(
           stream: Queries.categoryListSnapshots(_contents),

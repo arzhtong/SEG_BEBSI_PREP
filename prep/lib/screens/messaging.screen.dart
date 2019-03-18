@@ -51,7 +51,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+     resizeToAvoidBottomInset: false,
       body: Column(children: <Widget>[
         Flexible(
           child: GestureDetector(
@@ -149,47 +149,43 @@ class _TextComposerState extends State<_TextComposer> {
   Widget build(BuildContext context) {
     return IconTheme(
       data: IconThemeData(color: Theme.of(context).accentColor),
-      child: Container(
-        padding: EdgeInsets.only(left: 8.0),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: 200),
-          child: IntrinsicHeight(
-            child: Row(
-              children: <Widget>[
-                Flexible(
-                  child: SingleChildScrollView(
-                    child: TextField(
-                      maxLines: null,
-                      keyboardType: TextInputType.multiline,
-                      controller: _textController,
-                      onChanged: (userInputText) {
-                        setState(() => _hasTyped = userInputText.length > 0);
-                      },
-                      //onSubmitted: MessagingQueries.sendMessage,
-                      decoration:
-                          InputDecoration.collapsed(hintText: "Type a message"),
-                    ),
+      child: new Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Row(
+          children: <Widget>[
+            Flexible(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: 200),
+                child: Scrollbar(
+                  child: TextField(
+                    maxLines: null,
+                    keyboardType: TextInputType.multiline,
+                    controller: _textController,
+                    onChanged: (userInputText) {
+                      setState(() => _hasTyped = userInputText.length > 0);
+                    },
+                    //onSubmitted: MessagingQueries.sendMessage,
+                    decoration:
+                        InputDecoration.collapsed(hintText: "Type a message"),
                   ),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    IconButton(
-                      icon: Icon(
-                        Icons.send,
-                        //TODO Change to proper theme colors after implementation.
-                        color: (_hasTyped)
-                            ? Theme.of(context).accentColor
-                            : Theme.of(context).buttonColor,
-                      ),
-                      onPressed: () =>
-                          _sendMessage(_textController.text.trim()),
-                    ),
-                  ],
-                ),
-              ],
+              ),
             ),
-          ),
+            Container(
+              padding: EdgeInsets.only(top: 150),
+              margin: EdgeInsets.symmetric(horizontal: 4.0),
+              child: IconButton(
+                icon: Icon(
+                  Icons.send,
+                  //TODO Change to proper theme colors after implementation.
+                  color: (_hasTyped)
+                      ? Theme.of(context).accentColor
+                      : Theme.of(context).buttonColor,
+                ),
+                onPressed: () => _sendMessage(_textController.text.trim()),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -212,14 +208,13 @@ class _MessageData {
 //Widget used to display a particlat message on screen
 class _MessageListItem extends StatelessWidget {
   final _MessageData message;
-
-  _MessageListItem(this.message)
+    _MessageListItem(this.message)
       : rowAlignment = (message.isPatient)
             ? MainAxisAlignment.end
             : MainAxisAlignment.start,
         messageBackgroundColor = (message.isPatient)
-            ? Colors.blue[200]
-            : Colors.grey[300];
+            ? Colors.greenAccent
+            : Colors.lightBlueAccent; //TODO use Theme colors
 
   final MainAxisAlignment rowAlignment;
   final Color messageBackgroundColor;
