@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:prep/screens/appointment.screen.dart';
 import 'package:prep/utils/query.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
-
+import 'package:prep/utils/help_screen.dart';
 class FaqParser extends StatelessWidget {
   final DateTime _appointmentDateTime;
 
@@ -74,6 +74,7 @@ class FaqParser extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.indigo,
         title: Text("FAQ"),
+          actions: <Widget>[MakeHelpIcon('This is a page used to give basic information regarding the test')]
       ),
       body: StreamBuilder(
         stream: Queries.faqSnapshots,

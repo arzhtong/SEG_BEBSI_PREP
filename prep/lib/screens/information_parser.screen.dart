@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:prep/utils/query.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
-
+import 'package:prep/utils/help_screen.dart';
 class InformationParser extends StatelessWidget {
   final String _documentName;
   final String _categoryName;
@@ -39,10 +39,11 @@ class InformationParser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         backgroundColor: Colors.indigo,
         title: Text(_categoryName),
-      ),
+        actions: <Widget>[MakeHelpIcon('This is a page used to give basic information regarding the scan')]),
       body: StreamBuilder(
           stream: Queries.informationSnapshots(_documentName),
           builder: (context, snapshot) {

@@ -7,7 +7,7 @@ import 'package:prep/widgets/dashboard/calendar_card.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 import 'package:prep/utils/storage.dart';
 import 'package:prep/utils/query.dart';
-
+import 'package:prep/utils/help_screen.dart';
 class Dashboard extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -207,6 +207,7 @@ class _DashboardState extends State<Dashboard> {
         backgroundColor: Colors.indigo,
         title: Text("Calendar"),
         actions: <Widget>[
+          MakeHelpIcon('This is a page used to give basic information regarding the scan'),
           IconButton(
               icon: Icon(Icons.delete_sweep),
               onPressed: () {
