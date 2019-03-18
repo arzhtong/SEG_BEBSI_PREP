@@ -22,6 +22,7 @@ class EmptyScreenPlaceholder extends StatelessWidget {
             ),
           ),
         Padding(
+          key: Key('padding'),
           padding: EdgeInsets.all(20.0),
         ),
           Text(
