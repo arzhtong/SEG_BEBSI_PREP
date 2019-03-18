@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 class RecipeNote extends StatelessWidget {
   static const String notePrefix = "Note:";
-  final String note;
 
-  RecipeNote({@required this.note});
+  final dynamic note;
+
+  RecipeNote(this.note);
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(

@@ -15,20 +15,32 @@ class RecipeCardBody extends StatelessWidget {
       assert(subtitle is String);
     }
 
-    var recipeName = title;
+    var recipeName = [
+      Text(
+        title,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+        style: Theme.of(context).textTheme.headline,
+      ),
+    ];
     if (subtitle != null) {
-      recipeName += "\n" + subtitle;
+      recipeName.add(
+        Text(
+          subtitle,
+          overflow: TextOverflow.ellipsis,
+          
+          maxLines: 2,
+          style: Theme.of(context).textTheme.subhead.copyWith(fontSize: 18.0),
+        ),
+      );
     }
 
     return ExpansionTile(
-      title: FittedBox(
-        fit: BoxFit.scaleDown,
-        alignment: Alignment.centerLeft,
-        child: Text(
-          recipeName,
-          maxLines: 2,
-          style: Theme.of(context).textTheme.headline,
-        ),
+      title: Column(
+        verticalDirection: VerticalDirection.down,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: recipeName,
       ),
       children: <Widget>[
         RecipeCardContent(),

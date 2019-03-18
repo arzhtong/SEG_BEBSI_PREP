@@ -5,6 +5,7 @@ import 'package:prep/utils/document_data_provider.dart';
 import 'package:prep/widgets/recipe/recipe_card_body.dart';
 import 'package:prep/widgets/recipe/recipe_card_header.dart';
 
+//TODO: Add ancestor assertions in children
 class RecipeCard extends StatelessWidget {
   final DocumentSnapshot snapshot;
 

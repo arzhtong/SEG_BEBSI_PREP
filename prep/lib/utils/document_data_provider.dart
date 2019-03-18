@@ -10,7 +10,6 @@ class FirestoreDocumentDataProvider extends InheritedWidget {
       {Key key, @required Widget child, @required this.documentData})
       : super(key: key, child: child);
 
-  //TODO: Firestore On document snapshot change.
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) => true;
 

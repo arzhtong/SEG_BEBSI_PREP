@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class RecipeInstruction extends StatelessWidget {
+class RecipeMethodListItem extends StatelessWidget {
   final String instruction;
   final int ordering;
 
-  RecipeInstruction({@required this.ordering, @required this.instruction});
+  RecipeMethodListItem({@required this.ordering, @required this.instruction});
 
   @override
   Widget build(BuildContext context) {
