@@ -7,7 +7,7 @@ import 'package:prep/widgets/dashboard/calendar_card.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 import 'package:prep/utils/storage.dart';
 import 'package:prep/utils/query.dart';
-import 'package:prep/utils/help_screen.dart';
+import 'package:prep/widgets/dashboard/help_screen.dart';
 
 class Dashboard extends StatefulWidget {
   @override

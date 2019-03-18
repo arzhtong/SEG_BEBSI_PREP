@@ -16,8 +16,10 @@ class MakeHelpIcon extends StatelessWidget {
 
 void makeAlert(BuildContext context, String text) {
   var alertDialog = AlertDialog(
-    title: Text("Page help", style: TextStyle(fontSize: 30.0)),
-    content: Text(text, style: TextStyle(fontSize: 20.0)),
+    title: Text("Tip",
+        textAlign: TextAlign.center, style: TextStyle(fontSize: 30.0)),
+    content: Text(text,
+        textAlign: TextAlign.center, style: TextStyle(fontSize: 20.0)),
   );
 
   showDialog(
