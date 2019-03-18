@@ -3,7 +3,7 @@
     <ul class="collection with-header">
       <li class="collection-header">
         <!-- title of the list -->
-        <h4>{{this.$route.params.contents}}:</h4>
+        <h4>{{title}}:</h4>
         <!-- route to all the lists -->
         <router-link
           v-bind:to="{name: 'view-prep-lists', params: {test_id: test_id}}"
@@ -50,6 +50,7 @@ export default {
   data() {
     return {
       maps: [],
+      title: null,
       test_id: this.$route.params.test_id
     };
   },
@@ -64,8 +65,16 @@ export default {
           doc.data().maps.forEach(map => {
             this.maps.push(map);
           })
-        
       });
+
+         db.collection("tests")
+            .doc(this.$route.params.test_id)
+            .collection("prepCards")
+            .doc(this.$route.params.contents)
+            .get()
+            .then(doc => {
+              this.title = doc.data().title
+            });
   },
   methods: {
     // deletes the list from the database as well as its card
@@ -74,12 +83,10 @@ export default {
         db.collection("tests")
           .doc(this.$route.params.test_id)
           .collection("prepCards")
-          .where("contents", "==", this.$route.params.contents)
+          .doc(this.$route.params.contents)
           .get()
-          .then(querySnapshot => {
-            querySnapshot.forEach(doc => {
+          .then(doc => {
               doc.ref.delete();
-            });
           });
         db.collection("tests")
           .doc(this.$route.params.test_id)

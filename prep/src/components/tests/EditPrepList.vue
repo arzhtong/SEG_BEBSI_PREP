@@ -25,10 +25,10 @@
               <span>Item</span>
               <input type="text" v-model="data.list[item - 1]" required>
               <!-- removes item from list in database -->
-              <button @click="deleteFromOldList(data, item -1)" class="btn red">remove item</button>
+              <button type="button"  @click="deleteFromOldList(data, item - 1)" class="btn red">remove item</button>
             </div>
             <!-- removes map from database -->
-            <button @click="deleteOldMap(allData.indexOf(data))" class="btn red">remove List</button>
+            <button type="button" @click="deleteOldMap(allData.indexOf(data))" class="btn red">remove List</button>
           </div>
           <!-- adds a new map to be added to the database -->
           <button @click="addMap" class="btn green">new List</button>
@@ -43,10 +43,10 @@
               <span>Item</span>
               <input type="text" v-model="map.list[item - 1]" required>
               <!-- remove item from the list in the new map -->
-              <button @click="deleteFromList(map, item - 1)" class="btn red">remove item</button>
+              <button type="button" @click="deleteFromList(map, item - 1)" class="btn red">remove item</button>
             </div>
             <!-- remove newly added map -->
-            <button @click="deleteMap(allMaps.indexOf(map))" class="btn red">remove List</button>
+            <button type="button" @click="deleteMap(allMaps.indexOf(map))" class="btn red">remove List</button>
           </div>
         </div>
         <button type="submit" class="btn">Submit</button>
@@ -91,8 +91,10 @@ export default {
   methods: {
     updatePrepList() {
       if (this.allMaps.length > 0) {
+
         // adds the 2 arrays together to form the new set of maps and adds the new array to the database
         var theMaps = this.allData.concat(this.allMaps);
+        //for (l in theMaps) alert("h")
         db.collection("tests")
           .doc(this.$route.params.test_id)
           .collection("lists")
@@ -112,6 +114,7 @@ export default {
             });
           });
       } else {
+
         db.collection("tests")
           .doc(this.$route.params.test_id)
           .collection("lists")
@@ -155,7 +158,7 @@ export default {
     },
     // deletes an item from the list of the old map
     deleteFromOldList(newData, index) {
-      newData.list.splice(index, 1);
+      newData.list.splice(index, 1)
     },
     // deletes a map from the array in the database
     deleteOldMap(index) {
@@ -170,12 +173,10 @@ export default {
       db.collection("tests")
         .doc(this.$route.params.test_id)
         .collection("prepCards")
-        .where("contents", "==", this.$route.params.contents)
+        .doc(this.$route.params.contents)
         .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
+        .then(doc => {
             this.title = doc.data().contents;
-          });
         });
     }
   }
