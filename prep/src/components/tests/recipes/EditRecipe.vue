@@ -107,6 +107,8 @@ export default {
           this.labels = doc.data().labels,
           this.externalURL = doc.data().externalURL,
           this.allInstr = doc.data().method,
+          this.ingredients = doc.data().ingredients,
+          this.instructions = doc.data().method,
           this.note = doc.data().note,
           this.type = doc.data().type
           // wait for chips to be initialised
@@ -128,8 +130,8 @@ export default {
             vm.imageURL = doc.data().backgroundImage
             vm.labels = doc.data().labels
             vm.externalURL = doc.data().externalURL
-            // vm.ingredients = doc.data().ingredients
-            // vm.instructions = doc.data().method
+            vm.ingredients = doc.data().ingredients
+            vm.instructions = doc.data().method
             vm.note = doc.data().note
             vm.type = doc.data().type
           })
@@ -150,6 +152,7 @@ export default {
             title: this.title,
             subtitle: this.subtitle,
             method: this.allInstr,
+            ingredients: this.ingredients,
             note: this.note,
             labels: labels,
             backgroundImage: this.imageURL,

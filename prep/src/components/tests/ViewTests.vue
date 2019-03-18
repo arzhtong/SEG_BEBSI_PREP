@@ -52,7 +52,7 @@
                                 >Show/Edit</router-link>
                             </li>
                             <li class="collection-item avatar">
-                                <i class="material-icons circle orange">help_outline</i>
+                                <i class="material-icons circle orange">live_help</i>
                                 <h5 class="titles">FAQs</h5>
                                 <router-link 
                                     v-bind:to="{name: 'view-prep-faqs', params: {test_id: test.id}}" 
