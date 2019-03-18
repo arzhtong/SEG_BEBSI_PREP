@@ -15,6 +15,10 @@
                             <input type="text" v-model="title" required>
                             <label>Title *</label>
                         </div>
+                        <div class="input-field col s12">
+                            <input type="text" v-model="subtitle">
+                            <label>Subtitle</label>
+                        </div>
                     </div>
                     <div>
                         <div class="row">
@@ -44,7 +48,7 @@
                         <div class="row">
                             <div v-for="instruction in instructions" :key="instruction.id" class="input-field col s12">
                                 <input type="text" v-model="instruction.value" required>
-                                <button class="btn red" @click="deleteInstruction(instructions.indexOf(instruction))"> remove instruction</button>
+                                <button class="btn red" @click="deleteInstruction(instructions.indexOf(instruction))">{{instruction.id}} remove instruction</button>
                             </div>
                         </div>
                     </div>
@@ -81,17 +85,18 @@
 <script>
 import db from '../../firebaseInit'
 import imageUploader from '../../shared/ImageUploader'
+import { recipeMixin } from '../../../mixins/recipeMixin'
 
 export default {
     name: 'new-recipe',
+    mixins: [recipeMixin],
     data() {
         return {
-            idCounter: 0, // unique number for v-for of ingredients and instructions
             title: null,
+            subtitle: null,
             imageURL: null,
             ingredients: [],
             instructions: [],
-            types: ['salad','soup','vegetable','roast','stew','pizza','sandwich','wrap', 'pie', 'fish', 'beef', 'chicken', 'curry', 'eggs'],
             type: null,
             note: null,
             externalURL: null
@@ -102,67 +107,30 @@ export default {
     },
     methods: {
         saveRecipe() {
-            // get correctly formatted arrays before saving
-            var labels = this.getChips()
-            var ingredients = this.getValuesArray(this.ingredients)
-            var instructions = this.getValuesArray(this.instructions)
-            db.collection('tests')
-              .doc(this.$route.params.test_id)
-              .collection('recipes').add({
-                title: this.title,
-                backgroundImage: this.imageURL,
-                ingredients: ingredients,
-                method: instructions,
-                labels: labels,
-                note: this.note,
-                type: this.type,
-                externalURL: this.externalURL
-            })
-            .then(docRef => {
-                this.$router.push({ name: 'view-recipes', params: {test_id: this.$route.params.test_id} })
-            })
-            .catch(error => console.log(err))
-        },
-        addInstruction() {
-            const data = {
-                value: '',
-                yes: this.idCounter
+            // only save if recipe is valid
+            if(this.validRecipe()) {
+                // get correctly formatted arrays before saving
+                var labels = this.getChips()
+                var ingredients = this.getValuesArray(this.ingredients)
+                var instructions = this.getValuesArray(this.instructions)
+                db.collection('tests')
+                .doc(this.$route.params.test_id)
+                .collection('recipes').add({
+                    title: this.title,
+                    subtitle: this.subtitle,
+                    backgroundImage: this.imageURL,
+                    ingredients: ingredients,
+                    method: instructions,
+                    labels: labels,
+                    note: this.note,
+                    type: this.type,
+                    externalURL: this.externalURL
+                })
+                .then(docRef => {
+                    this.$router.push({ name: 'view-recipes', params: {test_id: this.$route.params.test_id} })
+                })
+                .catch(error => console.log(err))
             }
-            this.instructions.push(data)
-            this.idCounter ++
-        },
-        deleteInstruction(index) {
-            this.instructions.splice(index, 1)
-        },
-        addIngredient() {
-            const data = {
-                value: '',
-                yes: this.idCounter
-            }
-            this.ingredients.push(data)
-            this.idCounter ++
-        },
-        deleteIngredient(index) {
-            this.ingredients.splice(index, 1)
-        },
-        // get string arrays from ingredients and instructions
-        getValuesArray(arrayIn) {
-            var arr = []
-            for(var i = 0; i < arrayIn.length; i++) {
-                arr.push(arrayIn[i].value)
-            }
-            return arr
-        },
-        // get array of tag strings from chips
-        getChips() {
-            var arr = M.Chips.getInstance($('.chips')).chipsData
-            var chips = []
-            if(arr.length !== 0) {
-                for(var i = 0; i < arr.length; i++) {
-                    chips.push(arr[i].tag)
-                }
-            }
-            return (chips.length === 0 ? null : chips)
         }
     },
     mounted() {
