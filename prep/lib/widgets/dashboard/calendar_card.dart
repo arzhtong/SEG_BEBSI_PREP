@@ -23,6 +23,10 @@ class CalendarCard extends StatelessWidget {
   }
 
   String dateFormatter(DateTime datetime) {
+    if (datetime == null) {
+      return "N/A";
+    }
+
     const List<String> months = [
       "January",
       "February",
@@ -46,6 +50,10 @@ class CalendarCard extends StatelessWidget {
   }
 
   String timeFormatter(DateTime datetime) {
+    if (datetime == null) {
+      return "N/A";
+    }
+
     String hour = (datetime.hour < 10)
         ? "0" + datetime.hour.toString()
         : datetime.hour.toString();

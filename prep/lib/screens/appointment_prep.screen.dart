@@ -47,7 +47,7 @@ class _AppointmentPrepState extends State<AppointmentPrep> {
   }
 
   Widget _buildGrid(BuildContext context, DocumentSnapshot document) {
-    return CategoryCard(document['contents'], document['title'],
+    return CategoryCard(document.documentID, document['title'],
         document['type'], Colors.white, widget._appointmentDatetime);
   }
 }

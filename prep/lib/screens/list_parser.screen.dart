@@ -46,6 +46,8 @@ class CategoryListParser extends StatelessWidget {
     List<Widget> dropDowns = new List();
     List<dynamic> mappedData = document['maps'];
 
+    print(document['maps']);
+
     mappedData.forEach((value) {
       dropDowns.add(DescriptiveExpansionTile(
           value['name'], value['description'], value['list']));

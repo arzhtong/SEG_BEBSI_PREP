@@ -44,7 +44,8 @@ class Queries {
 
   const Queries._internal();
 
-  static void setAppointmentInfo(newAppointmentID, newTestID, newAppointmentName) {
+  static void setAppointmentInfo(
+      newAppointmentID, newTestID, newAppointmentName) {
     appointmentID = newAppointmentID;
     testID = newTestID;
     appointmentName = newAppointmentName;
@@ -52,7 +53,8 @@ class Queries {
 
   static Future<QuerySnapshot> get appointmentCodes => _appointmentsCollection
       .where('expired', isEqualTo: false)
-      .where('datetime', isGreaterThan: DateTime.now().subtract(Duration(days: 1)))
+      .where('datetime',
+          isGreaterThan: DateTime.now().subtract(Duration(days: 1)))
       .orderBy('datetime')
       .getDocuments();
 
@@ -102,7 +104,7 @@ class Queries {
 
   static Stream<DocumentSnapshot> informationSnapshots(documentName) =>
       _testReference
-          .collection('informations')
+          .collection('articles')
           .document(documentName)
           .get()
           .asStream();
