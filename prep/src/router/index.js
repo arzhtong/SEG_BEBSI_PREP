@@ -3,12 +3,26 @@ import Router from 'vue-router'
 import ViewStaff from '@/components/staff/ViewStaff'
 import EditStaff from '@/components/staff/EditStaff'
 import ViewTests from '@/components/tests/ViewTests'
+<<<<<<< HEAD
 import AddTest from '@/components/tests/AddTest'
 import EditTestDescription from '@/components/tests/EditTestDescription'
 import ViewRecipes from '@/components/tests/recipes/ViewRecipes'
 import ViewRecipeInfo from '@/components/tests/recipes/ViewRecipeInfo'
 import NewRecipe from '@/components/tests/recipes/NewRecipe'
 import EditRecipe from '@/components/tests/recipes/EditRecipe'
+=======
+import ViewRecipes from '@/components/tests/ViewRecipes'
+import ViewRecipeInfo from '@/components/tests/ViewRecipeInfo'
+import NewRecipe from '@/components/tests/NewRecipe'
+import EditRecipe from '@/components/tests/EditRecipe'
+import ViewPrepLists from '@/components/tests/ViewPrepLists'
+import NewList from '@/components/tests/NewList'
+import ViewPrepList from '@/components/tests/ViewPrepList'
+import ViewPrepFaqs from '@/components/tests/ViewPrepFaqs'
+import NewPrepFaq from '@/components/tests/NewPrepFaq'
+import EditPrepFaq from '@/components/tests/EditPrepFaq'
+import EditPrepList from '@/components/tests/EditPrepList'
+>>>>>>> web/develop
 import ViewDailyCheckups from '@/components/tests/dailycheckups/ViewDailyCheckups'
 import NewDailyCheckups from '@/components/tests/dailycheckups/NewDailyCheckups'
 import ViewDailyCheckupsInfo from '@/components/tests/dailycheckups/ViewDailyCheckupsInfo'
@@ -205,6 +219,14 @@ let router = new Router({
       }
     },
     {
+      path: '/view-prep-lists/:test_id',
+      name: 'view-prep-lists',
+      component: ViewPrepLists,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
       path: '/new-recipe/:test_id',
       name: 'new-recipe',
       component: NewRecipe,
@@ -213,9 +235,57 @@ let router = new Router({
       }
     },
     {
+      path: '/new-list/:test_id',
+      name: 'new-list',
+      component: NewList,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
       path: '/view-recipe-info/:test_id/:recipe_id',
       name: 'view-recipe-info',
       component: ViewRecipeInfo,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/view-prep-list/:test_id/:contents',
+      name: 'view-prep-list',
+      component: ViewPrepList,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/new-prep-faq/:test_id/',
+      name: 'new-prep-faq',
+      component: NewPrepFaq,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/edit-prep-faq/:test_id/:faq_id',
+      name: 'edit-prep-faq',
+      component: EditPrepFaq,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/view-prep-faqs/:test_id/',
+      name: 'view-prep-faqs',
+      component: ViewPrepFaqs,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/edit-prep-list/:test_id/',
+      name: 'edit-prep-list',
+      component: EditPrepList,
       meta: {
         requiresAuth: true
       }
