@@ -83,7 +83,7 @@ class RecipeCardHeader extends StatelessWidget {
           ),
       fadeInCurve: Curves.decelerate,
       fadeInDuration: Duration(microseconds: 300),
-      fit: BoxFit.cover,
+        fit: BoxFit.cover,
     );
   }
 
