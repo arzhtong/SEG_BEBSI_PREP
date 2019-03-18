@@ -23,10 +23,10 @@
                 <img 
                 :src="downloadURL"
                 width="100%" 
-                style="max-height: 150px; max-width: 150px;"/>
+                style="max-height: 250px; max-width: 250px;"/>
                 <!-- Wrapper to use custom upload button -->
                 <div v-if="!uploadEnd && !uploading" class="upload-btn-wrapper">
-                    <a class="waves-effect waves-light btn" onclick="document.getElementById('fileButton').click()"><i class="material-icons left">add</i>Upload image</a>
+                    <a class="waves-effect waves-light btn green" onclick="document.getElementById('fileButton').click()"><i class="material-icons left">add</i>Upload image</a>
                     <input type="file" value="uplaod" id="fileButton" @change="upload">
                 </div> 
             </div>
@@ -38,12 +38,12 @@
 </template>
 
 <script>
-import db from "../firebaseInit";
-import firebase from "firebase";
+import db from "../firebaseInit"
+import firebase from "firebase"
 
 export default {
     name: 'imageUploader',
-    props: 'imageURL',
+    props: ['imageURL'],
     data() {
         return {
             selectedFile: null,
@@ -57,38 +57,41 @@ export default {
     },
     methods: {
         upload(event) {
-            this.selectedFile = event.target.files[0];
+            this.selectedFile = event.target.files[0]
             this.fileName = this.selectedFile.name
-            let fileExtension = this.fileName.split('.')[this.fileName.split('.').length - 1].toLowerCase();
-            let fileSize = this.selectedFile.size;
-            let mbSize = (fileSize / 1048576).toFixed(2);
+            let fileExtension = this.fileName.split('.')[this.fileName.split('.').length - 1].toLowerCase()
+            let fileSize = this.selectedFile.size
+            let mbSize = (fileSize / 1048576).toFixed(2)
 
             // check the file for format and size 
             if (!(fileExtension === "jpg" || fileExtension === "png" || fileExtension === "gif") || fileSize > 1048576) { 
-                let txt = "File type : " + fileExtension + "\n\n";
+                let txt = "File type : " + fileExtension + "\n\n"
                 txt += "Size: " + mbSize + " MB \n\n";
-                txt += "Please make sure your file is in jpg, png or gif format and less than 1 MB.\n\n";
+                txt += "Please make sure your file is in jpg, png or gif format and less than 1 MB.\n\n"
                 alert(txt);
             } else {
                 this.uploading = true
-                this.uploadTask = firebase.storage().ref('images/' + this.fileName).put(this.selectedFile);
+                this.uploadTask = firebase.storage().ref('images/' + this.fileName).put(this.selectedFile)
             }
         },
         deleteImage() {
-            firebase.storage().ref('images/' + this.fileName).delete().then(() => {
-                this.uploading = false
-                this.uploadEnd = false
-                this.uploadPercentage = 0
-                this.downloadURL = ''
-            })
-            .catch((error) => {
-                console.error(`file delete error occured: ${error}`)
-            })
+            firebase.storage()
+                    .refFromURL(this.downloadURL)
+                    .delete()
+                    .then(() => {
+                        this.uploading = false
+                        this.uploadEnd = false
+                        this.uploadPercentage = 0
+                        this.downloadURL = ''
+                    })
+                    .catch((error) => {
+                        console.error(`file delete error occured: ${error}`)
+                    })
         }
     },
     watch: {
         uploadTask: function() {
-            this.uploadTask.on('state_changed', snapshot => {
+                this.uploadTask.on('state_changed', snapshot => {
                 var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 this.uploadPercentage = progress;
             },
@@ -103,7 +106,13 @@ export default {
                 this.downloadURL = downloadURL
                 this.$emit('downloadURL', downloadURL)
                 })
-            });
+            })
+        },
+        imageURL: function() {
+            if (this.imageURL !== null && this.imageURL !=='') {
+                this.uploadEnd = true
+                this.downloadURL = this.imageURL
+            }
         }
     }
 }

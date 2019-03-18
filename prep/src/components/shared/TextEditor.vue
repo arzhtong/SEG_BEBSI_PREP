@@ -52,7 +52,7 @@ export default {
             uploadTask: '',
             fileName: '',
             customToolbar: [
-            [{ 'header': [false, 1, 2, 3] }],
+            [{ 'header': [false, 1, 2, 3, 4] }],
             ['bold', 'italic', 'underline', 'strike'],
             ['blockquote', 'code-block'],
             [{ 'list': 'ordered'}, { 'list': 'bullet' }],
@@ -66,12 +66,7 @@ export default {
     },
     // load any editor information provided in the props 
     mounted() {
-        if(this.editorInformation !== '') {
-            this.htmlForEditor = this.editorInformation
-        }
-        if (this.editorImages !== undefined && this.editorImages !== '') {
-            this.images = this.editorImages
-        }
+        this.addData()
     },
     methods: {
         handleImageAdded: function(file, Editor, cursorLocation, resetUploader) {
@@ -119,6 +114,14 @@ export default {
             }
             // update images array
             this.images = temp
+        }, 
+        addData() {
+            if(this.editorInformation !== '') {
+            this.htmlForEditor = this.editorInformation
+            }
+            if (this.editorImages !== undefined && this.editorImages !== '') {
+                this.images = this.editorImages
+            }
         }
     },
     watch: {
