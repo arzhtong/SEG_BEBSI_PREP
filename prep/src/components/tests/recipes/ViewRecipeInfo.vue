@@ -9,7 +9,10 @@
                     <img :src="imageURL" width="100%" style="max-height: 250px; max-width: 250px;"/>
                 </div>
             </li>
-            <li class="collection-item"><b>Dish Name:</b> {{title}}</li>
+            <li class="collection-item">
+                <b>Dish Name:</b> {{title}}
+                <i v-if="subtitle"> - {{subtitle}}</i>
+            </li>
             <li v-if="type" class="collection-item"><b>Type:</b> {{type}}</li>
             <li v-if="labels" class="collection-item"><b>Labels:</b> {{labels}}</li>
             <li v-if="externalURL" class="collection-item"><b>Recipe link:</b> <a :href="externalURL">{{externalURL}}</a></li>
@@ -40,6 +43,7 @@ export default {
         return {
             recipe_id: this.$route.params.recipe_id,
             title: null,
+            subtitle: null,
             labels: null,
             imageURL: null,
             externalURL: null,
@@ -60,6 +64,7 @@ export default {
               if(doc.exists) {
                 next(vm => {
                     vm.title = doc.data().title
+                    vm.subtitle = doc.data().subtitle
                     vm.labels = doc.data().labels
                     vm.imageURL = doc.data().backgroundImage
                     vm.externalURL = doc.data().externalURL
@@ -84,6 +89,7 @@ export default {
               .then(doc => {
                 if(doc.exists) {
                     this.title = doc.data().title
+                    this.subtitle = doc.data().subtitle
                     this.labels = doc.data().labels
                     this.imageURL = doc.data().backgroundImage
                     this.externalURL = doc.data().externalURL
