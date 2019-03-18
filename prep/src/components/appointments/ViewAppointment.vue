@@ -27,7 +27,9 @@
             <td>{{testType}}</td>
             <td>
               <template v-if="past == false">
-                <router-link v-bind:to="{name: 'edit-appointment', params: {expired: past, id: router}}">
+                <router-link
+                  v-bind:to="{name: 'edit-appointment', params: {expired: past, id: router}}"
+                >
                   <a class="tooltip" style="margin-right:20px">
                     <span class="tooltiptext">Edit Appointment</span>
                     <i class="material-icons">edit</i>
@@ -62,9 +64,6 @@
               <td>{{checkup.daysBeforeTest}}</td>
               <td style="padding-left:10% !important">{{checkup.description}}</td>
               <td style="padding-left:10% !important">
-   
-               
-                
                 <div v-for="instruction in checkup.instructions" v-bind:key="instruction">
                   <div style="float:left;">
                     <span>
@@ -95,20 +94,29 @@
                           </a>
                         </span>
                       </div>
+                      <span style="margin:10px 0 0 5px;">
+                        <a class="tooltip black-text" style="margin-right:20px">
+                          <span class="tooltiptext">Last modified</span>
+                          {{instruction.lastChecked.toDate().toISOString()
+                          .split("T")[0]}}
+                          <br>
+                          {{instruction.lastChecked.toDate().toTimeString()
+                          .split(" ")[0]}}
+                        </a>
+                      </span>
                     </div>
                   </div>
                 </div>
-               
               </td>
             </tr>
           </tbody>
         </table>
       </div>
       <template v-if="past==false">
-       <router-link to="/view-appointments" class="btn">Go Back</router-link>
+        <router-link to="/view-appointments" class="btn">Go Back</router-link>
       </template>
       <template v-else>
-       <router-link to="/past-appointments" class="btn">Go Back</router-link>
+        <router-link to="/past-appointments" class="btn">Go Back</router-link>
       </template>
     </div>
   </div>
@@ -195,9 +203,9 @@ export default {
                 docId: change.doc.id,
                 daysBeforeTest: change.doc.data().daysBeforeTest,
                 description: change.doc.data().description,
-                instructions: change.doc.data().instructions,
+                instructions: change.doc.data().instructions
               };
-          
+
               this.dailyCheckups.push(data);
             }
             // if modified (e.g set to true)
