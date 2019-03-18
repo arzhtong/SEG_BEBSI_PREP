@@ -109,6 +109,7 @@ export default {
           this.allInstr = doc.data().method,
           this.note = doc.data().note,
           this.type = doc.data().type
+          // wait for chips to be initialised
           this.$nextTick(() => this.loadChips())
         }
       })

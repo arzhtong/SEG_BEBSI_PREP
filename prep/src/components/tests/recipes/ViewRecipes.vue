@@ -29,7 +29,7 @@
 <script>
 import db from '../../firebaseInit'
 
-export default{
+export default {
     name: 'view-recipes',
     data() {
         return {
