@@ -210,7 +210,7 @@ class _DashboardState extends State<Dashboard> {
         title: Text("Calendar"),
         actions: <Widget>[
           MakeHelpIcon(
-              'This screen shows a calendar with all your due appointments'),
+              'This screen shows a calendar with all your due appointments. Tap on one of them to get more information.'),
           IconButton(
               icon: Icon(Icons.delete_sweep),
               onPressed: () {

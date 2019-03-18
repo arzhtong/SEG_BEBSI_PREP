@@ -55,19 +55,19 @@ class _AppointmentState extends State<Appointment> {
     switch (_selectedIndex) {
       case 0:
         {
-          return MakeHelpIcon('This page offers relevant information about your appointment');
+          return MakeHelpIcon('This page offers relevant information about your appointment.');
         }
       case 1:
         {
-          return MakeHelpIcon('This page contains all the preparation information your doctor has provided for your appointment');
+          return MakeHelpIcon('This page contains all the preparation information your doctor has provided for your appointment.');
         }
       case 2:
         {
-          return MakeHelpIcon("Let your doctor know how well you're preparing for your appointment by checking the daily instructions");
+          return MakeHelpIcon("Let your doctor know how well you're preparing for your appointment by checking the daily instructions.");
         }
       case 3:
         {
-          return MakeHelpIcon("Chat directly with your doctor about pressing issues");
+          return MakeHelpIcon("Chat directly with your doctor about pressing issues.");
         }
     }
   }
