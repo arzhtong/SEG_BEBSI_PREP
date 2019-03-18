@@ -56,12 +56,14 @@
 
 <script>
 import db from "../../firebaseInit";
+import firebase from "firebase";
 
 export default {
   name: "edit-dailycheckups",
   data() {
     return {
       title: null,
+      timeArray:[],
       allInstr: [],
       allInstrArray:[],
       instructions:[],
@@ -87,7 +89,8 @@ export default {
             
              
          for (const [key, value] of Object.entries(this.allInstr)) {
-               this.allInstrArray.push(value.question)        
+               this.allInstrArray.push(value.question)    
+               this.timeArray.push(value.lastChecked)    
           }
            
         })
@@ -125,14 +128,15 @@ export default {
        for (var member in this.allInstr) delete this.allInstr[member]
 
        for(var i =0 ; i < this.allInstrArray.length; i++){
-          this.allInstr[i]={answer:false,question:this.allInstrArray[i]}                   
+          this.allInstr[i]={answer:false,lastChecked:this.timeArray[i],question:this.allInstrArray[i]}                   
        }
             
        var l=Object.keys(this.allInstr).length
       
       
        for(var i =l ; i < this.instructions.length+l; i++){
-        this.allInstr[i]={answer:false,question:this.instructions[i-l].value}            
+        this.allInstr[i]={answer:false,lastChecked:firebase.firestore.Timestamp.fromDate(new Date(Math.floor(Date.now()))),
+         question:this.instructions[i-l].value}            
         }
 
       db.collection("tests")

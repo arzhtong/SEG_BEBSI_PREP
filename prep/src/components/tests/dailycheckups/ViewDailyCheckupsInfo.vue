@@ -22,12 +22,15 @@
       </li>
       <li class="collection-item">
         <b>Instructions:</b>
+       
         <ul v-for="(value, key) in instructions" :key="key">
-          <ol>Instruction {{key}}:</ol>
-
-          <ol v-for="(value,key) in value" :key="key">
-            <ol>{{key}}:{{value}}</ol>
+          <ol style="padding:10px;font-weight: bold;">Instruction {{key}}:</ol>
+          <ol>Question: {{value.question}}</ol>
+          <ol>Last checked time: {{value.lastChecked.toDate().toISOString().split("T")[0]}}
+            {{value.lastChecked.toDate().toTimeString().split(" ")[0]}}
           </ol>
+          <ol>Status: {{value.answer}} </ol>
+        
         </ul>
       </li>
 
