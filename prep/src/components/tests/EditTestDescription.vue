@@ -46,6 +46,7 @@
             </div>
             <div v-if="dataLoaded">
                 <textEditor 
+                id="editor"
                 :editorInformation="htmlForEditor" 
                 :editorImages="imagesForEditor"
                 ref="textEditor"/>
@@ -106,13 +107,13 @@ export default {
                 .doc(this.$route.params.test_id)
                 .get()
                 .then(doc => {
-                if (doc.exists) {
-                    this.title = doc.data().title
-                    this.department = doc.data().type
-                    this.htmlForEditor = doc.data().description
-                    this.imagesForEditor = doc.data().editorImages
-                    this.dataLoaded = true
-                }
+                    if (doc.exists) {
+                        this.title = doc.data().title
+                        this.department = doc.data().type
+                        this.htmlForEditor = doc.data().description
+                        this.imagesForEditor = doc.data().editorImages
+                        this.dataLoaded = true
+                    }
                 });
             },
         updateTest() {
@@ -170,4 +171,5 @@ h3 {
 .collapsible-header {
     color: #2196f3;
 }
+
 </style>
