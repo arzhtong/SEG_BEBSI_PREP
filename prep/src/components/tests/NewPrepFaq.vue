@@ -59,8 +59,8 @@ export default {
     return {
       question: null,
       answer: null,
-      chatShortcut: null,
-      informationShortcut: null
+      chatShortcut: false,
+      informationShortcut: false
     };
   },
   methods: {
