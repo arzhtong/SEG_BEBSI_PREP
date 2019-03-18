@@ -16,7 +16,7 @@ class CategoryListParser extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.indigo,
         title: Text(_categoryName),
-         actions: <Widget>[MakeHelpIcon('This is a page used to give basic information regarding the foods')]
+         actions: <Widget>[MakeHelpIcon('This is a page used to give basic information regarding the foods allowed and not allowed to eat')]
       ),
       body: StreamBuilder(
           stream: Queries.categoryListSnapshots(_contents),
