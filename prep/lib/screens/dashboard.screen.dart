@@ -8,6 +8,7 @@ import 'package:prep/screens/empty_screen_placeholder.dart';
 import 'package:prep/utils/storage.dart';
 import 'package:prep/utils/query.dart';
 import 'package:prep/utils/help_screen.dart';
+
 class Dashboard extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -142,7 +143,8 @@ class _DashboardState extends State<Dashboard> {
     if (codeFileState == null) {
       return null;
     } else if (codeFileState.isEmpty) {
-      return EmptyScreenPlaceholder("Your calendar is empty", "Add some appointments");
+      return EmptyScreenPlaceholder(
+          "Your calendar is empty", "Add some appointments");
     } else {
       //Generates a list of filtered appointments
       List<DocumentSnapshot> filteredDocuments = new List();
@@ -188,7 +190,7 @@ class _DashboardState extends State<Dashboard> {
 
       return ListView(
         padding:
-        EdgeInsets.only(top: 10.0, bottom: 80.0, left: 10.0, right: 10.0),
+            EdgeInsets.only(top: 10.0, bottom: 80.0, left: 10.0, right: 10.0),
         children: <Widget>[
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -207,7 +209,8 @@ class _DashboardState extends State<Dashboard> {
         backgroundColor: Colors.indigo,
         title: Text("Calendar"),
         actions: <Widget>[
-          MakeHelpIcon('This is a page used to give basic information regarding the scan'),
+          MakeHelpIcon(
+              'This screen shows a calendar with all your due appointments'),
           IconButton(
               icon: Icon(Icons.delete_sweep),
               onPressed: () {
