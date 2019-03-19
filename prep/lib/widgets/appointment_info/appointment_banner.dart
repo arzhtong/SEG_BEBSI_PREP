@@ -1,51 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:prep/utils/query.dart';
+import 'package:prep/utils/date_time_formatter.dart';
 
 class AppointmentDetailsBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Queries.color,
       padding: EdgeInsets.all(10.0),
       alignment: Alignment.centerLeft,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          TitleText("I'm title text"),
-          SubtitleText("I'm subtitle text"),
+          _TitleText("Date"),
+          _SubtitleText(DateTimeFormatter.dateFormatter(Queries.dateTime)),
+          _TitleText("Time"),
+          _SubtitleText("I'm subtitle text"),
+          _TitleText("Location"),
+          _SubtitleText("I'm subtitle text"),
+          _TitleText("Staff member"),
+          _SubtitleText("I'm subtitle text"),
         ],
       ),
     );
   }
 }
 
-class TitleText extends StatelessWidget {
+class _TitleText extends StatelessWidget {
   final String text;
 
-  TitleText(this.text);
+  _TitleText(this.text);
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: TextStyle(
-
+    return Container(
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 20.0,
+        ),
       ),
     );
   }
 }
 
-class SubtitleText extends StatelessWidget {
+class _SubtitleText extends StatelessWidget {
   final String text;
 
-  SubtitleText(this.text);
+  _SubtitleText(this.text);
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: TextStyle(
-
+    return Container(
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 20.0,
+          fontWeight: FontWeight.w300
+        ),
       ),
     );
   }
