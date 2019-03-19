@@ -75,7 +75,7 @@ class FaqParser extends StatelessWidget {
               child: LinearProgressIndicator(),
             );
           } else {
-            if (snapshot.data.documents.length > 0) {
+            if (snapshot.data.documents != null && snapshot.data.documents.length > 0) {
               return ListView.builder(
                 padding: EdgeInsets.only(top: 10.0),
                 itemCount: snapshot.data.documents.length,

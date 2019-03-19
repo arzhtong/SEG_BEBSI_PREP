@@ -45,7 +45,7 @@ class AppointmentInfo extends StatelessWidget {
                   child: LinearProgressIndicator(),
                 );
               } else {
-                if (snapshot.data['description'].length > 0) {
+                if (snapshot.data['description'] != null && snapshot.data['description'].length > 0) {
                   return _buildListItem(context, snapshot.data);
                 } else {
                   return EmptyScreenPlaceholder("This article is empty", "");

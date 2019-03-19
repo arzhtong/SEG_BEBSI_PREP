@@ -25,7 +25,7 @@ class _AppointmentPrepState extends State<AppointmentPrep> {
               child: LinearProgressIndicator(),
             );
           } else {
-            if (snapshot.data.documents.length > 0) {
+            if (snapshot.data.documents != null && snapshot.data.documents.length > 0) {
               return StaggeredGridView.countBuilder(
                 padding: EdgeInsets.all(10.0),
                 crossAxisCount: 4,

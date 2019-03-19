@@ -27,7 +27,7 @@ class CategoryListParser extends StatelessWidget {
                 child: LinearProgressIndicator(),
               );
             } else {
-              if (snapshot.data['maps'].length > 0) {
+              if (snapshot.data['maps'] != null && snapshot.data['maps'].length > 0) {
                 return ListView.builder(
                   padding: EdgeInsets.all(10.0),
                   itemCount: 1,
