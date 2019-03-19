@@ -7,9 +7,7 @@ import 'package:prep/widgets/appointment_prep/category_card.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 
 class AppointmentPrep extends StatefulWidget {
-  final DateTime _appointmentDatetime;
-
-  AppointmentPrep(this._appointmentDatetime);
+  AppointmentPrep();
 
   @override
   _AppointmentPrepState createState() => _AppointmentPrepState();
@@ -48,6 +46,6 @@ class _AppointmentPrepState extends State<AppointmentPrep> {
 
   Widget _buildGrid(BuildContext context, DocumentSnapshot document) {
     return CategoryCard(document.documentID, document['title'],
-        document['type'], Colors.white, widget._appointmentDatetime);
+        document['type'], Colors.white, Queries.dateTime);
   }
 }

@@ -9,12 +9,8 @@ import 'package:prep/widgets/dashboard/help_dialog.dart';
 
 class Appointment extends StatefulWidget {
   final int index;
-  final DateTime _appointmentDateTime;
 
-  Appointment(appointmentID, testID, appointmentName, this.index,
-      this._appointmentDateTime) {
-    Queries.setAppointmentInfo(appointmentID, testID, appointmentName);
-  }
+  Appointment(this.index);
 
   @override
   State<StatefulWidget> createState() => _AppointmentState(index);
@@ -35,11 +31,13 @@ class _AppointmentState extends State<Appointment> {
       case 1:
         return (_appointmentPrep != null)
             ? _appointmentPrep
-            : _appointmentPrep = AppointmentPrep(widget._appointmentDateTime);
+            : _appointmentPrep =
+                AppointmentPrep();
       case 2:
         return (_dailyCheckups != null)
             ? _dailyCheckups
-            : _dailyCheckups = DailyCheckups(widget._appointmentDateTime);
+            : _dailyCheckups =
+                DailyCheckups();
       case 3:
         return (_messagingScreen != null)
             ? _messagingScreen
@@ -55,19 +53,23 @@ class _AppointmentState extends State<Appointment> {
     switch (_selectedIndex) {
       case 0:
         {
-          return MakeHelpIcon('This page offers relevant information about your appointment.');
+          return MakeHelpIcon(
+              'This page offers relevant information about your appointment.');
         }
       case 1:
         {
-          return MakeHelpIcon('This page contains all the preparation information your doctor has provided for your appointment.');
+          return MakeHelpIcon(
+              'This page contains all the preparation information your doctor has provided for your appointment.');
         }
       case 2:
         {
-          return MakeHelpIcon("Let your doctor know how well you're preparing for your appointment by checking the daily instructions.");
+          return MakeHelpIcon(
+              "Let your doctor know how well you're preparing for your appointment by checking the daily instructions.");
         }
       case 3:
         {
-          return MakeHelpIcon("Chat directly with your doctor about pressing issues.");
+          return MakeHelpIcon(
+              "Chat directly with your doctor about pressing issues.");
         }
     }
   }

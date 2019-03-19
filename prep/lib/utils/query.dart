@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 export 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class DatabaseHandler {
   static Firestore db;
@@ -37,6 +38,10 @@ class Queries {
   static String appointmentID;
   static String testID;
   static String appointmentName;
+  static String location;
+  static DateTime dateTime;
+  static String doctorName;
+  static Color color;
 
   static const Queries _singleton = Queries._internal();
 
@@ -45,10 +50,14 @@ class Queries {
   const Queries._internal();
 
   static void setAppointmentInfo(
-      newAppointmentID, newTestID, newAppointmentName) {
+      newAppointmentID, newTestID, newAppointmentName, newLocation, newDateTime, newDoctorName, newColor) {
     appointmentID = newAppointmentID;
     testID = newTestID;
     appointmentName = newAppointmentName;
+    location = newLocation;
+    dateTime = newDateTime;
+    doctorName = newDoctorName;
+    color = newColor;
   }
 
   static Future<QuerySnapshot> get appointmentCodes => _appointmentsCollection
