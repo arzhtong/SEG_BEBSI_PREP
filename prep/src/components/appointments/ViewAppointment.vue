@@ -18,7 +18,7 @@
           </tr>
         </thead>
 
-        <tbody class="collection-item" v-for="app in appointments" v-bind:key="app">
+        <tbody class="collection-item" v-for="(app, index) in appointments" v-bind:key="index">
           <tr>
             <td>{{app.date}}</td>
             <td>{{app.time}}</td>
@@ -57,14 +57,14 @@
           <tbody
             style="word-wrap: break-word;"
             class="collection-item"
-            v-for="checkup in dailyCheckups"
-            v-bind:key="checkup"
+            v-for="(checkup, index) in dailyCheckups"
+            v-bind:key="index"
           >
             <tr>
               <td>{{checkup.daysBeforeTest}}</td>
               <td style="padding-left:10% !important">{{checkup.description}}</td>
               <td style="padding-left:10% !important">
-                <div v-for="instruction in checkup.instructions" v-bind:key="instruction">
+                <div v-for="(instruction, index) in checkup.instructions" v-bind:key="index">
                   <div style="float:left;">
                     <span>
                       <textarea
