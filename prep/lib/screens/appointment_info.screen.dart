@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:prep/utils/query.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
+import 'package:prep/widgets/appointment_info/appointment_banner.dart';
 
 class AppointmentInfo extends StatelessWidget {
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
@@ -35,7 +36,7 @@ class AppointmentInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Text("First element"),
+        AppointmentDetailsBanner(),
         StreamBuilder(
             stream: Queries.testSnapshots,
             builder: (context, snapshot) {
