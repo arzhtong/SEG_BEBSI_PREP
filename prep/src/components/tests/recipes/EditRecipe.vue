@@ -13,7 +13,7 @@
               <input type="text" v-model="title" required>
             </div>
             <div class="input-field col s12">
-                <span>Subtitle</span>
+                <span id="title">Subtitle</span>
                 <input type="text" v-model="subtitle">
             </div>
           </div>
@@ -23,12 +23,28 @@
               <input type="text" v-model="externalURL">
             </div>
           </div>
-          <button @click="addInstruction" class="btn green">new instruction</button>
-          <div class="row">
-            <div v-for="instr in allInstr.length" v-bind:key="instr" class="input-field col s12">
-              <span id="title">Instruction</span>
-              <input type="text" v-model="allInstr[instr - 1]" required>
-              <button @click="deleteInstruction(instr -1)" class="btn red">remove instruction</button>
+          <div>
+            <div>
+                <span id="title">Ingredients</span>
+                <hr>
+            </div>
+            <button @click="addIngredient" class="btn green" type="button">add ingredient</button>
+            <div class="row">
+              <div v-for="(ingredient, index) in ingredients" v-bind:key="index" class="input-field col s12">
+                <input type="text" v-model="ingredients[index]" required>
+                <button @click="deleteIngredient(index)" class="btn red" type="button">remove ingredient</button>
+              </div>
+            </div>
+            <div>
+                <span id="title">instructions</span>
+                <hr>
+            </div>
+            <button @click="addInstruction" class="btn green" type="button">add instruction</button>
+            <div class="row">
+              <div v-for="(instruction, index) in instructions" v-bind:key="index" class="input-field col s12">
+                <input type="text" v-model="instructions[index]" required>
+                <button @click="deleteInstruction(index)" class="btn red" type="button">remove instruction</button>
+              </div>
             </div>
           </div>
           <div>
@@ -78,7 +94,6 @@ export default {
     return {
       title: null,
       subtitle: null,
-      allInstr: [],
       imageURL: null,
       ingredients: [],
       instructions: [],
@@ -106,7 +121,6 @@ export default {
           this.imageURL = doc.data().backgroundImage,
           this.labels = doc.data().labels,
           this.externalURL = doc.data().externalURL,
-          this.allInstr = doc.data().method,
           this.ingredients = doc.data().ingredients,
           this.instructions = doc.data().method,
           this.note = doc.data().note,
@@ -151,8 +165,8 @@ export default {
           .update({
             title: this.title,
             subtitle: this.subtitle,
-            method: this.allInstr,
-            ingredients: this.ingredients,
+            method: this.instructions,
+            ingredients: this.ingredients, 
             note: this.note,
             labels: labels,
             backgroundImage: this.imageURL,
@@ -166,13 +180,6 @@ export default {
             })
           })
       }
-    },
-    addInstruction() {
-      const data = ""
-      this.allInstr.push(data)
-    },
-    deleteInstruction(index) {
-      this.allInstr.splice(index, 1)
     },
     loadChips() {
       if(this.labels !== null) {

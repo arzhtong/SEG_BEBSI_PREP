@@ -58,7 +58,7 @@ export default {
                   .collection('articles')
                   .add({
                     title: this.title,
-                    description: this.$refs.textEditor.htmlForEditor, 
+                    description: (this.$refs.textEditor.htmlForEditor === undefined ? '' : this.$refs.textEditor.htmlForEditor), 
                     editorImages: this.$refs.textEditor.images
                 })
                 .then(docRef => {

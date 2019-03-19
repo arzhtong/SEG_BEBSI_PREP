@@ -68,7 +68,7 @@ export default {
                 db.collection('tests').add({
                     title: this.title,
                     type: this.department,
-                    description: this.$refs.textEditor.htmlForEditor, 
+                    description: (this.$refs.textEditor.htmlForEditor === undefined ? '' : this.$refs.textEditor.htmlForEditor), 
                     editorImages: this.$refs.textEditor.images
                 })
                 .then(docRef => {

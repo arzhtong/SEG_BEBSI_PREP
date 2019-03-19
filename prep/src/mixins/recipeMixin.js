@@ -27,30 +27,16 @@ export const recipeMixin = {
     },
     methods: {
         addInstruction() {
-            const data = {
-                value: ''
-            }
-            this.instructions.push(data)
+            this.instructions.push('')
         },
         deleteInstruction(index) {
             this.instructions.splice(index, 1)
         },
         addIngredient() {
-            const data = {
-                value: ''
-            }
-            this.ingredients.push(data)
+            this.ingredients.push('')
         },
         deleteIngredient(index) {
             this.ingredients.splice(index, 1)
-        },
-        // get string arrays from ingredients and instructions
-        getValuesArray(arrayIn) {
-            var arr = []
-            for(var i = 0; i < arrayIn.length; i++) {
-                arr.push(arrayIn[i].value)
-            }
-            return arr
         },
         // get array of tag strings from chips
         getChips() {
