@@ -113,18 +113,11 @@ class _DailyCheckups extends State<DailyCheckups> {
                   activeTrackColor: Colors.green[100],
                   value: checkupMap['answer'],
                   onChanged: (_) {
-                    if (checkupMap['answer']) {
-                      // Removes the old entry from the list
-                      document.reference.updateData({
-                        ('instructions.' + index + '.answer'): false,
-                        ('instructions.' + index + '.lastChecked'): DateTime.now(),
-                      });
-                    } else {
-                      document.reference.updateData({
-                        ('instructions.' + index + '.answer'): true,
-                        ('instructions.' + index + '.lastChecked'): DateTime.now(),
-                      });
-                    }
+                    document.reference.updateData({
+                      // Toggles true/false for the daily checkup
+                      ('instructions.' + index + '.answer'): !checkupMap['answer'],
+                      ('instructions.' + index + '.lastChecked'): DateTime.now(),
+                    });
                   },
                 ),
               ))
