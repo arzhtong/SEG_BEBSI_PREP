@@ -101,7 +101,7 @@ export default {
         .catch(error => console.log(err));
     },
     /*
-      This method Add an instruction as an element of the instructions array.
+      This method add an instruction as an element of the instructions array.
     */
     addInstruction() {
       const data = { value: "" };
