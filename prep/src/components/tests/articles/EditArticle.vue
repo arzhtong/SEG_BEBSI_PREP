@@ -123,7 +123,7 @@ export default {
                   .doc(this.article_id)
                   .update({
                     title: this.title,
-                    description: this.$refs.textEditor.htmlForEditor, 
+                    description: (this.$refs.textEditor.htmlForEditor === undefined ? '' : this.$refs.textEditor.htmlForEditor), 
                     editorImages: this.$refs.textEditor.images
                 })
                 .then(docRef => {

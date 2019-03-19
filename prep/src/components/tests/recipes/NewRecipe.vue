@@ -35,9 +35,9 @@
                         </div>
                         <button @click="addIngredient" class="btn green"> add ingredient</button>
                         <div class="row">
-                            <div v-for="ingredient in ingredients" :key="ingredient.id" class="input-field col s12">
-                                <input type="text" v-model="ingredient.value" required>
-                                <button class="btn red" @click="deleteIngredient(ingredients.indexOf(ingredient))"> remove ingredient</button>
+                            <div v-for="(ingredient, index) in ingredients" v-bind:key="index" class="input-field col s12">
+                                <input type="text" v-model="ingredients[index]" required>
+                                <button @click="deleteIngredient(index)" class="btn red" type="button">remove ingredient</button>
                             </div>
                         </div>
                         <div>
@@ -46,9 +46,9 @@
                         </div>
                         <button @click="addInstruction" class="btn green"> add instruction</button>
                         <div class="row">
-                            <div v-for="instruction in instructions" :key="instruction.id" class="input-field col s12">
-                                <input type="text" v-model="instruction.value" required>
-                                <button class="btn red" @click="deleteInstruction(instructions.indexOf(instruction))">{{instruction.id}} remove instruction</button>
+                            <div v-for="(instruction, index) in instructions" v-bind:key="index" class="input-field col s12">
+                                <input type="text" v-model="instructions[index]" required>
+                                <button @click="deleteInstruction(index)" class="btn red" type="button">remove instruction</button>
                             </div>
                         </div>
                     </div>
@@ -111,16 +111,14 @@ export default {
             if(this.validRecipe()) {
                 // get correctly formatted arrays before saving
                 var labels = this.getChips()
-                var ingredients = this.getValuesArray(this.ingredients)
-                var instructions = this.getValuesArray(this.instructions)
                 db.collection('tests')
                 .doc(this.$route.params.test_id)
                 .collection('recipes').add({
                     title: this.title,
                     subtitle: this.subtitle,
                     backgroundImage: this.imageURL,
-                    ingredients: ingredients,
-                    method: instructions,
+                    ingredients: this.ingredients,
+                    method: this.instructions,
                     labels: labels,
                     note: this.note,
                     type: this.type,

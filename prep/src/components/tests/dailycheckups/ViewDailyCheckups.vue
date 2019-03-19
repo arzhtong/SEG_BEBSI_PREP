@@ -19,7 +19,6 @@
                                <td>{{dailyCheckup.title}}</td>
                                <td>{{dailyCheckup.daysBeforeTest}}</td>
                                <td><router-link v-bind:to="{name: 'view-dailycheckups-info', params: {test_id: testID, daily_id:dailyCheckup.title}}" class="btn blue">Show</router-link></td>
-
                            </tr>
                           
                        </tbody>
@@ -41,8 +40,7 @@
         data() {
             return {
                 dailyCheckups: [],
-                testID: this.$route.params.test_id
-                
+                testID: this.$route.params.test_id              
             }
         },
        created () {

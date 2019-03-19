@@ -162,4 +162,8 @@ export default {
     height: 90px;
 }
 
+#editor {
+    width: 100%
+}
+
 </style>

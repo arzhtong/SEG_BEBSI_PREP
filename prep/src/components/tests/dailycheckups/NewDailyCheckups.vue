@@ -68,6 +68,11 @@ export default {
     };
   },
   methods: {
+    /*
+      This method creates an empty map which is inserted by the 
+      elements from the instructions array. Then assign this map
+      to daily checkup's instruction field.
+    */
     saveDailyCheckups() {
       var map = {};
       var lastChecked = firebase.firestore.Timestamp.fromDate(
@@ -95,10 +100,16 @@ export default {
         })
         .catch(error => console.log(err));
     },
+    /*
+      This method add an instruction as an element of the instructions array.
+    */
     addInstruction() {
       const data = { value: "" };
       this.instructions.push(data);
     },
+    /*
+      This method delete the instruction which added.
+    */
     deleteInstruction(index) {
       this.instructions.splice(index, 1);
     }
