@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:prep/screens/appointment.screen.dart';
 import 'package:prep/utils/query.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
-import 'package:prep/utils/help_screen.dart';
+import 'package:prep/widgets/dashboard/help_dialog.dart';
 
 class FaqParser extends StatelessWidget {
   final DateTime _appointmentDateTime;

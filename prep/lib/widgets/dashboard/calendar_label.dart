@@ -16,6 +16,10 @@ class CalendarLabel extends StatelessWidget {
   }
 
   String dateTimeFormatter(DateTime datetime) {
+    if (datetime == null) {
+      return "N/A";
+    }
+
     const List<String> months = [
       "January",
       "February",

@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:prep/utils/query.dart';
 import 'package:prep/widgets/list_parser/description_expansion_tile.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
-import 'package:prep/utils/help_screen.dart';
+import 'package:prep/widgets/dashboard/help_dialog.dart';
 
 class CategoryListParser extends StatelessWidget {
   final String _contents;
@@ -45,6 +45,8 @@ class CategoryListParser extends StatelessWidget {
   Widget _buildDropDownList(BuildContext context, DocumentSnapshot document) {
     List<Widget> dropDowns = new List();
     List<dynamic> mappedData = document['maps'];
+
+    print(document['maps']);
 
     mappedData.forEach((value) {
       dropDowns.add(DescriptiveExpansionTile(

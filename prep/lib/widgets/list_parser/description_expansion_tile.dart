@@ -6,10 +6,10 @@ class DescriptiveExpansionTile extends StatelessWidget {
   List<Widget> columnChildren;
   final List<dynamic> items;
 
-  DescriptiveExpansionTile(this.category,this.description,this.items){
+  DescriptiveExpansionTile(this.category, this.description, this.items) {
     columnChildren = new List();
 
-    if (description.isNotEmpty){
+    if (description.isNotEmpty) {
       columnChildren.add(
         Text(
           description,
@@ -26,24 +26,25 @@ class DescriptiveExpansionTile extends StatelessWidget {
       );
     }
 
-    columnChildren.add(
-        Text(
-          formatItemList(items),
-          style: TextStyle(
-            color: Colors.grey,
-          ),
-        )
-    );
+    columnChildren.add(Text(
+      formatItemList(items),
+      style: TextStyle(
+        color: Colors.grey,
+      ),
+    ));
   }
 
-  String formatItemList(List<dynamic> elementList){
+  String formatItemList(List<dynamic> elementList) {
     String rawItems = "";
 
-    elementList.forEach((value){
-      rawItems += value + " " "•" + " ";
-    });
+    if (items.isNotEmpty) {
+      elementList.forEach((value) {
+        rawItems += value + " " "•" + " ";
+      });
 
-    rawItems = rawItems.replaceRange(rawItems.length - 2, rawItems.length - 1,' ');
+      rawItems =
+          rawItems.replaceRange(rawItems.length - 2, rawItems.length - 1, ' ');
+    }
 
     return rawItems;
   }

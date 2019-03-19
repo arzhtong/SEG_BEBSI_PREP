@@ -33,6 +33,11 @@ void main() {
       "stringDate": "2 November 2024"
     });
 
+    dateTimeList.add({
+      "rawDate": null,
+      "stringDate": "N/A"
+    });
+
     dateTimeList.forEach((map) {
       test('Test ' + (dateTimeList.indexOf(map) + 1).toString(), () {
         expect(
