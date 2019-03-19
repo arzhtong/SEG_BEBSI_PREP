@@ -115,11 +115,15 @@ class _DailyCheckups extends State<DailyCheckups> {
                   onChanged: (_) {
                     if (checkupMap['answer']) {
                       // Removes the old entry from the list
-                      document.reference.updateData(
-                          {('instructions.' + index + '.answer'): false});
+                      document.reference.updateData({
+                        ('instructions.' + index + '.answer'): false,
+                        ('instructions.' + index + '.lastChecked'): DateTime.now(),
+                      });
                     } else {
-                      document.reference.updateData(
-                          {('instructions.' + index + '.answer'): true});
+                      document.reference.updateData({
+                        ('instructions.' + index + '.answer'): true,
+                        ('instructions.' + index + '.lastChecked'): DateTime.now(),
+                      });
                     }
                   },
                 ),
