@@ -1,6 +1,6 @@
 <template>
     <div id="edit-dailycheckups" style="background-color:white;padding: 10px 50px 10px 50px; margin-top:10px">
-        <h3>Edit Daily Check-ups</h3>
+       <h3>Edit Daily Check-ups</h3>
 
         <div class="row">
             <form @submit.prevent="updateDailyCheckups" class="col s12">
@@ -26,7 +26,7 @@
                </div>
 
 
-         <button @click="addInstruction" class="btn green"> Add instruction</button>
+                <button @click="addInstruction" class="btn green"> Add instruction</button>
                 <div class="row">
                     <div v-for="instruction in instructions" v-bind:key="instruction" class="input-field col s12">
                         <input type="text"  v-model="instruction.value" required>
@@ -36,13 +36,14 @@
                 </div>
 
        
-        <div class="row">
-          <div v-for="instr in allInstrArray.length" v-bind:key="instr" class="input-field col s12">
-            <span>Instruction</span>
-            <input type="text" v-model="allInstrArray[instr - 1]" required>   
-            <button @click="deleteInstruction(instr -1)" class="btn red">remove instruction</button>
-          </div>
-        </div>
+                <div class="row">
+                  <div v-for="instr in allInstrArray.length" v-bind:key="instr" class="input-field col s12">
+                    <span>Instruction</span>
+                    <input type="text" v-model="allInstrArray[instr - 1]" required>   
+                    <button @click="deleteInstruction(instr -1)" class="btn red">remove instruction</button>
+                  </div>
+                </div>
+
                 <button type="submit" class="btn">Submit</button>
                 <router-link v-bind:to="{name: 'view-dailycheckups-info', params: {test_id:test_id, daily_id:title}}" class="btn grey">
                   Cancel
@@ -50,8 +51,7 @@
                  
             </form>
        </div>
-                
-    </div>
+   </div>
 </template>
 
 <script>
@@ -86,10 +86,11 @@ export default {
             (this.description = doc.data().description),
             (this.daysBeforeTest = doc.data().daysBeforeTest),
             (this.title = doc.data().title);
-            
-             
+        
          for (const [key, value] of Object.entries(this.allInstr)) {
-               this.allInstrArray.push(value.question)    
+               //convert the elements in insturction field to a new array 
+               this.allInstrArray.push(value.question)   
+               //convert the last checked time to a new array
                this.timeArray.push(value.lastChecked)    
           }
            
@@ -115,25 +116,23 @@ export default {
       });
   },
   methods: {
+    /*
+    This method put all the elements in the array to the 
+    instruction map and update all the data in daily checkups.
+    */
     updateDailyCheckups() {
-  
-      // for (const [key, value] of Object.entries(this.allInstr)) {
-      //     for(const [k,v] of Object.entries(value)){
-      //      array.push(v.question)
-      //     }
-      // }
-      //  for (const prop of Object.keys(this.allInstr)) {
-      //    delete this.allInstr[prop];
-      // }
+       //delete all the elements in instructions.
        for (var member in this.allInstr) delete this.allInstr[member]
-
+       
+       //add the original elements to the instruction map 
        for(var i =0 ; i < this.allInstrArray.length; i++){
           this.allInstr[i]={answer:false,lastChecked:this.timeArray[i],question:this.allInstrArray[i]}                   
        }
-            
+       
+       //get the length of the instruction
        var l=Object.keys(this.allInstr).length
       
-      
+       //appending new element to the instruction map
        for(var i =l ; i < this.instructions.length+l; i++){
         this.allInstr[i]={answer:false,lastChecked:firebase.firestore.Timestamp.fromDate(new Date(Math.floor(Date.now()))),
          question:this.instructions[i-l].value}            
@@ -163,13 +162,22 @@ export default {
           });
         });
     },
+    /*
+      This method add an instruction as an element of the instructions array.
+    */
     addInstruction() {
        const data = {value: ''}
        this.instructions.push(data); 
     },
+    /*
+      This method delete the element in all instruction array.
+    */
     deleteInstruction(index) {
        this.allInstrArray.splice(index, 1);
     },
+    /*
+      This method delete the instruction which added.
+    */
     deleteAddedInstruction(index) {
        this.instructions.splice(index, 1);
     }

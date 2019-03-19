@@ -26,11 +26,11 @@
         <ul v-for="(value, key) in instructions" :key="key">
           <ol style="padding:10px;font-weight: bold;">Instruction {{key}}:</ol>
           <ol>Question: {{value.question}}</ol>
-          <ol>Last checked time: {{value.lastChecked.toDate().toISOString().split("T")[0]}}
+          <ol>Last checked time: 
+            {{value.lastChecked.toDate().toISOString().split("T")[0]}}
             {{value.lastChecked.toDate().toTimeString().split(" ")[0]}}
           </ol>
           <ol>Status: {{value.answer}} </ol>
-        
         </ul>
       </li>
 
@@ -92,6 +92,10 @@ export default {
     $route: "fetchData"
   },
   methods: {
+    /*
+      This method get fields' data from firestore and assign
+      it to the variables.
+    */
     fetchData() {
       db.collection("tests")
         .doc(this.$route.params.test_id)
@@ -108,6 +112,10 @@ export default {
           });
         });
     },
+    /*
+      This method is used for deleting the daily checkups and 
+      pops up an alert window for checking.
+    */
     deleteDailyCheckups() {
       if (confirm("Are you sure you want to delete this Daily Checkup?")) {
         db.collection("tests")
