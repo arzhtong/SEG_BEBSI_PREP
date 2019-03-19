@@ -5,7 +5,7 @@ import 'package:prep/screens/appointment_prep.screen.dart';
 import 'package:prep/screens/daily_checkups.screen.dart';
 import 'package:prep/screens/messaging.screen.dart';
 import 'package:prep/utils/query.dart';
-import 'package:prep/widgets/dashboard/help_screen.dart';
+import 'package:prep/widgets/dashboard/help_dialog.dart';
 
 class Appointment extends StatefulWidget {
   final int index;

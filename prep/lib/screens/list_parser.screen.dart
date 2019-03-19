@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:prep/utils/query.dart';
 import 'package:prep/widgets/list_parser/description_expansion_tile.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
-import 'package:prep/widgets/dashboard/help_screen.dart';
+import 'package:prep/widgets/dashboard/help_dialog.dart';
 
 class CategoryListParser extends StatelessWidget {
   final String _contents;
