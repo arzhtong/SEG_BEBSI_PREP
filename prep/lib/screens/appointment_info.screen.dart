@@ -33,22 +33,26 @@ class AppointmentInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: Queries.testSnapshots,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Align(
-              alignment: Alignment.topCenter,
-              child: LinearProgressIndicator(),
-            );
-          } else {
-            if (snapshot.data['description'].length > 0) {
-              return _buildListItem(context, snapshot.data);
-            } else {
-              return EmptyScreenPlaceholder("This article is empty", "");
-            }
-          }
-
-        });
+    return Column(
+      children: <Widget>[
+        Text("First element"),
+        StreamBuilder(
+            stream: Queries.testSnapshots,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Align(
+                  alignment: Alignment.topCenter,
+                  child: LinearProgressIndicator(),
+                );
+              } else {
+                if (snapshot.data['description'].length > 0) {
+                  return _buildListItem(context, snapshot.data);
+                } else {
+                  return EmptyScreenPlaceholder("This article is empty", "");
+                }
+              }
+            }),
+      ],
+    );
   }
 }
