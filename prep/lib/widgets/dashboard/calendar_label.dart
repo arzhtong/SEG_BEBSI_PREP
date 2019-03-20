@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:prep/utils/date_time_formatter.dart';
+
 class CalendarLabel extends StatelessWidget {
   final DateTime dateTime;
 
@@ -10,35 +12,8 @@ class CalendarLabel extends StatelessWidget {
     return Container(
         padding: EdgeInsets.only(left: 10.0, top: 5.0, bottom: 5.0),
         child: Text(
-          dateTimeFormatter(dateTime),
+          DateTimeFormatter.dateFormatter(dateTime),
           style: TextStyle(fontWeight: FontWeight.bold),
         ));
-  }
-
-  String dateTimeFormatter(DateTime datetime) {
-    if (datetime == null) {
-      return "N/A";
-    }
-
-    const List<String> months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
-    ];
-
-    String day = datetime.day.toString();
-    String month = months[datetime.month - 1];
-    String year = datetime.year.toString();
-
-    return day + " " + month + " " + year;
   }
 }

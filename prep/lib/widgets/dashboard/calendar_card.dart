@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:prep/screens/appointment.screen.dart';
+import 'package:prep/utils/date_time_formatter.dart';
 import 'package:prep/utils/query.dart';
+
 
 class CalendarCard extends StatelessWidget {
   final String name;
@@ -21,48 +23,6 @@ class CalendarCard extends StatelessWidget {
   CalendarCard(this.name, this.location, this.dateTime, this.testID,
       this.doctorName, this.testName) {
     this.color = colors[name.hashCode % 4];
-  }
-
-  String dateFormatter(DateTime datetime) {
-    if (datetime == null) {
-      return "N/A";
-    }
-
-    const List<String> months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
-    ];
-
-    String day = datetime.day.toString();
-    String month = months[datetime.month - 1];
-    String year = datetime.year.toString();
-
-    return day + " " + month + " " + year;
-  }
-
-  String timeFormatter(DateTime datetime) {
-    if (datetime == null) {
-      return "N/A";
-    }
-
-    String hour = (datetime.hour < 10)
-        ? "0" + datetime.hour.toString()
-        : datetime.hour.toString();
-    String minute = (datetime.minute < 10)
-        ? "0" + datetime.minute.toString()
-        : datetime.minute.toString();
-
-    return hour + " : " + minute;
   }
 
   Widget _informationRow(String label, String content) {
@@ -141,9 +101,9 @@ class CalendarCard extends StatelessWidget {
                               _informationRow("Location: ", location),
                               _informationRow("Staff member: ", doctorName),
                               _informationRow(
-                                  "Date: ", dateFormatter(dateTime)),
+                                  "Date: ", DateTimeFormatter.dateFormatter(dateTime)),
                               _informationRow(
-                                  "Time: ", timeFormatter(dateTime)),
+                                  "Time: ", DateTimeFormatter.timeFormatter(dateTime)),
                             ],
                           ),
                         ],

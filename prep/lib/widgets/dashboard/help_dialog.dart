@@ -9,12 +9,12 @@ class MakeHelpIcon extends StatelessWidget {
     return IconButton(
         icon: new Icon(Icons.help, color: Colors.indigo[50]),
         onPressed: () {
-          makeAlert(context, info);
+          _makeAlert(context, info);
         });
   }
 }
 
-void makeAlert(BuildContext context, String text) {
+void _makeAlert(BuildContext context, String text) {
   var alertDialog = AlertDialog(
     title: Text("Tip",
         textAlign: TextAlign.center, style: TextStyle(fontSize: 30.0)),
