@@ -1,34 +1,48 @@
 <template>
   <div id="edit-prep-list">
     <div class="fixed-action-btn">
-     <router-link
-          v-bind:to="{name: 'view-prep-list', params: {test_id: this.$route.params.test_id, contents: List}}"
-          class="btn-floating btn-large black"
-        ><i class="material-icons"> arrow_back</i></router-link>
-        </div>
+      <router-link
+        v-bind:to="{name: 'view-prep-list', params: {test_id: this.$route.params.test_id, contents: List}}"
+        class="btn-floating btn-large black"
+      >
+        <i class="material-icons">arrow_back</i>
+      </router-link>
+    </div>
     <h3>Edit Preperation List</h3>
-    <h4>{{title}}</h4>
     <div class="row">
       <form @submit.prevent="updatePrepList" class="col s12">
-         
+        <div class="row">
+          <div class="input-field col s12">
+            <span>title</span>
+            <input type="text" v-model="title" required>
+          </div>
+        </div>
         <div class="row">
           <!-- gets all the maps that already exist in the database -->
           <div v-for="data in allData" v-bind:key="data.id" class="input-field col s12">
             <span>name</span>
             <input type="text" v-model="data.name" required>
             <!-- gets a description if it is found in the database -->
-            <span v-if="data.description">description</span>
-            <input v-if="data.description" type="text" v-model="data.description" required>
+            <span >description</span>
+            <input type="text" v-model="data.description" >
             <!-- adds an item to the list in the database -->
             <button @click="addToOldList(data)" class="btn green">new item</button>
             <div v-for="item in data.list.length" v-bind:key="item" class="input-field col s12">
               <span>Item</span>
               <input type="text" v-model="data.list[item - 1]" required>
               <!-- removes item from list in database -->
-              <button type="button"  @click="deleteFromOldList(data, item - 1)" class="btn red">remove item</button>
+              <button
+                type="button"
+                @click="deleteFromOldList(data, item - 1)"
+                class="btn red"
+              >remove item</button>
             </div>
             <!-- removes map from database -->
-            <button type="button" @click="deleteOldMap(allData.indexOf(data))" class="btn red">remove List</button>
+            <button
+              type="button"
+              @click="deleteOldMap(allData.indexOf(data))"
+              class="btn red"
+            >remove List</button>
           </div>
           <!-- adds a new map to be added to the database -->
           <button @click="addMap" class="btn green">new List</button>
@@ -43,10 +57,18 @@
               <span>Item</span>
               <input type="text" v-model="map.list[item - 1]" required>
               <!-- remove item from the list in the new map -->
-              <button type="button" @click="deleteFromList(map, item - 1)" class="btn red">remove item</button>
+              <button
+                type="button"
+                @click="deleteFromList(map, item - 1)"
+                class="btn red"
+              >remove item</button>
             </div>
             <!-- remove newly added map -->
-            <button type="button" @click="deleteMap(allMaps.indexOf(map))" class="btn red">remove List</button>
+            <button
+              type="button"
+              @click="deleteMap(allMaps.indexOf(map))"
+              class="btn red"
+            >remove List</button>
           </div>
         </div>
         <button type="submit" class="btn">Submit</button>
@@ -56,7 +78,7 @@
           class="btn grey"
         >Cancel</router-link>
       </form>
-    </div>  
+    </div>
   </div>
 </template>
 
@@ -68,8 +90,8 @@ export default {
   data() {
     return {
       title: null,
-      allData: [],// maps from database
-      allMaps: [],// newly added maps
+      allData: [], // maps from database
+      allMaps: [], // newly added maps
       test_id: this.$route.params.test_id,
       List: this.$route.params.contents
     };
@@ -91,7 +113,6 @@ export default {
   methods: {
     updatePrepList() {
       if (this.allMaps.length > 0) {
-
         // adds the 2 arrays together to form the new set of maps and adds the new array to the database
         var theMaps = this.allData.concat(this.allMaps);
         //for (l in theMaps) alert("h")
@@ -101,38 +122,39 @@ export default {
           .doc(this.$route.params.contents)
           .set({
             maps: theMaps
-          })
-          .then(() => {
-            // reroutes to the list
-            alert('List edited!')
-            this.$router.push({
-              name: "view-prep-list",
-              params: {
-                test_id: this.$route.params.test_id,
-                contents: this.$route.params.contents
-              }
-            });
           });
       } else {
-
         db.collection("tests")
           .doc(this.$route.params.test_id)
           .collection("lists")
           .doc(this.$route.params.contents)
           .set({
             maps: this.allData
-          })
-          .then(() => {
-            alert('List edited!')
-            this.$router.push({
-              name: "view-prep-list",
-              params: {
-                test_id: this.$route.params.test_id,
-                contents: this.$route.params.contents
-              }
-            });
           });
       }
+      db.collection("tests")
+        .doc(this.$route.params.test_id)
+        .collection("prepCards")
+        .doc(this.$route.params.contents)
+        .get()
+        .then(doc => {
+          doc.ref
+            .update({
+              title: this.title,
+              contents: this.title
+            })
+            .then(() => {
+              // route back to list viewing page
+              alert("List edited!");
+              this.$router.push({
+                name: "view-prep-list",
+                params: {
+                  test_id: this.$route.params.test_id,
+                  contents: this.$route.params.contents
+                }
+              });
+            });
+        });
     },
     // adds a new map to the array
     addMap() {
@@ -158,7 +180,7 @@ export default {
     },
     // deletes an item from the list of the old map
     deleteFromOldList(newData, index) {
-      newData.list.splice(index, 1)
+      newData.list.splice(index, 1);
     },
     // deletes a map from the array in the database
     deleteOldMap(index) {
@@ -176,7 +198,7 @@ export default {
         .doc(this.$route.params.contents)
         .get()
         .then(doc => {
-            this.title = doc.data().contents;
+          this.title = doc.data().contents;
         });
     }
   }
