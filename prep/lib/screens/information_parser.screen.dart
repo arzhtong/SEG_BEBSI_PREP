@@ -7,10 +7,10 @@ import 'package:prep/utils/query.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 
 class InformationParser extends StatelessWidget {
-  final String _documentName;
-  final String _categoryName;
+  final String _documentId;
+  final String _articleName;
 
-  InformationParser(this._documentName, this._categoryName);
+  InformationParser(this._documentId, this._articleName);
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
     return Container(
@@ -42,10 +42,10 @@ class InformationParser extends StatelessWidget {
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         backgroundColor: Colors.indigo,
-        title: Text(_categoryName),
+        title: Text(_articleName),
       ),
       body: StreamBuilder(
-          stream: Queries.informationSnapshots(_documentName),
+          stream: Queries.informationSnapshots(_documentId),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const Align(
@@ -53,7 +53,8 @@ class InformationParser extends StatelessWidget {
                 child: LinearProgressIndicator(),
               );
             } else {
-              if (snapshot.data['description'] != null && snapshot.data['description'].length > 0) {
+              if (snapshot.data['description'] != null &&
+                  snapshot.data['description'].length > 0) {
                 return _buildListItem(context, snapshot.data);
               } else {
                 return EmptyScreenPlaceholder("This article is empty", "");

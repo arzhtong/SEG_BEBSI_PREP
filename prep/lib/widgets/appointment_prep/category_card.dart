@@ -6,11 +6,11 @@ import 'package:prep/screens/list_parser.screen.dart';
 import 'package:prep/screens/faq_parser.screen.dart';
 
 class CategoryCard extends StatelessWidget {
-  final String contents;
+  final String documentID;
   final String title;
   final String type;
 
-  CategoryCard(this.contents,
+  CategoryCard(this.documentID,
       this.title,
       this.type);
 
@@ -18,10 +18,10 @@ class CategoryCard extends StatelessWidget {
     switch (type) {
       case "article":
         return Navigator.push(context, MaterialPageRoute(builder:
-            (context) => InformationParser(contents, title)));
+            (context) => InformationParser(documentID, title)));
       case "categoryList":
         return Navigator.push(context, MaterialPageRoute(builder:
-            (context) => CategoryListParser(contents, title)));
+            (context) => CategoryListParser(documentID, title)));
       case "recipe":
         return Navigator.push(context,
             MaterialPageRoute(builder: (context) => RecipeListScreen()));
