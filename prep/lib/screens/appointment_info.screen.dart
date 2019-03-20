@@ -52,7 +52,10 @@ class AppointmentInfo extends StatelessWidget {
                     snapshot.data['description'].length > 0) {
                   return _buildListItem(context, snapshot.data);
                 } else {
-                  return EmptyScreenPlaceholder("This article is empty", "");
+                  return Container(
+                    padding: EdgeInsets.only(top: 50.0),
+                    child: EmptyScreenPlaceholder("This article contains no more information", "")
+                  );
                 }
               }
             }),
