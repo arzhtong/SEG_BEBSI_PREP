@@ -62,7 +62,8 @@ export default {
   name: "edit-dailycheckups",
   data() {
     return {
-      title: null,
+      title: '',
+      daily_id:'',
       timeArray:[],
       allInstr: [],
       allInstrArray:[],
@@ -96,7 +97,7 @@ export default {
            
         })
       })
-     
+     this.title=this.$route.params.daily_id
   },
   beforeRouteEnter(to, from, next) {
     db.collection("tests")

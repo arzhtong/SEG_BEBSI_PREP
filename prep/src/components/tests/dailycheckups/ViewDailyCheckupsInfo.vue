@@ -36,7 +36,7 @@
 
       <li class="collection-item">
         <router-link
-          v-bind:to="{name: 'edit-dailycheckups', params: {test_id: test_id, daily_id:title}}"
+          v-bind:to="{name: 'edit-dailycheckups', params: {test_id: test_id, daily_id:this.title}}"
           class="btn green"
         >Edit</router-link>
 
@@ -62,13 +62,17 @@ export default {
   name: "view-dailycheckups-info",
   data() {
     return {
-      title: null,
+      daily_id:'',
+      title: '',
       instructions: [],
       description: null,
       daysBeforeTest: null,
       code: null,
       test_id: this.$route.params.test_id
     };
+  },
+  created(){
+    this.title=this.$route.params.daily_id
   },
   beforeRouteEnter(to, from, next) {
     db.collection("tests")
@@ -104,13 +108,16 @@ export default {
         .get()
         .then(querySnapshot => {
           querySnapshot.forEach(doc => {
+
             this.code = doc.id;
             this.title = doc.data().title;
             this.instructions = doc.data().instructions;
             this.description = doc.data().description;
             this.daysBeforeTest = doc.data().daysBeforeTest;
-          });
-        });
+          })
+        })
+       
+
     },
     /*
       This method is used for deleting the daily checkups and 
