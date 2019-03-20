@@ -12,6 +12,8 @@ class FaqParser extends StatelessWidget {
   FaqParser(this._appointmentDateTime);
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
+    print("DOCUMENT ID DOCUMENT ID DOCUMENT IDDOCUMENT ID");
+    print(document.documentID);
     return Container(
       padding: EdgeInsets.only(right: 10.0, left: 10.0, bottom: 5.0),
       child: Card(
@@ -67,7 +69,8 @@ class FaqParser extends StatelessWidget {
         title: Text("FAQ"),
       ),
       body: StreamBuilder(
-        stream: Queries.faqSnapshots,
+        //stream: Queries.faqSnapshots,
+        stream: Firestore.instance.collection('tests').document(Queries.testID).collection('prepCards').where('type', isEqualTo: 'faqs').getDocuments().asStream(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Align(

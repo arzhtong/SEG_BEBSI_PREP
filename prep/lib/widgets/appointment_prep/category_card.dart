@@ -26,7 +26,7 @@ class CategoryCard extends StatelessWidget {
       case "categoryList":
         return Navigator.push(context, MaterialPageRoute(builder:
             (context) => CategoryListParser(contents, title)));
-      case "recipeView":
+      case "recipe":
         return Navigator.push(context,
             MaterialPageRoute(builder: (context) => RecipeListScreen()));
       default:
@@ -73,11 +73,11 @@ class CategoryCard extends StatelessWidget {
 
   String _getCategory(){
     switch (type) {
-      case "informations":
-        return "Info";
+      case "article":
+        return "Article";
       case "categoryList":
         return "List";
-      case "recipeView":
+      case "recipe":
         return "Recipe";
       default:
         return "FAQ";
@@ -86,35 +86,38 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: color,
-      elevation: 3.0,
-      child: InkWell(
-          onTap: () {
-            _navigate(context);
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              ListTile(
-                title: Text(
-                  _getCategory(),
-                  style: TextStyle(
-                      color: Colors.grey[400],
-                      fontStyle: FontStyle.italic
+    return Container(
+      padding: EdgeInsets.all(2.5),
+      child: Card(
+        color: color,
+        elevation: 3.0,
+        child: InkWell(
+            onTap: () {
+              _navigate(context);
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                ListTile(
+                  title: Text(
+                    _getCategory(),
+                    style: TextStyle(
+                        color: Colors.grey[400],
+                        fontStyle: FontStyle.italic
+                    ),
+                  ),
+                  leading: _getIcon(),
+                ),
+                ListTile(
+                  title: Text(
+                    title,
+                    //maxLines: 3,
                   ),
                 ),
-                leading: _getIcon(),
-              ),
-              ListTile(
-                title: Text(
-                  title,
-                  //maxLines: 3,
-                ),
-              ),
-            ],
-          )
+              ],
+            )
+        ),
       ),
     );
   }
