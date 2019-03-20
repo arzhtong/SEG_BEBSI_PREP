@@ -23,8 +23,8 @@
             <span>name</span>
             <input type="text" v-model="data.name" required>
             <!-- gets a description if it is found in the database -->
-            <span v-if="data.description">description</span>
-            <input v-if="data.description" type="text" v-model="data.description" required>
+            <span >description</span>
+            <input type="text" v-model="data.description" >
             <!-- adds an item to the list in the database -->
             <button @click="addToOldList(data)" class="btn green">new item</button>
             <div v-for="item in data.list.length" v-bind:key="item" class="input-field col s12">
