@@ -164,11 +164,11 @@
 </template>
 
 <script>
-import { appointmentMixin } from "../../mixins/appointmentMixin";
+import { viewAppointmentsMixin } from "../../mixins/view_appointmentsMixin.js";
 export default {
   name: "view-appointments",
   props: ["past"],
-  mixins: [appointmentMixin],
+  mixins: [viewAppointmentsMixin],
   created() {
     this.setDate();
     this.loadUser();
