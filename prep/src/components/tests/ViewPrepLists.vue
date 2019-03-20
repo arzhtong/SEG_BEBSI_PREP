@@ -59,26 +59,20 @@ export default {
     };
   },
   created() {
-    db.collection("tests")
-      .doc(this.$route.params.test_id)
-      .collection("lists")
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          db.collection("tests")
+      db.collection("tests")
             .doc(this.$route.params.test_id)
             .collection("prepCards")
-            .doc(doc.id)
+            .where("type", "==", "categoryList")
             .get()
-            .then(doc2 => {
+            .then(querySnapshot => {
+            querySnapshot.forEach(doc => {
               const data = {
                 id: doc.id, // the document id in the database
-                title: doc2.data().title
+                title: doc.data().title
               };
               this.lists.push(data);
             });
-        });
-      });
+            })
   }
 };
 </script>

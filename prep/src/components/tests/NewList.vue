@@ -71,19 +71,6 @@ export default {
       category: "categoryList"
     };
   },
-  created() {
-    db.collection("tests")
-      .doc(this.$route.params.test_id)
-      .collection("prepCards")
-      .doc(this.$route.params.contents)
-      .get()
-      .then(doc => {
-        // gets all the maps and pushes them seperately into an array
-        doc.data().maps.forEach(map => {
-          this.maps.push(map);
-        });
-      });
-  },
   methods: {
     createPrepCard() {
       db.collection("tests")
@@ -92,12 +79,18 @@ export default {
         .add({
           title: this.title,
           contents: this.title,
-          type: this.category
+          type: this.category,
+          maps: this.allMaps
         })
+        // reroutes to all the lists
         .then(docRef => {
-          this.prepCardID = docRef.id;
-          this.$nextTick(() => this.saveList());
-        });
+          alert("List added!");
+          this.$router.push({
+            name: "view-prep-lists",
+            params: { test_id: this.$route.params.test_id }
+          });
+        })
+        .catch(error => console.log(err));
     },
     // adds a new map to the array
     addMap() {
@@ -120,26 +113,6 @@ export default {
     deleteMap(index) {
       this.allMaps.splice(index, 1);
     },
-    saveList() {
-      // makes a new document in the list collection in the database
-      db.collection("tests")
-        .doc(this.$route.params.test_id)
-        .collection("lists")
-        .doc(this.prepCardID)
-        .set({
-          maps: this.allMaps
-        })
-
-        // reroutes to all the lists
-        .then(docRef => {
-          alert("List added!");
-          this.$router.push({
-            name: "view-prep-lists",
-            params: { test_id: this.$route.params.test_id }
-          });
-        })
-        .catch(error => console.log(err));
-    }
   }
 };
 </script>

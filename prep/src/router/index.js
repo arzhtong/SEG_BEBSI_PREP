@@ -276,7 +276,7 @@ let router = new Router({
       }
     },
     {
-      path: '/edit-prep-list/:test_id/',
+      path: '/edit-prep-list/:test_id/:contents',
       name: 'edit-prep-list',
       component: EditPrepList,
       meta: {

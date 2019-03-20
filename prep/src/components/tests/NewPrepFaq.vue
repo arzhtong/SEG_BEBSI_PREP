@@ -72,10 +72,13 @@ export default {
       if (document.getElementById("informationCheck").checked) {
         this.informationShortcut = true;
       }
+
       db.collection("tests")
         .doc(this.$route.params.test_id)
-        .collection("faqs")
+        .collection("prepCards")
         .add({
+          title: "Frequently Asked Questions",
+          type: "faqs",
           question: this.question,
           answer: this.answer,
           chatShortcut: this.chatShortcut,

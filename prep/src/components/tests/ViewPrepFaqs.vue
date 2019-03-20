@@ -76,7 +76,8 @@ export default {
   created() {
     db.collection("tests")
       .doc(this.$route.params.test_id)
-      .collection("faqs")
+      .collection("prepCards")
+      .where("type", "==", "faqs")
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
@@ -97,21 +98,20 @@ export default {
   methods: {
       // delete an faq from the database
     deleteFAQ(id) {
+      alert(id)
       if (confirm("Are you sure?")) {
         db.collection("tests")
           .doc(this.$route.params.test_id)
-          .collection("faqs")
+          .collection("prepCards")
           .doc(id)
-          .get()
-          .then(doc => {
-            doc.ref.delete();
-          })
-          .then(() => {
+          .delete()
+           .then(() => {
               // refresh page
               alert('FAQ deleted')
             console.log("FAQ successfully deleted!");
             location.reload();
           });
+         
       }
     }
   }

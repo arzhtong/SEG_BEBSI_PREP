@@ -79,7 +79,7 @@ export default {
   beforeRouteEnter(to, from, next) {
     db.collection("tests")
       .doc(to.params.test_id)
-      .collection("faqs")
+      .collection("prepCards")
       .doc(to.params.faq_id)
       .get()
       .then(doc => {
@@ -103,7 +103,7 @@ export default {
       // updates the fields in the database
       db.collection("tests")
         .doc(this.$route.params.test_id)
-        .collection("faqs")
+        .collection("prepCards")
         .doc(this.$route.params.faq_id)
         .get()
         .then(doc => {
