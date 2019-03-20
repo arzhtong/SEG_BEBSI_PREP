@@ -72,6 +72,7 @@ export default {
       if (document.getElementById("informationCheck").checked) {
         this.informationShortcut = true;
       }
+
       db.collection("tests")
         .doc(this.$route.params.test_id)
         .collection("faqs")
