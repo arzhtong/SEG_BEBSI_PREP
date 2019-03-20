@@ -7,12 +7,8 @@ import 'package:prep/widgets/faq_parser/faq_expansion_tile.dart';
 
 class FaqParser extends StatelessWidget {
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
-    if (document['type'] == 'faqs') {
-      return FaqExpansionTIle(document['question'], document['answer'],
-          document['chatShortcut'], document['informationShortcut']);
-    } else {
-      return Container();
-    }
+    return FaqExpansionTIle(document['question'], document['answer'],
+        document['chatShortcut'], document['informationShortcut']);
   }
 
   @override
@@ -27,7 +23,7 @@ class FaqParser extends StatelessWidget {
         stream: Firestore.instance
             .collection('tests')
             .document(Queries.testID)
-            .collection('prepCards')
+            .collection('prepCards').where('type', isEqualTo: 'faqs')
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
