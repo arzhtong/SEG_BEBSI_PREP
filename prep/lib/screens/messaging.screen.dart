@@ -244,7 +244,9 @@ class _MessageListItem extends StatelessWidget {
 
     return Row(
       mainAxisAlignment: rowAlignment,
-      children: [statuslineTimestamp],
+      children: <Widget>[
+        statuslineTimestamp,
+      ],
     );
   }
 
