@@ -99,16 +99,16 @@ export default {
   created() {
     db.collection("tests")
       .doc(this.$route.params.test_id)
-      .collection("lists")
+      .collection("prepCards")
       .doc(this.$route.params.contents)
       .get()
       .then(doc => {
         doc.data().maps.forEach(map => {
           this.allData.push(map);
         });
+        this.title = doc.data().title
       });
     // gets the title of the list
-    this.getTitle();
   },
   methods: {
     updatePrepList() {
@@ -118,32 +118,14 @@ export default {
         //for (l in theMaps) alert("h")
         db.collection("tests")
           .doc(this.$route.params.test_id)
-          .collection("lists")
+          .collection("prepCards")
           .doc(this.$route.params.contents)
           .set({
-            maps: theMaps
-          });
-      } else {
-        db.collection("tests")
-          .doc(this.$route.params.test_id)
-          .collection("lists")
-          .doc(this.$route.params.contents)
-          .set({
-            maps: this.allData
-          });
-      }
-      db.collection("tests")
-        .doc(this.$route.params.test_id)
-        .collection("prepCards")
-        .doc(this.$route.params.contents)
-        .get()
-        .then(doc => {
-          doc.ref
-            .update({
-              title: this.title,
-              contents: this.title
-            })
-            .then(() => {
+            maps: theMaps,
+            title: this.title,
+            contents: this.title,
+            type: "categoryList"
+          }).then(() => {
               // route back to list viewing page
               alert("List edited!");
               this.$router.push({
@@ -154,7 +136,28 @@ export default {
                 }
               });
             });
-        });
+      } else {
+        db.collection("tests")
+          .doc(this.$route.params.test_id)
+          .collection("prepCards")
+          .doc(this.$route.params.contents)
+          .set({
+            maps: this.allData,
+            title: this.title,
+            contents: this.title,
+            type: "categoryList"
+          }).then(() => {
+              // route back to list viewing page
+              alert("List edited!");
+              this.$router.push({
+                name: "view-prep-list",
+                params: {
+                  test_id: this.$route.params.test_id,
+                  contents: this.$route.params.contents
+                }
+              });
+            });
+      }
     },
     // adds a new map to the array
     addMap() {
@@ -190,17 +193,6 @@ export default {
     deleteMap(index) {
       this.allMaps.splice(index, 1);
     },
-    // gets title of the list from the database
-    getTitle() {
-      db.collection("tests")
-        .doc(this.$route.params.test_id)
-        .collection("prepCards")
-        .doc(this.$route.params.contents)
-        .get()
-        .then(doc => {
-          this.title = doc.data().contents;
-        });
-    }
   }
 };
 </script>
