@@ -23,7 +23,10 @@
           <tr>
             <td style="padding: 20px;">
               {{user.role}}
-              <i class="material-icons" v-if="user.email == currentEmail">accessibility_new</i>
+              <i
+                class="material-icons"
+                v-if="user.email == currentEmail"
+              >accessibility_new</i>
             </td>
             <td>{{user.email}}</td>
             <td>{{user.name}}</td>
@@ -31,7 +34,8 @@
             <td>
               <router-link
                 v-bind:to="{name: 'edit-staff', params: {email: user.email}}"
-                class="secondary-content left">
+                class="secondary-content left"
+              >
                 <button
                   v-if="user.email == currentEmail || user.role != 'Admin'"
                   class="btn blue"
@@ -55,82 +59,19 @@
 </template>
 
 <script>
-import db from "../firebaseInit";
-import firebase from "firebase";
+import { userMixin } from "../../mixins/userMixin";
 
 export default {
   name: "view-staff",
+  mixins: [userMixin],
   data() {
-    return {
-      users: [],
-      isAdmin: null,
-      currentEmail: null
-    };
+    return {};
   },
   created() {
-    /*
-      Get the information specifically for the
-      currently logged in user.
-    */
-    if (firebase.auth().currentUser) {
-      db.collection("users")
-        .where("email", "==", firebase.auth().currentUser.email)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(user => {
-            this.isAdmin = user.data().role;
-            this.currentEmail = user.data().email;
-          });
-        });
-    }
-    /*
-      Get the information for all users in the firestore.
-    */
-    db.collection("users")
-      .where("email", "<", "\uf8ff")
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(user => {
-          const data = {
-            email: user.data().email,
-            name: user.data().name,
-            dept: user.data().dept,
-            role: user.data().role
-          };
-          this.users.push(data);
-        });
-      });
+    this.getLoggedInUser();
+    this.getUsersInfo();
   },
-  methods: {
-    /*
-      This method deletes the clicked user
-      from firestore and removes it from the user table.
-    */
-    deleteUser(userEmail) {
-      if (confirm(`Are you sure you want to delete user ${userEmail}`)) {
-        db.collection("users")
-          .where("email", "==", userEmail)
-          .get()
-          .then(querySnapshot => {
-            querySnapshot.forEach(doc => {
-              doc.ref
-                .delete()
-                .then(() => {
-                  console.log("Document successfully deleted!");
-                  alert(`Successfully deleted user ${userEmail}`);
-                  location.reload();
-                })
-                .catch(function(error) {
-                  console.error("Error removing document: ", error);
-                  alert(`There was an error: ${error}`);
-                });
-            });
-          });
-      }
-    }
-  }
+  methods: {}
 };
 </script>
 
-<style>
-</style>
