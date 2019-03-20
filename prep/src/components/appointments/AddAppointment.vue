@@ -39,7 +39,6 @@
             <div class="input-field col s12">
               <span>Location</span>
               <input type="text" v-model="location" required>
-              
             </div>
           </div>
           <div class="row">
@@ -72,149 +71,16 @@
 
 
 <script>
-import db from "../firebaseInit";
-import firebase from "firebase";
+import { appointmentMixin } from "../../mixins/appointmentMixin";
 
 export default {
   name: "add-appointment",
-  data() {
-    return {
-      date: "",
-      time: "",
-      location: null,
-      staffMember: null,
-      testID: null,
-      currentUser: firebase.auth().currentUser.email,
-      code: null,
-      tests: [],
-      doctor: "",
-      testName: ""
-    };
-  },
+  mixins: [appointmentMixin],
   created() {
     this.checkIfCodeExists();
     this.getDocId();
     // Get all the information from tests collection
-    db.collection("tests")
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(test => {
-          const data = {
-            testID: test.id,
-            title: test.data().title,
-            type: test.data().type
-          };
-          this.tests.push(data);
-        });
-      });
-  },
-  methods: {
-    /*
-      This method checks if the generated code
-      exists in firestore. It also calls the method
-      that generates the code.
-    */
-    checkIfCodeExists() {
-      this.generateCode().then(foc => {
-        if (foc == true) { // recursively generate a new code
-          document.getElementById("mainScreen").style.display = "none";
-          this.checkIfCodeExists();
-        } else { // hide loader and show main screen
-          document.getElementById("el").classList.remove("active");
-          document.getElementById("loader").style.display = "none";
-          document.getElementById("mainScreen").style.display = null;
-        }
-      });
-    },
-    /*
-      This method generates a random code of length 9
-      and puts it as the doc id in the appointments' collection.
-
-      @return Promise
-    */
-    generateCode() {
-      var ID = Math.random()
-        .toString(36)
-        .substr(2, 9);
-
-      var docRef = db.collection("appointments").doc(ID);
-      return docRef
-        .get()
-        .then(doc => {
-          if (doc.exists) {
-            return true;
-          } else {
-            this.code = ID;
-            return false;
-          }
-        })
-        .catch(function(error) {
-          alert(error);
-        });
-    },
-    /*
-      This method creates a new appointment and
-      sets each field. 
-    */
-    saveAppointment() {
-      db.collection("appointments")
-        .doc(this.code)
-        .set({
-          datetime: firebase.firestore.Timestamp.fromDate(
-            new Date(Date.parse(this.date + "T" + this.time + "Z"))
-          ),
-          location: this.location,
-          staffMember: this.staffMember,
-          testID: this.testID.testID,
-          expired: false,
-          doctor: this.doctor,
-          testName: this.testID.title
-        })
-        .then(docRef => {
-          this.addDailyCheckups();
-          alert("Successfully created new appointment with code " + this.code + " !");
-          this.$router.push("/view-appointments");
-        })
-        .catch(error => console.log(err));
-    },
-    /*
-      This method gets the dailyCheckup collection
-      from tests and adds it to the newly created appointment.
-    */
-    addDailyCheckups() {
-      db.collection("tests")
-        .doc(this.testID.testID)
-        .collection("dailyCheckups")
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            db.collection("appointments")
-              .doc(this.code)
-              .collection("dailyCheckups")
-              .add(doc.data())
-              .then(docRef => {
-                console.log("Added dailyCheckup");
-              })
-              .catch(error => console.log(err));
-          });
-        });
-    },
-    /*
-      This method gets the document id of
-      the currently logged in person.
-    */
-    getDocId() {
-      db.collection("users")
-        .where("email", "==", this.currentUser)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            this.staffMember = doc.id;
-            this.doctor = doc.data().name;
-            return;
-          });
-        });
-    }
+    this.getTests();
   }
 };
 </script>
