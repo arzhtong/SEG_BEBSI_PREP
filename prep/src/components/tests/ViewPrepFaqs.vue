@@ -76,7 +76,8 @@ export default {
   created() {
     db.collection("tests")
       .doc(this.$route.params.test_id)
-      .collection("faqs")
+      .collection("prepCards")
+      .where("type", "==", "faqs")
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
@@ -101,7 +102,7 @@ export default {
       if (confirm("Are you sure?")) {
         db.collection("tests")
           .doc(this.$route.params.test_id)
-          .collection("faqs")
+          .collection("prepCards")
           .doc(id)
           .delete()
            .then(() => {
