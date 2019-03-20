@@ -93,6 +93,7 @@ export default {
             this.uploading = true
             this.deleteImages()
             this.uploading = false
+            // optional emit of editor data, uncomment if required
             // this.$emit('editorData', [this.htmlForEditor, this.images])
         },
         deleteImages() {

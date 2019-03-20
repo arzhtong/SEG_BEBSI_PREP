@@ -26,9 +26,11 @@
                 <tbody v-for="article in articles" v-bind:key="article.id" class="collection-item" >
                     <tr>
                         <td style="padding: 20px;">{{article.title}}</td>
-                        <td class="right"><router-link 
-                        v-bind:to="{name: 'edit-article', params: {test_id: test_id, article_id: article.id, test_title: test_title}}"
-                        class="btn blue">Show/edit</router-link></td>
+                        <td class="right">
+                            <router-link 
+                            v-bind:to="{name: 'edit-article', params: {test_id: test_id, article_id: article.id, test_title: test_title}}"
+                            class="btn blue">Show/edit</router-link>
+                        </td>
                         <td>
                             <a class="tooltip">
                                 <span class="tooltiptext">Delete Article</span>
@@ -62,46 +64,47 @@ export default {
     data() {
         return {
             articles: [],
-            test_id: '',
-            test_title: ''
+            test_id: this.$route.params.test_id,
+            test_title: this.$route.params.title
         }
     },
     created() {
         db.collection('tests')
           .doc(this.$route.params.test_id)
-          .collection('articles')
+          .collection('prepCards')
           .get()
           .then(querySnapshot => {
             querySnapshot.forEach(doc => {
-                const article = {
-                    id: doc.id,
-                    title: doc.data().title
-                };
-                this.articles.push(article)
+                if(doc.data().type === 'article') {
+                    const article = {
+                        id: doc.id,
+                        title: doc.data().title
+                    }
+                    this.articles.push(article)
+                }
             })
           })
-        this.test_id = this.$route.params.test_id
-        this.test_title = this.$route.params.title
     },
     methods: {
         editArticle() {
             this.$router.push({name: 'edit-article', params: {test_id: this.test_id, article_id: article.id, test_title: this.test_title}})
         },
         deleteArticle(id) {
+            // delete the article from prepcards
             db.collection('tests')
-              .doc(this.$route.params.test_id)
-              .collection('articles')
-              .doc(id)
-              .delete()
-              .then(() => {
-                console.log("Document successfully deleted!");
-                alert(`Successfully deleted Article`);
-                location.reload();
-              })
-              .catch(function(error) {
-                console.error("Error removing document: ", error);
-                alert(`There was an error: ${error}`);
-              });
+            .doc(this.$route.params.test_id)
+            .collection('prepCards')
+            .doc(id)
+            .delete()
+            .then(() => {
+                this.articles.splice(id, 1)
+                console.log("Document successfully deleted!")
+                alert(`Successfully deleted Article`)
+            })
+            .catch((error) => {
+                console.error("Error removing document: ", error)
+                alert(`There was an error: ${error}`)
+            })
         }
     }
 }
