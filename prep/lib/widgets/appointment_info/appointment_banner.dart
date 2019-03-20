@@ -5,23 +5,35 @@ import 'package:prep/utils/date_time_formatter.dart';
 class AppointmentDetailsBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Card(
+      elevation: 3.0,
       color: Queries.color,
-      padding: EdgeInsets.all(10.0),
-      alignment: Alignment.centerLeft,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          _TitleText("Date"),
-          _SubtitleText(DateTimeFormatter.dateFormatter(Queries.dateTime)),
-          _TitleText("Time"),
-          _SubtitleText("I'm subtitle text"),
-          _TitleText("Location"),
-          _SubtitleText("I'm subtitle text"),
-          _TitleText("Staff member"),
-          _SubtitleText("I'm subtitle text"),
-        ],
+      child: Container(
+        padding: EdgeInsets.all(10.0),
+        alignment: Alignment.centerLeft,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            _TitleText("Date"),
+            _SubtitleText(DateTimeFormatter.dateFormatter(Queries.dateTime)),
+            Divider(
+              color: Colors.white,
+            ),
+            _TitleText("Time"),
+            _SubtitleText(DateTimeFormatter.timeFormatter(Queries.dateTime)),
+            Divider(
+              color: Colors.white,
+            ),
+            _TitleText("Location"),
+            _SubtitleText(Queries.location),
+            Divider(
+              color: Colors.white,
+            ),
+            _TitleText("Staff member"),
+            _SubtitleText(Queries.doctorName),
+          ],
+        ),
       ),
     );
   }
@@ -39,6 +51,8 @@ class _TitleText extends StatelessWidget {
         text,
         style: TextStyle(
           fontSize: 20.0,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
         ),
       ),
     );
@@ -57,7 +71,8 @@ class _SubtitleText extends StatelessWidget {
         text,
         style: TextStyle(
           fontSize: 20.0,
-          fontWeight: FontWeight.w300
+          fontWeight: FontWeight.w300,
+          color: Colors.white,
         ),
       ),
     );
