@@ -71,19 +71,6 @@ export default {
       category: "categoryList"
     };
   },
-  created() {
-    db.collection("tests")
-      .doc(this.$route.params.test_id)
-      .collection("prepCards")
-      .doc(this.$route.params.contents)
-      .get()
-      .then(doc => {
-        // gets all the maps and pushes them seperately into an array
-        doc.data().maps.forEach(map => {
-          this.maps.push(map);
-        });
-      });
-  },
   methods: {
     createPrepCard() {
       db.collection("tests")

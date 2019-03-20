@@ -57,7 +57,7 @@ export default {
   created() {
     db.collection("tests")
       .doc(this.$route.params.test_id)
-      .collection("lists")
+      .collection("prepCards")
       .doc(this.$route.params.contents)
       .get()
       .then(doc => {
@@ -65,16 +65,8 @@ export default {
           doc.data().maps.forEach(map => {
             this.maps.push(map);
           })
+          this.title = doc.data().title
       });
-
-         db.collection("tests")
-            .doc(this.$route.params.test_id)
-            .collection("prepCards")
-            .doc(this.$route.params.contents)
-            .get()
-            .then(doc => {
-              this.title = doc.data().title
-            });
   },
   methods: {
     // deletes the list from the database as well as its card
@@ -84,23 +76,15 @@ export default {
           .doc(this.$route.params.test_id)
           .collection("prepCards")
           .doc(this.$route.params.contents)
-          .get()
+          .delete()
           .then(doc => {
-              doc.ref.delete();
-          });
-        db.collection("tests")
-          .doc(this.$route.params.test_id)
-          .collection("lists")
-          .doc(this.$route.params.contents)
-          .get()
-          .then(doc => {
-            doc.ref.delete();
             alert('List deleted!')
             this.$router.push({
               name: "view-prep-lists",
               params: { test_id: this.$route.params.test_id }
             });
           });
+          
       }
     }
   }
