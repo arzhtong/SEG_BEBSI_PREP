@@ -38,86 +38,22 @@
 </template>
 
 <script>
-import db from "../firebaseInit";
+import { userMixin } from "../../mixins/userMixin";
+
 export default {
   name: "edit-staff",
-  data() {
-    return {
-      email: null,
-      name: null,
-      dept: null,
-      role: null
-    };
-  },
-  /*
-    This method is executed before page load,
-    in order to fill all the fields with the
-    needed user information.
-  */
-  beforeRouteEnter(to, from, next) {
-    db.collection("users")
-      .where("email", "==", to.params.email)
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          next(vm => {
-            vm.email = doc.data().email;
-            vm.name = doc.data().name;
-            vm.dept = doc.data().dept;
-            vm.role = doc.data().role;
-          });
-        });
-      });
+  mixins: [userMixin],
+  created(){
+    this.preloadFields();
   },
   watch: {
     $route: "fetchData"
-  },
-  methods: {
-    /*
-      This method gets the currently clicked user information.
-    */
-    fetchData() {
-      db.collection("users")
-        .where("email", "==", this.$route.params.email)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            this.email = doc.data().employee_id;
-            this.name = doc.data().name;
-            this.dept = doc.data().dept;
-            this.role = doc.data().role;
-          });
-        });
-    },
-    /*
-      This method updates the user information on
-      firestore.
-    */
-    updateUser() {
-      db.collection("users")
-        .where("email", "==", this.$route.params.email)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            doc.ref
-              .update({
-                email: this.email,
-                name: this.name,
-                dept: this.dept,
-                role: this.role
-              })
-              .then(() => {
-                alert('User info updated!')
-                this.$router.push("/view-staff");
-              });
-          });
-        });
-    }
   }
 };
 </script>
-  <style>
-  span{
-      color:#2196f3;
+
+<style>
+  span {
+    color: #2196f3;
   }
 </style>

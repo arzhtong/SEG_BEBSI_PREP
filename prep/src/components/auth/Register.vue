@@ -48,54 +48,9 @@
 </template>
 
 <script>
-import firebase from 'firebase'
-import db from '../firebaseInit'
-
+import { authMixin } from "../../mixins/authMixin";
 export default {
     name: 'register',
-    data: function() {
-        return{
-            email: '',
-            password: '',
-            name: null,
-            dept: null,
-            role: 'Staff'
-        }
-    },
-    methods: {
-        /*
-            This function creates a new user on firestore as well
-            as google authentication service
-        */
-        register: function(e) {
-            if(this.name != null && this.dept != null && this.role != null){
-                firebase.auth()
-                    .createUserWithEmailAndPassword(this.email, this.password)
-                    .then(
-                        user => {
-                            if(document.getElementById("check").checked){
-                                this.role = 'Admin'
-                            }
-                            db.collection('users').add({
-                                email: this.email.toLowerCase(),
-                                name: this.name,
-                                dept: this.dept,
-                                role: this.role
-                            })
-                            .then(userRef => {
-                                alert(`Registration Successful!`)
-                                window.location.href = '/';
-                            })
-                            .catch(error => console.log(err))
-                        },
-                        err => {
-                            alert(err.message);
-                        }
-                    )
-                e.preventDefault();
-            }
-        },
-       
-    }
+    mixins: [authMixin]
 }
 </script>
