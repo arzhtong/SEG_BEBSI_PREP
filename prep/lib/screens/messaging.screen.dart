@@ -120,22 +120,17 @@ class _MessagesViewState extends State<_MessagesView>
       itemBuilder: (_, int index) {
         String currentDate =
             DateTimeFormatter.dateFormatter(_messagesList[index].datetime);
-        String nextDate = (index == _messagesList.length - 1)
-            ? "N/A"
-            : DateTimeFormatter.dateFormatter(
-                _messagesList[index + 1].datetime);
+        String nextDate = DateTimeFormatter.dateFormatter(
+            (index == _messagesList.length - 1)
+                ? null
+                : _messagesList[index + 1].datetime);
 
-        return (currentDate == nextDate)
-            ? _MessageListItem(
-                message: _messagesList[index],
-              )
-            : _MessageListItem(
-                message: _messagesList[index],
-                showDate: true,
-              );
+        return _MessageListItem(
+          message: _messagesList[index],
+          showDate: (currentDate == nextDate) ? false : true,
+        );
       },
       itemCount: _messagesList.length,
-      // controller: _scrollController,
     );
   }
 }
@@ -172,6 +167,7 @@ class _TextComposerState extends State<_TextComposer> {
                 Flexible(
                   child: SingleChildScrollView(
                     child: TextField(
+                      autocorrect: true,
                       maxLines: null,
                       keyboardType: TextInputType.multiline,
                       controller: _textController,
@@ -226,7 +222,7 @@ class _MessageListItem extends StatelessWidget {
   final _MessageData message;
   final bool showDate;
 
-  _MessageListItem({@required this.message, this.showDate = false})
+  _MessageListItem({@required this.message, @required this.showDate})
       : rowAlignment = (message.isPatient)
             ? MainAxisAlignment.end
             : MainAxisAlignment.start,
