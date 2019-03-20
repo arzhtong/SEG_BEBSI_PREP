@@ -20,7 +20,7 @@ class CategoryCard extends StatelessWidget {
 
   Future _navigate(dynamic context) {
     switch (type) {
-      case "informations":
+      case "article":
         return Navigator.push(context, MaterialPageRoute(builder:
             (context) => InformationParser(contents, title)));
       case "categoryList":
@@ -44,7 +44,7 @@ class CategoryCard extends StatelessWidget {
           color: Colors.white,
         ),
       );
-    } else if (type == "informations") {
+    } else if (type == "article") {
       return CircleAvatar(
         backgroundColor: Colors.deepPurple[400],
         child: Icon(

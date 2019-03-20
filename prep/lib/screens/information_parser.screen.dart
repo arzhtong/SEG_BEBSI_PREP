@@ -17,7 +17,7 @@ class InformationParser extends StatelessWidget {
     return Container(
         child: SingleChildScrollView(
       child: Html(
-        data: document['content'],
+        data: document['description'],
         padding: EdgeInsets.all(20.0),
         useRichText: true,
         //turn this off to get the alternative parser
@@ -54,7 +54,7 @@ class InformationParser extends StatelessWidget {
                 child: LinearProgressIndicator(),
               );
             } else {
-              if (snapshot.data['content'] != null && snapshot.data['content'].length > 0) {
+              if (snapshot.data['description'] != null && snapshot.data['description'].length > 0) {
                 return _buildListItem(context, snapshot.data);
               } else {
                 return EmptyScreenPlaceholder("This article is empty", "");
