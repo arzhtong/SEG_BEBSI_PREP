@@ -64,14 +64,10 @@ import { userMixin } from "../../mixins/userMixin";
 export default {
   name: "view-staff",
   mixins: [userMixin],
-  data() {
-    return {};
-  },
   created() {
     this.getLoggedInUser();
     this.getUsersInfo();
-  },
-  methods: {}
+  }
 };
 </script>
 

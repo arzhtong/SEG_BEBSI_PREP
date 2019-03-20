@@ -23,36 +23,10 @@
 </template>
 
 <script>
-import firebase from "firebase";
-
+import { authMixin } from "../../mixins/authMixin";
 export default {
   name: "resetPassword",
-  data: function() {
-    return {
-      email: ""
-    };
-  },
-  methods: {
-    /*
-      This method sends a pre-made email with a restoration
-      link.
-    */
-    sendResetEmail: function(e) {
-      var email = document.getElementById("email").value;
-      firebase
-        .auth()
-        .sendPasswordResetEmail(email)
-        .then(function() {
-          // Password reset email sent.
-          alert(`Password email has been sent to ${email}`);
-          window.location.href = '/';
-        })
-        .catch(function(error) {
-          // Error occurred. Inspect error.code.
-          alert(error);
-        });
-    }
-  }
+  mixins: [authMixin]
 };
 </script>
 <style>

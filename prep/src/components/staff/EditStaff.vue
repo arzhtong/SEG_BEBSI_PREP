@@ -43,16 +43,12 @@ import { userMixin } from "../../mixins/userMixin";
 export default {
   name: "edit-staff",
   mixins: [userMixin],
-  data() {
-    return {};
-  },
   created(){
     this.preloadFields();
   },
   watch: {
     $route: "fetchData"
-  },
-  methods: {}
+  }
 };
 </script>
 

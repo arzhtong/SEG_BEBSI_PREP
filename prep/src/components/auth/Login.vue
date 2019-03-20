@@ -8,11 +8,11 @@
             <form>
               <div class="input-field">
                 <i class="material-icons prefix">email</i>
-                <input placeholder="Email" type="text" name="email" id="email" v-model="email">
+                <input placeholder="Email" type="text" name="email" id="email" v-model="emailLog">
               </div>
               <div class="input-field">
                 <i class="material-icons prefix">lock</i>
-                <input placeholder="Password" type="password" name="password" id="password" v-model="password">
+                <input placeholder="Password" type="password" name="password" id="password" v-model="passwordLog">
               </div>
 
               <button v-on:click="login" class="btn btn-large blue lighten-2 black-text">Login</button>
@@ -26,37 +26,10 @@
 </template>
 
 <script>
-import firebase from "firebase";
-
+import { authMixin } from "../../mixins/authMixin";
 export default {
   name: "login",
-  data: function() {
-    return {
-      email: "",
-      password: ""
-    };
-  },
-  methods: {
-    /*
-    Verify the user by sending a request to the firestore
-    and create a new Session.
-   */
-    login: function(e) {
-      firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(this.email, this.password)
-        .then(
-          user => {
-            this.$router.go({ path: this.$router.path });
-          },
-          err => {
-            alert(err.message);
-          }
-        );
-      e.preventDefault();
-    }
-  }
+  mixins: [authMixin]
 };
 </script>
 <style>
