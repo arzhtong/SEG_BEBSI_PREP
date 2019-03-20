@@ -7,14 +7,14 @@ const md5 = require('md5');
   using AES cbc algorithm and md5.
 */
 function encryptMessage(message, id) {
-  var iv_array = generateIV();
-  var hexIv = md5(iv_array)
-  var key_array = aes.utils.utf8.toBytes((generateKey(id + hexIv)));
-  var textBytes = aes.utils.utf8.toBytes(message);
-  var aesCbc = new aes.ModeOfOperation.cbc(key_array, iv_array);
-  var encryptedBytes = aesCbc.encrypt(aes.padding.pkcs7.pad(textBytes));
-  var hex = aes.utils.hex.fromBytes(encryptedBytes);
-  var encryptedHex = aes.utils.hex.fromBytes(iv_array) + hex;
+  const iv_array = generateIV();
+  const hexIv = md5(iv_array)
+  const key_array = aes.utils.utf8.toBytes((generateKey(id + hexIv)));
+  const textBytes = aes.utils.utf8.toBytes(message);
+  const aesCbc = new aes.ModeOfOperation.cbc(key_array, iv_array);
+  const encryptedBytes = aesCbc.encrypt(aes.padding.pkcs7.pad(textBytes));
+  const hex = aes.utils.hex.fromBytes(encryptedBytes);
+  const encryptedHex = aes.utils.hex.fromBytes(iv_array) + hex;
   return encryptedHex;
 }
 
@@ -49,15 +49,15 @@ function getIV(encryptedHex) {
   and md5.
 */
 function decryptMessage(encryptedHex, id) {
-  var hexIv = getIV(encryptedHex)
-  var md5IV = md5(Array.from(aes.utils.hex.toBytes(hexIv)))
-  var key_array = aes.utils.utf8.toBytes(generateKey(id + md5IV));
-  var message = encryptedHex.substring(32);
-  var decryptIV = aes.utils.hex.toBytes(hexIv);
-  var encryptedBytes = aes.utils.hex.toBytes(message);
-  var aesCbc = new aes.ModeOfOperation.cbc(key_array, decryptIV);
-  var decryptedBytes = aesCbc.decrypt(encryptedBytes);
-  var decryptedText = aes.utils.utf8.fromBytes(
+  const hexIv = getIV(encryptedHex)
+  const md5IV = md5(Array.from(aes.utils.hex.toBytes(hexIv)))
+  const key_array = aes.utils.utf8.toBytes(generateKey(id + md5IV));
+  const message = encryptedHex.substring(32);
+  const decryptIV = aes.utils.hex.toBytes(hexIv);
+  const encryptedBytes = aes.utils.hex.toBytes(message);
+  const aesCbc = new aes.ModeOfOperation.cbc(key_array, decryptIV);
+  const decryptedBytes = aesCbc.decrypt(encryptedBytes);
+  const decryptedText = aes.utils.utf8.fromBytes(
     aes.padding.pkcs7.strip(decryptedBytes)
   );
   return decryptedText;

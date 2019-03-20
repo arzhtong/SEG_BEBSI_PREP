@@ -18,7 +18,7 @@
           </tr>
         </thead>
 
-        <tbody class="collection-item" v-for="(app, index) in appointments" v-bind:key="index">
+        <tbody class="collection-item" v-for="(app, index) in appointmentsView" v-bind:key="index">
           <tr>
             <td>{{app.date}}</td>
             <td>{{app.time}}</td>
@@ -57,7 +57,7 @@
           <tbody
             style="word-wrap: break-word;"
             class="collection-item"
-            v-for="(checkup, index) in dailyCheckups"
+            v-for="(checkup, index) in dailyCheckupsView"
             v-bind:key="index"
           >
             <tr>
@@ -124,168 +124,17 @@
 
 
 <script>
-import db from "../firebaseInit";
-import firebase from "firebase";
-
+import { appointmentMixin } from "../../mixins/appointmentMixin";
 export default {
   name: "view-appointment",
-  data() {
-    return {
-      dailyCheckups: [],
-      appointments: [],
-      testName: null,
-      testType: null,
-      router: this.$route.params.id,
-      newMap: new Map(),
-      past: this.$route.params.expired
-    };
-  },
+  mixins: [appointmentMixin],
   created() {
     this.listenDailyCheckups();
     this.getAppointmentInfo();
-  },
-  methods: {
-    /*
-      This method gets the information for the specified
-      appointment with doc id given by the router.
-    */
-    getAppointmentInfo() {
-      db.collection("appointments")
-        .doc(this.$route.params.id)
-        .get()
-        .then(doc => {
-          const data = {
-            testID: doc.data().testID,
-            date: doc
-              .data()
-              .datetime.toDate()
-              .toISOString()
-              .split("T")[0],
-            time: doc
-              .data()
-              .datetime.toDate()
-              .toTimeString()
-              .split(" ")[0],
-            location: doc.data().location
-          };
-          this.appointments.push(data);
-          this.getTestInfo();
-        });
-    },
-    /*
-      This methid gets the needed information from the 
-      tests collection with a doc id specified in the
-      clicked appointment.
-    */
-    getTestInfo() {
-      db.collection("tests")
-        .doc(this.appointments[0].testID)
-        .get()
-        .then(doc => {
-          (this.testName = doc.data().title), (this.testType = doc.data().type);
-        });
-    },
-    /*
-      This method listens live to the dailyCheckups 
-      collection in the clicked appointment in order
-      to get if any changes were made.
-    */
-    listenDailyCheckups() {
-      db.collection("appointments")
-        .doc(this.$route.params.id)
-        .collection("dailyCheckups")
-        .orderBy("daysBeforeTest", "desc")
-        .onSnapshot(snapshot => {
-          snapshot.docChanges().forEach(change => {
-            // on page load
-            if (change.type == "added") {
-              const data = {
-                docId: change.doc.id,
-                daysBeforeTest: change.doc.data().daysBeforeTest,
-                description: change.doc.data().description,
-                instructions: change.doc.data().instructions
-              };
-
-              this.dailyCheckups.push(data);
-            }
-            // if modified (e.g set to true)
-            if (change.type == "modified") {
-              for (var i = 0; i < this.dailyCheckups.length; i++) {
-                if (
-                  this.dailyCheckups[i].daysBeforeTest ==
-                  change.doc.data().daysBeforeTest
-                ) {
-                  this.dailyCheckups[
-                    i
-                  ].instructions = change.doc.data().instructions;
-                  this.dailyCheckups.push();
-                }
-              }
-            }
-          });
-        });
-    },
-    /*
-      This method enables the dailyCheckyps to be modified.
-      Note: This method is left here for expandability purposes
-      and it does not function in this current website version.
-    */
-    enableEditMode(currentCheckup) {
-      var inputArray = document.getElementsByClassName("dailyInput");
-      var inputList = Array.from(inputArray);
-      for (var i = 0; i < inputList.length; i++) {
-        if (inputList[i].value in currentCheckup.instructions) {
-          if (inputList[i].readOnly == true) {
-            inputList[i].readOnly = false;
-            inputList[i].style.color = "#2196f3";
-          } else {
-            inputList[i].readOnly = true;
-            inputList[i].style.color = "grey";
-          }
-        }
-      }
-    }
   }
 };
 </script>
   <style scoped>
-.tooltip {
-  position: relative;
-  display: inline-block;
-}
-
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 100px;
-  background-color: #555;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 100%;
-  margin-left: -60px;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.tooltip .tooltiptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #555 transparent transparent transparent;
-}
-
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-  opacity: 1;
-}
 label {
   color: #2196f3 !important;
 }
