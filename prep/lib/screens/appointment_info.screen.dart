@@ -10,19 +10,18 @@ import 'package:prep/widgets/appointment_info/appointment_banner.dart';
 class AppointmentInfo extends StatelessWidget {
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
     return Container(
-      padding: EdgeInsets.all(10.0),
-      child: SingleChildScrollView(
-        child: Html(
-          data: document['description'],
-          useRichText: true,
-          //turn this off to get the alternative parser
-          onLinkTap: (url) {
-            _launchURL(url);
-          },
-          customRender: null,
-        ),
-      )
-    );
+        padding: EdgeInsets.all(10.0),
+        child: SingleChildScrollView(
+          child: Html(
+            data: document['description'],
+            useRichText: true,
+            //turn this off to get the alternative parser
+            onLinkTap: (url) {
+              _launchURL(url);
+            },
+            customRender: null,
+          ),
+        ));
   }
 
   _launchURL(String url) async {
@@ -53,9 +52,9 @@ class AppointmentInfo extends StatelessWidget {
                   return _buildListItem(context, snapshot.data);
                 } else {
                   return Container(
-                    padding: EdgeInsets.only(top: 50.0),
-                    child: EmptyScreenPlaceholder("This article contains no more information", "")
-                  );
+                      padding: EdgeInsets.only(top: 50.0),
+                      child: EmptyScreenPlaceholder(
+                          "This article contains no more information", ""));
                 }
               }
             }),
