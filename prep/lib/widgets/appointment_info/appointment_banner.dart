@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prep/utils/query.dart';
-import 'package:prep/utils/date_time_formatter.dart';
+import 'package:prep/utils/misc_functions.dart';
 
 class AppointmentDetailsBanner extends StatelessWidget {
   @override
@@ -16,12 +16,12 @@ class AppointmentDetailsBanner extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             _TitleText("Date"),
-            _SubtitleText(DateTimeFormatter.dateFormatter(Queries.dateTime)),
+            _SubtitleText(dateFormatter(Queries.dateTime)),
             Divider(
               color: Colors.white,
             ),
             _TitleText("Time"),
-            _SubtitleText(DateTimeFormatter.timeFormatter(Queries.dateTime)),
+            _SubtitleText(timeFormatter(Queries.dateTime)),
             Divider(
               color: Colors.white,
             ),

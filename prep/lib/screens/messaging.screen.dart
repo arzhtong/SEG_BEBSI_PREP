@@ -5,7 +5,7 @@ import 'dart:async';
 
 import 'package:prep/utils/query.dart';
 import 'package:prep/utils/message_crypto.dart';
-import 'package:prep/utils/date_time_formatter.dart';
+import 'package:prep/utils/misc_functions.dart';
 
 class MessagingScreen extends StatefulWidget {
   @override
@@ -119,10 +119,10 @@ class _MessagesViewState extends State<_MessagesView>
       reverse: true,
       itemBuilder: (_, int index) {
         String currentDate =
-            DateTimeFormatter.dateFormatter(_messagesList[index].datetime);
+            dateFormatter(_messagesList[index].datetime);
         String nextDate = (index == _messagesList.length - 1)
             ? "N/A"
-            : DateTimeFormatter.dateFormatter(
+            : dateFormatter(
                 _messagesList[index + 1].datetime);
 
         return (currentDate == nextDate)
@@ -253,7 +253,7 @@ class _MessageListItem extends StatelessWidget {
   Widget _getDateLine(BuildContext context) {
     return Column(children: <Widget>[
       Text(
-        DateTimeFormatter.dateFormatter(message.datetime),
+        dateFormatter(message.datetime),
         style: TextStyle(fontSize: 12.0),
       ),
       Divider(),

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:prep/utils/query.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
+import 'package:prep/utils/misc_functions.dart';
 
 class InformationParser extends StatelessWidget {
   final String _documentId;
@@ -21,19 +21,11 @@ class InformationParser extends StatelessWidget {
         useRichText: true,
         //turn this off to get the alternative parser
         onLinkTap: (url) {
-          _launchURL(url);
+          launchURL(url);
         },
         customRender: null,
       ),
     ));
-  }
-
-  _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Cloud not launch url';
-    }
   }
 
   @override
