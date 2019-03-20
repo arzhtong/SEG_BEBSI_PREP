@@ -26,7 +26,7 @@ class _AppointmentState extends State<Appointment> {
 
   _AppointmentState(this._selectedIndex);
 
-  Widget getPage(int index) {
+  Widget _getPage(int index) {
     switch (index) {
       case 1:
         return (_appointmentPrep != null)
@@ -82,7 +82,7 @@ class _AppointmentState extends State<Appointment> {
           title: Text(Queries.appointmentName),
           actions: <Widget>[_chooseHelpMenuToDisplay()]),
       body: Center(
-        child: getPage(_selectedIndex),
+        child: _getPage(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[

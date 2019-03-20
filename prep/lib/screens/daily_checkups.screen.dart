@@ -7,7 +7,7 @@ import 'package:prep/screens/empty_screen_placeholder.dart';
 class DailyCheckups extends StatelessWidget {
   List<Widget> myList = new List<Widget>();
 
-  String monthAbbreviation(DateTime datetime) {
+  String _monthAbbreviation(DateTime datetime) {
     const List<String> months = [
       "January",
       "February",
@@ -46,7 +46,7 @@ class DailyCheckups extends StatelessWidget {
             ),
           ),
           Text(
-            monthAbbreviation(Queries.dateTime),
+            _monthAbbreviation(Queries.dateTime),
             style: TextStyle(color: Colors.white, fontSize: 10.0),
           ),
         ],
