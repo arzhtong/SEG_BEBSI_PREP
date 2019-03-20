@@ -75,8 +75,10 @@ export default {
 
       db.collection("tests")
         .doc(this.$route.params.test_id)
-        .collection("faqs")
+        .collection("prepCards")
         .add({
+          title: "Frequently Asked Questions",
+          type: "faqs",
           question: this.question,
           answer: this.answer,
           chatShortcut: this.chatShortcut,
