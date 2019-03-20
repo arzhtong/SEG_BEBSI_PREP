@@ -37,12 +37,7 @@ class FaqParser extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Appointment(
-                                      Queries.appointmentID,
-                                      Queries.testID,
-                                      Queries.appointmentName,
-                                      3,
-                                      _appointmentDateTime)));
+                                  builder: (context) => Appointment(3)));
                         })
                     : Container(),
                 (document['informationShortcut'])
@@ -53,12 +48,7 @@ class FaqParser extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Appointment(
-                                      Queries.appointmentID,
-                                      Queries.testID,
-                                      Queries.appointmentName,
-                                      1,
-                                      _appointmentDateTime)));
+                                  builder: (context) => Appointment(1)));
                         })
                     : Container(),
               ],
@@ -85,7 +75,7 @@ class FaqParser extends StatelessWidget {
               child: LinearProgressIndicator(),
             );
           } else {
-            if (snapshot.data.documents.length > 0) {
+            if (snapshot.data.documents != null && snapshot.data.documents.length > 0) {
               return ListView.builder(
                 padding: EdgeInsets.only(top: 10.0),
                 itemCount: snapshot.data.documents.length,

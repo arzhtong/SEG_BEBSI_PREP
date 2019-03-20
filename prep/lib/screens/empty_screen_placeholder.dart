@@ -17,7 +17,7 @@ class EmptyScreenPlaceholder extends StatelessWidget {
             title,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 35.0,
+              fontSize: 30.0,
               color: Colors.grey,
               fontWeight: FontWeight.bold,
             ),

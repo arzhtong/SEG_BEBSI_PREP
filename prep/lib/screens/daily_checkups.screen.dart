@@ -3,17 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:prep/utils/query.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
-import 'package:prep/widgets/dashboard/help_dialog.dart';
-class DailyCheckups extends StatefulWidget {
-  final DateTime _appointmentDateTime;
 
-  DailyCheckups(this._appointmentDateTime);
-
-  @override
-  State<StatefulWidget> createState() => _DailyCheckups();
-}
-
-class _DailyCheckups extends State<DailyCheckups> {
+class DailyCheckups extends StatelessWidget {
   List<Widget> myList = new List<Widget>();
 
   String monthAbbreviation(DateTime datetime) {
@@ -44,7 +35,7 @@ class _DailyCheckups extends State<DailyCheckups> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            widget._appointmentDateTime
+            Queries.dateTime
                 .subtract(Duration(days: daysBeforeTest))
                 .day
                 .toString(),
@@ -55,7 +46,7 @@ class _DailyCheckups extends State<DailyCheckups> {
             ),
           ),
           Text(
-            monthAbbreviation(widget._appointmentDateTime),
+            monthAbbreviation(Queries.dateTime),
             style: TextStyle(color: Colors.white, fontSize: 10.0),
           ),
         ],
@@ -154,7 +145,7 @@ class _DailyCheckups extends State<DailyCheckups> {
             child: LinearProgressIndicator(),
           );
         } else {
-          if (snapshot.data.documents.length > 0){
+          if (snapshot.data.documents != null && snapshot.data.documents.length > 0){
             return ListView.builder(
               padding: EdgeInsets.only(top: 10, bottom: 10),
               itemCount: snapshot.data.documents.length,
