@@ -1,63 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:prep/screens/appointment.screen.dart';
 import 'package:prep/utils/query.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
+import 'package:prep/widgets/faq_parser/faq_expansion_tile.dart';
 
 class FaqParser extends StatelessWidget {
-  final DateTime _appointmentDateTime;
-
-  FaqParser(this._appointmentDateTime);
-
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
-    print("DOCUMENT ID DOCUMENT ID DOCUMENT IDDOCUMENT ID");
-    print(document.documentID);
-    return Container(
-      padding: EdgeInsets.only(right: 10.0, left: 10.0, bottom: 5.0),
-      child: Card(
-        elevation: 3.0,
-        child: ExpansionTile(
-          title: Text(document['question']),
-          children: <Widget>[
-            ListTile(
-              title: Text(
-                document['answer'],
-                style: TextStyle(color: Colors.grey),
-              ),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                (document['chatShortcut'])
-                    ? IconButton(
-                        icon: Icon(Icons.chat),
-                        color: Colors.indigo[400],
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Appointment(3)));
-                        })
-                    : Container(),
-                (document['informationShortcut'])
-                    ? IconButton(
-                        icon: Icon(Icons.info),
-                        color: Colors.deepPurple[400],
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Appointment(1)));
-                        })
-                    : Container(),
-              ],
-            )
-          ],
-        ),
-      ),
-    );
+    if (document['type'] == 'faqs') {
+      return FaqExpansionTIle(document['question'], document['answer'],
+          document['chatShortcut'], document['informationShortcut']);
+    } else {
+      return Container();
+    }
   }
 
   @override
@@ -69,7 +24,11 @@ class FaqParser extends StatelessWidget {
       ),
       body: StreamBuilder(
         //stream: Queries.faqSnapshots,
-        stream: Firestore.instance.collection('tests').document(Queries.testID).collection('prepCards').where('type', isEqualTo: 'faqs').getDocuments().asStream(),
+        stream: Firestore.instance
+            .collection('tests')
+            .document(Queries.testID)
+            .collection('prepCards')
+            .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Align(
@@ -77,7 +36,8 @@ class FaqParser extends StatelessWidget {
               child: LinearProgressIndicator(),
             );
           } else {
-            if (snapshot.data.documents != null && snapshot.data.documents.length > 0) {
+            if (snapshot.data.documents != null &&
+                snapshot.data.documents.length > 0) {
               return ListView.builder(
                 padding: EdgeInsets.only(top: 10.0),
                 itemCount: snapshot.data.documents.length,

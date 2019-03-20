@@ -9,14 +9,10 @@ class CategoryCard extends StatelessWidget {
   final String contents;
   final String title;
   final String type;
-  final Color color;
-  final DateTime _appointmentDateTime;
 
   CategoryCard(this.contents,
       this.title,
-      this.type,
-      this.color,
-      this._appointmentDateTime);
+      this.type);
 
   Future _navigate(dynamic context) {
     switch (type) {
@@ -31,7 +27,7 @@ class CategoryCard extends StatelessWidget {
             MaterialPageRoute(builder: (context) => RecipeListScreen()));
       default:
         return Navigator.push(context, MaterialPageRoute(builder:
-            (context) => FaqParser(_appointmentDateTime)));
+            (context) => FaqParser()));
     }
   }
 
@@ -89,7 +85,7 @@ class CategoryCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(2.5),
       child: Card(
-        color: color,
+        color: Colors.white,
         elevation: 3.0,
         child: InkWell(
             onTap: () {

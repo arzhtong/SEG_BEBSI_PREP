@@ -18,7 +18,12 @@ class CategoryListParser extends StatelessWidget {
         title: Text(_categoryName),
       ),
       body: StreamBuilder(
-          stream: Queries.categoryListSnapshots(_contents),
+          //stream: Queries.categoryListSnapshots(_contents),
+          stream: Firestore.instance
+              .collection('tests')
+              .document(Queries.testID)
+              .collection('prepCards')
+              .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const Align(
@@ -42,6 +47,7 @@ class CategoryListParser extends StatelessWidget {
   }
 
   Widget _buildDropDownList(BuildContext context, DocumentSnapshot document) {
+
     List<Widget> dropDowns = new List();
     List<dynamic> mappedData = document['maps'];
 
