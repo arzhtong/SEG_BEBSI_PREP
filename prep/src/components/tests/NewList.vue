@@ -2,7 +2,7 @@
   <div id="new-list">
     <h3>New List</h3>
     <div class="row">
-      <form @submit.prevent="saveList" class="col s12">
+      <form @submit.prevent="createPrepCard" class="col s12">
         <div class="row">
           <div class="input-field col s12">
             <input type="text" v-model="title">
@@ -27,26 +27,49 @@ export default {
   data() {
     return {
       title: null,
+      prepCardID: null,
       category: 'categoryList'
     };
   },
+   created() {
+    db.collection("tests")
+      .doc(this.$route.params.test_id)
+      .collection("prepCards")
+      .doc(this.$route.params.contents)
+      .get()
+      .then(doc => {
+        // gets all the maps and pushes them seperately into an array
+          doc.data().maps.forEach(map => {
+            this.maps.push(map);
+          })
+        
+      });
+  },
   methods: {
-    saveList() {
-        // makes a new document in the list collection in the database
-         db.collection("tests")
-        .doc(this.$route.params.test_id)
-        .collection("lists")
-        .doc(this.title)
-        .set({})
-        // adds a new card to the database
-      db.collection("tests")
+    createPrepCard (){
+        db.collection("tests")
         .doc(this.$route.params.test_id)
         .collection("prepCards")
         .add({
           title: this.title,
           contents: this.title,
           type: this.category
+        }).then(docRef => {
+          this.prepCardID = docRef.id
+          this.$nextTick(() => this.saveList())
         })
+      
+    },
+    saveList() {
+
+        // makes a new document in the list collection in the database
+         db.collection("tests")
+        .doc(this.$route.params.test_id)
+        .collection("lists")
+        .doc(this.prepCardID)
+        .set({})
+ 
+    
         // reroutes to all the lists
         .then(docRef => {
           alert('List added!')

@@ -22,7 +22,7 @@
             <tbody v-for="list  in lists" v-bind:key="list.id" class="collection-item">
               <tr>
                 <!-- display the list id which is its name -->
-                <td style="padding: 20px;">{{list.id}}</td>
+                <td style="padding: 20px;">{{list.title}}</td>
                 <td>
                   <!-- more info about the list -->
                   <router-link
@@ -39,11 +39,7 @@
               class="btn green"
               style="margin:20px"
             >Add List</router-link>
-            <router-link
-              to="/view-tests"
-              class="btn grey"
-              style="margin:20px"
-            >Back</router-link>
+            <router-link to="/view-tests" class="btn grey" style="margin:20px">Back</router-link>
           </table>
         </div>
       </li>
@@ -69,10 +65,18 @@ export default {
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
-          const data = {
-            id: doc.id // the document id in the database
-          };
-          this.lists.push(data);
+          db.collection("tests")
+            .doc(this.$route.params.test_id)
+            .collection("prepCards")
+            .doc(doc.id)
+            .get()
+            .then(doc2 => {
+              const data = {
+                id: doc.id, // the document id in the database
+                title: doc2.data().title
+              };
+              this.lists.push(data);
+            });
         });
       });
   }
