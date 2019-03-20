@@ -12,19 +12,19 @@ class MakeHelpIcon extends StatelessWidget {
           _makeAlert(context, info);
         });
   }
-}
 
-void _makeAlert(BuildContext context, String text) {
-  var alertDialog = AlertDialog(
-    title: Text("Tip",
-        textAlign: TextAlign.center, style: TextStyle(fontSize: 30.0)),
-    content: Text(text,
-        textAlign: TextAlign.center, style: TextStyle(fontSize: 20.0)),
-  );
+  void _makeAlert(BuildContext context, String text) {
+    var alertDialog = AlertDialog(
+      title: Text("Help",
+          textAlign: TextAlign.center, style: TextStyle(fontSize: 30.0)),
+      content: Text(text,
+          textAlign: TextAlign.center, style: TextStyle(fontSize: 20.0)),
+    );
 
-  showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alertDialog;
-      });
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alertDialog;
+        });
+  }
 }

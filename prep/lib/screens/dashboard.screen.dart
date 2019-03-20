@@ -33,7 +33,6 @@ class _DashboardState extends State<Dashboard> {
   bool validationResultDb;
   bool validationResultFile;
 
-  // TODO: replace the calling of this method.
   // Subscribe user to message notifications
   void _subscribeToNotifications(String appointmentID) {
     final FirebaseMessaging firebaseMessaging = FirebaseMessaging();

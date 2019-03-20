@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'dart:async';
 
 import 'package:prep/utils/query.dart';
 import 'package:prep/utils/message_crypto.dart';
-import 'package:prep/utils/date_time_formatter.dart';
+import 'package:prep/utils/misc_functions.dart';
 
 class MessagingScreen extends StatefulWidget {
   @override
@@ -118,12 +117,10 @@ class _MessagesViewState extends State<_MessagesView>
       padding: EdgeInsets.only(top: 8.0),
       reverse: true,
       itemBuilder: (_, int index) {
-        String currentDate =
-            DateTimeFormatter.dateFormatter(_messagesList[index].datetime);
-        String nextDate = DateTimeFormatter.dateFormatter(
-            (index == _messagesList.length - 1)
-                ? null
-                : _messagesList[index + 1].datetime);
+        String currentDate = dateFormatter(_messagesList[index].datetime);
+        String nextDate = dateFormatter((index == _messagesList.length - 1)
+            ? null
+            : _messagesList[index + 1].datetime);
 
         return _MessageListItem(
           message: _messagesList[index],
@@ -249,7 +246,7 @@ class _MessageListItem extends StatelessWidget {
   Widget _getDateLine(BuildContext context) {
     return Column(children: <Widget>[
       Text(
-        DateTimeFormatter.dateFormatter(message.datetime),
+        dateFormatter(message.datetime),
         style: TextStyle(fontSize: 12.0),
       ),
       Divider(),

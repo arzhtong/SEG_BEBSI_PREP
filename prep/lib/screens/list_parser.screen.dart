@@ -6,19 +6,20 @@ import 'package:prep/widgets/list_parser/description_expansion_tile.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 
 class CategoryListParser extends StatelessWidget {
-  final String _contents;
-  final String _categoryName;
+  final String documentId;
+  final String _title;
 
-  CategoryListParser(this._contents, this._categoryName);
+  CategoryListParser(this.documentId, this._title);
 
   Widget build(BuildContext context) {
+    print("DocumentID: " + documentId);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.indigo,
-        title: Text(_categoryName),
+        title: Text(_title),
       ),
       body: StreamBuilder(
-          stream: Queries.categoryListSnapshots(_contents),
+          stream: Queries.categoryListSnapshots(documentId),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const Align(

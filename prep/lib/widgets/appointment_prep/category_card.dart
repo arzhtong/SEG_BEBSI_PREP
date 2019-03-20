@@ -6,32 +6,28 @@ import 'package:prep/screens/list_parser.screen.dart';
 import 'package:prep/screens/faq_parser.screen.dart';
 
 class CategoryCard extends StatelessWidget {
-  final String contents;
+  final String documentID;
   final String title;
   final String type;
-  final Color color;
-  final DateTime _appointmentDateTime;
 
-  CategoryCard(this.contents,
+  CategoryCard(this.documentID,
       this.title,
-      this.type,
-      this.color,
-      this._appointmentDateTime);
+      this.type);
 
   Future _navigate(dynamic context) {
     switch (type) {
       case "article":
         return Navigator.push(context, MaterialPageRoute(builder:
-            (context) => InformationParser(contents, title)));
+            (context) => InformationParser(documentID, title)));
       case "categoryList":
         return Navigator.push(context, MaterialPageRoute(builder:
-            (context) => CategoryListParser(contents, title)));
+            (context) => CategoryListParser(documentID, title)));
       case "recipe":
         return Navigator.push(context,
             MaterialPageRoute(builder: (context) => RecipeListScreen()));
       default:
         return Navigator.push(context, MaterialPageRoute(builder:
-            (context) => FaqParser(_appointmentDateTime)));
+            (context) => FaqParser()));
     }
   }
 
@@ -89,7 +85,7 @@ class CategoryCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(2.5),
       child: Card(
-        color: color,
+        color: Colors.white,
         elevation: 3.0,
         child: InkWell(
             onTap: () {

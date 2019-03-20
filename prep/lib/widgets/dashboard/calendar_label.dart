@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:prep/utils/date_time_formatter.dart';
+import 'package:prep/utils/misc_functions.dart';
 
 class CalendarLabel extends StatelessWidget {
   final DateTime dateTime;
@@ -12,7 +12,7 @@ class CalendarLabel extends StatelessWidget {
     return Container(
         padding: EdgeInsets.only(left: 10.0, top: 5.0, bottom: 5.0),
         child: Text(
-          DateTimeFormatter.dateFormatter(dateTime),
+          dateFormatter(dateTime),
           style: TextStyle(fontWeight: FontWeight.bold),
         ));
   }

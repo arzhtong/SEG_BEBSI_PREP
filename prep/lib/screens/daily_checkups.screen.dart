@@ -3,29 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:prep/utils/query.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
+import 'package:prep/utils/misc_functions.dart';
 
 class DailyCheckups extends StatelessWidget {
-  List<Widget> myList = new List<Widget>();
-
-  String _monthAbbreviation(DateTime datetime) {
-    const List<String> months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
-    ];
-
-    return months[datetime.month - 1].substring(0, 3);
-  }
-
   CircleAvatar _getDailyCheckupIcon(int daysBeforeTest) {
     return CircleAvatar(
       backgroundColor:
@@ -46,7 +26,7 @@ class DailyCheckups extends StatelessWidget {
             ),
           ),
           Text(
-            _monthAbbreviation(Queries.dateTime),
+            monthAbbreviation(Queries.dateTime),
             style: TextStyle(color: Colors.white, fontSize: 10.0),
           ),
         ],

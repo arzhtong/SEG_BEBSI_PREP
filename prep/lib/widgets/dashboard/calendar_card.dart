@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:prep/screens/appointment.screen.dart';
-import 'package:prep/utils/date_time_formatter.dart';
+import 'package:prep/utils/misc_functions.dart';
 import 'package:prep/utils/query.dart';
 
 
@@ -101,9 +101,9 @@ class CalendarCard extends StatelessWidget {
                               _informationRow("Location: ", location),
                               _informationRow("Staff member: ", doctorName),
                               _informationRow(
-                                  "Date: ", DateTimeFormatter.dateFormatter(dateTime)),
+                                  "Date: ", dateFormatter(dateTime)),
                               _informationRow(
-                                  "Time: ", DateTimeFormatter.timeFormatter(dateTime)),
+                                  "Time: ", timeFormatter(dateTime)),
                             ],
                           ),
                         ],

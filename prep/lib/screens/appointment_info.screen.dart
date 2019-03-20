@@ -1,36 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:prep/utils/query.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 import 'package:prep/widgets/appointment_info/appointment_banner.dart';
+import 'package:prep/utils/misc_functions.dart';
 
 class AppointmentInfo extends StatelessWidget {
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
     return Container(
-      padding: EdgeInsets.all(10.0),
-      child: SingleChildScrollView(
-        child: Html(
-          data: document['description'],
-          useRichText: true,
-          //turn this off to get the alternative parser
-          onLinkTap: (url) {
-            _launchURL(url);
-          },
-          customRender: null,
-        ),
-      )
-    );
-  }
-
-  _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Cloud not launch url';
-    }
+        padding: EdgeInsets.all(10.0),
+        child: SingleChildScrollView(
+          child: Html(
+            data: document['description'],
+            useRichText: true,
+            //turn this off to get the alternative parser
+            onLinkTap: (url) {
+              launchURL(url);
+            },
+            customRender: null,
+          ),
+        ));
   }
 
   @override
@@ -53,9 +44,9 @@ class AppointmentInfo extends StatelessWidget {
                   return _buildListItem(context, snapshot.data);
                 } else {
                   return Container(
-                    padding: EdgeInsets.only(top: 50.0),
-                    child: EmptyScreenPlaceholder("This article contains no more information", "")
-                  );
+                      padding: EdgeInsets.only(top: 50.0),
+                      child: EmptyScreenPlaceholder(
+                          "This article contains no more information", ""));
                 }
               }
             }),

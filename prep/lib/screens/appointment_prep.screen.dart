@@ -6,19 +6,12 @@ import 'package:prep/utils/query.dart';
 import 'package:prep/widgets/appointment_prep/category_card.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 
-//class AppointmentPrep extends StatefulWidget {
-//  @override
-//  _AppointmentPrepState createState() => _AppointmentPrepState();
-//}
-
 class AppointmentPrep extends StatelessWidget {
   bool seenRecipe;
   bool seenFAQ;
 
   @override
   Widget build(BuildContext context) {
-    print("----BUILD METHOD RUN ON APPOINTMENT PREP----");
-    print("seen recipe: " + seenFAQ.toString());
     return StreamBuilder(
         stream: Queries.prepCardsSnapshots,
         builder: (context, snapshot) {
@@ -51,24 +44,20 @@ class AppointmentPrep extends StatelessWidget {
   }
 
   Widget _buildGrid(BuildContext context, DocumentSnapshot document) {
-    print("---SEENFAQ---");
-    print(document.documentID);
-    print(seenFAQ);
-
     if (document['type'] == 'article' || document['type'] == 'categoryList') {
       return CategoryCard(document.documentID, document['title'],
-          document['type'], Colors.white, Queries.dateTime);
+          document['type']);
     } else {
       if (document['type'] == 'faqs' && !seenFAQ) {
         seenFAQ = true;
         return CategoryCard(document.documentID, document['title'],
-            document['type'], Colors.white, Queries.dateTime);
+            document['type']);
       }
 
       if (document['type'] == 'recipe' && !seenRecipe) {
         seenRecipe = true;
         return CategoryCard(document.documentID, document['title'],
-            document['type'], Colors.white, Queries.dateTime);
+            document['type']);
       }
     }
 
