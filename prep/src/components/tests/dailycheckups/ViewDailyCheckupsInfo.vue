@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import {viewdailycheckupsInfoMixin} from "../../../mixins/viewdailycheckupsInfoMixin";
+import {viewdailycheckupsInfoMixin} from "../../../mixins/dailycheckupsMixin/viewdailycheckupsInfoMixin";
 export default {
   name: "view-dailycheckups-info",
   mixins: [viewdailycheckupsInfoMixin],

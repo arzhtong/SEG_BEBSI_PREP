@@ -34,7 +34,7 @@
 </template>
 
 <script>
-    import {viewdailycheckupsMixin} from "../../../mixins/viewdailycheckupsMixin";
+    import {viewdailycheckupsMixin} from "../../../mixins/dailycheckupsMixin/viewdailycheckupsMixin";
     export default {
     name: 'view-dailycheckups',
     mixins: [viewdailycheckupsMixin],

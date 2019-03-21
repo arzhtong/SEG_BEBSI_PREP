@@ -1,4 +1,4 @@
-import db from "../components/firebaseInit";
+import db from "../../components/firebaseInit";
 import firebase from "firebase";
 
 export const viewdailycheckupsMixin ={
