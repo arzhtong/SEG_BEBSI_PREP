@@ -6,6 +6,7 @@ class AppointmentDetailsBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      key: Key('rootCard'),
       elevation: 3.0,
       color: Queries.color,
       child: Container(
