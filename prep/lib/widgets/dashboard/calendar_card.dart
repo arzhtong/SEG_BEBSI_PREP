@@ -69,6 +69,7 @@ class CalendarCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Container(
+                    key: Key('rootContainer'),
                     width: double.infinity,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(3.0)),

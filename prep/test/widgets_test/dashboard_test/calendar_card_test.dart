@@ -24,12 +24,15 @@ void main() {
     final appointmentTitleFinder = find.text("FDG PET Scan of the Heart");
     final location = find.text("St. Thomas Hospiutal");
     final staffMember = find.text("Eliana Reyes");
-    final date =
-        find.text(dateFormatter(DateTime(2019, 3, 25, 10, 0)));
-    final time =
-        find.text(timeFormatter(DateTime(2019, 3, 25, 10, 0)));
+    final date = find.text(dateFormatter(DateTime(2019, 3, 25, 10, 0)));
+    final time = find.text(timeFormatter(DateTime(2019, 3, 25, 10, 0)));
     final appointmentCode = find.text("hjhfuz3ey");
+    final containerFinder = find.byKey(Key('rootContainer'));
 
+    Color boxColor = ((containerFinder.evaluate().single.widget as Container)
+            .decoration as BoxDecoration).color;
+
+    expect(boxColor, Colors.blue[300]);
     expect(appointmentTitleFinder, findsOneWidget);
     expect(location, findsOneWidget);
     expect(staffMember, findsOneWidget);
