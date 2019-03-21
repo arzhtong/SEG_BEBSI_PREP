@@ -50,13 +50,13 @@ class AppointmentPrep extends StatelessWidget {
     } else {
       if (document['type'] == 'faqs' && !seenFAQ) {
         seenFAQ = true;
-        return CategoryCard(document.documentID, document['title'],
+        return CategoryCard(document.documentID, "Frequently Asked Questions",
             document['type']);
       }
 
       if (document['type'] == 'recipe' && !seenRecipe) {
         seenRecipe = true;
-        return CategoryCard(document.documentID, document['title'],
+        return CategoryCard(document.documentID, "Recommended Recipes",
             document['type']);
       }
     }

@@ -99,7 +99,7 @@ class CalendarCard extends StatelessWidget {
                                 height: 30.0,
                               ),
                               _informationRow("Location: ", location),
-                              _informationRow("Staff member: ", doctorName),
+                              _informationRow("Staff: ", doctorName),
                               _informationRow(
                                   "Date: ", dateFormatter(dateTime)),
                               _informationRow(

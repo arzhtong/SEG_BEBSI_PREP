@@ -30,7 +30,7 @@ class AppointmentDetailsBanner extends StatelessWidget {
             Divider(
               color: Colors.white,
             ),
-            _TitleText("Staff member"),
+            _TitleText("Staff"),
             _SubtitleText(Queries.doctorName),
           ],
         ),
