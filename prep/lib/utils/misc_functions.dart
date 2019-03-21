@@ -61,6 +61,10 @@ String timeFormatter(DateTime datetime) {
 }
 
 String monthAbbreviation(DateTime datetime) {
+  if (datetime == null) {
+    return "N/A";
+  }
+
   const List<String> months = [
     "January",
     "February",
