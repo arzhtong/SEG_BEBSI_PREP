@@ -7,7 +7,7 @@ export const recipeMixin = {
     data() { 
         return {
             // possible types for a recipe
-            types: [
+            recipeTypes: [
                 "salad",
                 "soup",
                 "vegetable",
