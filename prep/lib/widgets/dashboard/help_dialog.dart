@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
 class MakeHelpIcon extends StatelessWidget {
-  final String info;
+   String info;
 
-  MakeHelpIcon(this.info);
+  MakeHelpIcon(this.info){
+   if (info==null){
+     info='';
+   }
+  }
 
   Widget build(BuildContext context) {
     return IconButton(
@@ -15,6 +19,7 @@ class MakeHelpIcon extends StatelessWidget {
 }
 
 void makeAlert(BuildContext context, String text) {
+
   var alertDialog = AlertDialog(
     title: Text("Tip",
         textAlign: TextAlign.center, style: TextStyle(fontSize: 30.0)),
