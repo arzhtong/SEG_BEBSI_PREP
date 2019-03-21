@@ -40,16 +40,17 @@ export default {
     created () {
         db.collection('tests')
           .doc(this.$route.params.test_id)
-          .collection('recipes')
+          .collection('prepCards')
           .get()
           .then(querySnapshot => {
             querySnapshot.forEach(doc => {
-                const data = {
-                    'id': doc.id,
-                    'instrcutions': doc.data().instructions,
-                    'title': doc.data().title,
+                if(doc.data().cardType === 'recipe') {
+                    const data = {
+                        id: doc.id,
+                        title: doc.data().title
+                    }
+                    this.recipes.push(data)
                 }
-                this.recipes.push(data)
             })
         })
     }

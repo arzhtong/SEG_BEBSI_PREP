@@ -57,7 +57,7 @@ export default {
     beforeRouteEnter (to, from, next) {
         db.collection('tests')
           .doc(to.params.test_id)
-          .collection('recipes')
+          .collection('prepCards')
           .doc(to.params.recipe_id)
           .get()
           .then(doc => {
@@ -71,7 +71,7 @@ export default {
                     vm.ingredients = doc.data().ingredients
                     vm.instructions = doc.data().method
                     vm.note = doc.data().note
-                    vm.type = doc.data().type
+                    vm.type = doc.data().recipeType
                 })
               }
           })
@@ -83,7 +83,7 @@ export default {
         fetchData () {
             db.collection('tests')
               .doc(this.$route.params.test_id)
-              .collection('recipes')
+              .collection('prepCards')
               .doc(this.$route.params.recipe_id)
               .get()
               .then(doc => {
@@ -96,7 +96,7 @@ export default {
                     this.ingredients = doc.data().ingredients
                     this.instructions = doc.data().method
                     this.note = doc.data().note
-                    this.type = doc.data().type
+                    this.type = doc.data().recipeType
                 }
               })
         },
@@ -104,7 +104,7 @@ export default {
             if(confirm('Are you sure?')) {
                 db.collection('tests')
                     .doc(this.$route.params.test_id)
-                    .collection('recipes')
+                    .collection('prepCards')
                     .doc(this.$route.params.recipe_id)
                     .get()
                     .then(doc => {

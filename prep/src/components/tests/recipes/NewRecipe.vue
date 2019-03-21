@@ -62,7 +62,7 @@
                     </div>
                     <div class="row">
                         <select class="browser-default" style="color:black" v-model="type">
-                            <option v-for="type in types" v-bind:key="type.index" :value="type">{{type}}</option>
+                            <option v-for="type in recipeTypes" v-bind:key="type.index" :value="type">{{type}}</option>
                         </select>
                     </div>
                     <div class="row">
@@ -113,7 +113,9 @@ export default {
                 var labels = this.getChips()
                 db.collection('tests')
                 .doc(this.$route.params.test_id)
-                .collection('recipes').add({
+                .collection('prepCards')
+                .add({
+                    cardType: 'recipe',
                     title: this.title,
                     subtitle: this.subtitle,
                     backgroundImage: this.imageURL,
@@ -121,7 +123,7 @@ export default {
                     method: this.instructions,
                     labels: labels,
                     note: this.note,
-                    type: this.type,
+                    recipeType: this.type,
                     externalURL: this.externalURL
                 })
                 .then(docRef => {

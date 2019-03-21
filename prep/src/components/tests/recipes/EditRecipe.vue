@@ -58,8 +58,8 @@
             <span id="title">Type</span>
           </div>
           <div class="row">
-            <select class="browser-default" style="color:black" v-model="type">
-              <option v-for="type in types" v-bind:key="type.index" :value="type">{{type}}</option>
+            <select class="browser-default" style="color:black" v-model="recipeType">
+              <option v-for="type in recipeTypes" v-bind:key="type.index" :value="type">{{type}}</option>
             </select>
           </div>
           <div class="row">
@@ -97,7 +97,7 @@ export default {
       imageURL: null,
       ingredients: [],
       instructions: [],
-      type: null,
+      recipeType: null,
       note: null,
       externalURL: null,
       labels: [],
@@ -111,7 +111,7 @@ export default {
   created() {
     db.collection("tests")
       .doc(this.$route.params.test_id)
-      .collection("recipes")
+      .collection("prepCards")
       .doc(this.$route.params.recipe_id)
       .get()
       .then(doc => {
@@ -124,7 +124,7 @@ export default {
           this.ingredients = doc.data().ingredients,
           this.instructions = doc.data().method,
           this.note = doc.data().note,
-          this.type = doc.data().type
+          this.recipeType = doc.data().recipeType
           // wait for chips to be initialised
           this.$nextTick(() => this.loadChips())
         }
@@ -133,7 +133,7 @@ export default {
   beforeRouteEnter(to, from, next) {
     db.collection("tests")
       .doc(to.params.test_id)
-      .collection("recipes")
+      .collection("prepCards")
       .doc(to.params.recipe_id)
       .get()
       .then(doc => {
@@ -147,7 +147,7 @@ export default {
             vm.ingredients = doc.data().ingredients
             vm.instructions = doc.data().method
             vm.note = doc.data().note
-            vm.type = doc.data().type
+            vm.recipeType = doc.data().recipeType
           })
         }
       })
@@ -160,7 +160,7 @@ export default {
         var labels = this.getChips()
         db.collection("tests")
           .doc(this.$route.params.test_id)
-          .collection("recipes")
+          .collection("prepCards")
           .doc(this.$route.params.recipe_id)
           .update({
             title: this.title,
@@ -170,7 +170,7 @@ export default {
             note: this.note,
             labels: labels,
             backgroundImage: this.imageURL,
-            type: this.type,
+            recipeType: this.recipeType,
             externalURL: this.externalURL
           })
           .then(() => {
