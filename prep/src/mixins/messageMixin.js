@@ -126,7 +126,7 @@ export const messageMixin = {
               console.log("Message modified!");
             }
           });
-          this.scroll();
+          this.scrollToBottom();
         });
     },
     /*
@@ -159,8 +159,7 @@ export const messageMixin = {
           .then(function() {
             document.getElementById("textArea").value = "";
             message = null;
-            var elem = document.getElementById("messages");
-            elem.scrollTop = elem.scrollHeight;
+            document.getElementById("textArea").click();
             console.log("Document successfully written!");
           })
           .catch(function(error) {
@@ -174,7 +173,7 @@ export const messageMixin = {
 
         Part of the Message Component.
     */
-    scroll() {
+   scrollToBottom() {
       var elmnt = document.getElementById("messages");
       elmnt.scrollTop = elmnt.scrollHeight;
     }

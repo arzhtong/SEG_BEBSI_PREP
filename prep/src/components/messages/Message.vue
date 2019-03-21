@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="containerChat" id="top">
-      <div id="messages">
+      <div id="messages" tag="msg">
         <ul>
           <li v-for="message in messages" v-bind:key="message.msgKey">
             <div v-if="message.isPatient == false" class="containerChat" style="max-width:100%;">
@@ -35,7 +35,7 @@
           <div class="input-field col s12">
             <div id="foot">
               <textarea
-                @focus="scroll"
+                @click="scrollToBottom"
                 style="width:30%;height:80px;resize: none;"
                 id="textArea"
                 required

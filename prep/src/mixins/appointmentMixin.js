@@ -119,34 +119,6 @@ export const appointmentMixin = {
         });
     },
     /*
-        This method enables the dailyCheckyps to be modified.
-        Note: This method is left here for expandability purposes
-        and it does not function in this current website version.
-
-        Part of the ViewAppointment Component.
-    */
-    enableEditMode(currentCheckup) {
-      var inputArray = document.getElementsByClassName("dailyInput");
-      var inputList = Array.from(inputArray);
-      for (var i = 0; i < inputList.length; i++) {
-        // @ts-ignore
-        if (inputList[i].value in currentCheckup.instructions) {
-          // @ts-ignore
-          if (inputList[i].readOnly == true) {
-            // @ts-ignore
-            inputList[i].readOnly = false;
-            // @ts-ignore
-            inputList[i].style.color = "#2196f3";
-          } else {
-            // @ts-ignore
-            inputList[i].readOnly = true;
-            // @ts-ignore
-            inputList[i].style.color = "grey";
-          }
-        }
-      }
-    },
-    /*
         This method gets the data from all users
         in the firestore.
 

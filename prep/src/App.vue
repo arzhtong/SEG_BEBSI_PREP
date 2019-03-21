@@ -39,7 +39,7 @@ export default {
 
 .tooltip .tooltiptext {
   visibility: hidden;
-  width: 100px;
+  width: 120px;
   background-color: #555;
   color: #fff;
   text-align: center;
