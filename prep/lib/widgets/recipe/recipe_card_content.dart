@@ -23,7 +23,7 @@ class RecipeCardContent extends StatelessWidget {
     //internal recipe must either exist fully or doesn't at all
     bool hasInternalRecipe =
         (dynamicIngredientListData != null) && (dynamicMethodListData != null);
-    assert(hasInternalRecipe |
+    assert(hasInternalRecipe ||
         ((dynamicMethodListData == null) &&
             (dynamicIngredientListData == null)));
 
