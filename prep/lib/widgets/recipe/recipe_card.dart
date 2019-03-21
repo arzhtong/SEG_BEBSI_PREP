@@ -16,10 +16,11 @@ class RecipeCard extends StatelessWidget {
     return FirestoreDocumentDataProvider(
       documentData: snapshot.data,
       child: Container(
+        padding: EdgeInsets.only(bottom: 5.0),
         width: MediaQuery.of(context).size.width,
         child: Material(
           child: Card(
-            elevation: 1.0,
+            elevation: 3.0,
             clipBehavior: Clip.antiAlias,
             child: Column(
               children: <Widget>[

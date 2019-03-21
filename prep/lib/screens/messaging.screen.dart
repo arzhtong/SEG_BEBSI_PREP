@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'dart:async';
 
-import '../utils/query.dart';
-import '../utils/message_crypto.dart';
+import 'package:prep/utils/query.dart';
+import 'package:prep/utils/message_crypto.dart';
+import 'package:prep/utils/misc_functions.dart';
 
 class MessagingScreen extends StatefulWidget {
   @override
@@ -17,8 +17,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
 
   void _addNewMessage(DocumentSnapshot document) {
     Map<String, dynamic> message = document.data;
-    if (!message['seenByPatient'])
-      Queries.setSeenByPatient(document.reference);
+    if (!message['seenByPatient']) Queries.setSeenByPatient(document.reference);
 
     String decryptedMessage = MessageCrypto.decryptMessage(message['content']);
 
@@ -89,7 +88,6 @@ class _MessagesView extends StatefulWidget {
 class _MessagesViewState extends State<_MessagesView>
     with TickerProviderStateMixin {
   List<_MessageData> _messagesList = [];
-  // final ScrollController _scrollController = ScrollController();
 
   void _addMessageToList(
       {String messageText, DateTime datetime, bool isPatient}) {
@@ -104,11 +102,7 @@ class _MessagesViewState extends State<_MessagesView>
     );
 
     setState(() => _messagesList.insert(0, _newMessage));
-    // _scrollMessageViewToBottom();
   }
-
-  /* void _scrollMessageViewToBottom() => _scrollController.animateTo(0.0,
-      curve: Curves.ease, duration: const Duration(milliseconds: 300)); */
 
   void dispose() {
     for (_MessageData message in _messagesList) {
@@ -120,10 +114,20 @@ class _MessagesViewState extends State<_MessagesView>
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      padding: EdgeInsets.only(top: 8.0),
       reverse: true,
-      itemBuilder: (_, int index) => _MessageListItem(_messagesList[index]),
+      itemBuilder: (_, int index) {
+        String currentDate = dateFormatter(_messagesList[index].datetime);
+        String nextDate = dateFormatter((index == _messagesList.length - 1)
+            ? null
+            : _messagesList[index + 1].datetime);
+
+        return _MessageListItem(
+          message: _messagesList[index],
+          showDate: (currentDate == nextDate) ? false : true,
+        );
+      },
       itemCount: _messagesList.length,
-      // controller: _scrollController,
     );
   }
 }
@@ -150,37 +154,47 @@ class _TextComposerState extends State<_TextComposer> {
   Widget build(BuildContext context) {
     return IconTheme(
       data: IconThemeData(color: Theme.of(context).accentColor),
-      child: new Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Row(
-          children: <Widget>[
-            Flexible(
-              child: TextField(
-                maxLines: null,
-                keyboardType: TextInputType.multiline,
-                controller: _textController,
-                onChanged: (userInputText) {
-                  setState(() => _hasTyped = userInputText.length > 0);
-                },
-                //onSubmitted: MessagingQueries.sendMessage,
-                decoration:
-                    InputDecoration.collapsed(hintText: "Type a message"),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 4.0),
-              child: IconButton(
-                icon: Icon(
-                  Icons.send,
-                  //TODO Change to proper theme colors after implementation.
-                  color: (_hasTyped)
-                      ? Theme.of(context).accentColor
-                      : Theme.of(context).buttonColor,
+      child: Container(
+        padding: EdgeInsets.only(left: 8.0),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: 200),
+          child: IntrinsicHeight(
+            child: Row(
+              children: <Widget>[
+                Flexible(
+                  child: SingleChildScrollView(
+                    child: TextField(
+                      autocorrect: true,
+                      maxLines: null,
+                      keyboardType: TextInputType.multiline,
+                      controller: _textController,
+                      onChanged: (userInputText) {
+                        setState(() => _hasTyped = userInputText.length > 0);
+                      },
+                      decoration:
+                          InputDecoration.collapsed(hintText: "Type a message"),
+                    ),
+                  ),
                 ),
-                onPressed: () => _sendMessage(_textController.text.trim()),
-              ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(
+                        Icons.send,
+                        //TODO Change to proper theme colors after implementation.
+                        color: (_hasTyped)
+                            ? Theme.of(context).accentColor
+                            : Theme.of(context).buttonColor,
+                      ),
+                      onPressed: () =>
+                          _sendMessage(_textController.text.trim()),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -203,18 +217,17 @@ class _MessageData {
 //Widget used to display a particlat message on screen
 class _MessageListItem extends StatelessWidget {
   final _MessageData message;
+  final bool showDate;
 
-  _MessageListItem(this.message)
+  _MessageListItem({@required this.message, @required this.showDate})
       : rowAlignment = (message.isPatient)
             ? MainAxisAlignment.end
             : MainAxisAlignment.start,
-        messageBackgroundColor = (message.isPatient)
-            ? Colors.greenAccent
-            : Colors.lightBlueAccent; //TODO use Theme colors
+        messageBackgroundColor =
+            (message.isPatient) ? Colors.blue[200] : Colors.grey[300];
 
   final MainAxisAlignment rowAlignment;
   final Color messageBackgroundColor;
-  final bool shouldWrap = true; // not yet used...
 
   Widget _getStatusLine(BuildContext context) {
     var statuslineTimestamp = Text(
@@ -224,26 +237,20 @@ class _MessageListItem extends StatelessWidget {
 
     return Row(
       mainAxisAlignment: rowAlignment,
-      children: (message.isPatient)
-          ? <Widget>[
-              //Time sent
-              statuslineTimestamp,
-              //Read Receipt
-              /* Icon(
-                Icons.done,
-                color: Theme.of(context).buttonColor,
-                size: 16.0,
-              ),
-              Text(
-                "Delivered",
-                style: TextStyle(fontSize: 12.0, fontStyle: FontStyle.italic),
-              ), */
-            ]
-          : <Widget>[
-              //Time sent
-              statuslineTimestamp
-            ],
+      children: <Widget>[
+        statuslineTimestamp,
+      ],
     );
+  }
+
+  Widget _getDateLine(BuildContext context) {
+    return Column(children: <Widget>[
+      Text(
+        dateFormatter(message.datetime),
+        style: TextStyle(fontSize: 12.0),
+      ),
+      Divider(),
+    ]);
   }
 
   Widget _getMessageBody(BuildContext context) {
@@ -279,6 +286,7 @@ class _MessageListItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
         children: <Widget>[
+          showDate ? _getDateLine(context) : Container(),
           _getStatusLine(context),
           _getMessageBody(context),
           Divider(),
