@@ -39,7 +39,7 @@ class RecipeCardHeader extends StatelessWidget {
 
   List<Widget> _buildRecipeLabels(BuildContext context) {
     var dynamicLabels =
-        FirestoreDocumentDataProvider.of(context).documentData['labels'];
+        DocumentDataProvider.of(context).documentData['labels'];
 
     if (dynamicLabels == null) return [];
 
@@ -64,10 +64,10 @@ class RecipeCardHeader extends StatelessWidget {
       );
 
   CachedNetworkImage _loadRecipeImageOrDefault(BuildContext context) {
-    var backgroundImageUrl = FirestoreDocumentDataProvider.of(context)
+    var backgroundImageUrl = DocumentDataProvider.of(context)
         .documentData['backgroundImage'];
     var recipeType =
-        FirestoreDocumentDataProvider.of(context).documentData['type'];
+        DocumentDataProvider.of(context).documentData['type'];
 
     backgroundImageUrl ??= '';
     recipeType ??= 'default';

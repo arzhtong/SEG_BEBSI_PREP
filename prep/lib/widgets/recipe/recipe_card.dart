@@ -7,14 +7,14 @@ import 'package:prep/widgets/recipe/recipe_card_header.dart';
 
 //TODO: Add ancestor assertions in children
 class RecipeCard extends StatelessWidget {
-  final DocumentSnapshot snapshot;
+  final Map<String, dynamic> data;
 
-  RecipeCard({@required this.snapshot});
+  RecipeCard({@required this.data});
 
   @override
   Widget build(BuildContext context) {
-    return FirestoreDocumentDataProvider(
-      documentData: snapshot.data,
+    return DocumentDataProvider(
+      documentData: data,
       child: Container(
         padding: EdgeInsets.only(bottom: 5.0),
         width: MediaQuery.of(context).size.width,

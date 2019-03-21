@@ -5,7 +5,9 @@ import 'package:prep/widgets/recipe/recipe_card.dart';
 
 class RecipeListScreen extends StatelessWidget {
   static const String _appBarTitle = "Suggested Recipes";
-  static const Widget _loadingWidget = Text("Loading recipes...");
+  static const Widget _loadingWidget = Center(
+    child: Text("Loading recipes..."),
+  );
   static String _errorMessagePrefix = 'Error while loading recipes:';
 
   @override
@@ -20,13 +22,14 @@ class RecipeListScreen extends StatelessWidget {
           if (!collectionSnapshot.hasData) {
             return _loadingWidget;
           } else if (collectionSnapshot.hasError) {
-            return Text(_errorMessagePrefix + collectionSnapshot.error);
+            return Center(
+              child: Text(_errorMessagePrefix + collectionSnapshot.error),
+            );
           }
           return ListView.builder(
             padding: EdgeInsets.all(10.0),
-            itemBuilder: (_, index) =>
-                RecipeCard(
-                  snapshot: collectionSnapshot.data.documents[index],
+            itemBuilder: (_, index) => RecipeCard(
+                  data: collectionSnapshot.data.documents[index].data,
                 ),
             itemCount: collectionSnapshot.data.documents.length,
           );
