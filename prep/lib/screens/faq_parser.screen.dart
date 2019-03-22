@@ -7,7 +7,7 @@ import 'package:prep/widgets/faq_parser/faq_expansion_tile.dart';
 
 class FaqParser extends StatelessWidget {
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
-    return FaqExpansionTIle(document['question'], document['answer'],
+    return FaqExpansionTile(document['question'], document['answer'],
         document['chatShortcut'], document['informationShortcut']);
   }
 

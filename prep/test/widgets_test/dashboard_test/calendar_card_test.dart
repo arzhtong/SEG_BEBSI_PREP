@@ -30,7 +30,8 @@ void main() {
     final containerFinder = find.byKey(Key('rootContainer'));
 
     Color boxColor = ((containerFinder.evaluate().single.widget as Container)
-            .decoration as BoxDecoration).color;
+            .decoration as BoxDecoration)
+        .color;
 
     expect(boxColor, Colors.blue[300]);
     expect(appointmentTitleFinder, findsOneWidget);

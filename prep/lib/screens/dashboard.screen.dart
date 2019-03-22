@@ -20,12 +20,10 @@ class _DashboardState extends State<Dashboard> {
   // Firestore variables
   Widget cachedCalendar;
   List<DocumentSnapshot> documentList;
-  QuerySnapshot testDocList;
 
   // Codes file variables
   Storage storage = new Storage();
   String codeFileState;
-  bool fileExists = false;
 
   // Form validation variables
   TextEditingController codeController = new TextEditingController();
@@ -68,17 +66,19 @@ class _DashboardState extends State<Dashboard> {
     return storage.writeData("");
   }
 
-//  // Checks if a code exists in the Firestore
-  Future<bool> _isCodeInFirestore(String code) async {
-    List<String> liveIDs = new List();
+  // Checks if a code exists in the Firestore and is not used
+  Future<bool> _isCodeInFirestoreNotUsed(String code) async {
+    List<String> liveNotUsedIDs = new List();
 
     await Queries.appointmentCodes.then((query) {
       query.documents.forEach((document) {
-        liveIDs.add(document.documentID);
+        if (document['used'] == false) {
+          liveNotUsedIDs.add(document.documentID);
+        }
       });
     });
 
-    if (liveIDs.contains(code)) {
+    if (liveNotUsedIDs.contains(code)) {
       return true;
     } else {
       return false;
@@ -100,29 +100,29 @@ class _DashboardState extends State<Dashboard> {
     print("Raw codes file - in getDocData after reading: " + codeFileState);
 
     //reading appointments from the database and updating the codes file
-    documentList = new List();
-    testDocList = await Queries.appointmentCodes;
+    QuerySnapshot testDocList = await Queries.appointmentCodes;
     documentList = testDocList.documents;
 
     // Get all the codes stored in the database
-    List<String> documentIDs = new List();
+    List<String> availableCodes = new List();
+
     documentList.forEach((doc) {
-      documentIDs.add(doc.documentID);
+      availableCodes.add(doc.documentID);
     });
 
     // Store all the codes in both the database and the codes file in the var
     String newCodeFileState = "";
+
     codeFileState.split(',').forEach((code) {
-      if (documentIDs.contains(code)) {
+      if (availableCodes.contains(code)) {
         newCodeFileState = newCodeFileState + code + ',';
       }
     });
 
     print("New codes files - after filtering: " + newCodeFileState);
 
-    // Saving the new sequence of codes in the codes file
+    // Saving the new sequence of codes in the codes file and updating file state
     await storage.writeData(newCodeFileState);
-
     codeFileState = newCodeFileState;
 
     // building the return widget based on the updated (current) codes file
@@ -322,11 +322,21 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
 
                             bool inFile = _parent._documentInCodeFile(
                                 _parent.codeController.text);
-                            bool inDatabase = await _parent._isCodeInFirestore(
-                                _parent.codeController.text);
+                            bool inDatabase =
+                                await _parent._isCodeInFirestoreNotUsed(
+                                    _parent.codeController.text);
 
+                            // The validator will succeed if the code is not already in the codes file and if it is not used in firestore
                             _parent.validationResultDb = inDatabase;
                             _parent.validationResultFile = inFile;
+
+                            // If the validator will succeed, start overwriting the used field already
+                            if (inDatabase && !inFile) {
+                              await Firestore.instance
+                                  .collection('appointments')
+                                  .document(_parent.codeController.text)
+                                  .updateData({'used': true});
+                            }
 
                             setState(() {
                               loading = false;
@@ -342,7 +352,8 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                                       ',');
 
                               _parent.setState(() {
-                                _parent._subscribeToNotifications(_parent.codeController.text);
+                                _parent._subscribeToNotifications(
+                                    _parent.codeController.text);
                                 _parent.codeController.text = "";
                               });
 

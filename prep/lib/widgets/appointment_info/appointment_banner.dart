@@ -6,6 +6,7 @@ class AppointmentDetailsBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      key: Key('rootCard'),
       elevation: 3.0,
       color: Queries.color,
       child: Container(
@@ -30,7 +31,7 @@ class AppointmentDetailsBanner extends StatelessWidget {
             Divider(
               color: Colors.white,
             ),
-            _TitleText("Staff member"),
+            _TitleText("Staff"),
             _SubtitleText(Queries.doctorName),
           ],
         ),
