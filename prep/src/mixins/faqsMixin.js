@@ -38,7 +38,6 @@ export const faqsMixin = {
         });
     },
     deleteFAQ(id) {
-      alert(id)
       if (confirm("Are you sure?")) {
         db.collection("tests")
           .doc(this.$route.params.test_id)
