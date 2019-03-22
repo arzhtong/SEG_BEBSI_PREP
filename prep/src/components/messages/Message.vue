@@ -62,7 +62,7 @@
   </div>
 </template>
 <script>
-import { messageMixin } from "../../mixins/messageMixin";
+import { messageMixin } from "../../mixins/messagesMixin/messageMixin";
 export default {
   name: "message",
   mixins: [messageMixin],

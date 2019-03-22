@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { authMixin } from "../../mixins/authMixin";
+import { authMixin } from "../../mixins/authMixin/authMixin";
 export default {
   name: "login",
   mixins: [authMixin]

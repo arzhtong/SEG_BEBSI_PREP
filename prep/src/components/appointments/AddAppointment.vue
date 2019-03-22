@@ -71,7 +71,7 @@
 
 
 <script>
-import { appointmentMixin } from "../../mixins/appointmentMixin";
+import { appointmentMixin } from "../../mixins/appointmentsMixin/appointmentMixin.js";
 
 export default {
   name: "add-appointment",

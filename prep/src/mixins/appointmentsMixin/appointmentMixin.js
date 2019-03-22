@@ -2,7 +2,7 @@
 // To make use of the functionality in this file import { appointmentMixin } from '(this location)'
 // and then add 'mixins: [appointmentMixin]' just before the data of the component.
 
-import db from "../components/firebaseInit";
+import db from "../../components/firebaseInit";
 import firebase from "firebase";
 
 export const appointmentMixin = {
@@ -282,7 +282,8 @@ export const appointmentMixin = {
           testID: this.testID.testID,
           expired: false,
           doctor: this.doctor,
-          testName: this.testID.title
+          testName: this.testID.title,
+          used: false
         })
         .then(docRef => {
           this.addDailyCheckups();

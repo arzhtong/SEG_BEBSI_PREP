@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { appointmentMixin } from "../../mixins/appointmentMixin";
+import { appointmentMixin } from "../../mixins/appointmentsMixin/appointmentMixin";
 export default {
   name: "edit-appointment",
   mixins: [appointmentMixin],
