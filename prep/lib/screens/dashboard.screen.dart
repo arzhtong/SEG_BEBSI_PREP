@@ -68,13 +68,15 @@ class _DashboardState extends State<Dashboard> {
     return storage.writeData("");
   }
 
-//  // Checks if a code exists in the Firestore
+  // Checks if a code exists in the Firestore and is not used
   Future<bool> _isCodeInFirestore(String code) async {
     List<String> liveIDs = new List();
 
     await Queries.appointmentCodes.then((query) {
       query.documents.forEach((document) {
-        liveIDs.add(document.documentID);
+        if (document['used'] == false) {
+          liveIDs.add(document.documentID);
+        }
       });
     });
 
@@ -100,29 +102,38 @@ class _DashboardState extends State<Dashboard> {
     print("Raw codes file - in getDocData after reading: " + codeFileState);
 
     //reading appointments from the database and updating the codes file
-    documentList = new List();
     testDocList = await Queries.appointmentCodes;
     documentList = testDocList.documents;
 
     // Get all the codes stored in the database
-    List<String> documentIDs = new List();
+    List<String> availableCodes = new List();
+    List<String> usedCodes = new List();
+
     documentList.forEach((doc) {
-      documentIDs.add(doc.documentID);
+      availableCodes.add(doc.documentID);
+      if (doc['used'] == true) {
+        usedCodes.add(doc.documentID);
+      }
     });
+
+    print("---All document IDs---");
+    print(availableCodes);
+    print("---All used document IDs---");
+    print(usedCodes);
 
     // Store all the codes in both the database and the codes file in the var
     String newCodeFileState = "";
+
     codeFileState.split(',').forEach((code) {
-      if (documentIDs.contains(code)) {
+      if (availableCodes.contains(code)) {
         newCodeFileState = newCodeFileState + code + ',';
       }
     });
 
     print("New codes files - after filtering: " + newCodeFileState);
 
-    // Saving the new sequence of codes in the codes file
+    // Saving the new sequence of codes in the codes file and updating file state
     await storage.writeData(newCodeFileState);
-
     codeFileState = newCodeFileState;
 
     // building the return widget based on the updated (current) codes file
@@ -328,6 +339,14 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                             _parent.validationResultDb = inDatabase;
                             _parent.validationResultFile = inFile;
 
+                            // If the validator will succeed, start overwriting the used field already
+                            if (inDatabase && !inFile) {
+                              await Firestore.instance
+                                  .collection('appointments')
+                                  .document(_parent.codeController.text)
+                                  .updateData({'used': true});
+                            }
+
                             setState(() {
                               loading = false;
                             });
@@ -342,7 +361,8 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                                       ',');
 
                               _parent.setState(() {
-                                _parent._subscribeToNotifications(_parent.codeController.text);
+                                _parent._subscribeToNotifications(
+                                    _parent.codeController.text);
                                 _parent.codeController.text = "";
                               });
 

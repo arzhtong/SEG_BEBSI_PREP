@@ -61,6 +61,7 @@ class Queries {
   }
 
   static Future<QuerySnapshot> get appointmentCodes => _appointmentsCollection
+      //.where('used', isEqualTo: false)
       .where('expired', isEqualTo: false)
       .where('datetime',
           isGreaterThan: DateTime.now().subtract(Duration(days: 1)))
