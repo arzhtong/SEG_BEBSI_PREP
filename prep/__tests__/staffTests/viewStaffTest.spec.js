@@ -12,6 +12,9 @@ describe("Component", () => {
   const wrapper = shallowMount(Component);
   test("is a Vue instance", () => {
     expect(wrapper.isVueInstance()).toBeTruthy();
+  }),
+  test('renders correctly', () => {
+    expect(wrapper.element).toMatchSnapshot()
   });
   db.app.delete();
 });
