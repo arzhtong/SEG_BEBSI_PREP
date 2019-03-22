@@ -52,50 +52,10 @@
 </template>
 
 <script>
-import db from "../firebaseInit";
+import { faqsMixin } from "../../mixins/faqsMixin.js";
 export default {
-  name: "new-recipe",
-  data() {
-    return {
-      question: null,
-      answer: null,
-      chatShortcut: false,
-      informationShortcut: false
-    };
-  },
-  methods: {
-    saveFAQ() {
-      // gets the value of the checkboxes
-      if (document.getElementById("chatCheck").checked) {
-        this.chatShortcut = true;
-      }
-      if (document.getElementById("informationCheck").checked) {
-        this.informationShortcut = true;
-      }
-
-      db.collection("tests")
-        .doc(this.$route.params.test_id)
-        .collection("prepCards")
-        .add({
-          title: "Frequently Asked Questions",
-          type: "faqs",
-          question: this.question,
-          answer: this.answer,
-          chatShortcut: this.chatShortcut,
-          informationShortcut: this.informationShortcut
-        })
-        // reroutes to faqs page
-        .then(docRef => {
-          alert('FAQ added!')
-          this.$router.push({
-            name: "view-prep-faqs",
-            params: {
-              test_id: this.$route.params.test_id
-            }
-          });
-        })
-        .catch(error => console.log(err));
-    }
-  }
+  name: "new-prep-faqs",
+  mixins: [faqsMixin],
 };
+
 </script>
