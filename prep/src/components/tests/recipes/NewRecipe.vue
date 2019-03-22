@@ -62,7 +62,7 @@
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
-                            <select  v-model="type">
+                            <select  v-model="recipeType">
                             <option value="" disabled selected><label>Choose Recipe type</label></option>
                             <option v-for="type in recipeTypes" v-bind:key="type.index" :value="type">{{type}}</option>
                             </select>
@@ -89,64 +89,17 @@
 </template>
 
 <script>
-import db from '../../firebaseInit'
-import imageUploader from '../../shared/ImageUploader'
-import { recipeMixin } from '../../../mixins/recipeMixin'
+import { recipeMixin } from '../../../mixins/recipeMixins/recipeMixin'
+import { recipeQuereyMixin } from '../../../mixins/recipeMixins/recipeQuereyMixin'
 
 export default {
     name: 'new-recipe',
-    mixins: [recipeMixin],
+    mixins: [recipeMixin, recipeQuereyMixin],
     data() {
         return {
-            title: null,
-            subtitle: null,
-            imageURL: null,
-            ingredients: [],
-            instructions: [],
-            type: null,
-            note: null,
-            externalURL: null
+            test_id: this.$route.params.test_id,
+            recipe_id: this.$route.params.recipe_id
         }
-    },
-    components: {
-        imageUploader
-    },
-    methods: {
-        saveRecipe() {
-            // only save if recipe is valid
-            if(this.validRecipe()) {
-                // get correctly formatted arrays before saving
-                var labels = this.getChips()
-                db.collection('tests')
-                .doc(this.$route.params.test_id)
-                .collection('prepCards')
-                .add({
-                    cardType: 'recipe',
-                    title: this.title,
-                    subtitle: this.subtitle,
-                    backgroundImage: this.imageURL,
-                    ingredients: this.ingredients,
-                    method: this.instructions,
-                    labels: labels,
-                    note: this.note,
-                    recipeType: this.type,
-                    externalURL: this.externalURL
-                })
-                .then(docRef => {
-                    this.$router.push({ name: 'view-recipes', params: {test_id: this.$route.params.test_id} })
-                })
-                .catch(error => console.log(err))
-            }
-        }
-    },
-    mounted() {
-        // initialise chips for recipe tags
-        $('.chips-placeholder').chips({
-            placeholder: 'Enter a tag'
-        })
-        $(document).ready(function() {
-            $('select').formSelect()
-        })    
     }
 }
 </script>

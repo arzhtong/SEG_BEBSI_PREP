@@ -13,7 +13,7 @@
                 <b>Dish Name:</b> {{title}}
                 <i v-if="subtitle"> - {{subtitle}}</i>
             </li>
-            <li v-if="type" class="collection-item"><b>Type:</b> {{type}}</li>
+            <li v-if="recipeType" class="collection-item"><b>Recipe type:</b> {{recipeType}}</li>
             <li v-if="labels" class="collection-item"><b>Labels:</b> {{labels}}</li>
             <li v-if="externalURL" class="collection-item"><b>Recipe link:</b> <a :href="externalURL">{{externalURL}}</a></li>
             <li v-if="ingredients" class="collection-item"><b>Ingredients:</b>
@@ -35,86 +35,24 @@
 </template>
 
 <script>
-import db from '../../firebaseInit'
+import { recipeMixin } from '../../../mixins/recipeMixins/recipeMixin'
+import { recipeQuereyMixin } from '../../../mixins/recipeMixins/recipeQuereyMixin'
 
 export default {
     name: 'view-recipe-info',
+    mixins: [recipeMixin, recipeQuereyMixin],
     data() {
         return {
-            recipe_id: this.$route.params.recipe_id,
-            title: null,
-            subtitle: null,
-            labels: null,
-            imageURL: null,
-            externalURL: null,
-            ingredients: [],
-            instructions: [],
-            note: null,
-            type: null,
-            test_id: this.$route.params.test_id
+            test_id: this.$route.params.test_id,
+            recipe_id: this.$route.params.recipe_id
         }
     },
-    beforeRouteEnter (to, from, next) {
-        db.collection('tests')
-          .doc(to.params.test_id)
-          .collection('prepCards')
-          .doc(to.params.recipe_id)
-          .get()
-          .then(doc => {
-              if(doc.exists) {
-                next(vm => {
-                    vm.title = doc.data().title
-                    vm.subtitle = doc.data().subtitle
-                    vm.labels = doc.data().labels
-                    vm.imageURL = doc.data().backgroundImage
-                    vm.externalURL = doc.data().externalURL
-                    vm.ingredients = doc.data().ingredients
-                    vm.instructions = doc.data().method
-                    vm.note = doc.data().note
-                    vm.type = doc.data().recipeType
-                })
-              }
-          })
-    },
-    watch: {
-        '$route': 'fetchData'
+    created() {
+        this.getRecipe(this.test_id, this.recipe_id)
     },
     methods: {
-        fetchData () {
-            db.collection('tests')
-              .doc(this.$route.params.test_id)
-              .collection('prepCards')
-              .doc(this.$route.params.recipe_id)
-              .get()
-              .then(doc => {
-                if(doc.exists) {
-                    this.title = doc.data().title
-                    this.subtitle = doc.data().subtitle
-                    this.labels = doc.data().labels
-                    this.imageURL = doc.data().backgroundImage
-                    this.externalURL = doc.data().externalURL
-                    this.ingredients = doc.data().ingredients
-                    this.instructions = doc.data().method
-                    this.note = doc.data().note
-                    this.type = doc.data().recipeType
-                }
-              })
-        },
-        deleteRecipe () {
-            if(confirm('Are you sure?')) {
-                db.collection('tests')
-                    .doc(this.$route.params.test_id)
-                    .collection('prepCards')
-                    .doc(this.$route.params.recipe_id)
-                    .get()
-                    .then(doc => {
-                        if(doc.exists) {
-                        doc.ref.delete()
-                    }
-                    this.$router.push({name: 'view-recipes', params: {test_id: this.$route.params.test_id}})
-                    })
-            }
-        }   
+        // overdie the load chips methods as this component dosent use chips
+        loadChips() {}
     }
 }
 </script>

@@ -2,10 +2,22 @@
 // To make use of the functionality in this file import { recipeMixin } from '(this location)'
 // and then add 'mixins: [recipeMixin]' just before the data of the component.
 
+import db from '../../components/firebaseInit'
+import imageUploader from '../../components/shared/ImageUploader'
 
 export const recipeMixin = {
     data() { 
         return {
+            // shared data for recipes
+            title: null,
+            subtitle: null,
+            imageURL: null,
+            ingredients: [],
+            instructions: [],
+            recipeType: null,
+            note: null,
+            externalURL: null,
+            labels: [],
             // possible types for a recipe
             recipeTypes: [
                 "salad",
@@ -25,6 +37,12 @@ export const recipeMixin = {
             ]
         }
     },
+
+    components: {
+        imageUploader
+    },
+
+    
     methods: {
         addInstruction() {
             this.instructions.push('')
@@ -49,6 +67,18 @@ export const recipeMixin = {
             }
             return (chips.length === 0 ? null : chips)
         },
+        // load current chips into the input area
+        loadChips() {
+            if(this.labels !== null) {
+                var instance = M.Chips.getInstance($('.chips'))
+                for(var i = 0; i < this.labels.length; i++) {
+                    instance.addChip({
+                        tag: this.labels[i]
+                    })
+                }
+            }
+        },
+
         // make sure the recipe has the required fields
         validRecipe() {
             if(!((this.externalURL !== null && this.externalURL !== '') || (this.ingredients.length > 0 && this.instructions.length > 0))) {
@@ -57,6 +87,38 @@ export const recipeMixin = {
             } else {
                 return true
             }
+        },
+
+        /*
+            Shared queries for recipe components
+        */
+
+        // get all recipes 
+        getRecipes() {
+            db.collection('tests')
+              .doc(this.$route.params.test_id)
+              .collection('prepCards')
+              .get()
+              .then(querySnapshot => {
+                querySnapshot.forEach(doc => {
+                    if(doc.data().cardType === 'recipe') {
+                        const data = {
+                            id: doc.id,
+                            title: doc.data().title
+                        }
+                        this.recipes.push(data)
+                    }
+                })
+              })
         }
+    },
+    mounted() {
+        // initialise materialize components 
+        $('.chips-placeholder').chips({
+            placeholder: 'Enter a tag'
+        })
+        $(document).ready(function() {
+            $('select').formSelect()
+        })    
     }
 }

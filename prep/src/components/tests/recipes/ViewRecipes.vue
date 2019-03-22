@@ -27,10 +27,11 @@
 </template>
 
 <script>
-import db from '../../firebaseInit'
+import { recipeMixin } from '../../../mixins/recipeMixins/recipeMixin'
 
 export default {
     name: 'view-recipes',
+    mixins: [recipeMixin],
     data() {
         return {
             recipes: [],
@@ -38,21 +39,7 @@ export default {
         }
     },
     created () {
-        db.collection('tests')
-          .doc(this.$route.params.test_id)
-          .collection('prepCards')
-          .get()
-          .then(querySnapshot => {
-            querySnapshot.forEach(doc => {
-                if(doc.data().cardType === 'recipe') {
-                    const data = {
-                        id: doc.id,
-                        title: doc.data().title
-                    }
-                    this.recipes.push(data)
-                }
-            })
-        })
+        this.getRecipes()
     }
 }
 </script>

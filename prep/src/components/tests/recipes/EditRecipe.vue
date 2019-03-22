@@ -92,123 +92,20 @@
 </template>
 
 <script>
-import db from '../../firebaseInit'
-import imageUploader from '../../shared/ImageUploader'
-import { recipeMixin } from '../../../mixins/recipeMixin'
+import { recipeMixin } from '../../../mixins/recipeMixins/recipeMixin'
+import { recipeQuereyMixin } from '../../../mixins/recipeMixins/recipeQuereyMixin'
 
 export default {
   name: "edit-recipe",
-  mixins: [recipeMixin],
+  mixins: [recipeMixin, recipeQuereyMixin],
   data() {
     return {
-      title: null,
-      subtitle: null,
-      imageURL: null,
-      ingredients: [],
-      instructions: [],
-      recipeType: null,
-      note: null,
-      externalURL: null,
-      labels: [],
       test_id: this.$route.params.test_id,
       recipe_id: this.$route.params.recipe_id
     }
   },
-  components: {
-    imageUploader
-  },
   created() {
-    db.collection("tests")
-      .doc(this.$route.params.test_id)
-      .collection("prepCards")
-      .doc(this.$route.params.recipe_id)
-      .get()
-      .then(doc => {
-        if (doc.exists) {
-          this.title = doc.data().title,
-          this.subtitle = doc.data().subtitle,
-          this.imageURL = doc.data().backgroundImage,
-          this.labels = doc.data().labels,
-          this.externalURL = doc.data().externalURL,
-          this.ingredients = doc.data().ingredients,
-          this.instructions = doc.data().method,
-          this.note = doc.data().note,
-          this.recipeType = doc.data().recipeType
-          // wait for chips to be initialised
-          this.$nextTick(() => this.loadChips())
-        }
-      })
-  },
-  beforeRouteEnter(to, from, next) {
-    db.collection("tests")
-      .doc(to.params.test_id)
-      .collection("prepCards")
-      .doc(to.params.recipe_id)
-      .get()
-      .then(doc => {
-        if (doc.exists) {
-          next(vm => {
-            vm.title = doc.data().title
-            vm.subtitle = doc.data().subtitle
-            vm.imageURL = doc.data().backgroundImage
-            vm.labels = doc.data().labels
-            vm.externalURL = doc.data().externalURL
-            vm.ingredients = doc.data().ingredients
-            vm.instructions = doc.data().method
-            vm.note = doc.data().note
-            vm.recipeType = doc.data().recipeType
-          })
-        }
-      })
-  },
-  methods: {
-    updateRecipe() {
-      // only save if recipe is valid
-      if(this.validRecipe()) {
-        // get correctly formatted arrays before saving
-        var labels = this.getChips()
-        db.collection("tests")
-          .doc(this.$route.params.test_id)
-          .collection("prepCards")
-          .doc(this.$route.params.recipe_id)
-          .update({
-            title: this.title,
-            subtitle: this.subtitle,
-            method: this.instructions,
-            ingredients: this.ingredients, 
-            note: this.note,
-            labels: labels,
-            backgroundImage: this.imageURL,
-            recipeType: this.recipeType,
-            externalURL: this.externalURL
-          })
-          .then(() => {
-            this.$router.push({
-              name: "view-recipes",
-              params: { test_id: this.$route.params.test_id }
-            })
-          })
-      }
-    },
-    loadChips() {
-      if(this.labels !== null) {
-        var instance = M.Chips.getInstance($('.chips'))
-        for(var i = 0; i < this.labels.length; i++) {
-          instance.addChip({
-            tag: this.labels[i]
-          })
-        }
-      }
-    }
-  },
-  mounted() {
-    // initialise chips for recipe tags
-    $('.chips-placeholder').chips({
-       placeholder: 'Enter a tag'
-    })
-    $(document).ready(function() {
-       $('select').formSelect()
-    }) 
+    this.getRecipe(this.test_id, this.recipe_id)
   }
 }
 </script>
