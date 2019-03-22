@@ -56,7 +56,7 @@ class AppointmentPrep extends StatelessWidget {
 
       if (document['type'] == 'recipe' && !seenRecipe) {
         seenRecipe = true;
-        return CategoryCard(document.documentID, "Recommended Recipes",
+        return CategoryCard(document.documentID, "Suggested Recipes",
             document['type']);
       }
     }

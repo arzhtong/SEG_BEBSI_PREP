@@ -20,12 +20,10 @@ class _DashboardState extends State<Dashboard> {
   // Firestore variables
   Widget cachedCalendar;
   List<DocumentSnapshot> documentList;
-  QuerySnapshot testDocList;
 
   // Codes file variables
   Storage storage = new Storage();
   String codeFileState;
-  bool fileExists = false;
 
   // Form validation variables
   TextEditingController codeController = new TextEditingController();
@@ -69,18 +67,18 @@ class _DashboardState extends State<Dashboard> {
   }
 
   // Checks if a code exists in the Firestore and is not used
-  Future<bool> _isCodeInFirestore(String code) async {
-    List<String> liveIDs = new List();
+  Future<bool> _isCodeInFirestoreNotUsed(String code) async {
+    List<String> liveNotUsedIDs = new List();
 
     await Queries.appointmentCodes.then((query) {
       query.documents.forEach((document) {
         if (document['used'] == false) {
-          liveIDs.add(document.documentID);
+          liveNotUsedIDs.add(document.documentID);
         }
       });
     });
 
-    if (liveIDs.contains(code)) {
+    if (liveNotUsedIDs.contains(code)) {
       return true;
     } else {
       return false;
@@ -102,24 +100,15 @@ class _DashboardState extends State<Dashboard> {
     print("Raw codes file - in getDocData after reading: " + codeFileState);
 
     //reading appointments from the database and updating the codes file
-    testDocList = await Queries.appointmentCodes;
+    QuerySnapshot testDocList = await Queries.appointmentCodes;
     documentList = testDocList.documents;
 
     // Get all the codes stored in the database
     List<String> availableCodes = new List();
-    List<String> usedCodes = new List();
 
     documentList.forEach((doc) {
       availableCodes.add(doc.documentID);
-      if (doc['used'] == true) {
-        usedCodes.add(doc.documentID);
-      }
     });
-
-    print("---All document IDs---");
-    print(availableCodes);
-    print("---All used document IDs---");
-    print(usedCodes);
 
     // Store all the codes in both the database and the codes file in the var
     String newCodeFileState = "";
@@ -333,9 +322,11 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
 
                             bool inFile = _parent._documentInCodeFile(
                                 _parent.codeController.text);
-                            bool inDatabase = await _parent._isCodeInFirestore(
-                                _parent.codeController.text);
+                            bool inDatabase =
+                                await _parent._isCodeInFirestoreNotUsed(
+                                    _parent.codeController.text);
 
+                            // The validator will succeed if the code is not already in the codes file and if it is not used in firestore
                             _parent.validationResultDb = inDatabase;
                             _parent.validationResultFile = inFile;
 
