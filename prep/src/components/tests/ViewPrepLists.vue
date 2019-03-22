@@ -47,34 +47,15 @@
   </div>
 </template>
 
-<script>
-import db from "../firebaseInit";
 
+<script>
+import { listsMixin } from "../../mixins/listsMixin.js";
 export default {
   name: "view-prep-lists",
-  data() {
-    return {
-      lists: [],
-      test_id: this.$route.params.test_id
-    };
-  },
-  created() {
-      db.collection("tests")
-            .doc(this.$route.params.test_id)
-            .collection("prepCards")
-            .where("type", "==", "categoryList")
-            .get()
-            .then(querySnapshot => {
-            querySnapshot.forEach(doc => {
-              const data = {
-                id: doc.id, // the document id in the database
-                title: doc.data().title
-              };
-              this.lists.push(data);
-            });
-            })
+  mixins: [listsMixin],
+  created (){
+    this.createPrepLists()
   }
 };
+
 </script>
-
-

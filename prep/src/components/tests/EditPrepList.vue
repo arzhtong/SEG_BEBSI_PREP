@@ -83,116 +83,13 @@
 </template>
 
 <script>
-import db from "../firebaseInit";
-
+import { listsMixin } from "../../mixins/listsMixin.js";
 export default {
   name: "edit-prep-list",
-  data() {
-    return {
-      title: null,
-      allData: [], // maps from database
-      allMaps: [], // newly added maps
-      test_id: this.$route.params.test_id,
-      List: this.$route.params.contents
-    };
-  },
-  created() {
-    db.collection("tests")
-      .doc(this.$route.params.test_id)
-      .collection("prepCards")
-      .doc(this.$route.params.contents)
-      .get()
-      .then(doc => {
-        doc.data().maps.forEach(map => {
-          this.allData.push(map);
-        });
-        this.title = doc.data().title
-      });
-    // gets the title of the list
-  },
-  methods: {
-    updatePrepList() {
-      if (this.allMaps.length > 0) {
-        // adds the 2 arrays together to form the new set of maps and adds the new array to the database
-        var theMaps = this.allData.concat(this.allMaps);
-        //for (l in theMaps) alert("h")
-        db.collection("tests")
-          .doc(this.$route.params.test_id)
-          .collection("prepCards")
-          .doc(this.$route.params.contents)
-          .set({
-            maps: theMaps,
-            title: this.title,
-            contents: this.title,
-            type: "categoryList"
-          }).then(() => {
-              // route back to list viewing page
-              alert("List edited!");
-              this.$router.push({
-                name: "view-prep-list",
-                params: {
-                  test_id: this.$route.params.test_id,
-                  contents: this.$route.params.contents
-                }
-              });
-            });
-      } else {
-        db.collection("tests")
-          .doc(this.$route.params.test_id)
-          .collection("prepCards")
-          .doc(this.$route.params.contents)
-          .set({
-            maps: this.allData,
-            title: this.title,
-            contents: this.title,
-            type: "categoryList"
-          }).then(() => {
-              // route back to list viewing page
-              alert("List edited!");
-              this.$router.push({
-                name: "view-prep-list",
-                params: {
-                  test_id: this.$route.params.test_id,
-                  contents: this.$route.params.contents
-                }
-              });
-            });
-      }
-    },
-    // adds a new map to the array
-    addMap() {
-      let data = new Object();
-      data.name = "";
-      data.description = "";
-      data.list = [];
-      this.allMaps.push(data);
-    },
-    // adds an item to the list of the new map
-    addToList(map) {
-      const data = "";
-      map.list.push(data);
-    },
-    // adds an item to the list of the old map
-    addToOldList(newData) {
-      const data = "";
-      newData.list.push(data);
-    },
-    // deletes an item from the list of the new map
-    deleteFromList(map, index) {
-      map.list.splice(index, 1);
-    },
-    // deletes an item from the list of the old map
-    deleteFromOldList(newData, index) {
-      newData.list.splice(index, 1);
-    },
-    // deletes a map from the array in the database
-    deleteOldMap(index) {
-      this.allData.splice(index, 1);
-    },
-    // deletes newly added map
-    deleteMap(index) {
-      this.allMaps.splice(index, 1);
-    },
+  mixins: [listsMixin],
+  created (){
+    this.createEditPrepList()
   }
 };
+
 </script>

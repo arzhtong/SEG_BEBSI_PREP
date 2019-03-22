@@ -43,50 +43,13 @@
 </template>
 
 <script>
-import db from "../firebaseInit";
-
+import { listsMixin } from "../../mixins/listsMixin.js";
 export default {
   name: "view-prep-list",
-  data() {
-    return {
-      maps: [],
-      title: null,
-      test_id: this.$route.params.test_id
-    };
-  },
-  created() {
-    db.collection("tests")
-      .doc(this.$route.params.test_id)
-      .collection("prepCards")
-      .doc(this.$route.params.contents)
-      .get()
-      .then(doc => {
-        // gets all the maps and pushes them seperately into an array
-          doc.data().maps.forEach(map => {
-            this.maps.push(map);
-          })
-          this.title = doc.data().title
-      });
-  },
-  methods: {
-    // deletes the list from the database as well as its card
-    deleteList() {
-      if (confirm("Are you sure?")) {
-        db.collection("tests")
-          .doc(this.$route.params.test_id)
-          .collection("prepCards")
-          .doc(this.$route.params.contents)
-          .delete()
-          .then(doc => {
-            alert('List deleted!')
-            this.$router.push({
-              name: "view-prep-lists",
-              params: { test_id: this.$route.params.test_id }
-            });
-          });
-          
-      }
-    }
+  mixins: [listsMixin],
+  created (){
+    this.createPrepList()
   }
 };
+
 </script>

@@ -63,59 +63,20 @@
 </template>
 
 <script>
-import db from "../firebaseInit";
-
+import { faqsMixin } from "../../mixins/faqsMixin.js";
 export default {
   name: "view-prep-faqs",
-  data() {
-    return {
-      faqs: [],
-      testID: this.$route.params.test_id
-    };
+  mixins: [faqsMixin],
+  created (){
+    this.createFaqs();
   },
-  created() {
-    db.collection("tests")
-      .doc(this.$route.params.test_id)
-      .collection("prepCards")
-      .where("type", "==", "faqs")
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          const data = {
-            id: doc.id, // the id of the document in the database
-            answer: doc.data().answer,
-            chatShortcut: doc.data().chatShortcut,
-            informationShortcut: doc.data().informationShortcut,
-            question: doc.data().question
-          };
-          this.faqs.push(data);
-        });
-      });
-  },
-  mounted() {
+   mounted() {
     M.AutoInit(); // initializes materialize components for the dropdowns
   },
-  methods: {
-      // delete an faq from the database
-    deleteFAQ(id) {
-      alert(id)
-      if (confirm("Are you sure?")) {
-        db.collection("tests")
-          .doc(this.$route.params.test_id)
-          .collection("prepCards")
-          .doc(id)
-          .delete()
-           .then(() => {
-              // refresh page
-              alert('FAQ deleted')
-            console.log("FAQ successfully deleted!");
-            location.reload();
-          });
-         
-      }
-    }
-  }
 };
+
 </script>
+
+
 
 
