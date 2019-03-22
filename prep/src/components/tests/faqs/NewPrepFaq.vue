@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { faqsMixin } from "../../mixins/faqsMixin.js";
+import { faqsMixin } from "../../../mixins/faqsMixin/faqsMixin.js";
 export default {
   name: "new-prep-faqs",
   mixins: [faqsMixin],

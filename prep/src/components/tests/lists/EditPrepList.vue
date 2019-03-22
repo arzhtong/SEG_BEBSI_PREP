@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import { listsMixin } from "../../mixins/listsMixin.js";
+import { listsMixin } from "../../../mixins/listsMixin/listsMixin.js";
 export default {
   name: "edit-prep-list",
   mixins: [listsMixin],

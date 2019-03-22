@@ -49,13 +49,13 @@
 
 
 <script>
-import { listsMixin } from "../../mixins/listsMixin.js";
+import { listsMixin } from "../../../mixins/listsMixin/listsMixin.js";
 export default {
   name: "view-prep-lists",
   mixins: [listsMixin],
   created (){
     this.createPrepLists()
   }
-};
+}; 
 
 </script>

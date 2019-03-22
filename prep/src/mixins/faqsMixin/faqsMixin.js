@@ -2,7 +2,7 @@
 // To make use of the functionality in this file import { faqsMixin } from '(this location)'
 // and then add 'mixins: [faqsMixin]' just before the data of the component.
 
-import db from "../components/firebaseInit";
+import db from "../../components/firebaseInit";
 import firebase from "firebase";
 
 export const faqsMixin = {
