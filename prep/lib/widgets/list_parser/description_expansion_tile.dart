@@ -27,14 +27,14 @@ class DescriptiveExpansionTile extends StatelessWidget {
     }
 
     columnChildren.add(Text(
-      formatItemList(items),
+      _formatItemList(items),
       style: TextStyle(
         color: Colors.grey,
       ),
     ));
   }
 
-  String formatItemList(List<dynamic> elementList) {
+  String _formatItemList(List<dynamic> elementList) {
     String rawItems = "";
 
     if (items.isNotEmpty) {

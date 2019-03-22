@@ -33,7 +33,6 @@ class _DashboardState extends State<Dashboard> {
   bool validationResultDb;
   bool validationResultFile;
 
-  // TODO: replace the calling of this method.
   // Subscribe user to message notifications
   void _subscribeToNotifications(String appointmentID) {
     final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
@@ -59,7 +58,7 @@ class _DashboardState extends State<Dashboard> {
   }
 
   // Writes data to the codes file
-  Future<File> clearData() async {
+  Future<File> _clearData() async {
     _unsubscribeFromNotifications();
     //must apply set state to make sure the calendar is redrawn
     setState(() {
@@ -215,7 +214,7 @@ class _DashboardState extends State<Dashboard> {
               icon: Icon(Icons.delete_sweep),
               onPressed: () {
                 print("---clear data button pressed---");
-                clearData();
+                _clearData();
               }),
           IconButton(
               icon: Icon(Icons.refresh),
@@ -343,6 +342,7 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                                       ',');
 
                               _parent.setState(() {
+                                _parent._subscribeToNotifications(_parent.codeController.text);
                                 _parent.codeController.text = "";
                               });
 

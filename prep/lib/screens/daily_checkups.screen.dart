@@ -3,38 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:prep/utils/query.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
-import 'package:prep/widgets/dashboard/help_dialog.dart';
-class DailyCheckups extends StatefulWidget {
-  final DateTime _appointmentDateTime;
+import 'package:prep/utils/misc_functions.dart';
 
-  DailyCheckups(this._appointmentDateTime);
-
-  @override
-  State<StatefulWidget> createState() => _DailyCheckups();
-}
-
-class _DailyCheckups extends State<DailyCheckups> {
-  List<Widget> myList = new List<Widget>();
-
-  String monthAbbreviation(DateTime datetime) {
-    const List<String> months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
-    ];
-
-    return months[datetime.month - 1].substring(0, 3);
-  }
-
+class DailyCheckups extends StatelessWidget {
   CircleAvatar _getDailyCheckupIcon(int daysBeforeTest) {
     return CircleAvatar(
       backgroundColor:
@@ -44,7 +15,7 @@ class _DailyCheckups extends State<DailyCheckups> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            widget._appointmentDateTime
+            Queries.dateTime
                 .subtract(Duration(days: daysBeforeTest))
                 .day
                 .toString(),
@@ -55,7 +26,7 @@ class _DailyCheckups extends State<DailyCheckups> {
             ),
           ),
           Text(
-            monthAbbreviation(widget._appointmentDateTime),
+            monthAbbreviation(Queries.dateTime),
             style: TextStyle(color: Colors.white, fontSize: 10.0),
           ),
         ],
@@ -113,18 +84,11 @@ class _DailyCheckups extends State<DailyCheckups> {
                   activeTrackColor: Colors.green[100],
                   value: checkupMap['answer'],
                   onChanged: (_) {
-                    if (checkupMap['answer']) {
-                      // Removes the old entry from the list
-                      document.reference.updateData({
-                        ('instructions.' + index + '.answer'): false,
-                        ('instructions.' + index + '.lastChecked'): DateTime.now(),
-                      });
-                    } else {
-                      document.reference.updateData({
-                        ('instructions.' + index + '.answer'): true,
-                        ('instructions.' + index + '.lastChecked'): DateTime.now(),
-                      });
-                    }
+                    document.reference.updateData({
+                      // Toggles true/false for the daily checkup
+                      ('instructions.' + index + '.answer'): !checkupMap['answer'],
+                      ('instructions.' + index + '.lastChecked'): DateTime.now(),
+                    });
                   },
                 ),
               ))
@@ -161,7 +125,7 @@ class _DailyCheckups extends State<DailyCheckups> {
             child: LinearProgressIndicator(),
           );
         } else {
-          if (snapshot.data.documents.length > 0){
+          if (snapshot.data.documents != null && snapshot.data.documents.length > 0){
             return ListView.builder(
               padding: EdgeInsets.only(top: 10, bottom: 10),
               itemCount: snapshot.data.documents.length,

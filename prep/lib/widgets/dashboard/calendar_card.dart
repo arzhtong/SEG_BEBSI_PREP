@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:prep/screens/appointment.screen.dart';
+import 'package:prep/utils/misc_functions.dart';
+import 'package:prep/utils/query.dart';
 
 class CalendarCard extends StatelessWidget {
   final String name;
@@ -20,48 +22,6 @@ class CalendarCard extends StatelessWidget {
   CalendarCard(this.name, this.location, this.dateTime, this.testID,
       this.doctorName, this.testName) {
     this.color = colors[name.hashCode % 4];
-  }
-
-  String dateFormatter(DateTime datetime) {
-    if (datetime == null) {
-      return "N/A";
-    }
-
-    const List<String> months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
-    ];
-
-    String day = datetime.day.toString();
-    String month = months[datetime.month - 1];
-    String year = datetime.year.toString();
-
-    return day + " " + month + " " + year;
-  }
-
-  String timeFormatter(DateTime datetime) {
-    if (datetime == null) {
-      return "N/A";
-    }
-
-    String hour = (datetime.hour < 10)
-        ? "0" + datetime.hour.toString()
-        : datetime.hour.toString();
-    String minute = (datetime.minute < 10)
-        ? "0" + datetime.minute.toString()
-        : datetime.minute.toString();
-
-    return hour + " : " + minute;
   }
 
   Widget _informationRow(String label, String content) {
@@ -109,6 +69,7 @@ class CalendarCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Container(
+                    key: Key('rootContainer'),
                     width: double.infinity,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(3.0)),
@@ -160,12 +121,18 @@ class CalendarCard extends StatelessWidget {
                 child: InkWell(
                     splashColor: Color.fromRGBO(255, 255, 255, 0.2),
                     onTap: () {
+                      Queries.setAppointmentInfo(
+                          this.name,
+                          this.testID,
+                          this.testName,
+                          this.location,
+                          this.dateTime,
+                          this.doctorName,
+                          this.color);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Appointment(
-                                  name, testID, testName, 0, dateTime)
-                          ));
+                              builder: (context) => Appointment(0)));
                     }),
               ),
             ),

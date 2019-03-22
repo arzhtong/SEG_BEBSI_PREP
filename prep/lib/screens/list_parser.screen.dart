@@ -4,22 +4,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:prep/utils/query.dart';
 import 'package:prep/widgets/list_parser/description_expansion_tile.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
-import 'package:prep/widgets/dashboard/help_dialog.dart';
 
 class CategoryListParser extends StatelessWidget {
-  final String _contents;
-  final String _categoryName;
+  final String documentId;
+  final String _title;
 
-  CategoryListParser(this._contents, this._categoryName);
+  CategoryListParser(this.documentId, this._title);
 
   Widget build(BuildContext context) {
+    print("DocumentID: " + documentId);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.indigo,
-        title: Text(_categoryName),
+        title: Text(_title),
       ),
       body: StreamBuilder(
-          stream: Queries.categoryListSnapshots(_contents),
+          stream: Queries.categoryListSnapshots(documentId),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const Align(
@@ -27,7 +27,7 @@ class CategoryListParser extends StatelessWidget {
                 child: LinearProgressIndicator(),
               );
             } else {
-              if (snapshot.data['maps'].length > 0) {
+              if (snapshot.data['maps'] != null && snapshot.data['maps'].length > 0) {
                 return ListView.builder(
                   padding: EdgeInsets.all(10.0),
                   itemCount: 1,

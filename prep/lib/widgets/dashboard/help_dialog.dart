@@ -13,23 +13,22 @@ class MakeHelpIcon extends StatelessWidget {
     return IconButton(
         icon: new Icon(Icons.help, color: Colors.indigo[50]),
         onPressed: () {
-          makeAlert(context, info);
+          _makeAlert(context, info);
         });
   }
-}
 
-void makeAlert(BuildContext context, String text) {
+  void _makeAlert(BuildContext context, String text) {
+    var alertDialog = AlertDialog(
+      title: Text("Help",
+          textAlign: TextAlign.center, style: TextStyle(fontSize: 30.0)),
+      content: Text(text,
+          textAlign: TextAlign.center, style: TextStyle(fontSize: 20.0)),
+    );
 
-  var alertDialog = AlertDialog(
-    title: Text("Tip",
-        textAlign: TextAlign.center, style: TextStyle(fontSize: 30.0)),
-    content: Text(text,
-        textAlign: TextAlign.center, style: TextStyle(fontSize: 20.0)),
-  );
-
-  showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alertDialog;
-      });
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alertDialog;
+        });
+  }
 }

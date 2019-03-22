@@ -6,16 +6,10 @@ import 'package:prep/utils/query.dart';
 import 'package:prep/widgets/appointment_prep/category_card.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 
-class AppointmentPrep extends StatefulWidget {
-  final DateTime _appointmentDatetime;
+class AppointmentPrep extends StatelessWidget {
+  bool seenRecipe;
+  bool seenFAQ;
 
-  AppointmentPrep(this._appointmentDatetime);
-
-  @override
-  _AppointmentPrepState createState() => _AppointmentPrepState();
-}
-
-class _AppointmentPrepState extends State<AppointmentPrep> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -27,16 +21,19 @@ class _AppointmentPrepState extends State<AppointmentPrep> {
               child: LinearProgressIndicator(),
             );
           } else {
-            if (snapshot.data.documents.length > 0) {
+            if (snapshot.data.documents != null &&
+                snapshot.data.documents.length > 0) {
+              seenFAQ = false;
+              seenRecipe = false;
               return StaggeredGridView.countBuilder(
-                padding: EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(7.5),
                 crossAxisCount: 4,
                 itemCount: snapshot.data.documents.length,
                 itemBuilder: (context, index) =>
                     _buildGrid(context, snapshot.data.documents[index]),
                 staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
-                mainAxisSpacing: 5.0,
-                crossAxisSpacing: 5.0,
+                mainAxisSpacing: 0,
+                crossAxisSpacing: 0,
               );
             } else {
               return EmptyScreenPlaceholder(
@@ -47,7 +44,25 @@ class _AppointmentPrepState extends State<AppointmentPrep> {
   }
 
   Widget _buildGrid(BuildContext context, DocumentSnapshot document) {
-    return CategoryCard(document.documentID, document['title'],
-        document['type'], Colors.white, widget._appointmentDatetime);
+    if (document['type'] == 'article' || document['type'] == 'categoryList') {
+      return CategoryCard(document.documentID, document['title'],
+          document['type']);
+    } else {
+      if (document['type'] == 'faqs' && !seenFAQ) {
+        seenFAQ = true;
+        return CategoryCard(document.documentID, document['title'],
+            document['type']);
+      }
+
+      if (document['type'] == 'recipe' && !seenRecipe) {
+        seenRecipe = true;
+        return CategoryCard(document.documentID, document['title'],
+            document['type']);
+      }
+    }
+
+    return Container(
+      padding: EdgeInsets.all(0),
+    );
   }
 }

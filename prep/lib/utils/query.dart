@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 export 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class DatabaseHandler {
   static Firestore db;
@@ -37,6 +38,10 @@ class Queries {
   static String appointmentID;
   static String testID;
   static String appointmentName;
+  static String location;
+  static DateTime dateTime;
+  static String doctorName;
+  static Color color;
 
   static const Queries _singleton = Queries._internal();
 
@@ -44,11 +49,15 @@ class Queries {
 
   const Queries._internal();
 
-  static void setAppointmentInfo(
-      newAppointmentID, newTestID, newAppointmentName) {
+  static void setAppointmentInfo(newAppointmentID, newTestID,
+      newAppointmentName, newLocation, newDateTime, newDoctorName, newColor) {
     appointmentID = newAppointmentID;
     testID = newTestID;
     appointmentName = newAppointmentName;
+    location = newLocation;
+    dateTime = newDateTime;
+    doctorName = newDoctorName;
+    color = newColor;
   }
 
   static Future<QuerySnapshot> get appointmentCodes => _appointmentsCollection
@@ -93,22 +102,20 @@ class Queries {
   static Stream<QuerySnapshot> get prepCardsSnapshots =>
       _testReference.collection('prepCards').snapshots();
 
-  static Stream<QuerySnapshot> get faqSnapshots =>
-      _testReference.collection('faqs').snapshots();
+  static Stream<QuerySnapshot> get faqSnapshots => _testReference
+      .collection('prepCards')
+      .where('type', isEqualTo: 'faqs')
+      .snapshots();
 
   static Stream<DocumentSnapshot> get testSnapshots =>
-      _testReference.get().asStream();
+      _testReference.snapshots();
 
   static Stream<QuerySnapshot> get recipeSnapshots =>
       _testReference.collection('recipes').snapshots();
 
-  static Stream<DocumentSnapshot> informationSnapshots(documentName) =>
-      _testReference
-          .collection('articles')
-          .document(documentName)
-          .get()
-          .asStream();
+  static Stream<DocumentSnapshot> informationSnapshots(documentId) =>
+      _testReference.collection('prepCards').document(documentId).snapshots();
 
-  static Stream<DocumentSnapshot> categoryListSnapshots(String contents) =>
-      _testReference.collection('lists').document(contents).get().asStream();
+  static Stream<DocumentSnapshot> categoryListSnapshots(String documentId) =>
+      _testReference.collection('prepCards').document(documentId).snapshots();
 }

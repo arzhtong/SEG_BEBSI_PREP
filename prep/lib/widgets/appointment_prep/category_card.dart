@@ -6,32 +6,28 @@ import 'package:prep/screens/list_parser.screen.dart';
 import 'package:prep/screens/faq_parser.screen.dart';
 
 class CategoryCard extends StatelessWidget {
-  final String contents;
+  final String documentID;
   final String title;
   final String type;
-  final Color color;
-  final DateTime _appointmentDateTime;
 
-  CategoryCard(this.contents,
+  CategoryCard(this.documentID,
       this.title,
-      this.type,
-      this.color,
-      this._appointmentDateTime);
+      this.type);
 
   Future _navigate(dynamic context) {
     switch (type) {
-      case "informations":
+      case "article":
         return Navigator.push(context, MaterialPageRoute(builder:
-            (context) => InformationParser(contents, title)));
+            (context) => InformationParser(documentID, title)));
       case "categoryList":
         return Navigator.push(context, MaterialPageRoute(builder:
-            (context) => CategoryListParser(contents, title)));
-      case "recipeView":
+            (context) => CategoryListParser(documentID, title)));
+      case "recipe":
         return Navigator.push(context,
             MaterialPageRoute(builder: (context) => RecipeListScreen()));
       default:
         return Navigator.push(context, MaterialPageRoute(builder:
-            (context) => FaqParser(_appointmentDateTime)));
+            (context) => FaqParser()));
     }
   }
 
@@ -44,7 +40,7 @@ class CategoryCard extends StatelessWidget {
           color: Colors.white,
         ),
       );
-    } else if (type == "informations") {
+    } else if (type == "article") {
       return CircleAvatar(
         backgroundColor: Colors.deepPurple[400],
         child: Icon(
@@ -73,11 +69,11 @@ class CategoryCard extends StatelessWidget {
 
   String _getCategory(){
     switch (type) {
-      case "informations":
-        return "Info";
+      case "article":
+        return "Article";
       case "categoryList":
         return "List";
-      case "recipeView":
+      case "recipe":
         return "Recipe";
       default:
         return "FAQ";
@@ -86,35 +82,38 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: color,
-      elevation: 3.0,
-      child: InkWell(
-          onTap: () {
-            _navigate(context);
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              ListTile(
-                title: Text(
-                  _getCategory(),
-                  style: TextStyle(
-                      color: Colors.grey[400],
-                      fontStyle: FontStyle.italic
+    return Container(
+      padding: EdgeInsets.all(2.5),
+      child: Card(
+        color: Colors.white,
+        elevation: 3.0,
+        child: InkWell(
+            onTap: () {
+              _navigate(context);
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                ListTile(
+                  title: Text(
+                    _getCategory(),
+                    style: TextStyle(
+                        color: Colors.grey[400],
+                        fontStyle: FontStyle.italic
+                    ),
+                  ),
+                  leading: _getIcon(),
+                ),
+                ListTile(
+                  title: Text(
+                    title,
+                    //maxLines: 3,
                   ),
                 ),
-                leading: _getIcon(),
-              ),
-              ListTile(
-                title: Text(
-                  title,
-                  //maxLines: 3,
-                ),
-              ),
-            ],
-          )
+              ],
+            )
+        ),
       ),
     );
   }
