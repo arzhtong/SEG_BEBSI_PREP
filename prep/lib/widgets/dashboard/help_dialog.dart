@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class MakeHelpIcon extends StatelessWidget {
-   String info;
+  final String info;
 
   MakeHelpIcon(this.info){
    if (info==null){
-     info='';
+     AlertDialog(title: Text("Help"),content: Text('No description available'));
    }
   }
 
