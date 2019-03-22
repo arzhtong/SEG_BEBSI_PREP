@@ -63,7 +63,7 @@
 
 
 <script>
-import { faqsMixin } from "../../mixins/faqsMixin.js";
+import { faqsMixin } from "../../../mixins/faqsMixin/faqsMixin.js";
 export default {
   name: "edit-prep-faq",
   mixins: [faqsMixin],

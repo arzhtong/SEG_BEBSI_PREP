@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { faqsMixin } from "../../mixins/faqsMixin.js";
+import { faqsMixin } from "../../../mixins/faqsMixin/faqsMixin.js";
 export default {
   name: "view-prep-faqs",
   mixins: [faqsMixin],
