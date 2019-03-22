@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { userMixin } from "../../mixins/userMixin";
+import { userMixin } from "../../mixins/usersMixin/userMixin";
 
 export default {
   name: "edit-staff",

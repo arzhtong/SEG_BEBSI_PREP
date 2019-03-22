@@ -124,7 +124,7 @@
 
 
 <script>
-import { appointmentMixin } from "../../mixins/appointmentMixin";
+import { appointmentMixin } from "../../mixins/appointmentsMixin/appointmentMixin";
 export default {
   name: "view-appointment",
   mixins: [appointmentMixin],

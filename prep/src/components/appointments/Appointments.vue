@@ -164,7 +164,7 @@
 </template>
 
 <script>
-import { viewAppointmentsMixin } from "../../mixins/view_appointmentsMixin.js";
+import { viewAppointmentsMixin } from "../../mixins/appointmentsMixin/view_appointmentsMixin.js";
 export default {
   name: "view-appointments",
   props: ["past"],
