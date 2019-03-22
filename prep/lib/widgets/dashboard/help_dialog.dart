@@ -3,18 +3,20 @@ import 'package:flutter/material.dart';
 class MakeHelpIcon extends StatelessWidget {
   final String info;
 
-  MakeHelpIcon(this.info){
-   if (info==null){
-     AlertDialog(title: Text("Help"),content: Text('No description available'));
-   }
-  }
-
+  MakeHelpIcon(this.info);
+  
+  
+  
   Widget build(BuildContext context) {
+    if (info==null){
+      return AlertDialog(content: Text('No Description Available'));
+    }else{
     return IconButton(
         icon: new Icon(Icons.help, color: Colors.indigo[50]),
         onPressed: () {
           _makeAlert(context, info);
         });
+  }
   }
 
   void _makeAlert(BuildContext context, String text) {

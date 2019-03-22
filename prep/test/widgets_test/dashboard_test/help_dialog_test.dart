@@ -38,6 +38,6 @@ void main() {
     );
     await tester.tap(find.byWidget(helpicon));
     await tester.pump();
-    expect(find.text(''), findsOneWidget);
+    expect(find.widgetWithText(AlertDialog, 'No Description Available'),findsOneWidget);
   });
 }
