@@ -110,8 +110,10 @@ class Queries {
   static Stream<DocumentSnapshot> get testSnapshots =>
       _testReference.snapshots();
 
-  static Stream<QuerySnapshot> get recipeSnapshots =>
-      _testReference.collection('recipes').snapshots();
+  static Stream<QuerySnapshot> get recipeSnapshots => _testReference
+      .collection('prepCards')
+      .where('cardType', isEqualTo: 'recipe')
+      .snapshots();
 
   static Stream<DocumentSnapshot> informationSnapshots(documentId) =>
       _testReference.collection('prepCards').document(documentId).snapshots();

@@ -6,9 +6,9 @@ import 'package:prep/widgets/recipe/recipe_card_content.dart';
 class RecipeCardBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var title = FirestoreDocumentDataProvider.of(context).documentData['title'];
+    var title = DocumentDataProvider.of(context).documentData['title'];
     var subtitle =
-        FirestoreDocumentDataProvider.of(context).documentData['subtitle'];
+        DocumentDataProvider.of(context).documentData['subtitle'];
     assert(title != null);
     assert(title is String);
     if (subtitle != null) {

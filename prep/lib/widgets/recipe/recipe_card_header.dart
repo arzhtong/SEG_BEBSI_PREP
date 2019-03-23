@@ -38,8 +38,7 @@ class RecipeCardHeader extends StatelessWidget {
   }
 
   List<Widget> _buildRecipeLabels(BuildContext context) {
-    var dynamicLabels =
-        FirestoreDocumentDataProvider.of(context).documentData['labels'];
+    var dynamicLabels = DocumentDataProvider.of(context).documentData['labels'];
 
     if (dynamicLabels == null) return [];
 
@@ -64,10 +63,10 @@ class RecipeCardHeader extends StatelessWidget {
       );
 
   CachedNetworkImage _loadRecipeImageOrDefault(BuildContext context) {
-    var backgroundImageUrl = FirestoreDocumentDataProvider.of(context)
-        .documentData['backgroundImage'];
+    var backgroundImageUrl =
+        DocumentDataProvider.of(context).documentData['backgroundImage'];
     var recipeType =
-        FirestoreDocumentDataProvider.of(context).documentData['type'];
+        DocumentDataProvider.of(context).documentData['recipeType'];
 
     backgroundImageUrl ??= '';
     recipeType ??= 'default';
@@ -84,7 +83,7 @@ class RecipeCardHeader extends StatelessWidget {
           ),
       fadeInCurve: Curves.decelerate,
       fadeInDuration: Duration(microseconds: 300),
-        fit: BoxFit.cover,
+      fit: BoxFit.cover,
     );
   }
 
