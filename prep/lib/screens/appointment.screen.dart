@@ -107,16 +107,14 @@ class _AppointmentState extends State<Appointment> {
     return (_selectedIndex == 3)
         ? Icon(Icons.chat)
         : StreamBuilder(
-            stream: Queries.messageSnapshots,
+            stream: Queries.messagesStream(setSeen: false),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                snapshot.data.documentChanges.forEach((change) {
-                  if (change.type == DocumentChangeType.added &&
-                      !change.document.data['seenByPatient']) {
-                    _unseenMessages = true;
-                  }
+                snapshot.data.forEach((message) {
+                  if (!message['seenByPatient']) _unseenMessages = true;
                 });
               }
+
               return (_unseenMessages)
                   ? Icon(Icons.chat, color: Colors.red)
                   : Icon(Icons.chat);

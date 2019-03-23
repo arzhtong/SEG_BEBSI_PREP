@@ -79,8 +79,25 @@ class Queries {
   static CollectionReference get _messagesCollection =>
       _appointmentReference.collection('messages');
 
-  static Stream<QuerySnapshot> get messageSnapshots =>
-      _messagesCollection.orderBy('datetime', descending: false).snapshots();
+  static Stream<List<Map<String, dynamic>>> messagesStream({bool setSeen}) =>
+      _messagesCollection
+          .orderBy('datetime', descending: false)
+          .snapshots()
+          .map((querySnapshot) => querySnapshot.documentChanges
+              .map((documentChange) {
+                if (documentChange.type == DocumentChangeType.added) {
+                  DocumentSnapshot document = documentChange.document;
+                  Map<String, dynamic> message = document.data;
+                  if (setSeen && !message['seenByPatient'])
+                    _setSeenByPatient(document.reference);
+                  return message;
+                }
+              })
+              .where((message) => message != null)
+              .toList());
+
+  static void _setSeenByPatient(DocumentReference docRef) =>
+      docRef.updateData({'seenByPatient': true});
 
   static void sendMessage(String message) => _messagesCollection.add({
         'content': message,
@@ -89,9 +106,6 @@ class Queries {
         'seenByPatient': true,
         'seenByStaff': false,
       });
-
-  static void setSeenByPatient(DocumentReference docRef) =>
-      docRef.updateData({'seenByPatient': true});
 
   static Stream<QuerySnapshot> get dailyCheckupsSnapshots =>
       _appointmentReference

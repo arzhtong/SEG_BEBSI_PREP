@@ -15,11 +15,9 @@ class MessagingScreen extends StatefulWidget {
 class _MessagingScreenState extends State<MessagingScreen> {
   MessagesView _messagesView = MessagesView();
   TextComposer _textComposer = TextComposer();
-  StreamSubscription<QuerySnapshot> _messageStreamSubscription;
+  StreamSubscription<List<Map<String, dynamic>>> _messageStreamSubscription;
 
-  void _addNewMessage(DocumentSnapshot document) {
-    Map<String, dynamic> message = document.data;
-    if (!message['seenByPatient']) Queries.setSeenByPatient(document.reference);
+  void _addNewMessage(Map<String, dynamic> message) {
     String decryptedMessage = MessageCrypto.decryptMessage(message['content']);
 
     _messagesView.addMessage(
@@ -33,18 +31,14 @@ class _MessagingScreenState extends State<MessagingScreen> {
   void initState() {
     super.initState();
 
-    _messageStreamSubscription =
-        Queries.messageSnapshots.listen((QuerySnapshot snapshot) {
-      snapshot.documentChanges.forEach((DocumentChange change) {
-        if (change.type == DocumentChangeType.added)
-          _addNewMessage(change.document);
-      });
-    });
+    _messageStreamSubscription = Queries.messagesStream(setSeen: true)
+        .listen((list) => list.forEach((message) => _addNewMessage(message)));
   }
 
   @override
   void dispose() {
     _messageStreamSubscription.cancel();
+
     super.dispose();
   }
 
