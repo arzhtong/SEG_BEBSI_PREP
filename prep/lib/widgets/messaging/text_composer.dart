@@ -16,7 +16,7 @@ class _TextComposerState extends State<TextComposer> {
     if (_hasTyped) {
       setState(() => _hasTyped = false);
       String encryptedMessage = MessageCrypto.encryptMessage(messageText);
-      Queries.sendMessage(encryptedMessage);
+      FirestoreBackend().sendMessage(encryptedMessage);
       _textController.clear();
     }
   }

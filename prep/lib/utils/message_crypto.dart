@@ -47,7 +47,7 @@ class MessageCrypto {
     Digest md5 = Digest("MD5");
     String hexEncryptedIV = HEX.encode(md5.process(iv));
     Uint8List keyArray =
-        utf8.encode(Queries.appointmentID + hexEncryptedIV);
+        utf8.encode(FirestoreBackend().appointmentID + hexEncryptedIV);
     String hexEncryptedKey = HEX.encode(md5.process(keyArray));
     Uint8List encryptedKeyArray = utf8.encode(hexEncryptedKey);
 

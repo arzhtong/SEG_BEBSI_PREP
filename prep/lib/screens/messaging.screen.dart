@@ -19,7 +19,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
 
   void _addNewMessage(DocumentSnapshot document) {
     Map<String, dynamic> message = document.data;
-    if (!message['seenByPatient']) Queries.setSeenByPatient(document.reference);
+    if (!message['seenByPatient']) FirestoreBackend().setSeenByPatient(document.reference);
     String decryptedMessage = MessageCrypto.decryptMessage(message['content']);
 
     _messagesView.addMessage(
@@ -34,7 +34,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
     super.initState();
 
     _messageStreamSubscription =
-        Queries.messageSnapshots.listen((QuerySnapshot snapshot) {
+        FirestoreBackend().messageSnapshots.listen((QuerySnapshot snapshot) {
       snapshot.documentChanges.forEach((DocumentChange change) {
         if (change.type == DocumentChangeType.added)
           _addNewMessage(change.document);

@@ -121,7 +121,7 @@ class CalendarCard extends StatelessWidget {
                 child: InkWell(
                     splashColor: Color.fromRGBO(255, 255, 255, 0.2),
                     onTap: () {
-                      Queries.setAppointmentInfo(
+                      FirestoreBackend().setBackendParams(
                           this.name,
                           this.testID,
                           this.testName,

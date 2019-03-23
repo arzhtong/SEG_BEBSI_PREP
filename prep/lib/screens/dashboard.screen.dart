@@ -70,7 +70,7 @@ class _DashboardState extends State<Dashboard> {
   Future<bool> _isCodeInFirestoreNotUsed(String code) async {
     List<String> liveNotUsedIDs = new List();
 
-    await Queries.appointmentCodes.then((query) {
+    await FirestoreBackend().appointmentCodes.then((query) {
       query.documents.forEach((document) {
         if (document['used'] == false) {
           liveNotUsedIDs.add(document.documentID);
@@ -100,7 +100,7 @@ class _DashboardState extends State<Dashboard> {
     print("Raw codes file - in getDocData after reading: " + codeFileState);
 
     //reading appointments from the database and updating the codes file
-    QuerySnapshot testDocList = await Queries.appointmentCodes;
+    QuerySnapshot testDocList = await FirestoreBackend().appointmentCodes;
     documentList = testDocList.documents;
 
     // Get all the codes stored in the database

@@ -31,7 +31,7 @@ class AppointmentInfo extends StatelessWidget {
       children: <Widget>[
         AppointmentDetailsBanner(),
         StreamBuilder(
-            stream: Queries.testSnapshots,
+            stream: FirestoreBackend().testSnapshots,
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return const Align(

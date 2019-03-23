@@ -13,7 +13,7 @@ class AppointmentPrep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: Queries.prepCardsSnapshots,
+        stream: FirestoreBackend().prepCardsSnapshots,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Align(

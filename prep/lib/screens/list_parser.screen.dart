@@ -19,7 +19,7 @@ class CategoryListParser extends StatelessWidget {
         title: Text(_title),
       ),
       body: StreamBuilder(
-          stream: Queries.categoryListSnapshots(documentId),
+          stream: FirestoreBackend().categoryListSnapshots(documentId),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const Align(

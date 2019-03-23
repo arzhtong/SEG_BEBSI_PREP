@@ -53,7 +53,7 @@ abstract class BaseBackend {
 
   Stream<QuerySnapshot> get recipeSnapshots;
 
-  Stream<DocumentSnapshot> informationSnapshots(documentId);
+  Stream<DocumentSnapshot> informationSnapshots(String documentId);
 
   Stream<DocumentSnapshot> categoryListSnapshots(String documentId);
 }

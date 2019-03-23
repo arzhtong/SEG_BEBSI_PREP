@@ -15,7 +15,7 @@ class DailyCheckups extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            Queries.dateTime
+            FirestoreBackend().dateTime
                 .subtract(Duration(days: daysBeforeTest))
                 .day
                 .toString(),
@@ -26,7 +26,7 @@ class DailyCheckups extends StatelessWidget {
             ),
           ),
           Text(
-            monthAbbreviation(Queries.dateTime),
+            monthAbbreviation(FirestoreBackend().dateTime),
             style: TextStyle(color: Colors.white, fontSize: 10.0),
           ),
         ],
@@ -117,7 +117,7 @@ class DailyCheckups extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: Queries.dailyCheckupsSnapshots,
+      stream: FirestoreBackend().dailyCheckupsSnapshots,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const Align(

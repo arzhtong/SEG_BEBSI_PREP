@@ -17,7 +17,7 @@ class RecipeListScreen extends StatelessWidget {
         title: Text(_appBarTitle),
       ),
       body: StreamBuilder(
-        stream: Queries.recipeSnapshots,
+        stream: FirestoreBackend().recipeSnapshots,
         builder: (context, collectionSnapshot) {
           if (!collectionSnapshot.hasData) {
             return _loadingWidget;

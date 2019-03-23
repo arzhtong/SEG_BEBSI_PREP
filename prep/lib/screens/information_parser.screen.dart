@@ -37,7 +37,7 @@ class InformationParser extends StatelessWidget {
         title: Text(_articleName),
       ),
       body: StreamBuilder(
-          stream: Queries.informationSnapshots(_documentId),
+          stream: FirestoreBackend().informationSnapshots(_documentId),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const Align(

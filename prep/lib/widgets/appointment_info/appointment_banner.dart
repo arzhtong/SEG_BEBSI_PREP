@@ -8,7 +8,7 @@ class AppointmentDetailsBanner extends StatelessWidget {
     return Card(
       key: Key('rootCard'),
       elevation: 3.0,
-      color: Queries.color,
+      color: FirestoreBackend().color,
       child: Container(
         padding: EdgeInsets.all(10.0),
         alignment: Alignment.centerLeft,
@@ -17,22 +17,22 @@ class AppointmentDetailsBanner extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             _TitleText("Date"),
-            _SubtitleText(dateFormatter(Queries.dateTime)),
+            _SubtitleText(dateFormatter(FirestoreBackend().dateTime)),
             Divider(
               color: Colors.white,
             ),
             _TitleText("Time"),
-            _SubtitleText(timeFormatter(Queries.dateTime)),
+            _SubtitleText(timeFormatter(FirestoreBackend().dateTime)),
             Divider(
               color: Colors.white,
             ),
             _TitleText("Location"),
-            _SubtitleText(Queries.location),
+            _SubtitleText(FirestoreBackend().location),
             Divider(
               color: Colors.white,
             ),
             _TitleText("Staff"),
-            _SubtitleText(Queries.doctorName),
+            _SubtitleText(FirestoreBackend().doctorName),
           ],
         ),
       ),

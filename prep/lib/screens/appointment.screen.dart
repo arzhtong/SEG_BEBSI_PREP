@@ -31,13 +31,11 @@ class _AppointmentState extends State<Appointment> {
       case 1:
         return (_appointmentPrep != null)
             ? _appointmentPrep
-            : _appointmentPrep =
-                AppointmentPrep();
+            : _appointmentPrep = AppointmentPrep();
       case 2:
         return (_dailyCheckups != null)
             ? _dailyCheckups
-            : _dailyCheckups =
-                DailyCheckups();
+            : _dailyCheckups = DailyCheckups();
       case 3:
         return (_messagingScreen != null)
             ? _messagingScreen
@@ -79,7 +77,7 @@ class _AppointmentState extends State<Appointment> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.indigo,
-          title: Text(Queries.appointmentName),
+          title: Text(FirestoreBackend().appointmentName),
           actions: <Widget>[_chooseHelpMenuToDisplay()]),
       body: Center(
         child: _getPage(_selectedIndex),
@@ -107,7 +105,7 @@ class _AppointmentState extends State<Appointment> {
     return (_selectedIndex == 3)
         ? Icon(Icons.chat)
         : StreamBuilder(
-            stream: Queries.messageSnapshots,
+            stream: FirestoreBackend().messageSnapshots,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 snapshot.data.documentChanges.forEach((change) {

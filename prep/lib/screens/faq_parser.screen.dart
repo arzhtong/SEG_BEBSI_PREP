@@ -19,7 +19,7 @@ class FaqParser extends StatelessWidget {
         title: Text("FAQ"),
       ),
       body: StreamBuilder(
-        stream: Queries.faqSnapshots,
+        stream: FirestoreBackend().faqSnapshots,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Align(
