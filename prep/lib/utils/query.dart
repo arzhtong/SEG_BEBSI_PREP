@@ -84,20 +84,17 @@ class Queries {
           .orderBy('datetime', descending: false)
           .snapshots()
           .map((querySnapshot) => querySnapshot.documentChanges
-              .map((documentChange) {
-                if (documentChange.type == DocumentChangeType.added) {
-                  DocumentSnapshot document = documentChange.document;
-                  Map<String, dynamic> message = document.data;
+              .map((docChange) {
+                if (docChange.type == DocumentChangeType.added) {
+                  DocumentSnapshot docSnapshot = docChange.document;
+                  Map<String, dynamic> message = docSnapshot.data;
                   if (setSeen && !message['seenByPatient'])
-                    _setSeenByPatient(document.reference);
+                    docSnapshot.reference.updateData({'seenByPatient': true});
                   return message;
                 }
               })
               .where((message) => message != null)
               .toList());
-
-  static void _setSeenByPatient(DocumentReference docRef) =>
-      docRef.updateData({'seenByPatient': true});
 
   static void sendMessage(String message) => _messagesCollection.add({
         'content': message,
