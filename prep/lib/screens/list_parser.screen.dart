@@ -46,17 +46,16 @@ class CategoryListParser extends StatelessWidget {
     );
   }
 
-  Widget _buildDropDownList(BuildContext context, Map<String, dynamic> dataMap) {
+  Widget _buildDropDownList(
+      BuildContext context, Map<String, dynamic> dataMap) {
     List<Widget> dropDowns = new List();
     List<dynamic> mappedData = dataMap['maps'];
-
-    print("Data map: " + dataMap['maps']);
 
     mappedData.forEach((value) {
       dropDowns.add(DescriptiveExpansionTile(
           value['name'], value['description'], value['list']));
     });
 
-    return Column(children: dropDowns);
+    return Column(key: Key("listsColumn"), children: dropDowns);
   }
 }
