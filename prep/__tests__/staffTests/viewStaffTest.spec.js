@@ -1,5 +1,4 @@
 import { shallowMount } from "@vue/test-utils";
-// import ComponentFunctions from '../../src/mixins/usersMixin/userMixin'
 import Vue from "vue";
 import VueRouter from "vue-router";
 import db from "../../src/components/firebaseInit";

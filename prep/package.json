@@ -13,6 +13,7 @@
   "jest": {
     "collectCoverage": true,
     "collectCoverageFrom": [
+      "<rootDir>/src/",
       "**/*.{js,vue}",
       "!**/node_modules/**"
     ],

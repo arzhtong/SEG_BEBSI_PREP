@@ -15,8 +15,8 @@
                 <input placeholder="Password" type="password" name="password" id="password" v-model="passwordLog">
               </div>
 
-              <button v-on:click="login" class="btn btn-large blue lighten-2 black-text">Login</button>
-              <router-link to="/resetPassword" style="margin-left:50px;">Forgot Password?</router-link>
+              <button id="loginBtn" v-on:click="login" class="btn btn-large blue lighten-2 black-text">Login</button>
+              <router-link id="resetPasswordBtn" to="/resetPassword" style="margin-left:50px;">Forgot Password?</router-link>
             </form>
           </div>
         </div>
