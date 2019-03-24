@@ -64,7 +64,7 @@ abstract class BaseBackend {
 
   Stream<Map<String, dynamic>> informationSnapshots(String documentId);
 
-  Stream<DocumentSnapshot> categoryListSnapshots(String documentId);
+  Stream<Map<String, dynamic>> categoryListSnapshots(String documentId);
 }
 
 class FirestoreBackend implements BaseBackend {
@@ -165,6 +165,10 @@ class FirestoreBackend implements BaseBackend {
           .snapshots()
           .map((docSnap) => docSnap.data);
 
-  Stream<DocumentSnapshot> categoryListSnapshots(String documentId) =>
-      _testReference.collection('prepCards').document(documentId).snapshots();
+  Stream<Map<String, dynamic>> categoryListSnapshots(String documentId) =>
+      _testReference
+          .collection('prepCards')
+          .document(documentId)
+          .snapshots()
+          .map((docSnap) => docSnap.data);
 }
