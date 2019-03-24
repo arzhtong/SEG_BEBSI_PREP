@@ -10,8 +10,9 @@
               <input type="text" name="email" id="email">
               <label class="blue-text" for="email">Email</label>
             </div>
-            <router-link to="/login" style="margin-right:50px;">Back to Login</router-link>
+            <router-link id="backToLoginBtn" to="/login" style="margin-right:50px;">Back to Login</router-link>
             <button
+              id="resetPassBtn"
               @click="sendResetEmail"
               class="btn btn-large blue lighten-2 black-text"
             >Reset Password</button>

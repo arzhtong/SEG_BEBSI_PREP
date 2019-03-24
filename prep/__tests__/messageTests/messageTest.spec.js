@@ -1,5 +1,4 @@
 import { shallowMount, RouterLinkStub} from "@vue/test-utils";
-// import ComponentFunctions from '../../src/mixins/usersMixin/userMixin'
 import db from "../../src/components/firebaseInit";
 // @ts-ignore
 import Component from "../../src/components/messages/Message.vue";
