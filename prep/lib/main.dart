@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:prep/screens/dashboard.screen.dart';
 import 'package:prep/utils/backend_provider.dart';
-import 'package:prep/utils/query.dart';
+import 'package:prep/utils/backend.dart';
 
 void main() {
   DatabaseHandler.initDatabase();

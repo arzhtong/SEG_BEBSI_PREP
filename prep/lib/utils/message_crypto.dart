@@ -9,6 +9,8 @@ import 'package:pointycastle/paddings/pkcs7.dart';
 import 'package:pointycastle/block/aes_fast.dart';
 import 'package:pointycastle/block/modes/cbc.dart';
 
+import 'package:prep/utils/backend.dart';
+
 class MessageCrypto {
   static const MessageCrypto _singleton = MessageCrypto._internal();
 

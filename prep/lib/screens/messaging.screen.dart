@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:async';
 
+import 'package:prep/utils/backend.dart';
 import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/utils/message_crypto.dart';
 import 'package:prep/widgets/messaging/messages_view.dart';
