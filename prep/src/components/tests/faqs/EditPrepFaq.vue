@@ -1,19 +1,20 @@
 <template>
-  <div id="edit-recipe">
+  <div id="edit-recipe"
+  style="background-color:white; padding: 10px 50px 10px 50px; margin-top:10px">
     <h3>Edit FAQ</h3>
     <div class="row">
       <form @submit.prevent="updateFAQ" class="col s12">
         <!-- adds the question input field -->
         <div class="row">
           <div class="input-field col s12">
-            <span>Question</span>
+            <span id="title">Question*</span>
             <input type="text" v-model="question" required>
           </div>
         </div>
         <!-- adds the answer input field -->
         <div class="row">
           <div class="input-field col s12">
-            <span>Answer</span>
+            <span id="title">Answer*</span>
             <input type="text" v-model="answer">
           </div>
         </div>
@@ -43,9 +44,9 @@
                   type="checkbox"
                   class="filled-in"
                   v-model="informationShortcut"
-                  style="margin-top:10px"
+                  style="margin-top:10px "
                 >
-                <span class="blue-text" style="margin-top:10px">Has information shortcut?</span>
+                <span class="blue-text" style="margin-bottom:10px ">Has information shortcut?</span>
               </label>
             </p>
           </div>
@@ -72,3 +73,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+#title {
+  color: #2196f3
+}
+</style>

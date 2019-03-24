@@ -1,20 +1,23 @@
 <template>
-  <div id="new-prep-faq">
+  <div
+    id="new-prep-faq"
+    style="background-color:white; padding: 10px 50px 10px 50px; margin-top:10px"
+  >
     <h3>New FAQ</h3>
     <div class="row">
       <form @submit.prevent="saveFAQ" class="col s12">
         <!-- adds a question input field -->
         <div class="row">
           <div class="input-field col s12">
+            <span id="title">Question*</span>
             <input type="text" v-model="question" required>
-            <label>Question</label>
           </div>
         </div>
         <!-- adds an answer input field -->
         <div class="row">
           <div class="input-field col s12">
+            <span id="title">Answer*</span>
             <input type="text" v-model="answer" required>
-            <label>Answer</label>
           </div>
         </div>
         <!-- adds 2 checkboxes representing shortcuts in the app -->
@@ -55,7 +58,11 @@
 import { faqsMixin } from "../../../mixins/faqsMixin/faqsMixin.js";
 export default {
   name: "new-prep-faqs",
-  mixins: [faqsMixin],
+  mixins: [faqsMixin]
 };
-
 </script>
+<style scoped>
+#title {
+  color: #2196f3;
+}
+</style>
