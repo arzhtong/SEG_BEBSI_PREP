@@ -30,7 +30,7 @@
             <input disabled type="text" v-model="role" required>
           </div>
         </div>
-        <button type="submit" class="btn">Submit</button>
+        <button id="submit" type="submit" class="btn">Submit</button>
         <router-link to="/view-staff" class="btn grey">Cancel</router-link>
       </form>
     </div>

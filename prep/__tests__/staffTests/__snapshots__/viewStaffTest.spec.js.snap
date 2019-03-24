@@ -51,6 +51,7 @@ exports[`Component renders correctly 1`] = `
       <router-link-stub
         class="btn green"
         event="click"
+        id="addStaffBtn"
         style="margin: 20px;"
         tag="a"
         to="/register"
