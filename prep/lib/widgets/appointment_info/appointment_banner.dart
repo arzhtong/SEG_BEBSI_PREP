@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/utils/query.dart';
 import 'package:prep/utils/misc_functions.dart';
 
 class AppointmentDetailsBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final BaseBackend backend = BackendProvider.of(context).backend;
+
     return Card(
       key: Key('rootCard'),
       elevation: 3.0,
-      color: FirestoreBackend().color,
+      color: backend.color,
       child: Container(
         padding: EdgeInsets.all(10.0),
         alignment: Alignment.centerLeft,
@@ -17,22 +20,22 @@ class AppointmentDetailsBanner extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             _TitleText("Date"),
-            _SubtitleText(dateFormatter(FirestoreBackend().dateTime)),
+            _SubtitleText(dateFormatter(backend.dateTime)),
             Divider(
               color: Colors.white,
             ),
             _TitleText("Time"),
-            _SubtitleText(timeFormatter(FirestoreBackend().dateTime)),
+            _SubtitleText(timeFormatter(backend.dateTime)),
             Divider(
               color: Colors.white,
             ),
             _TitleText("Location"),
-            _SubtitleText(FirestoreBackend().location),
+            _SubtitleText(backend.location),
             Divider(
               color: Colors.white,
             ),
             _TitleText("Staff"),
-            _SubtitleText(FirestoreBackend().doctorName),
+            _SubtitleText(backend.doctorName),
           ],
         ),
       ),

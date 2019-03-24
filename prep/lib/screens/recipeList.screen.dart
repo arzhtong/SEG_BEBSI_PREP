@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:prep/utils/query.dart';
+import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/widgets/recipe/recipe_card.dart';
 
 class RecipeListScreen extends StatelessWidget {
@@ -17,7 +17,7 @@ class RecipeListScreen extends StatelessWidget {
         title: Text(_appBarTitle),
       ),
       body: StreamBuilder(
-        stream: FirestoreBackend().recipeSnapshots,
+        stream: BackendProvider.of(context).backend.recipeSnapshots,
         builder: (context, collectionSnapshot) {
           if (!collectionSnapshot.hasData) {
             return _loadingWidget;

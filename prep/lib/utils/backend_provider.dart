@@ -13,7 +13,6 @@ class BackendProvider extends InheritedWidget {
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) => true;
 
-  static BaseBackend of(BuildContext context) =>
-      (context.inheritFromWidgetOfExactType(BackendProvider) as BackendProvider)
-          .backend;
+  static BackendProvider of(BuildContext context) =>
+      context.inheritFromWidgetOfExactType(BackendProvider) as BackendProvider;
 }

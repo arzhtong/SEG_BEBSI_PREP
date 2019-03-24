@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 import 'package:prep/utils/query.dart';
+import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 import 'package:prep/widgets/appointment_info/appointment_banner.dart';
 import 'package:prep/utils/misc_functions.dart';
@@ -31,7 +32,7 @@ class AppointmentInfo extends StatelessWidget {
       children: <Widget>[
         AppointmentDetailsBanner(),
         StreamBuilder(
-            stream: FirestoreBackend().testSnapshots,
+            stream: BackendProvider.of(context).backend.testSnapshots,
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return const Align(

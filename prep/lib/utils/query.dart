@@ -35,6 +35,17 @@ class DatabaseHandler {
 }
 
 abstract class BaseBackend {
+  String appointmentID;
+  String testID;
+  String appointmentName;
+  String location;
+  DateTime dateTime;
+  String doctorName;
+  Color color;
+
+  BaseBackend setBackendParams(newAppointmentID, newTestID, newAppointmentName,
+      newLocation, newDateTime, newDoctorName, newColor);
+
   Future<QuerySnapshot> get appointmentCodes;
 
   Stream<QuerySnapshot> get messageSnapshots;
@@ -73,7 +84,7 @@ class FirestoreBackend implements BaseBackend {
 
   FirestoreBackend._internal();
 
-  void setBackendParams(newAppointmentID, newTestID, newAppointmentName,
+  BaseBackend setBackendParams(newAppointmentID, newTestID, newAppointmentName,
       newLocation, newDateTime, newDoctorName, newColor) {
     appointmentID = newAppointmentID;
     testID = newTestID;
@@ -82,6 +93,8 @@ class FirestoreBackend implements BaseBackend {
     dateTime = newDateTime;
     doctorName = newDoctorName;
     color = newColor;
+
+    return FirestoreBackend();
   }
 
   Future<QuerySnapshot> get appointmentCodes => _appointmentsCollection
