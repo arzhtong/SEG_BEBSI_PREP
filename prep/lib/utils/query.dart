@@ -48,11 +48,9 @@ abstract class BaseBackend {
 
   Future<QuerySnapshot> get appointmentCodes;
 
-  Stream<QuerySnapshot> get messageSnapshots;
+  Stream<List<Map<String, dynamic>>> messagesStream({bool setSeen});
 
   void sendMessage(String message);
-
-  void setSeenByPatient(DocumentReference docRef);
 
   Stream<QuerySnapshot> get dailyCheckupsSnapshots;
 
@@ -116,8 +114,22 @@ class FirestoreBackend implements BaseBackend {
   CollectionReference get _messagesCollection =>
       _appointmentReference.collection('messages');
 
-  Stream<QuerySnapshot> get messageSnapshots =>
-      _messagesCollection.orderBy('datetime', descending: false).snapshots();
+  Stream<List<Map<String, dynamic>>> messagesStream({bool setSeen}) =>
+      _messagesCollection
+          .orderBy('datetime', descending: false)
+          .snapshots()
+          .map((querySnapshot) => querySnapshot.documentChanges
+              .map((docChange) {
+                if (docChange.type == DocumentChangeType.added) {
+                  DocumentSnapshot docSnapshot = docChange.document;
+                  Map<String, dynamic> message = docSnapshot.data;
+                  if (setSeen && !message['seenByPatient'])
+                    docSnapshot.reference.updateData({'seenByPatient': true});
+                  return message;
+                }
+              })
+              .where((message) => message != null)
+              .toList());
 
   void sendMessage(String message) => _messagesCollection.add({
         'content': message,
@@ -126,9 +138,6 @@ class FirestoreBackend implements BaseBackend {
         'seenByPatient': true,
         'seenByStaff': false,
       });
-
-  void setSeenByPatient(DocumentReference docRef) =>
-      docRef.updateData({'seenByPatient': true});
 
   Stream<QuerySnapshot> get dailyCheckupsSnapshots => _appointmentReference
       .collection('dailyCheckups')

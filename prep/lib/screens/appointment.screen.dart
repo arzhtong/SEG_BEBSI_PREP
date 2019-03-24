@@ -5,7 +5,6 @@ import 'package:prep/screens/appointment_prep.screen.dart';
 import 'package:prep/screens/daily_checkups.screen.dart';
 import 'package:prep/screens/messaging.screen.dart';
 import 'package:prep/utils/backend_provider.dart';
-import 'package:prep/utils/query.dart';
 import 'package:prep/widgets/dashboard/help_dialog.dart';
 
 class Appointment extends StatefulWidget {
@@ -103,25 +102,24 @@ class _AppointmentState extends State<Appointment> {
   }
 
   Widget _buildChatIcon() {
-    return Icon(Icons.chat);
-    /* return (_selectedIndex == 3)
+    return (_selectedIndex == 3)
         ? Icon(Icons.chat)
         : StreamBuilder(
-            stream: BackendProvider.of(context).backend.messageSnapshots,
+            stream: BackendProvider.of(context)
+                .backend
+                .messagesStream(setSeen: false),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                snapshot.data.documentChanges.forEach((change) {
-                  if (change.type == DocumentChangeType.added &&
-                      !change.document.data['seenByPatient']) {
-                    _unseenMessages = true;
-                  }
+                snapshot.data.forEach((message) {
+                  if (!message['seenByPatient']) _unseenMessages = true;
                 });
               }
+
               return (_unseenMessages)
                   ? Icon(Icons.chat, color: Colors.red)
                   : Icon(Icons.chat);
             },
-          ); */
+          );
   }
 
   void _onItemTapped(int index) {
