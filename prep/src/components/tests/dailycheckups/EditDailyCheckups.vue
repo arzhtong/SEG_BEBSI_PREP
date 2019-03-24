@@ -40,7 +40,7 @@
                   <div v-for="instr in allInstrArray.length" v-bind:key="instr" class="input-field col s12">
                     <span>Instruction</span>
                     <input type="text" v-model="allInstrArray[instr - 1]" required>   
-                    <button @click="deleteInstruction(instr -1)" class="btn red">remove instruction</button>
+                    <button @click="deleteInstructionEdit(instr -1)" class="btn red">remove instruction</button>
                   </div>
                 </div>
 
@@ -55,15 +55,20 @@
 </template>
 
 <script>
-import { editdailycheckupsMixin } from "../../../mixins/dailycheckupsMixin/editdailycheckupsMixin";
+import { dailycheckupMixin } from "../../../mixins/dailycheckupsMixin/dailycheckupMixin";
 
 export default {
  name: "edit-dailycheckups",
-  mixins: [editdailycheckupsMixin],
+  mixins: [dailycheckupMixin],
+  data(){
+    return{
+      test_id: this.$route.params.test_id,
+      daily_id: this.$route.params.daily_id
+    }
+  },
   created() {
-    this.addInstruction();
-    this.deleteInstruction();
-    this.deleteAddedInstruction();
+     this.title=this.$route.params.daily_id
+     this.getCheckups()
   }
 };
 </script>
