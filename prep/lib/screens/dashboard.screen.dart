@@ -7,6 +7,7 @@ import 'package:prep/widgets/dashboard/calendar_card.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 import 'package:prep/utils/storage.dart';
 import 'package:prep/utils/query.dart';
+import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/widgets/dashboard/help_dialog.dart';
 
 class Dashboard extends StatefulWidget {
@@ -70,7 +71,7 @@ class _DashboardState extends State<Dashboard> {
   Future<bool> _isCodeInFirestoreNotUsed(String code) async {
     List<String> liveNotUsedIDs = new List();
 
-    await Queries.appointmentCodes.then((query) {
+    await BackendProvider.of(context).backend.appointmentCodes.then((query) {
       query.documents.forEach((document) {
         if (document['used'] == false) {
           liveNotUsedIDs.add(document.documentID);
@@ -100,7 +101,8 @@ class _DashboardState extends State<Dashboard> {
     print("Raw codes file - in getDocData after reading: " + codeFileState);
 
     //reading appointments from the database and updating the codes file
-    QuerySnapshot testDocList = await Queries.appointmentCodes;
+    QuerySnapshot testDocList =
+        await BackendProvider.of(context).backend.appointmentCodes;
     documentList = testDocList.documents;
 
     // Get all the codes stored in the database

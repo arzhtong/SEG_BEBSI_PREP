@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'dart:async';
 
 import 'package:prep/utils/query.dart';
+import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/utils/message_crypto.dart';
 import 'package:prep/widgets/messaging/messages_view.dart';
 import 'package:prep/widgets/messaging/text_composer.dart';
@@ -18,9 +19,12 @@ class _MessagingScreenState extends State<MessagingScreen> {
   StreamSubscription<QuerySnapshot> _messageStreamSubscription;
 
   void _addNewMessage(DocumentSnapshot document) {
+    final BaseBackend backend = BackendProvider.of(context).backend;
+
     Map<String, dynamic> message = document.data;
-    if (!message['seenByPatient']) Queries.setSeenByPatient(document.reference);
-    String decryptedMessage = MessageCrypto.decryptMessage(message['content']);
+    if (!message['seenByPatient']) backend.setSeenByPatient(document.reference);
+    String decryptedMessage =
+        MessageCrypto.decryptMessage(backend.appointmentID, message['content']);
 
     _messagesView.addMessage(
       messageText: decryptedMessage,
@@ -33,11 +37,15 @@ class _MessagingScreenState extends State<MessagingScreen> {
   void initState() {
     super.initState();
 
-    _messageStreamSubscription =
-        Queries.messageSnapshots.listen((QuerySnapshot snapshot) {
-      snapshot.documentChanges.forEach((DocumentChange change) {
-        if (change.type == DocumentChangeType.added)
-          _addNewMessage(change.document);
+    Future.delayed(Duration.zero, () {
+      _messageStreamSubscription = BackendProvider.of(context)
+          .backend
+          .messageSnapshots
+          .listen((QuerySnapshot snapshot) {
+        snapshot.documentChanges.forEach((DocumentChange change) {
+          if (change.type == DocumentChangeType.added)
+            _addNewMessage(change.document);
+        });
       });
     });
   }
