@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_html/flutter_html.dart';
 
-import 'package:prep/utils/query.dart';
+import 'package:prep/utils/backend.dart';
+import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 import 'package:prep/utils/misc_functions.dart';
 
@@ -37,7 +38,9 @@ class InformationParser extends StatelessWidget {
         title: Text(_articleName),
       ),
       body: StreamBuilder(
-          stream: Queries.informationSnapshots(_documentId),
+          stream: BackendProvider.of(context)
+              .backend
+              .informationSnapshots(_documentId),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const Align(

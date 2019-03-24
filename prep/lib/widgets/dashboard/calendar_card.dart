@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:prep/screens/appointment.screen.dart';
+import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/utils/misc_functions.dart';
-import 'package:prep/utils/query.dart';
-
 
 class CalendarCard extends StatelessWidget {
   final String name;
@@ -12,18 +11,17 @@ class CalendarCard extends StatelessWidget {
   final String testID;
   final String doctorName;
   final String testName;
-  final List<Color> colors = [
+  static final List<Color> colors = [
     Colors.green[300],
     Colors.red[300],
     Colors.blue[300],
     Colors.orange[300]
   ];
-  Color color;
+  final Color color;
 
   CalendarCard(this.name, this.location, this.dateTime, this.testID,
-      this.doctorName, this.testName) {
-    this.color = colors[name.hashCode % 4];
-  }
+      this.doctorName, this.testName)
+      : color = colors[name.hashCode % 4];
 
   Widget _informationRow(String label, String content) {
     return Container(
@@ -70,6 +68,7 @@ class CalendarCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Container(
+                    key: Key('rootContainer'),
                     width: double.infinity,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(3.0)),
@@ -99,7 +98,7 @@ class CalendarCard extends StatelessWidget {
                                 height: 30.0,
                               ),
                               _informationRow("Location: ", location),
-                              _informationRow("Staff member: ", doctorName),
+                              _informationRow("Staff: ", doctorName),
                               _informationRow(
                                   "Date: ", dateFormatter(dateTime)),
                               _informationRow(
@@ -121,12 +120,18 @@ class CalendarCard extends StatelessWidget {
                 child: InkWell(
                     splashColor: Color.fromRGBO(255, 255, 255, 0.2),
                     onTap: () {
-                      Queries.setAppointmentInfo(this.name, this.testID, this.testName, this.location, this.dateTime, this.doctorName, this.color);
+                      BackendProvider.of(context).backend.setBackendParams(
+                          this.name,
+                          this.testID,
+                          this.testName,
+                          this.location,
+                          this.dateTime,
+                          this.doctorName,
+                          this.color);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Appointment(0)
-                          ));
+                              builder: (context) => Appointment(0)));
                     }),
               ),
             ),

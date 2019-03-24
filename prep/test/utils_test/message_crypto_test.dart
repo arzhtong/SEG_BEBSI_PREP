@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:prep/utils/message_crypto.dart';
-import 'package:prep/utils/query.dart';
+import 'package:prep/utils/backend.dart';
 
 void main() {
   testDecryptGivenMessage(String msgEncrypted, String msgUnencrypted) {
@@ -13,7 +13,8 @@ void main() {
     testDecryptGivenMessage(msgEncrypted, msgUnencrypted);
   }
 
-  setUp(() => Queries.setAppointmentInfo("ach9s8abt", null, null, null, null, null, null));
+  setUp(() => FirestoreBackend()
+      .setBackendParams("ach9s8abt", null, null, null, null, null, null));
 
   group('Given message can be encrypted, and decrypted back to original:', () {
     const List<String> messages = [
@@ -48,5 +49,6 @@ void main() {
           () => testDecryptGivenMessage(messagePair[0], messagePair[1]));
   });
 
-  tearDown(() => Queries.setAppointmentInfo(null, null, null, null, null, null, null));
+  tearDown(() => FirestoreBackend()
+      .setBackendParams(null, null, null, null, null, null, null));
 }

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:prep/utils/query.dart';
+import 'package:prep/utils/backend.dart';
+import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 import 'package:prep/widgets/faq_parser/faq_expansion_tile.dart';
 
 class FaqParser extends StatelessWidget {
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
-    return FaqExpansionTIle(document['question'], document['answer'],
+    return FaqExpansionTile(document['question'], document['answer'],
         document['chatShortcut'], document['informationShortcut']);
   }
 
@@ -19,7 +20,7 @@ class FaqParser extends StatelessWidget {
         title: Text("FAQ"),
       ),
       body: StreamBuilder(
-        stream: Queries.faqSnapshots,
+        stream: BackendProvider.of(context).backend.faqSnapshots,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Align(

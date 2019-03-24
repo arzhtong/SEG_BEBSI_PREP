@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-import 'package:prep/utils/query.dart';
+import 'package:prep/utils/backend_provider.dart';
+import 'package:prep/utils/backend.dart';
 import 'package:prep/widgets/appointment_prep/category_card.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 
@@ -13,7 +14,7 @@ class AppointmentPrep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: Queries.prepCardsSnapshots,
+        stream: BackendProvider.of(context).backend.prepCardsSnapshots,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Align(
@@ -45,19 +46,19 @@ class AppointmentPrep extends StatelessWidget {
 
   Widget _buildGrid(BuildContext context, DocumentSnapshot document) {
     if (document['type'] == 'article' || document['type'] == 'categoryList') {
-      return CategoryCard(document.documentID, document['title'],
-          document['type']);
+      return CategoryCard(
+          document.documentID, document['title'], document['type']);
     } else {
       if (document['type'] == 'faqs' && !seenFAQ) {
         seenFAQ = true;
-        return CategoryCard(document.documentID, document['title'],
+        return CategoryCard(document.documentID, "Frequently Asked Questions",
             document['type']);
       }
 
       if (document['type'] == 'recipe' && !seenRecipe) {
         seenRecipe = true;
-        return CategoryCard(document.documentID, document['title'],
-            document['type']);
+        return CategoryCard(
+            document.documentID, "Suggested Recipes", document['type']);
       }
     }
 

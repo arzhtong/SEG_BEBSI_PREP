@@ -4,13 +4,19 @@ class MakeHelpIcon extends StatelessWidget {
   final String info;
 
   MakeHelpIcon(this.info);
-
+  
+  
+  
   Widget build(BuildContext context) {
+    if (info==null){
+      return AlertDialog(content: Text('No Description Available'));
+    }else{
     return IconButton(
         icon: new Icon(Icons.help, color: Colors.indigo[50]),
         onPressed: () {
           _makeAlert(context, info);
         });
+  }
   }
 
   void _makeAlert(BuildContext context, String text) {
