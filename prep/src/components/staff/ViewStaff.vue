@@ -37,6 +37,7 @@
                 class="secondary-content left"
               >
                 <button
+                  id="editBtn"
                   v-if="user.email == currentEmail || user.role != 'Admin'"
                   class="btn blue"
                   style="position:relative;text-align:center;"
@@ -45,6 +46,7 @@
             </td>
             <td>
               <button
+                id="deleteBtn"
                 v-if="user.role != 'Admin'"
                 class="btn red"
                 @click="deleteUser(user.email)"
@@ -52,7 +54,7 @@
             </td>
           </tr>
         </tbody>
-        <router-link to="/register" class="btn green" style="margin:20px">Add Staff</router-link>
+        <router-link id="addStaffBtn" to="/register" class="btn green" style="margin:20px">Add Staff</router-link>
       </table>
     </div>
   </div>
