@@ -7,24 +7,33 @@ import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/utils/message_crypto.dart';
 import 'package:prep/screens/messaging.screen.dart';
 
-class MockBackend extends Mock implements BaseBackend {}
+/// _messagesCollectionFirestore: mock list of messages in appointment in firestore
+/// _messagesSentCollectionFirestore: mock list of sent messages in appointment in firestore,
+/// _messagesSentCollectionFirestore is not real, as DocumentChanges automatically keeps track
+class MockBackend extends Mock implements BaseBackend {
+  List<Map<String, dynamic>> _messagesCollectionFirestore = [];
+  List<Map<String, dynamic>> _messagesSentCollectionFirestore = [];
+
+  List<Map<String, dynamic>> get mockMessagesCollection =>
+      _messagesCollectionFirestore;
+  List<Map<String, dynamic>> get mockMessagesSentCollection =>
+      _messagesSentCollectionFirestore;
+}
 
 main() {
-  final String mockAppointmentID = 'abcdefghi';
-  List<Map<String, dynamic>> mockMessagesCollection = [];
+  final MockBackend mockBackend = MockBackend();
 
-  Widget testableWidget({MockBackend backend, Widget child}) {
+  Widget testableWidget({Widget child}) {
     return BackendProvider(
-      backend: backend,
+      backend: mockBackend,
       child: MaterialApp(
         home: child,
       ),
     );
   }
 
-  MockBackend setUpMockBackend() {
-    MockBackend mockBackend = new MockBackend();
-    List<Map<String, dynamic>> mockMessagesCollectionSent = [];
+  void setUpMockBackend() {
+    final String mockAppointmentID = 'abcdefghi';
 
     when(mockBackend.appointmentID).thenReturn(
       mockAppointmentID,
@@ -33,36 +42,34 @@ main() {
     when(mockBackend.messagesStream(any)).thenAnswer(
       (_) => Stream.periodic(Duration(milliseconds: 100), (_) {
             List<Map<String, dynamic>> mockMessagesCollectionToSend =
-                mockMessagesCollection
-                    .map((message) =>
-                        (!mockMessagesCollectionSent.contains(message))
-                            ? message
-                            : null)
+                mockBackend.mockMessagesCollection
+                    .map((message) => (mockBackend.mockMessagesSentCollection
+                            .contains(message))
+                        ? null
+                        : message)
                     .where((message) => message != null)
                     .toList();
-            mockMessagesCollectionSent.addAll(mockMessagesCollectionToSend);
+            mockBackend.mockMessagesSentCollection
+                .addAll(mockMessagesCollectionToSend);
             return mockMessagesCollectionToSend;
           }),
     );
 
     when(mockBackend.sendMessage(any)).thenAnswer((invocation) {
-      mockMessagesCollection.add({
+      mockBackend.mockMessagesCollection.add({
         'content': invocation.positionalArguments.first,
         'datetime': Timestamp.fromDate(DateTime.now()),
         'isPatient': true,
         'seenByPatient': true,
       });
     });
-
-    return mockBackend;
   }
 
   Future<void> setUpWidgetTester(WidgetTester tester) async {
-    MockBackend mockBackend = setUpMockBackend();
+    setUpMockBackend();
     MessagingScreen messagingScreen = MessagingScreen();
 
-    await tester.pumpWidget(
-        testableWidget(backend: mockBackend, child: messagingScreen));
+    await tester.pumpWidget(testableWidget(child: messagingScreen));
     await tester.pumpAndSettle();
   }
 
@@ -75,47 +82,56 @@ main() {
       "Fifth Test Message!",
     ];
 
-    testWidgets('text field, send button, and messages view are found',
-        (WidgetTester tester) async {
-      await setUpWidgetTester(tester);
+    testWidgets(
+      'text field, send button, and messages view are found',
+      (WidgetTester tester) async {
+        await setUpWidgetTester(tester);
 
-      final textField = find.byKey(Key('textField'));
-      final sendButton = find.byKey(Key('sendButton'));
-      final messagesView = find.byKey(Key('messagesView'));
+        final textField = find.byKey(Key('textField'));
+        final sendButton = find.byKey(Key('sendButton'));
+        final messagesView = find.byKey(Key('messagesView'));
 
-      expect(textField, findsOneWidget);
-      expect(sendButton, findsOneWidget);
-      expect(messagesView, findsOneWidget);
-    });
+        expect(textField, findsOneWidget);
+        expect(sendButton, findsOneWidget);
+        expect(messagesView, findsOneWidget);
+      },
+    );
 
-    testWidgets("messages can be encrypted and sent; encrypted messages can be received",
-        (WidgetTester tester) async {
-      await setUpWidgetTester(tester);
+    testWidgets(
+      "messages can be encrypted and sent; encrypted messages can be received",
+      (WidgetTester tester) async {
+        await setUpWidgetTester(tester);
 
-      final textField = find.byKey(Key('textField'));
-      final sendButton = find.byKey(Key('sendButton'));
-      final messagesView = find.byKey(Key('messagesView'));
+        final textField = find.byKey(Key('textField'));
+        final sendButton = find.byKey(Key('sendButton'));
+        final messagesView = find.byKey(Key('messagesView'));
 
-      for (String message in testMessages) {
-        await tester.enterText(textField, message);
-        await tester.tap(sendButton);
-        await tester.pumpAndSettle();
+        for (String message in testMessages) {
+          await tester.enterText(textField, message);
+          await tester.tap(sendButton);
+          await tester.pumpAndSettle();
 
-        ListView listView = (messagesView.evaluate().single.widget as ListView);
+          ListView messageListView = (messagesView.evaluate().single.widget);
 
-        expect(listView.semanticChildCount, mockMessagesCollection.length);
-      }
-    });
+          expect(messageListView.semanticChildCount,
+              mockBackend.mockMessagesCollection.length);
+        }
+      },
+    );
 
-    test("received encrypted messages can be decrypted", () {
-      List<String> decryptedMessages = mockMessagesCollection.map((message) {
-        return MessageCrypto.decryptMessage(
-          mockAppointmentID,
-          message['content'],
-        );
-      }).toList();
+    test(
+      "received encrypted messages can be decrypted",
+      () {
+        List<String> decryptedMessages =
+            mockBackend.mockMessagesCollection.map((message) {
+          return MessageCrypto.decryptMessage(
+            mockBackend.appointmentID,
+            message['content'],
+          );
+        }).toList();
 
-      expect(decryptedMessages, testMessages);
-    });
+        expect(decryptedMessages, testMessages);
+      },
+    );
   });
 }
