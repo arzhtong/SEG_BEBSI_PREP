@@ -13,6 +13,7 @@ class AppointmentInfo extends StatelessWidget {
         padding: EdgeInsets.all(10.0),
         child: SingleChildScrollView(
           child: Html(
+            key: Key('articleText'),
             data: dataMap['description'],
             useRichText: true,
             //turn this off to get the alternative parser
