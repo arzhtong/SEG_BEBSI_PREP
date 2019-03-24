@@ -23,20 +23,20 @@ class CategoryListParser extends StatelessWidget {
           stream: BackendProvider.of(context)
               .backend
               .categoryListSnapshots(documentId),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
+          builder: (context, dataSnapshot) {
+            if (!dataSnapshot.hasData) {
               return const Align(
                 alignment: Alignment.topCenter,
                 child: LinearProgressIndicator(),
               );
             } else {
-              if (snapshot.data['maps'] != null &&
-                  snapshot.data['maps'].length > 0) {
+              if (dataSnapshot.data['maps'] != null &&
+                  dataSnapshot.data['maps'].length > 0) {
                 return ListView.builder(
                   padding: EdgeInsets.all(10.0),
                   itemCount: 1,
                   itemBuilder: (context, index) =>
-                      _buildDropDownList(context, snapshot.data),
+                      _buildDropDownList(context, dataSnapshot.data),
                 );
               } else {
                 return EmptyScreenPlaceholder("No items in this list", "");
@@ -46,11 +46,11 @@ class CategoryListParser extends StatelessWidget {
     );
   }
 
-  Widget _buildDropDownList(BuildContext context, DocumentSnapshot document) {
+  Widget _buildDropDownList(BuildContext context, Map<String, dynamic> dataMap) {
     List<Widget> dropDowns = new List();
-    List<dynamic> mappedData = document['maps'];
+    List<dynamic> mappedData = dataMap['maps'];
 
-    print(document['maps']);
+    print("Data map: " + dataMap['maps']);
 
     mappedData.forEach((value) {
       dropDowns.add(DescriptiveExpansionTile(
