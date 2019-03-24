@@ -43,7 +43,7 @@ abstract class BaseBackend {
   String doctorName;
   Color color;
 
-  BaseBackend setBackendParams(newAppointmentID, newTestID, newAppointmentName,
+  void setBackendParams(newAppointmentID, newTestID, newAppointmentName,
       newLocation, newDateTime, newDoctorName, newColor);
 
   Future<QuerySnapshot> get appointmentCodes;
@@ -82,7 +82,7 @@ class FirestoreBackend implements BaseBackend {
 
   FirestoreBackend._internal();
 
-  BaseBackend setBackendParams(newAppointmentID, newTestID, newAppointmentName,
+  void setBackendParams(newAppointmentID, newTestID, newAppointmentName,
       newLocation, newDateTime, newDoctorName, newColor) {
     appointmentID = newAppointmentID;
     testID = newTestID;
@@ -91,8 +91,6 @@ class FirestoreBackend implements BaseBackend {
     dateTime = newDateTime;
     doctorName = newDoctorName;
     color = newColor;
-
-    return FirestoreBackend();
   }
 
   Future<QuerySnapshot> get appointmentCodes => _appointmentsCollection
@@ -164,4 +162,51 @@ class FirestoreBackend implements BaseBackend {
 
   Stream<DocumentSnapshot> categoryListSnapshots(String documentId) =>
       _testReference.collection('prepCards').document(documentId).snapshots();
+}
+
+class TestBackend implements BaseBackend {
+  String appointmentID;
+  String testID;
+  String appointmentName;
+  String location;
+  DateTime dateTime;
+  String doctorName;
+  Color color;
+
+  static final TestBackend _singleton = TestBackend._internal();
+
+  factory TestBackend() => _singleton;
+
+  TestBackend._internal();
+
+  void setBackendParams(newAppointmentID, newTestID, newAppointmentName,
+      newLocation, newDateTime, newDoctorName, newColor) {
+    appointmentID = newAppointmentID;
+    testID = newTestID;
+    appointmentName = newAppointmentName;
+    location = newLocation;
+    dateTime = newDateTime;
+    doctorName = newDoctorName;
+    color = newColor;
+  }
+
+  Future<QuerySnapshot> get appointmentCodes {}
+
+  Stream<List<Map<String, dynamic>>> messagesStream({bool setSeen}) {}
+
+  void sendMessage(String message) {}
+
+  Stream<QuerySnapshot> get dailyCheckupsSnapshots {}
+
+  Stream<QuerySnapshot> get prepCardsSnapshots {}
+
+  Stream<QuerySnapshot> get faqSnapshots {}
+
+  Stream<DocumentSnapshot> get testSnapshots {}
+
+  Stream<QuerySnapshot> get recipeSnapshots {}
+
+  Stream<DocumentSnapshot> informationSnapshots(String documentId) {}
+
+  Stream<DocumentSnapshot> categoryListSnapshots(String documentId) {}
 }
