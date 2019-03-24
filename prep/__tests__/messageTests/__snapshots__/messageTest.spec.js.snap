@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component renders correctly 1`] = `
+<div>
+  <div
+    class="containerChat"
+    id="top"
+  >
+    <div
+      id="messages"
+      tag="msg"
+    >
+      <ul>
+         
+        <li>
+          <div
+            class="containerChat"
+            style="max-width: 100%;"
+          >
+            <p>
+              Say hello to the patient 👋
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+     
+    <form>
+      <div
+        class="row"
+      >
+        <div
+          class="input-field col s12"
+        >
+          <div
+            id="foot"
+          >
+            <textarea
+              id="textArea"
+              required="required"
+              style="width: 30%; height: 80px; resize: none;"
+            />
+             
+            <button
+              class="btn btn-large"
+              id="sendMessage"
+              style="margin: 0px 0px 5% 10px;"
+              type="submit"
+            >
+              <i
+                class="material-icons left"
+              >
+                send
+              </i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+     
+    <a
+      class="btn"
+      id="currentApp"
+      style="margin-bottom: 10px;"
+    >
+      Go Back
+    </a>
+  </div>
+</div>
+`;
