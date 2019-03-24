@@ -62,7 +62,7 @@ abstract class BaseBackend {
 
   Stream<QuerySnapshot> get recipeSnapshots;
 
-  Stream<DocumentSnapshot> informationSnapshots(String documentId);
+  Stream<Map<String, dynamic>> informationSnapshots(String documentId);
 
   Stream<DocumentSnapshot> categoryListSnapshots(String documentId);
 }
@@ -158,56 +158,13 @@ class FirestoreBackend implements BaseBackend {
       .where('cardType', isEqualTo: 'recipe')
       .snapshots();
 
-  Stream<DocumentSnapshot> informationSnapshots(documentId) =>
-      _testReference.collection('prepCards').document(documentId).snapshots();
+  Stream<Map<String, dynamic>> informationSnapshots(documentId) =>
+      _testReference
+          .collection('prepCards')
+          .document(documentId)
+          .snapshots()
+          .map((docSnap) => docSnap.data);
 
   Stream<DocumentSnapshot> categoryListSnapshots(String documentId) =>
       _testReference.collection('prepCards').document(documentId).snapshots();
-}
-
-class TestBackend implements BaseBackend {
-  String appointmentID;
-  String testID;
-  String appointmentName;
-  String location;
-  DateTime dateTime;
-  String doctorName;
-  Color color;
-
-  static final TestBackend _singleton = TestBackend._internal();
-
-  factory TestBackend() => _singleton;
-
-  TestBackend._internal();
-
-  void setBackendParams(newAppointmentID, newTestID, newAppointmentName,
-      newLocation, newDateTime, newDoctorName, newColor) {
-    appointmentID = newAppointmentID;
-    testID = newTestID;
-    appointmentName = newAppointmentName;
-    location = newLocation;
-    dateTime = newDateTime;
-    doctorName = newDoctorName;
-    color = newColor;
-  }
-
-  Future<QuerySnapshot> get appointmentCodes {}
-
-  Stream<List<Map<String, dynamic>>> messagesStream({bool setSeen}) {}
-
-  void sendMessage(String message) {}
-
-  Stream<QuerySnapshot> get dailyCheckupsSnapshots {}
-
-  Stream<QuerySnapshot> get prepCardsSnapshots {}
-
-  Stream<QuerySnapshot> get faqSnapshots {}
-
-  Stream<DocumentSnapshot> get testSnapshots {}
-
-  Stream<QuerySnapshot> get recipeSnapshots {}
-
-  Stream<DocumentSnapshot> informationSnapshots(String documentId) {}
-
-  Stream<DocumentSnapshot> categoryListSnapshots(String documentId) {}
 }
