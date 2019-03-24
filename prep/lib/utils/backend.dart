@@ -48,7 +48,7 @@ abstract class BaseBackend {
 
   Future<QuerySnapshot> get appointmentCodes;
 
-  Stream<List<Map<String, dynamic>>> messagesStream({bool setSeen});
+  Stream<List<Map<String, dynamic>>> messagesStream(bool setSeen);
 
   void sendMessage(String message);
 
@@ -112,7 +112,7 @@ class FirestoreBackend implements BaseBackend {
   CollectionReference get _messagesCollection =>
       _appointmentReference.collection('messages');
 
-  Stream<List<Map<String, dynamic>>> messagesStream({bool setSeen}) =>
+  Stream<List<Map<String, dynamic>>> messagesStream(bool setSeen) =>
       _messagesCollection
           .orderBy('datetime', descending: false)
           .snapshots()

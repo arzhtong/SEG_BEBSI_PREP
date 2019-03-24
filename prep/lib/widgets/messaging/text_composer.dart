@@ -40,6 +40,7 @@ class _TextComposerState extends State<TextComposer> {
                   Flexible(
                     child: SingleChildScrollView(
                       child: TextField(
+                        key: Key('textField'),
                         autocorrect: true,
                         maxLines: null,
                         keyboardType: TextInputType.multiline,
@@ -56,6 +57,7 @@ class _TextComposerState extends State<TextComposer> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       IconButton(
+                        key: Key('sendButton'),
                         icon: Icon(
                           Icons.send,
                           //TODO Change to proper theme colors after implementation.
