@@ -22,7 +22,7 @@
                 </div>
                 <div class="navButtons">
                     <button type="submit" class="btn">Submit</button>
-                    <router-link v-bind:to="{name: 'view-articles', params: {test_id: this.test_id, title: this.test_title}}" class="btn grey">Cancel</router-link>
+                    <router-link v-bind:to="{name: 'view-articles', params: {test_id: this.test_id, test_title: this.test_title}}" class="btn grey">Cancel</router-link>
                 </div>
             </form>
         </div>
@@ -30,52 +30,15 @@
 </template>
 
 <script>
-import db from "../../firebaseInit"
-import textEditor from "../../shared/TextEditor"
+import { articleQuereyMixin } from '../../../mixins/articleMixins/articleQuereyMixin'
+import { articleMixin } from '../../../mixins/articleMixins/articleMixin'
 
 export default {
     name: 'addArticle',
+    mixins: [articleQuereyMixin, articleMixin],
     data() {
         return {
-            title: '',
-            test_id: this.$route.params.test_id,
-            test_title: this.$route.params.title
-        };
-    },
-    components: {
-        textEditor
-    },
-    methods: {
-        // save the new article to the prepCards collection
-        saveArticle () {
-            // run the editors save method
-            this.$refs.textEditor.saveEditorData()
-            db.collection("tests")
-            .doc(this.$route.params.test_id)
-            .collection("prepCards")
-            .add({
-                title: this.title,
-                type: 'article',
-                description: (this.$refs.textEditor.htmlForEditor === undefined ? '' : this.$refs.textEditor.htmlForEditor), 
-                editorImages: this.$refs.textEditor.images
-            })
-            .then(docRef => {
-                console.log("Document written with ID: ", docRef.id)
-                    alert(`New article: ` + this.title + ` saved!`)
-            })
-            .catch(error => {
-                console.error("Error adding document: ", error)
-                return // dont leave the page if save fails
-            })
-            // return to articles page
-            this.$router.push({ name:'view-articles', params: {test_id: this.test_id, title: this.test_title} })
         }
-    },     
-    mounted() {
-        // initalise colapsablie component
-         $(document).ready(function() {
-            $('.collapsible').collapsible()
-        })
     }
 }
 </script>
