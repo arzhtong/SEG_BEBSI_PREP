@@ -34,10 +34,19 @@
 </template>
 
 <script>
-    import {viewdailycheckupsMixin} from "../../../mixins/dailycheckupsMixin/viewdailycheckupsMixin";
+    import {dailycheckupMixin} from "../../../mixins/dailycheckupsMixin/dailycheckupMixin";
     export default {
     name: 'view-dailycheckups',
-    mixins: [viewdailycheckupsMixin],
+    mixins: [dailycheckupMixin],
+    data(){
+        return{
+             dailyCheckups: [],
+             testID: this.$route.params.test_id     
+        }
+    },
+    created(){
+        this.getCheckup()
+    }
 };
 </script>
 

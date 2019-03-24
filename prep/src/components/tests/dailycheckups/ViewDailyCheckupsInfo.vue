@@ -56,9 +56,22 @@
 </template>
 
 <script>
-import {viewdailycheckupsInfoMixin} from "../../../mixins/dailycheckupsMixin/viewdailycheckupsInfoMixin";
+import {dailycheckupMixin} from "../../../mixins/dailycheckupsMixin/dailycheckupMixin";
 export default {
   name: "view-dailycheckups-info",
-  mixins: [viewdailycheckupsInfoMixin],
+  mixins: [dailycheckupMixin],
+  data(){
+    return{
+     test_id: this.$route.params.test_id,
+     daily_id:this.$route.params.daily_id,
+     code: null
+    };
+   
+  },
+  created(){
+     this.title=this.$route.params.daily_id
+     this.getDaily(this.test_id,this.daily_id)
+  }
+
 };
 </script>

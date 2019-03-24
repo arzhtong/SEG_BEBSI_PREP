@@ -55,15 +55,17 @@
 </template>
 
 <script>
-import { newdailycheckupsMixin } from "../../../mixins/dailycheckupsMixin/newdailycheckupsMixin";
+import { dailycheckupMixin } from "../../../mixins/dailycheckupsMixin/dailycheckupMixin";
 
 export default {
  name: "new-dailycheckups",
-  mixins: [newdailycheckupsMixin],
-  created() {
-    this.addInstruction();
-    this.deleteInstruction();
-  }
+  mixins: [dailycheckupMixin],
+   data() {
+        return {
+            test_id: this.$route.params.test_id,
+            daily_id: this.$route.params.daily_id
+        }
+    }
 };
 </script>
 
