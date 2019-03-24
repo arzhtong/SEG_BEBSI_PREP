@@ -45,7 +45,7 @@
                 </tbody>
             </table>
             <router-link 
-            v-bind:to="{name: 'add-article', params: {test_id: this.test_id, title: this.test_title}}" 
+            v-bind:to="{name: 'add-article', params: {test_id: this.test_id, test_title: this.test_title}}" 
             class="btn green">
                 Add article
             </router-link>
@@ -57,54 +57,24 @@
 </template>
 
 <script>
-import db from "../../firebaseInit"
+import { articleQueryMixin } from '../../../mixins/articleMixins/articleQueryMixin'
+import { articleMixin } from '../../../mixins/articleMixins/articleMixin'
 
 export default {
     name: 'view-articles',
+    mixins: [articleQueryMixin, articleMixin],
     data() {
         return {
-            articles: [],
-            test_id: this.$route.params.test_id,
-            test_title: this.$route.params.title
+            articles: []
         }
     },
     created() {
-        db.collection('tests')
-          .doc(this.$route.params.test_id)
-          .collection('prepCards')
-          .get()
-          .then(querySnapshot => {
-            querySnapshot.forEach(doc => {
-                if(doc.data().type === 'article') {
-                    const article = {
-                        id: doc.id,
-                        title: doc.data().title
-                    }
-                    this.articles.push(article)
-                }
-            })
-          })
+        this.getArticles()
     },
     methods: {
+        // re route to the edit article page
         editArticle() {
             this.$router.push({name: 'edit-article', params: {test_id: this.test_id, article_id: article.id, test_title: this.test_title}})
-        },
-        deleteArticle(id) {
-            // delete the article from prepcards
-            db.collection('tests')
-            .doc(this.$route.params.test_id)
-            .collection('prepCards')
-            .doc(id)
-            .delete()
-            .then(() => {
-                this.articles.splice(id, 1)
-                console.log("Document successfully deleted!")
-                alert(`Successfully deleted Article`)
-            })
-            .catch((error) => {
-                console.error("Error removing document: ", error)
-                alert(`There was an error: ${error}`)
-            })
         }
     }
 }

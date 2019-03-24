@@ -48,7 +48,7 @@
                 <div class="navButtons">
                     <button type="submit" class="btn">Submit</button>
                     <router-link
-                    v-bind:to="{name: 'view-articles', params: {test_id: test_id, title: test_title}}"
+                    v-bind:to="{name: 'view-articles', params: {test_id: test_id, test_title: test_title}}"
                     class="btn grey"
                     >Cancel</router-link>
                 </div>
@@ -58,94 +58,21 @@
 </template>
 
 <script>
-import db from "../../firebaseInit"
-import textEditor from "../../shared/TextEditor"
+import { articleQueryMixin } from '../../../mixins/articleMixins/articleQueryMixin'
+import { articleMixin } from '../../../mixins/articleMixins/articleMixin'
 
 export default {
     name: 'addArticle',
+    mixins: [articleQueryMixin, articleMixin],
     data() {
         return {
-            title: '',
-            article_id: this.$route.params.article_id,
-            test_id: this.$route.params.test_id,
-            test_title: this.$route.params.test_title,
-            imagesForEditor: [],
-            htmlForEditor: '',
-            dataLoaded: false
-        };
-    },
-    components: {
-        textEditor
-    },
-    beforeRouteEnter(to,from,next) {
-        db.collection('tests')
-          .doc(to.params.test_id)
-          .collection('prepCards')
-          .doc(to.params.article_id)
-          .get()
-          .then(doc => {
-              if(doc.exists) {
-                  next(vm => {
-                      vm.title = doc.data().title
-                      vm.htmlForEditor = doc.data().description
-                      vm.imagesForEditor = doc.data().editorImages
-                      vm.dataLoaded = true 
-                  })
-              }
-          })
-    },
-    watch: {
-        $route: "fetchData"
-    },
-    methods: {
-        fetchData() {
-            db.collection("tests")
-                .doc(this.$route.params.test_id)
-                .collection('prepCards')
-                .doc(this.$route.params.article_id)
-                .get()
-                .then(doc => {
-                    if (doc.exists) {
-                        this.title = doc.data().title
-                        this.htmlForEditor = doc.data().description
-                        this.imagesForEditor = doc.data().editorImages
-                        this.dataLoaded = true
-                    }
-                })
-            },
-        updateArticle() { 
-            // run the editors save method
-            this.$refs.textEditor.saveEditorData()
-            // save the document
-            db.collection('tests')
-                .doc(this.test_id)
-                .collection('prepCards')
-                .doc(this.article_id)
-                .update({
-                title: this.title,
-                description: (this.$refs.textEditor.htmlForEditor === undefined ? '' : this.$refs.textEditor.htmlForEditor), 
-                editorImages: this.$refs.textEditor.images
-            })
-            .then(docRef => {
-                console.log("Document saved");
-                alert(`Edit to: ` + this.title + ` saved!`)
-            })
-            .catch(error => {
-                console.error("Error adding document: ", error)
-                return // dont leave the page if save fails
-            })
-            // return to tests page
-            this.$router.push({ name:'view-articles', params: {test_id: this.test_id, title: this.test_title}})
         }
-    },     
-    mounted() {
-        // initalise colapsablie component
-         $(document).ready(function() {
-            $('.collapsible').collapsible()
-        })
+    },
+    created() {
+        // get the article by id given in route
+        this.getArticle()
     }
 }
-
 </script>
 
 <style scoped>

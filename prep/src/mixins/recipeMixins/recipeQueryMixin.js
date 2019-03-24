@@ -1,10 +1,10 @@
 // This mixin will be used for queries that are shared between the recipe components.
-// To make use of the functionality in this file import { recipeQuereyMixin } from '(this location)'
-// and then add 'mixins: [recipeQuereyMixin]' just before the data of the component.
+// To make use of the functionality in this file import { recipeQueryMixin } from '(this location)'
+// and then add 'mixins: [recipeQueryMixin]' just before the data of the component.
 
 import db from '../../components/firebaseInit'
 
-export const recipeQuereyMixin = {
+export const recipeQueryMixin = {
     data() { 
         return {
         }

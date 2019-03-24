@@ -39,7 +39,7 @@
                                 <i class="material-icons circle blue">assignment</i>
                                 <h5 class="titles">Articles</h5>
                                 <router-link 
-                                    v-bind:to="{name: 'view-articles', params: {test_id: test.id, title: test.title}}"  
+                                    v-bind:to="{name: 'view-articles', params: {test_id: test.id, test_title: test.title}}"  
                                     class="btn blue secondary-content"
                                 >Show/Edit</router-link>
                             </li>
@@ -67,6 +67,9 @@
                                     class="btn blue secondary-content"
                                 >Show/Edit</router-link>
                             </li>
+                            <li class="center-align">
+                                <button class="btn red" id="deleteBtn" @click="deleteTest(test.id, test.title)">delete test</button>
+                            </li>
                         </ul>
                     </div>
                 </li>
@@ -80,50 +83,22 @@
 </template>
 
 <script>
-    import db from '../firebaseInit'
+import { testQueryMixin } from '../../mixins/testMixins/testQueryMixin'
+import { testMixin } from '../../mixins/testMixins/testMixin'
     
 export default {
-  name: "view-tests",
-  data() {
-    return {
-      tests: []
-    };
-  },
-  created() {
-    db.collection("tests")
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          const data = {
-            id: doc.id,
-            test_id: doc.data().testID,
-            title: doc.data().title,
-            department: doc.data().type
-          };
-          this.tests.push(data);
-        });
-      });
-  },
-  methods: {
-    subcollectionEmpty(testID, collection) {
-        return db.collection("tests")
-            .doc(testID)
-            .collection(collection)
-            .get()
-            .then(querySnapshot => {
-                return querySnapshot.size === 0
-            })
+    name: "view-tests",
+    mixins: [testQueryMixin, testMixin],
+    data() {
+        return {
+            // collection of all tests in the database
+            tests: []
+        }
     },
-    selectDropdown() {
+    created() {
+        this.getTests()
     }
-  },
-    mounted() {
-        // initalise colapsablie component
-            $(document).ready(function() {
-            $('.collapsible').collapsible();
-        });        
-    }
-};
+}
 
 </script>
 
@@ -134,10 +109,11 @@ export default {
 .titles {
     font-size: 15pt;
 }
-
 #badge {
     padding: 3px;
 }
-
+#deleteBtn {
+    margin-top: 10px;
+}
 </style>
 

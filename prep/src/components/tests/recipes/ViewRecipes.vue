@@ -28,10 +28,11 @@
 
 <script>
 import { recipeMixin } from '../../../mixins/recipeMixins/recipeMixin'
+import { recipeQueryMixin } from '../../../mixins/recipeMixins/recipeQueryMixin'
 
 export default {
     name: 'view-recipes',
-    mixins: [recipeMixin],
+    mixins: [recipeMixin, recipeQueryMixin],
     data() {
         return {
             recipes: [],
