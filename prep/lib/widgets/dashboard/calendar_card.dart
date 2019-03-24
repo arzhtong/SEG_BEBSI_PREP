@@ -131,7 +131,7 @@ class CalendarCard extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Appointment(1)));
+                              builder: (context) => Appointment(0)));
                     }),
               ),
             ),

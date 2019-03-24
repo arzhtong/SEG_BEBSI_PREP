@@ -7,9 +7,9 @@ import 'package:prep/widgets/recipe/recipe_note.dart';
 import 'package:prep/widgets/recipe/external_recipe_link.dart';
 
 class RecipeCardContent extends StatelessWidget {
-  final List<Widget> content = [];
   @override
   Widget build(BuildContext context) {
+    final List<Widget> content = [];
     //get data
     final documentData = DocumentDataProvider.of(context).documentData;
 
@@ -32,13 +32,15 @@ class RecipeCardContent extends StatelessWidget {
 
     //generate widgets from data
     if (hasInternalRecipe) {
-      _addToContentWithSpacer(RecipeIngredientList(dynamicIngredientListData));
-      _addToContentWithSpacer(RecipeMethodList(dynamicMethodListData));
+      _addToContentWithSpacer(
+          RecipeIngredientList(dynamicIngredientListData), content);
+      _addToContentWithSpacer(RecipeMethodList(dynamicMethodListData), content);
     }
 
     if (dynamicExternalUrlData != null) {
       assert(dynamicExternalUrlData.runtimeType == String);
-      _addToContentWithSpacer(ExternalRecipeLink(dynamicExternalUrlData));
+      _addToContentWithSpacer(
+          ExternalRecipeLink(dynamicExternalUrlData), content);
     }
 
     if (dynamicNoteData != null) {
@@ -52,7 +54,7 @@ class RecipeCardContent extends StatelessWidget {
     );
   }
 
-  void _addToContentWithSpacer(Widget toAdd) => content
+  void _addToContentWithSpacer(Widget toAdd, List<Widget> addTo) => addTo
     ..add(toAdd)
     ..add(
       SizedBox(

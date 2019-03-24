@@ -43,16 +43,14 @@ abstract class BaseBackend {
   String doctorName;
   Color color;
 
-  BaseBackend setBackendParams(newAppointmentID, newTestID, newAppointmentName,
+  void setBackendParams(newAppointmentID, newTestID, newAppointmentName,
       newLocation, newDateTime, newDoctorName, newColor);
 
   Future<QuerySnapshot> get appointmentCodes;
 
-  Stream<QuerySnapshot> get messageSnapshots;
+  Stream<List<Map<String, dynamic>>> messagesStream({bool setSeen});
 
   void sendMessage(String message);
-
-  void setSeenByPatient(DocumentReference docRef);
 
   Stream<QuerySnapshot> get dailyCheckupsSnapshots;
 
@@ -60,7 +58,7 @@ abstract class BaseBackend {
 
   Stream<QuerySnapshot> get faqSnapshots;
 
-  Stream<DocumentSnapshot> get testSnapshots;
+  Stream<Map<String, dynamic>> get testSnapshots;
 
   Stream<QuerySnapshot> get recipeSnapshots;
 
@@ -84,7 +82,7 @@ class FirestoreBackend implements BaseBackend {
 
   FirestoreBackend._internal();
 
-  BaseBackend setBackendParams(newAppointmentID, newTestID, newAppointmentName,
+  void setBackendParams(newAppointmentID, newTestID, newAppointmentName,
       newLocation, newDateTime, newDoctorName, newColor) {
     appointmentID = newAppointmentID;
     testID = newTestID;
@@ -93,8 +91,6 @@ class FirestoreBackend implements BaseBackend {
     dateTime = newDateTime;
     doctorName = newDoctorName;
     color = newColor;
-
-    return FirestoreBackend();
   }
 
   Future<QuerySnapshot> get appointmentCodes => _appointmentsCollection
@@ -116,8 +112,22 @@ class FirestoreBackend implements BaseBackend {
   CollectionReference get _messagesCollection =>
       _appointmentReference.collection('messages');
 
-  Stream<QuerySnapshot> get messageSnapshots =>
-      _messagesCollection.orderBy('datetime', descending: false).snapshots();
+  Stream<List<Map<String, dynamic>>> messagesStream({bool setSeen}) =>
+      _messagesCollection
+          .orderBy('datetime', descending: false)
+          .snapshots()
+          .map((querySnapshot) => querySnapshot.documentChanges
+              .map((docChange) {
+                if (docChange.type == DocumentChangeType.added) {
+                  DocumentSnapshot docSnapshot = docChange.document;
+                  Map<String, dynamic> message = docSnapshot.data;
+                  if (setSeen && !message['seenByPatient'])
+                    docSnapshot.reference.updateData({'seenByPatient': true});
+                  return message;
+                }
+              })
+              .where((message) => message != null)
+              .toList());
 
   void sendMessage(String message) => _messagesCollection.add({
         'content': message,
@@ -126,9 +136,6 @@ class FirestoreBackend implements BaseBackend {
         'seenByPatient': true,
         'seenByStaff': false,
       });
-
-  void setSeenByPatient(DocumentReference docRef) =>
-      docRef.updateData({'seenByPatient': true});
 
   Stream<QuerySnapshot> get dailyCheckupsSnapshots => _appointmentReference
       .collection('dailyCheckups')
@@ -143,7 +150,8 @@ class FirestoreBackend implements BaseBackend {
       .where('type', isEqualTo: 'faqs')
       .snapshots();
 
-  Stream<DocumentSnapshot> get testSnapshots => _testReference.snapshots();
+  Stream<Map<String, dynamic>> get testSnapshots =>
+      _testReference.snapshots().map((docSnap) => docSnap.data);
 
   Stream<QuerySnapshot> get recipeSnapshots => _testReference
       .collection('prepCards')
@@ -155,4 +163,51 @@ class FirestoreBackend implements BaseBackend {
 
   Stream<DocumentSnapshot> categoryListSnapshots(String documentId) =>
       _testReference.collection('prepCards').document(documentId).snapshots();
+}
+
+class TestBackend implements BaseBackend {
+  String appointmentID;
+  String testID;
+  String appointmentName;
+  String location;
+  DateTime dateTime;
+  String doctorName;
+  Color color;
+
+  static final TestBackend _singleton = TestBackend._internal();
+
+  factory TestBackend() => _singleton;
+
+  TestBackend._internal();
+
+  void setBackendParams(newAppointmentID, newTestID, newAppointmentName,
+      newLocation, newDateTime, newDoctorName, newColor) {
+    appointmentID = newAppointmentID;
+    testID = newTestID;
+    appointmentName = newAppointmentName;
+    location = newLocation;
+    dateTime = newDateTime;
+    doctorName = newDoctorName;
+    color = newColor;
+  }
+
+  Future<QuerySnapshot> get appointmentCodes {}
+
+  Stream<List<Map<String, dynamic>>> messagesStream({bool setSeen}) {}
+
+  void sendMessage(String message) {}
+
+  Stream<QuerySnapshot> get dailyCheckupsSnapshots {}
+
+  Stream<QuerySnapshot> get prepCardsSnapshots {}
+
+  Stream<QuerySnapshot> get faqSnapshots {}
+
+  Stream<DocumentSnapshot> get testSnapshots {}
+
+  Stream<QuerySnapshot> get recipeSnapshots {}
+
+  Stream<DocumentSnapshot> informationSnapshots(String documentId) {}
+
+  Stream<DocumentSnapshot> categoryListSnapshots(String documentId) {}
 }
