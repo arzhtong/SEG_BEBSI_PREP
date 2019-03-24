@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:prep/utils/message_crypto.dart';
 import 'package:prep/utils/query.dart';
+import 'package:prep/utils/backend_provider.dart';
+import 'package:prep/utils/message_crypto.dart';
 
 class TextComposer extends StatefulWidget {
   @override
@@ -13,10 +14,12 @@ class _TextComposerState extends State<TextComposer> {
   bool _hasTyped = false;
 
   void _sendMessage(String messageText) {
+    final BaseBackend backend = BackendProvider.of(context).backend;
     if (_hasTyped) {
       setState(() => _hasTyped = false);
-      String encryptedMessage = MessageCrypto.encryptMessage(messageText);
-      Queries.sendMessage(encryptedMessage);
+      String encryptedMessage =
+          MessageCrypto.encryptMessage(backend.appointmentID, messageText);
+      backend.sendMessage(encryptedMessage);
       _textController.clear();
     }
   }

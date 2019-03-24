@@ -34,23 +34,58 @@ class DatabaseHandler {
   }
 }
 
-class Queries {
-  static String appointmentID;
-  static String testID;
-  static String appointmentName;
-  static String location;
-  static DateTime dateTime;
-  static String doctorName;
-  static Color color;
+abstract class BaseBackend {
+  String appointmentID;
+  String testID;
+  String appointmentName;
+  String location;
+  DateTime dateTime;
+  String doctorName;
+  Color color;
 
-  static const Queries _singleton = Queries._internal();
+  BaseBackend setBackendParams(newAppointmentID, newTestID, newAppointmentName,
+      newLocation, newDateTime, newDoctorName, newColor);
 
-  factory Queries() => _singleton;
+  Future<QuerySnapshot> get appointmentCodes;
 
-  const Queries._internal();
+  Stream<QuerySnapshot> get messageSnapshots;
 
-  static void setAppointmentInfo(newAppointmentID, newTestID,
-      newAppointmentName, newLocation, newDateTime, newDoctorName, newColor) {
+  void sendMessage(String message);
+
+  void setSeenByPatient(DocumentReference docRef);
+
+  Stream<QuerySnapshot> get dailyCheckupsSnapshots;
+
+  Stream<QuerySnapshot> get prepCardsSnapshots;
+
+  Stream<QuerySnapshot> get faqSnapshots;
+
+  Stream<DocumentSnapshot> get testSnapshots;
+
+  Stream<QuerySnapshot> get recipeSnapshots;
+
+  Stream<DocumentSnapshot> informationSnapshots(String documentId);
+
+  Stream<DocumentSnapshot> categoryListSnapshots(String documentId);
+}
+
+class FirestoreBackend implements BaseBackend {
+  String appointmentID;
+  String testID;
+  String appointmentName;
+  String location;
+  DateTime dateTime;
+  String doctorName;
+  Color color;
+
+  static final FirestoreBackend _singleton = FirestoreBackend._internal();
+
+  factory FirestoreBackend() => _singleton;
+
+  FirestoreBackend._internal();
+
+  BaseBackend setBackendParams(newAppointmentID, newTestID, newAppointmentName,
+      newLocation, newDateTime, newDoctorName, newColor) {
     appointmentID = newAppointmentID;
     testID = newTestID;
     appointmentName = newAppointmentName;
@@ -58,45 +93,33 @@ class Queries {
     dateTime = newDateTime;
     doctorName = newDoctorName;
     color = newColor;
+
+    return FirestoreBackend();
   }
 
-  static Future<QuerySnapshot> get appointmentCodes => _appointmentsCollection
+  Future<QuerySnapshot> get appointmentCodes => _appointmentsCollection
       .where('expired', isEqualTo: false)
       .where('datetime',
           isGreaterThan: DateTime.now().subtract(Duration(days: 1)))
       .orderBy('datetime')
       .getDocuments();
 
-  static DocumentReference get _testReference =>
-      DatabaseHandler.db.collection('tests').document(Queries.testID);
+  DocumentReference get _testReference =>
+      DatabaseHandler.db.collection('tests').document(testID);
 
-  static CollectionReference get _appointmentsCollection =>
+  CollectionReference get _appointmentsCollection =>
       DatabaseHandler.db.collection('appointments');
 
-  static DocumentReference get _appointmentReference =>
-      _appointmentsCollection.document(Queries.appointmentID);
+  DocumentReference get _appointmentReference =>
+      _appointmentsCollection.document(appointmentID);
 
-  static CollectionReference get _messagesCollection =>
+  CollectionReference get _messagesCollection =>
       _appointmentReference.collection('messages');
 
-  static Stream<List<Map<String, dynamic>>> messagesStream({bool setSeen}) =>
-      _messagesCollection
-          .orderBy('datetime', descending: false)
-          .snapshots()
-          .map((querySnapshot) => querySnapshot.documentChanges
-              .map((docChange) {
-                if (docChange.type == DocumentChangeType.added) {
-                  DocumentSnapshot docSnapshot = docChange.document;
-                  Map<String, dynamic> message = docSnapshot.data;
-                  if (setSeen && !message['seenByPatient'])
-                    docSnapshot.reference.updateData({'seenByPatient': true});
-                  return message;
-                }
-              })
-              .where((message) => message != null)
-              .toList());
+  Stream<QuerySnapshot> get messageSnapshots =>
+      _messagesCollection.orderBy('datetime', descending: false).snapshots();
 
-  static void sendMessage(String message) => _messagesCollection.add({
+  void sendMessage(String message) => _messagesCollection.add({
         'content': message,
         'datetime': DateTime.now(),
         'isPatient': true,
@@ -104,31 +127,32 @@ class Queries {
         'seenByStaff': false,
       });
 
-  static Stream<QuerySnapshot> get dailyCheckupsSnapshots =>
-      _appointmentReference
-          .collection('dailyCheckups')
-          .orderBy('daysBeforeTest', descending: true)
-          .snapshots();
+  void setSeenByPatient(DocumentReference docRef) =>
+      docRef.updateData({'seenByPatient': true});
 
-  static Stream<QuerySnapshot> get prepCardsSnapshots =>
+  Stream<QuerySnapshot> get dailyCheckupsSnapshots => _appointmentReference
+      .collection('dailyCheckups')
+      .orderBy('daysBeforeTest', descending: true)
+      .snapshots();
+
+  Stream<QuerySnapshot> get prepCardsSnapshots =>
       _testReference.collection('prepCards').snapshots();
 
-  static Stream<QuerySnapshot> get faqSnapshots => _testReference
+  Stream<QuerySnapshot> get faqSnapshots => _testReference
       .collection('prepCards')
       .where('type', isEqualTo: 'faqs')
       .snapshots();
 
-  static Stream<DocumentSnapshot> get testSnapshots =>
-      _testReference.snapshots();
+  Stream<DocumentSnapshot> get testSnapshots => _testReference.snapshots();
 
-  static Stream<QuerySnapshot> get recipeSnapshots => _testReference
+  Stream<QuerySnapshot> get recipeSnapshots => _testReference
       .collection('prepCards')
       .where('cardType', isEqualTo: 'recipe')
       .snapshots();
 
-  static Stream<DocumentSnapshot> informationSnapshots(documentId) =>
+  Stream<DocumentSnapshot> informationSnapshots(documentId) =>
       _testReference.collection('prepCards').document(documentId).snapshots();
 
-  static Stream<DocumentSnapshot> categoryListSnapshots(String documentId) =>
+  Stream<DocumentSnapshot> categoryListSnapshots(String documentId) =>
       _testReference.collection('prepCards').document(documentId).snapshots();
 }

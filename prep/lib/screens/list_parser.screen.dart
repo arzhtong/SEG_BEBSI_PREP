@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:prep/utils/query.dart';
+import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/widgets/list_parser/description_expansion_tile.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 
@@ -19,7 +20,9 @@ class CategoryListParser extends StatelessWidget {
         title: Text(_title),
       ),
       body: StreamBuilder(
-          stream: Queries.categoryListSnapshots(documentId),
+          stream: BackendProvider.of(context)
+              .backend
+              .categoryListSnapshots(documentId),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const Align(

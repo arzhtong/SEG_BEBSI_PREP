@@ -4,6 +4,7 @@ import 'package:prep/screens/appointment_info.screen.dart';
 import 'package:prep/screens/appointment_prep.screen.dart';
 import 'package:prep/screens/daily_checkups.screen.dart';
 import 'package:prep/screens/messaging.screen.dart';
+import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/utils/query.dart';
 import 'package:prep/widgets/dashboard/help_dialog.dart';
 
@@ -31,13 +32,11 @@ class _AppointmentState extends State<Appointment> {
       case 1:
         return (_appointmentPrep != null)
             ? _appointmentPrep
-            : _appointmentPrep =
-                AppointmentPrep();
+            : _appointmentPrep = AppointmentPrep();
       case 2:
         return (_dailyCheckups != null)
             ? _dailyCheckups
-            : _dailyCheckups =
-                DailyCheckups();
+            : _dailyCheckups = DailyCheckups();
       case 3:
         return (_messagingScreen != null)
             ? _messagingScreen
@@ -79,7 +78,7 @@ class _AppointmentState extends State<Appointment> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.indigo,
-          title: Text(Queries.appointmentName),
+          title: Text(BackendProvider.of(context).backend.appointmentName),
           actions: <Widget>[_chooseHelpMenuToDisplay()]),
       body: Center(
         child: _getPage(_selectedIndex),
@@ -104,10 +103,11 @@ class _AppointmentState extends State<Appointment> {
   }
 
   Widget _buildChatIcon() {
-    return (_selectedIndex == 3)
+    return Icon(Icons.chat);
+    /* return (_selectedIndex == 3)
         ? Icon(Icons.chat)
         : StreamBuilder(
-            stream: Queries.messagesStream(setSeen: false),
+            stream: BackendProvider.of(context).backend.messageSnapshots,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 snapshot.data.forEach((message) {
@@ -119,7 +119,7 @@ class _AppointmentState extends State<Appointment> {
                   ? Icon(Icons.chat, color: Colors.red)
                   : Icon(Icons.chat);
             },
-          );
+          ); */
   }
 
   void _onItemTapped(int index) {

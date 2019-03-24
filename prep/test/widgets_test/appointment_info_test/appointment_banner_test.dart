@@ -9,7 +9,7 @@ void main() {
     return MaterialApp(home: child);
   }
 
-  setUp(() => Queries.setAppointmentInfo(
+  setUp(() => FirestoreBackend().setBackendParams(
       "appID",
       "testID",
       "appName",
@@ -40,5 +40,5 @@ void main() {
   });
 
   tearDown(() =>
-      Queries.setAppointmentInfo(null, null, null, null, null, null, null));
+      FirestoreBackend().setBackendParams(null, null, null, null, null, null, null));
 }
