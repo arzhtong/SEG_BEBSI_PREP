@@ -2,7 +2,6 @@
 // To make use of the functionality in this file import { recipeMixin } from '(this location)'
 // and then add 'mixins: [recipeMixin]' just before the data of the component.
 
-import db from '../../components/firebaseInit'
 import imageUploader from '../../components/shared/ImageUploader'
 
 export const recipeMixin = {
@@ -87,29 +86,6 @@ export const recipeMixin = {
             } else {
                 return true
             }
-        },
-
-        /*
-            Shared queries for recipe components
-        */
-
-        // get all recipes 
-        getRecipes() {
-            db.collection('tests')
-              .doc(this.$route.params.test_id)
-              .collection('prepCards')
-              .get()
-              .then(querySnapshot => {
-                querySnapshot.forEach(doc => {
-                    if(doc.data().cardType === 'recipe') {
-                        const data = {
-                            id: doc.id,
-                            title: doc.data().title
-                        }
-                        this.recipes.push(data)
-                    }
-                })
-              })
         }
     },
     mounted() {
