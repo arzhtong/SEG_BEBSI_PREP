@@ -57,12 +57,12 @@
 </template>
 
 <script>
-import { articleQuereyMixin } from '../../../mixins/articleMixins/articleQuereyMixin'
+import { articleQueryMixin } from '../../../mixins/articleMixins/articleQueryMixin'
 import { articleMixin } from '../../../mixins/articleMixins/articleMixin'
 
 export default {
     name: 'view-articles',
-    mixins: [articleQuereyMixin, articleMixin],
+    mixins: [articleQueryMixin, articleMixin],
     data() {
         return {
             articles: []

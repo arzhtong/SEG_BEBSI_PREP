@@ -1,23 +1,11 @@
-// This mixin will be used for any functionality that is shared between the article components.
-// To make use of the functionality in this file import { articleQuereyMixin } from '(this location)'
-// and then add 'mixins: [articleQuereyMixin]' just before the data of the component.
+// This mixin will be used for any queries that are shared between the article components.
+// To make use of the functionality in this file import { articleQueryMixin } from '(this location)'
+// and then add 'mixins: [articleQueryMixin]' just before the data of the component.
 
 import db from '../../components/firebaseInit'
-import textEditor from '../../components/shared/TextEditor'
 
-export const articleQuereyMixin = {
-    data() { 
-        return {
-            // shared data for articles
-            
-        }
-    },
+export const articleQueryMixin = {
 
-    components: {
-        textEditor
-    },
-
-    
     methods: {
 
         // get all articles
@@ -57,7 +45,6 @@ export const articleQuereyMixin = {
             })
         },
         
-
 
         // delete article by id
         deleteArticle(id) {
@@ -130,11 +117,5 @@ export const articleQuereyMixin = {
             // return to tests page
             this.$router.push({ name:'view-articles', params: {test_id: this.test_id, title: this.test_title}})
         }
-    },
-    mounted() {
-        // initalise colapsablie component
-        $(document).ready(function() {
-            $('.collapsible').collapsible()
-        })   
     }
 }

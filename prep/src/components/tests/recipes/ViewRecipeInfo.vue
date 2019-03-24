@@ -36,11 +36,11 @@
 
 <script>
 import { recipeMixin } from '../../../mixins/recipeMixins/recipeMixin'
-import { recipeQuereyMixin } from '../../../mixins/recipeMixins/recipeQuereyMixin'
+import { recipeQueryMixin } from '../../../mixins/recipeMixins/recipeQueryMixin'
 
 export default {
     name: 'view-recipe-info',
-    mixins: [recipeMixin, recipeQuereyMixin],
+    mixins: [recipeMixin, recipeQueryMixin],
     data() {
         return {
             test_id: this.$route.params.test_id,

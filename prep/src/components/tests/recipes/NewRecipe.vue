@@ -23,8 +23,8 @@
                     <div>
                         <div class="row">
                             <div class="input-field col s12">
-                                <input type="text" v-model="externalURL">
-                                <label>Recipe link</label>
+                                <input type="text" id="recipeLink" v-model="externalURL">
+                                <label for="recipeLink">Recipe link</label>
                             </div>
                         </div>
                     </div>
@@ -90,11 +90,11 @@
 
 <script>
 import { recipeMixin } from '../../../mixins/recipeMixins/recipeMixin'
-import { recipeQuereyMixin } from '../../../mixins/recipeMixins/recipeQuereyMixin'
+import { recipeQueryMixin } from '../../../mixins/recipeMixins/recipeQueryMixin'
 
 export default {
     name: 'new-recipe',
-    mixins: [recipeMixin, recipeQuereyMixin],
+    mixins: [recipeMixin, recipeQueryMixin],
     data() {
         return {
             test_id: this.$route.params.test_id,

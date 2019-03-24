@@ -20,7 +20,7 @@ export const articleMixin = {
         }
     },
 
-    // make the text editor
+    // make the text editor available to article components
     components: {
         textEditor
     },
