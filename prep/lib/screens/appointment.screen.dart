@@ -103,11 +103,12 @@ class _AppointmentState extends State<Appointment> {
   }
 
   Widget _buildChatIcon() {
-    return Icon(Icons.chat);
-    /* return (_selectedIndex == 3)
+    return (_selectedIndex == 3)
         ? Icon(Icons.chat)
         : StreamBuilder(
-            stream: BackendProvider.of(context).backend.messageSnapshots,
+            stream: BackendProvider.of(context)
+                .backend
+                .messagesStream(setSeen: false),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 snapshot.data.forEach((message) {
@@ -119,7 +120,7 @@ class _AppointmentState extends State<Appointment> {
                   ? Icon(Icons.chat, color: Colors.red)
                   : Icon(Icons.chat);
             },
-          ); */
+          );
   }
 
   void _onItemTapped(int index) {
