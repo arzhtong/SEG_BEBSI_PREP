@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import 'package:prep/utils/backend_provider.dart';
-import 'package:prep/utils/query.dart';
+import 'package:prep/utils/backend.dart';
 import 'package:prep/widgets/appointment_prep/category_card.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 

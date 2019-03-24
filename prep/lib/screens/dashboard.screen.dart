@@ -6,7 +6,7 @@ import 'package:prep/widgets/dashboard/calendar_label.dart';
 import 'package:prep/widgets/dashboard/calendar_card.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 import 'package:prep/utils/storage.dart';
-import 'package:prep/utils/query.dart';
+import 'package:prep/utils/backend.dart';
 import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/widgets/dashboard/help_dialog.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:prep/utils/query.dart';
+import 'package:prep/utils/backend.dart';
 import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/utils/message_crypto.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:prep/utils/query.dart';
+import 'package:prep/utils/backend.dart';
 
 ///Provides an instance of and object that implements BaseBackend to pass down a widget tree
 ///in order to avoid passing it down through the constructor.
