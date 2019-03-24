@@ -58,7 +58,7 @@ abstract class BaseBackend {
 
   Stream<QuerySnapshot> get faqSnapshots;
 
-  Stream<DocumentSnapshot> get testSnapshots;
+  Stream<Map<String, dynamic>> get testSnapshots;
 
   Stream<QuerySnapshot> get recipeSnapshots;
 
@@ -152,7 +152,8 @@ class FirestoreBackend implements BaseBackend {
       .where('type', isEqualTo: 'faqs')
       .snapshots();
 
-  Stream<DocumentSnapshot> get testSnapshots => _testReference.snapshots();
+  Stream<Map<String, dynamic>> get testSnapshots =>
+      _testReference.snapshots().map((docSnap) => docSnap.data);
 
   Stream<QuerySnapshot> get recipeSnapshots => _testReference
       .collection('prepCards')
