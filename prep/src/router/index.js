@@ -177,7 +177,7 @@ let router = new Router({
     // Article routes
 
     {
-      path: '/view-articles/:test_id/:title',
+      path: '/view-articles/:test_id/:test_title',
       name: 'view-articles',
       component: ViewArticles,
       meta: {
@@ -185,7 +185,7 @@ let router = new Router({
       }
     },
     {
-      path: '/add-article/:test_id/:title',
+      path: '/add-article/:test_id/:test_title',
       name: 'add-article',
       component: AddArticle,
       meta: {
