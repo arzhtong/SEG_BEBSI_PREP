@@ -5,7 +5,6 @@ import 'package:prep/screens/appointment_prep.screen.dart';
 import 'package:prep/screens/daily_checkups.screen.dart';
 import 'package:prep/screens/messaging.screen.dart';
 import 'package:prep/utils/backend_provider.dart';
-import 'package:prep/utils/backend.dart';
 import 'package:prep/widgets/dashboard/help_dialog.dart';
 
 class Appointment extends StatefulWidget {
@@ -108,7 +107,7 @@ class _AppointmentState extends State<Appointment> {
         : StreamBuilder(
             stream: BackendProvider.of(context)
                 .backend
-                .messagesStream(setSeen: false),
+                .messagesStream(false),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 snapshot.data.forEach((message) {
