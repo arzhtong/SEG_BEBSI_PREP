@@ -10,24 +10,27 @@ class CategoryCard extends StatelessWidget {
   final String title;
   final String type;
 
-  CategoryCard(this.documentID,
-      this.title,
-      this.type);
+  CategoryCard(this.documentID, this.title, this.type);
 
   Future _navigate(dynamic context) {
     switch (type) {
       case "article":
-        return Navigator.push(context, MaterialPageRoute(builder:
-            (context) => InformationParser(documentID, title)));
+        return Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => InformationParser(documentID, title)));
       case "categoryList":
-        return Navigator.push(context, MaterialPageRoute(builder:
-            (context) => CategoryListParser(documentID, title)));
+        return Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CategoryListParser(documentID, title)));
       case "recipe":
-        return Navigator.push(context,
+        return Navigator.push(
+            context,
             MaterialPageRoute(builder: (context) => RecipeListScreen()));
       default:
-        return Navigator.push(context, MaterialPageRoute(builder:
-            (context) => FaqParser()));
+        return Navigator.push(
+            context, MaterialPageRoute(builder: (context) => FaqParser()));
     }
   }
 
@@ -67,7 +70,7 @@ class CategoryCard extends StatelessWidget {
     }
   }
 
-  String _getCategory(){
+  String _getCategory() {
     switch (type) {
       case "article":
         return "Article";
@@ -99,9 +102,7 @@ class CategoryCard extends StatelessWidget {
                   title: Text(
                     _getCategory(),
                     style: TextStyle(
-                        color: Colors.grey[400],
-                        fontStyle: FontStyle.italic
-                    ),
+                        color: Colors.grey[400], fontStyle: FontStyle.italic),
                   ),
                   leading: _getIcon(),
                 ),
@@ -112,8 +113,7 @@ class CategoryCard extends StatelessWidget {
                   ),
                 ),
               ],
-            )
-        ),
+            )),
       ),
     );
   }
