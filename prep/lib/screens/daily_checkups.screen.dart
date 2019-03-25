@@ -7,10 +7,12 @@ import 'package:prep/screens/empty_screen_placeholder.dart';
 import 'package:prep/utils/misc_functions.dart';
 
 class DailyCheckups extends StatelessWidget {
+
   CircleAvatar _getDailyCheckupIcon(int daysBeforeTest, BuildContext context) {
     final BaseBackend backend = BackendProvider.of(context).backend;
 
     return CircleAvatar(
+      key: Key('dateIcon'),
       backgroundColor:
           (daysBeforeTest == 0) ? Colors.red[400] : Colors.indigo[400],
       child: Column(
@@ -119,7 +121,6 @@ class DailyCheckups extends StatelessWidget {
     return StreamBuilder(
       stream: BackendProvider.of(context).backend.dailyCheckupsSnapshots,
       builder: (context, mapListSnapshot) {
-        print(mapListSnapshot.data);
         if (!mapListSnapshot.hasData) {
           return const Align(
             alignment: Alignment.topCenter,
