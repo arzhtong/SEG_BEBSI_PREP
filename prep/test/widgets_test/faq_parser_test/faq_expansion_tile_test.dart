@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/utils/backend.dart';
 import 'package:mockito/mockito.dart';
+import 'package:prep/screens/empty_screen_placeholder.dart';
+import 'package:prep/screens/appointment_prep.screen.dart';
+import 'package:prep/widgets/dashboard/help_dialog.dart';
 
 class MockBackend extends Mock implements FirestoreBackend {}
 
@@ -84,6 +87,9 @@ void main() {
     expect(infoButtonFinder, findsOneWidget);
 
     await tester.tap(infoButtonFinder);
+    await tester.pumpAndSettle();
+
+    //expect(find.byKey(Key('builder')), findsOneWidget);
   });
 
   testWidgets('Tapping on the chat shortcut button navigates to the Dr. Chat tab screen', (WidgetTester tester) async {
@@ -107,5 +113,6 @@ void main() {
     expect(infoButtonFinder, findsOneWidget);
 
     await tester.tap(infoButtonFinder);
+    await tester.pump();
   });
 }

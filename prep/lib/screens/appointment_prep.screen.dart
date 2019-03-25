@@ -14,6 +14,7 @@ class AppointmentPrep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
+      key: Key('builder'),
         stream: BackendProvider.of(context).backend.prepCardsSnapshots,
         builder: (context, mapListSnapshot) {
           if (!mapListSnapshot.hasData) {
