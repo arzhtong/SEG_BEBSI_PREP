@@ -3,6 +3,14 @@
   style="background-color:white; padding: 10px 50px 10px 50px; margin-top:10px">
     <h3>Edit FAQ</h3>
     <div class="row">
+         <ul class="collapsible">
+                    <li>
+                        <div class="collapsible-header" style="color:#2196f3"><i class="small material-icons">info_outline</i>Info</div>
+                        <div class="collapsible-body"><span>Enter a question and its answer in the respective fields below.<br><br>Add information and chat buttons to this question to take the patient directly to that page.</span></div>
+                    </li>
+                </ul>
+        </div>
+    <div class="row">
       <form @submit.prevent="updateFAQ" class="col s12">
         <!-- adds the question input field -->
         <div class="row">
@@ -70,7 +78,13 @@ export default {
   mixins: [faqsMixin],
   created(){
     this.createEditPrepFaq()
-  }
+  },
+   mounted() {
+        // initalise colapsablie component
+         $(document).ready(function() {
+            $('.collapsible').collapsible()
+        })
+    }
 };
 </script>
 <style scoped>

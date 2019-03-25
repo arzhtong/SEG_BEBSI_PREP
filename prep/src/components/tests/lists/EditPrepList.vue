@@ -11,6 +11,26 @@
     </div>
     <h3>Edit Preperation List</h3>
     <div class="row">
+      <ul class="collapsible">
+        <li>
+          <div class="collapsible-header" style="color:#2196f3">
+            <i class="small material-icons">info_outline</i>Info
+          </div>
+          <div class="collapsible-body">
+            <span>
+              The list title will be displayed in the preparation card and as the title on that list's screen
+              <br>
+              <br>
+              Clicking on the NEW LIST button will create a new sublist inside the list's screen. This will contain a name, description and a list of items
+              <br>
+              <br>
+              Click on the NEW ITEM button to add items to the list of items.
+            </span>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="row">
       <form @submit.prevent="updatePrepList" class="col s12">
         <div class="row">
           <div class="input-field col s12">
@@ -90,6 +110,12 @@ export default {
   mixins: [listsMixin],
   created (){
     this.createEditPrepList()
+  },
+  mounted() {
+    // initalise colapsablie component
+    $(document).ready(function() {
+      $(".collapsible").collapsible();
+    });
   }
 };
 

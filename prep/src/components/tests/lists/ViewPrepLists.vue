@@ -3,9 +3,18 @@
     <ul class="collection with-header">
       <li class="collection-header">
         <div class="container" style="width:100%;height:100%">
+           <div v-if="lists.length === 0" class="row">
+                <div class="col s12">
+                <div class="card-panel light-blue">
+                    <span class="card-title white-text"><i class="small material-icons">info_outline</i>Info</span>
+                    <p class="white-text">There are currently no lists for this test.<br> To add one, please click on the button below.
+                    </p>
+                </div>
+                </div>
+            </div>
           <table
             class="collection with-header responsive-table"
-            style="background: white;margin-top:10%;width:100%;height:auto"
+            style="background: white;;width:100%;height:auto"
           >
             <thead class="collection-header">
               <h4 style="padding:20px;font-size:3em;">

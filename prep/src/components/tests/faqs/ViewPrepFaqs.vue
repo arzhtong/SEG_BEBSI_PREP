@@ -2,6 +2,16 @@
   <div id="view-prep-faqs">
     <ul class="collection with-header">
       <li class="collection-header">
+        <h4><b>FAQS</b></h4>
+         <div v-if="faqs.length === 0" class="row">
+                <div class="col s12">
+                <div class="card-panel light-blue">
+                    <span class="card-title white-text"><i class="small material-icons">info_outline</i>Info</span>
+                    <p class="white-text">There are currently no faqs for this test.<br> To add one, please click on the button below.
+                    </p>
+                </div>
+                </div>
+            </div>
         <div class="container" style="width:100%;height:100%">
           <router-link
             v-bind:to="{name: 'new-prep-faq', params: {test_id: testID}}"

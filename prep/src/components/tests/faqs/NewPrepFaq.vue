@@ -5,6 +5,14 @@
   >
     <h3>New FAQ</h3>
     <div class="row">
+         <ul class="collapsible">
+                    <li>
+                        <div class="collapsible-header" style="color:#2196f3"><i class="small material-icons">info_outline</i>Info</div>
+                        <div class="collapsible-body"><span>Enter a question and its answer in the respective fields below.<br><br>Add information and chat buttons to this question to take the patient directly to that page.</span></div>
+                    </li>
+                </ul>
+        </div>
+    <div class="row">
       <form @submit.prevent="saveFAQ" class="col s12">
         <!-- adds a question input field -->
         <div class="row">
@@ -58,7 +66,13 @@
 import { faqsMixin } from "../../../mixins/faqsMixin/faqsMixin.js";
 export default {
   name: "new-prep-faqs",
-  mixins: [faqsMixin]
+  mixins: [faqsMixin],
+  mounted() {
+        // initalise colapsablie component
+         $(document).ready(function() {
+            $('.collapsible').collapsible()
+        })
+    }
 };
 </script>
 <style scoped>
