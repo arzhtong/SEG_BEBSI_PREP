@@ -2,7 +2,9 @@
 /// Firebase Cloud Firestore database backend. Each class defines a
 /// specific group of queries.
 
+import 'dart:async';
 import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 export 'package:cloud_firestore/cloud_firestore.dart';
@@ -163,51 +165,4 @@ class FirestoreBackend implements BaseBackend {
 
   Stream<DocumentSnapshot> categoryListSnapshots(String documentId) =>
       _testReference.collection('prepCards').document(documentId).snapshots();
-}
-
-class TestBackend implements BaseBackend {
-  String appointmentID;
-  String testID;
-  String appointmentName;
-  String location;
-  DateTime dateTime;
-  String doctorName;
-  Color color;
-
-  static final TestBackend _singleton = TestBackend._internal();
-
-  factory TestBackend() => _singleton;
-
-  TestBackend._internal();
-
-  void setBackendParams(newAppointmentID, newTestID, newAppointmentName,
-      newLocation, newDateTime, newDoctorName, newColor) {
-    appointmentID = newAppointmentID;
-    testID = newTestID;
-    appointmentName = newAppointmentName;
-    location = newLocation;
-    dateTime = newDateTime;
-    doctorName = newDoctorName;
-    color = newColor;
-  }
-
-  Future<QuerySnapshot> get appointmentCodes {}
-
-  Stream<List<Map<String, dynamic>>> messagesStream({bool setSeen}) {}
-
-  void sendMessage(String message) {}
-
-  Stream<QuerySnapshot> get dailyCheckupsSnapshots {}
-
-  Stream<QuerySnapshot> get prepCardsSnapshots {}
-
-  Stream<QuerySnapshot> get faqSnapshots {}
-
-  Stream<DocumentSnapshot> get testSnapshots {}
-
-  Stream<QuerySnapshot> get recipeSnapshots {}
-
-  Stream<DocumentSnapshot> informationSnapshots(String documentId) {}
-
-  Stream<DocumentSnapshot> categoryListSnapshots(String documentId) {}
 }

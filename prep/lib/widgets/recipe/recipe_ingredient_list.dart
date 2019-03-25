@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'package:prep/utils/misc_functions.dart' show convertDynamicListToStringList;
+import 'package:prep/utils/misc_functions.dart'
+    show convertDynamicListToStringList;
 
 import 'package:prep/widgets/recipe/recipe_ingredient_list_item.dart';
 
 class RecipeIngredientList extends StatelessWidget {
   static const String _ingredientListHeadline = "Show ingredients";
-  
+
   final dynamic dynamicIngredientList;
 
   RecipeIngredientList(this.dynamicIngredientList);
@@ -23,6 +24,7 @@ class RecipeIngredientList extends StatelessWidget {
     }
 
     return ExpansionTile(
+      key: Key('ingredientList'),
       title: Text(
         _ingredientListHeadline,
         style: Theme.of(context).textTheme.button,

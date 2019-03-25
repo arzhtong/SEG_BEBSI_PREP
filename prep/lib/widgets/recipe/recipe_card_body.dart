@@ -7,8 +7,7 @@ class RecipeCardBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var title = DocumentDataProvider.of(context).documentData['title'];
-    var subtitle =
-        DocumentDataProvider.of(context).documentData['subtitle'];
+    var subtitle = DocumentDataProvider.of(context).documentData['subtitle'];
     assert(title != null);
     assert(title is String);
     if (subtitle != null) {
@@ -28,7 +27,6 @@ class RecipeCardBody extends StatelessWidget {
         Text(
           subtitle,
           overflow: TextOverflow.ellipsis,
-          
           maxLines: 2,
           style: Theme.of(context).textTheme.subhead.copyWith(fontSize: 18.0),
         ),
@@ -36,6 +34,7 @@ class RecipeCardBody extends StatelessWidget {
     }
 
     return ExpansionTile(
+      key: Key('recipeCardBody'),
       title: Column(
         verticalDirection: VerticalDirection.down,
         crossAxisAlignment: CrossAxisAlignment.start,
