@@ -8,7 +8,6 @@
                           <h4 style="padding:10px;font-size:3em;font-weight: bold;">Daily Check-ups</h4>
                           <tr style="font-size:1.5em">
                                <th>Id</th>
-                               <th>Title</th> 
                                <th>Days Before Test</th>
                                <th>Description</th>
                            </tr>
@@ -16,7 +15,6 @@
                        <tbody v-for="dailyCheckup in dailyCheckups" v-bind:key="dailyCheckup.id" class="collection-item">
                            <tr>
                                <td>{{dailyCheckup.id}}</td>
-                               <td>{{dailyCheckup.title}}</td>
                                <td>{{dailyCheckup.daysBeforeTest}}</td>
                                <td><router-link v-bind:to="{name: 'view-dailycheckups-info', params: {test_id: testID, daily_id:dailyCheckup.id}}" class="btn blue">Show</router-link></td>
                            </tr>
