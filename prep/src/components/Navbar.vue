@@ -2,9 +2,8 @@
     <div class="navbar-fixed">
         <nav v-if="isLoggedIn">
             <div class="nav-wrapper white">
-                
                 <img style="height:50px;margin-top:6px;" src="static/webIcon.png" alt="Prep." class="brand-logo left">
-                <router-link to="/" style="margin-left:50px" class="brand-logo" id="logo">Prep.</router-link>
+                <router-link to="/" style="margin-left:50px" class="brand-logo hide-on-med-and-down" id="logo">Prep.</router-link>
                     <ul>
                         <li class="right"><button v-on:click="logout" class="btn red" style="margin-left: 10px">Logout</button></li>
                     </ul>
@@ -97,6 +96,6 @@ li {
   width: 60%;
 }
 .brand-logo {
-  color: #4b0082 !important;
+  color: darkblue !important;
 }
 </style>

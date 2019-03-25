@@ -4,7 +4,7 @@
       <li class="collection-header">
         <div class="container" style="width:100%;height:100%">
           <table
-            class="collection with-header responsive-table"
+            class="collection with-header "
             style="background: white;margin-top:10%;width:100%;height:auto"
           >
             <thead class="collection-header">

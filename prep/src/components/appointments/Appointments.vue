@@ -1,7 +1,7 @@
 <template>
-  <div id="view-appointment" style="width:100%;">
+  <div id="view-appointment">
     <div class="container" style="width:100%;height:100%;">
-      <table class="collection with-header responsive-table" style="background: white;">
+      <table class="collection with-header" style="background: white;">
         <thead class="collection-header">
           <h3>
             <b>{{pastString}} Appointments</b>
@@ -12,7 +12,7 @@
                 <span style="color:black !important">
                   <b>Sort by:</b>
                 </span>
-                <select id="select" @change="sortByOrder" class="browser-default" style="color:black">
+                <select id="select" @change="sortByOrder" class="browser-default" style="color:black; min-width: 185px">
                   <option value="Date" selected>Date in ascending order</option>
                   <option value="Date desc">Date in descending order</option>
                 </select>
@@ -177,7 +177,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+table {
+  width: 100%;
+  min-width: 50%;
+}
 h3 {
   padding: 20px;
 }

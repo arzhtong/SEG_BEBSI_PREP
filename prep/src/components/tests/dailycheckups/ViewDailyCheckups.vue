@@ -3,7 +3,7 @@
        <ul class="collection with-header">
            <li class="collection-header">
                <div calss="container" style="width:100%;height:100%">
-                   <table calss="collection with-header responsive-table" style="background: white;margin-top:10%;width:100%;height:auto">
+                   <table calss="collection with-header " style="background: white;margin-top:10%;width:100%;height:auto">
                        <thead calss="collection-header">
                           <h4 style="padding:10px;font-size:3em;font-weight: bold;">Daily Check-ups</h4>
                           <tr style="font-size:1.5em">
