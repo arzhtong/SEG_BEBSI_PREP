@@ -32,7 +32,8 @@ import Message from '@/components/messages/Message'
 import ViewArticles from '@/components/tests/articles/ViewArticles'
 import AddArticle from '@/components/tests/articles/AddArticle'
 import EditArticle from '@/components/tests/articles/EditArticle'
-import firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/auth'
 
 
 Vue.use(Router)

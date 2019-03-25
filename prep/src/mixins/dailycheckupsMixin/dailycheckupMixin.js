@@ -1,5 +1,5 @@
 import db from "../../components/firebaseInit";
-import firebase from "firebase";
+import firebase from "firebase/app";
 
 export const dailycheckupMixin ={
     data() {

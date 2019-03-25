@@ -3,7 +3,7 @@
 // and then add 'mixins: [viewAppointmentsMixin]' just before the data of the component.
 
 import db from "../../components/firebaseInit";
-import firebase from "firebase";
+import firebase from "firebase/app";
 
 export const viewAppointmentsMixin = {
   data() {

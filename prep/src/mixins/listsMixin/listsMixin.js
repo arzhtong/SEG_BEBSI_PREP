@@ -3,7 +3,6 @@
 // and then add 'mixins: [listsMixin]' just before the data of the component.
 
 import db from "../../components/firebaseInit";
-import firebase from "firebase";
 
 export const listsMixin = {
     data() {

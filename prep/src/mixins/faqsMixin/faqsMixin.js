@@ -3,7 +3,6 @@
 // and then add 'mixins: [faqsMixin]' just before the data of the component.
 
 import db from "../../components/firebaseInit";
-import firebase from "firebase";
 
 export const faqsMixin = {
   data() {
