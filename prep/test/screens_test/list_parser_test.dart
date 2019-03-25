@@ -18,7 +18,9 @@ void main() {
     );
   }
 
-  testWidgets('The page is given a complete data set and exactly 2 drop down lists are produced', (WidgetTester tester) async {
+  testWidgets(
+      'The page is given a complete data set and exactly 2 drop down lists are produced',
+      (WidgetTester tester) async {
     List<Map<String, dynamic>> maps = new List();
 
     maps.add({
@@ -54,13 +56,16 @@ void main() {
     await tester.pump(Duration.zero);
 
     final listColumnFinder = find.byKey(Key('listsColumn'));
-    final List<Widget> generatedChildren = (listColumnFinder.evaluate().single.widget as Column).children;
+    final List<Widget> generatedChildren =
+        (listColumnFinder.evaluate().single.widget as Column).children;
 
     expect(listColumnFinder, findsOneWidget);
     expect(generatedChildren.length, 2);
   });
 
-  testWidgets('The page is given a complete data set and exactly 1 drop down lists are produced', (WidgetTester tester) async {
+  testWidgets(
+      'The page is given a complete data set and exactly 1 drop down lists are produced',
+      (WidgetTester tester) async {
     List<Map<String, dynamic>> maps = new List();
 
     maps.add({
@@ -84,20 +89,23 @@ void main() {
         .thenAnswer((_) => mapStream);
 
     CategoryListParser categoryListParser =
-    CategoryListParser("dummyDocumentID", "dummyTitle");
+        CategoryListParser("dummyDocumentID", "dummyTitle");
 
     await tester.pumpWidget(
         testableWidget(backend: mockBackend, child: categoryListParser));
     await tester.pump(Duration.zero);
 
     final listColumnFinder = find.byKey(Key('listsColumn'));
-    final List<Widget> generatedChildren = (listColumnFinder.evaluate().single.widget as Column).children;
+    final List<Widget> generatedChildren =
+        (listColumnFinder.evaluate().single.widget as Column).children;
 
     expect(listColumnFinder, findsOneWidget);
     expect(generatedChildren.length, 1);
   });
 
-  testWidgets('The page is given an empty set of lists and it displays an empty screen placeholder', (WidgetTester tester) async {
+  testWidgets(
+      'The page is given an empty set of lists and it displays an empty screen placeholder',
+      (WidgetTester tester) async {
     List<Map<String, dynamic>> maps = new List();
 
     maps.add({
@@ -115,7 +123,7 @@ void main() {
         .thenAnswer((_) => mapStream);
 
     CategoryListParser categoryListParser =
-    CategoryListParser("dummyDocumentID", "dummyTitle");
+        CategoryListParser("dummyDocumentID", "dummyTitle");
 
     await tester.pumpWidget(
         testableWidget(backend: mockBackend, child: categoryListParser));
@@ -126,7 +134,9 @@ void main() {
     expect(emptyScreenPlaceholder, findsOneWidget);
   });
 
-  testWidgets('The page is given a null list of elements and it displays an empty screen placeholder', (WidgetTester tester) async {
+  testWidgets(
+      'The page is given a null list of elements and it displays an empty screen placeholder',
+      (WidgetTester tester) async {
     List<Map<String, dynamic>> maps = new List();
 
     maps.add({
@@ -143,7 +153,7 @@ void main() {
         .thenAnswer((_) => mapStream);
 
     CategoryListParser categoryListParser =
-    CategoryListParser("dummyDocumentID", "dummyTitle");
+        CategoryListParser("dummyDocumentID", "dummyTitle");
 
     await tester.pumpWidget(
         testableWidget(backend: mockBackend, child: categoryListParser));
@@ -154,7 +164,8 @@ void main() {
     expect(emptyScreenPlaceholder, findsOneWidget);
   });
 
-  testWidgets('The loading indicator is active while the stream is arriving', (WidgetTester tester) async {
+  testWidgets('The loading indicator is active while the stream is arriving',
+      (WidgetTester tester) async {
     List<Map<String, dynamic>> maps = new List();
 
     maps.add({
@@ -178,7 +189,7 @@ void main() {
         .thenAnswer((_) => mapStream);
 
     CategoryListParser categoryListParser =
-    CategoryListParser("dummyDocumentID", "dummyTitle");
+        CategoryListParser("dummyDocumentID", "dummyTitle");
 
     await tester.pumpWidget(
         testableWidget(backend: mockBackend, child: categoryListParser));
