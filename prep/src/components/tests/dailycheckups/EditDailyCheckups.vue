@@ -4,12 +4,6 @@
 
         <div class="row">
             <form @submit.prevent="updateDailyCheckups" class="col s12">
-                <div class="row">
-                    <div class="input-field col s12">
-                        <p>Title</p>
-                        <input type="text" v-model="title" required>
-                    </div>
-               </div>
 
                <div class="row">
                     <div class="input-field col s12">

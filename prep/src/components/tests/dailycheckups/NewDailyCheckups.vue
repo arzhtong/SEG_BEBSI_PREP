@@ -7,12 +7,6 @@
 
     <div class="row">
       <form @submit.prevent="saveDailyCheckups" class="col s12">
-        <div class="row">
-          <div class="input-field col s12">
-            <input type="text" v-model="title" required>
-            <label>Title</label>
-          </div>
-        </div>
 
         <div class="row">
           <div class="input-field col s12">

@@ -9,10 +9,6 @@
         {{code}}
       </li>
       <li class="collection-item">
-        <b>Title:</b>
-        {{title}}
-      </li>
-      <li class="collection-item">
         <b>Number of Days Before Test:</b>
         {{daysBeforeTest}}
       </li>
