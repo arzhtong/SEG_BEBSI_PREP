@@ -213,7 +213,7 @@ export const viewAppointmentsMixin = {
                 location: appointment.data().location,
                 id: appointment.id,
                 testID: appointment.data().testID,
-                expired: appointment.data().expired
+                expired: appointment.data().expired,
               };
               this.appointments.push(data);
               this.listenForDailyCheckups(appointment.id);
