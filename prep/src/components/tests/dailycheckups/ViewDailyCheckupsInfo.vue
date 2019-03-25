@@ -36,7 +36,7 @@
 
       <li class="collection-item">
         <router-link
-          v-bind:to="{name: 'edit-dailycheckups', params: {test_id: test_id, daily_id:this.title}}"
+          v-bind:to="{name: 'edit-dailycheckups', params: {test_id: test_id, daily_id:this.code}}"
           class="btn green"
         >Edit</router-link>
 
@@ -69,7 +69,7 @@ export default {
    
   },
   created(){
-     this.title=this.$route.params.daily_id
+     this.code=this.$route.params.daily_id
      this.getDaily(this.test_id,this.daily_id)
   }
 

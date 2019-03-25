@@ -16,48 +16,50 @@ export const dailycheckupMixin ={
     },
     methods:{
         //get daily checkups data for view daily check-ups page
+
         getCheckup(){
-            db.collection('tests').doc(this.$route.params.test_id).collection('dailyCheckups').orderBy('daysBeforeTest','desc').get().then(querySnapshot => {
-                querySnapshot.forEach(doc => {
-                    const data = {
-                        'id': doc.id,
-                        'daysBeforeTest':doc.data().daysBeforeTest,
-                        'description':doc.data().description,
-                        'instrcutions': doc.data().instructions,
-                        'title':doc.data().title,
-                    }
-                    this.dailyCheckups.push(data)
-                })
-            })
-        },
-        //get daily checkups data for view daily check-ups information page
-        getDaily(test_id,daily_id){
-          db.collection("tests")
-          .doc(test_id)
-          .collection("dailyCheckups")
-          .where("title", "==", daily_id)
+          db.collection('tests')
+          .doc(this.$route.params.test_id)
+          .collection('dailyCheckups')
+          .orderBy('daysBeforeTest','desc')
           .get()
           .then(querySnapshot => {
-            querySnapshot.forEach(doc => {              
-                this.code = doc.id;
-                this.title = doc.data().title;
-                this.instructions = doc.data().instructions;
-                this.daysBeforeTest = doc.data().daysBeforeTest;
-                this.description = doc.data().description;            
+            querySnapshot.forEach(doc => {
+              const data = {
+                'id': doc.id,
+                'daysBeforeTest':doc.data().daysBeforeTest,
+                'description':doc.data().description,
+                'instrcutions': doc.data().instructions,
+                'title':doc.data().title,
+              }
+                this.dailyCheckups.push(data)
             })
           })
-
         },
+        //get daily checkups data for view daily check-ups information page
+        getDaily(test_id, daily_id) {
+          db.collection("tests")
+            .doc(test_id)
+            .collection("dailyCheckups")
+            .doc(daily_id)
+            .get()
+            .then(doc => {
+              this.code = doc.id;
+              this.title = doc.data().title;
+              this.instructions = doc.data().instructions;
+              this.daysBeforeTest = doc.data().daysBeforeTest;
+              this.description = doc.data().description;   
+            })
+      },
         //get daily checkups data for edit daily check-ups page
         getCheckups(){
             db.collection("tests")
             .doc(this.$route.params.test_id)
             .collection("dailyCheckups")
-            .where("title", "==", this.$route.params.daily_id)
+            .doc(this.$route.params.daily_id)
             .get()
-            .then(querySnapshot => {
-              querySnapshot.forEach(doc => {
-                                  
+            .then(doc => {
+                  (this.code=doc.id),             
                   (this.allInstr = doc.data().instructions),
                   (this.description = doc.data().description),
                   (this.daysBeforeTest = doc.data().daysBeforeTest),
@@ -68,25 +70,22 @@ export const dailycheckupMixin ={
                      this.allInstrArray.push(value.question)   
                      //convert the last checked time to a new array
                      this.timeArray.push(value.lastChecked)    
-                }
-                 
+                }                
               })
-            })
-
          },
         /*
           This method is used for deleting the daily checkups and 
           pops up an alert window for checking.
-        */
+        */ 
         deleteDailyCheckups() {
             if (confirm("Are you sure you want to delete this Daily Checkup?")) {
               db.collection("tests")
                 .doc(this.$route.params.test_id)
                 .collection("dailyCheckups")
-                .where("title", "==", this.$route.params.daily_id)
+                .doc(this.$route.params.daily_id)
                 .get()
-                .then(querySnapshot => {
-                  querySnapshot.forEach(doc => {
+                .then(doc => {
+                  if(doc.exists){
                     doc.ref
                       .delete()
                       .then(() => {
@@ -97,9 +96,9 @@ export const dailycheckupMixin ={
                       .catch(function(error) {
                         console.error("Error removing document: ", error);
                         alert(`There was an error: ${error}`);
-                      });
-                  });
-                });
+                      })
+                    }
+                  })
             }
           },
           /*
@@ -155,14 +154,14 @@ export const dailycheckupMixin ={
              this.allInstr[i]={answer:false,lastChecked:firebase.firestore.Timestamp.fromDate(new Date(Math.floor(Date.now()))),
               question:this.instructions[i-l].value}            
              }
-     
+
             db.collection("tests")
              .doc(this.$route.params.test_id)
              .collection("dailyCheckups")
-             .where("title", "==", this.$route.params.daily_id)
+             .doc(this.$route.params.daily_id)
              .get()
-             .then(querySnapshot => {
-               querySnapshot.forEach(doc => {
+             .then(doc => {
+               if(doc.exists){
                  doc.ref
                    .update({
                      title: this.title,
@@ -177,8 +176,8 @@ export const dailycheckupMixin ={
                        params: {test_id: this.$route.params.test_id }
                      });
                    });
-               });
-             });
+                  }
+                })            
          },
           /*
           This method add an instruction as an element of the instructions array.

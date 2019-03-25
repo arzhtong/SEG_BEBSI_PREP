@@ -18,7 +18,7 @@
                                <td>{{dailyCheckup.id}}</td>
                                <td>{{dailyCheckup.title}}</td>
                                <td>{{dailyCheckup.daysBeforeTest}}</td>
-                               <td><router-link v-bind:to="{name: 'view-dailycheckups-info', params: {test_id: testID, daily_id:dailyCheckup.title}}" class="btn blue">Show</router-link></td>
+                               <td><router-link v-bind:to="{name: 'view-dailycheckups-info', params: {test_id: testID, daily_id:dailyCheckup.id}}" class="btn blue">Show</router-link></td>
                            </tr>
                           
                        </tbody>
