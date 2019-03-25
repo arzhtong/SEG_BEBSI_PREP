@@ -36,6 +36,13 @@
 
         <div class="row">
           <div class="input-field col s12">
+            <p>Contact Number:</p>
+            <input type="number" v-model="contactNumber" required>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s12">
             <p>Change Referenced Staff:</p>
             <select class="browser-default" style="color:black" v-model="staffMember">
               <option v-for="user in users" v-bind:key="user.Ucode" :value="user">{{user.name}}</option>

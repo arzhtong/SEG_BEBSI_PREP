@@ -4,12 +4,6 @@
 
         <div class="row">
             <form @submit.prevent="updateDailyCheckups" class="col s12">
-                <div class="row">
-                    <div class="input-field col s12">
-                        <p>Title</p>
-                        <input type="text" v-model="title" required>
-                    </div>
-               </div>
 
                <div class="row">
                     <div class="input-field col s12">
@@ -40,12 +34,12 @@
                   <div v-for="instr in allInstrArray.length" v-bind:key="instr" class="input-field col s12">
                     <span>Instruction</span>
                     <input type="text" v-model="allInstrArray[instr - 1]" required>   
-                    <button @click="deleteInstruction(instr -1)" class="btn red">remove instruction</button>
+                    <button @click="deleteInstructionEdit(instr -1)" class="btn red">remove instruction</button>
                   </div>
                 </div>
 
                 <button type="submit" class="btn">Submit</button>
-                <router-link v-bind:to="{name: 'view-dailycheckups-info', params: {test_id:test_id, daily_id:title}}" class="btn grey">
+                <router-link v-bind:to="{name: 'view-dailycheckups-info', params: {test_id:test_id, daily_id:this.code}}" class="btn grey">
                   Cancel
                 </router-link>
                  
@@ -55,15 +49,21 @@
 </template>
 
 <script>
-import { editdailycheckupsMixin } from "../../../mixins/dailycheckupsMixin/editdailycheckupsMixin";
+import { dailycheckupMixin } from "../../../mixins/dailycheckupsMixin/dailycheckupMixin";
 
 export default {
  name: "edit-dailycheckups",
-  mixins: [editdailycheckupsMixin],
+  mixins: [dailycheckupMixin],
+  data(){
+    return{
+      code:null,
+      test_id: this.$route.params.test_id,
+      daily_id: this.$route.params.daily_id
+    }
+  },
   created() {
-    this.addInstruction();
-    this.deleteInstruction();
-    this.deleteAddedInstruction();
+     this.code=this.$route.params.daily_id
+     this.getCheckups()
   }
 };
 </script>

@@ -9,10 +9,6 @@
         {{code}}
       </li>
       <li class="collection-item">
-        <b>Title:</b>
-        {{title}}
-      </li>
-      <li class="collection-item">
         <b>Number of Days Before Test:</b>
         {{daysBeforeTest}}
       </li>
@@ -36,7 +32,7 @@
 
       <li class="collection-item">
         <router-link
-          v-bind:to="{name: 'edit-dailycheckups', params: {test_id: test_id, daily_id:this.title}}"
+          v-bind:to="{name: 'edit-dailycheckups', params: {test_id: test_id, daily_id:this.code}}"
           class="btn green"
         >Edit</router-link>
 
@@ -56,9 +52,22 @@
 </template>
 
 <script>
-import {viewdailycheckupsInfoMixin} from "../../../mixins/dailycheckupsMixin/viewdailycheckupsInfoMixin";
+import {dailycheckupMixin} from "../../../mixins/dailycheckupsMixin/dailycheckupMixin";
 export default {
   name: "view-dailycheckups-info",
-  mixins: [viewdailycheckupsInfoMixin],
+  mixins: [dailycheckupMixin],
+  data(){
+    return{
+     test_id: this.$route.params.test_id,
+     daily_id:this.$route.params.daily_id,
+     code: null
+    };
+   
+  },
+  created(){
+     this.code=this.$route.params.daily_id
+     this.getDaily(this.test_id,this.daily_id)
+  }
+
 };
 </script>

@@ -7,12 +7,6 @@
 
     <div class="row">
       <form @submit.prevent="saveDailyCheckups" class="col s12">
-        <div class="row">
-          <div class="input-field col s12">
-            <input type="text" v-model="title" required>
-            <label>Title</label>
-          </div>
-        </div>
 
         <div class="row">
           <div class="input-field col s12">
@@ -55,15 +49,17 @@
 </template>
 
 <script>
-import { newdailycheckupsMixin } from "../../../mixins/dailycheckupsMixin/newdailycheckupsMixin";
+import { dailycheckupMixin } from "../../../mixins/dailycheckupsMixin/dailycheckupMixin";
 
 export default {
  name: "new-dailycheckups",
-  mixins: [newdailycheckupsMixin],
-  created() {
-    this.addInstruction();
-    this.deleteInstruction();
-  }
+  mixins: [dailycheckupMixin],
+   data() {
+        return {
+            test_id: this.$route.params.test_id,
+            daily_id: this.$route.params.daily_id
+        }
+    }
 };
 </script>
 

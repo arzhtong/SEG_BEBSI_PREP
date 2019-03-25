@@ -28,9 +28,9 @@
               {{map.name}}
             </h6>
           </li>
-          <ul>
+          <ol>
             <li v-for="item in map.list" v-bind:key="item">{{item}}</li>
-          </ul>
+          </ol>
           <li v-if="map.description" class="collection-item">
             <B>Description:</B>
             {{map.description}}

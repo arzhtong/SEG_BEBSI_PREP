@@ -63,4 +63,4 @@ function decryptMessage(encryptedHex, id) {
   return decryptedText;
 }
 
-export { encryptMessage, decryptMessage, generateKey };
+export { encryptMessage, decryptMessage, generateKey, getIV };

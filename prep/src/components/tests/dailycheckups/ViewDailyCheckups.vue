@@ -8,7 +8,6 @@
                           <h4 style="padding:10px;font-size:3em;font-weight: bold;">Daily Check-ups</h4>
                           <tr style="font-size:1.5em">
                                <th>Id</th>
-                               <th>Title</th> 
                                <th>Days Before Test</th>
                                <th>Description</th>
                            </tr>
@@ -16,9 +15,8 @@
                        <tbody v-for="dailyCheckup in dailyCheckups" v-bind:key="dailyCheckup.id" class="collection-item">
                            <tr>
                                <td>{{dailyCheckup.id}}</td>
-                               <td>{{dailyCheckup.title}}</td>
                                <td>{{dailyCheckup.daysBeforeTest}}</td>
-                               <td><router-link v-bind:to="{name: 'view-dailycheckups-info', params: {test_id: testID, daily_id:dailyCheckup.title}}" class="btn blue">Show</router-link></td>
+                               <td><router-link v-bind:to="{name: 'view-dailycheckups-info', params: {test_id: testID, daily_id:dailyCheckup.id}}" class="btn blue">Show</router-link></td>
                            </tr>
                           
                        </tbody>
@@ -34,10 +32,19 @@
 </template>
 
 <script>
-    import {viewdailycheckupsMixin} from "../../../mixins/dailycheckupsMixin/viewdailycheckupsMixin";
+    import {dailycheckupMixin} from "../../../mixins/dailycheckupsMixin/dailycheckupMixin";
     export default {
     name: 'view-dailycheckups',
-    mixins: [viewdailycheckupsMixin],
+    mixins: [dailycheckupMixin],
+    data(){
+        return{
+             dailyCheckups: [],
+             testID: this.$route.params.test_id     
+        }
+    },
+    created(){
+        this.getCheckup()
+    }
 };
 </script>
 

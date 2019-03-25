@@ -13,8 +13,7 @@
   "jest": {
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "**/*.{js,vue}",
-      "!**/node_modules/**"
+      "<rootDir>/src/**/*.{js,vue}"
     ],
     "coverageReporters": [
       "html",

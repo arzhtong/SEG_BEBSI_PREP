@@ -24,6 +24,7 @@ export const appointmentMixin = {
       staffMember: null,
       users: [],
       expired: this.$route.params.expired,
+      contactNumber: "",
       //Part of the AddAppointment Component
       testID: null,
       currentUser: firebase.auth().currentUser.email,
@@ -166,6 +167,7 @@ export const appointmentMixin = {
             this.testID = doc.data().testID;
             this.staffMember = doc.data().staffMember;
             this.code = doc.id;
+            this.contactNumber = doc.data().contactNumber;
           }
         });
     },
@@ -184,7 +186,8 @@ export const appointmentMixin = {
             new Date(Date.parse(this.date + "T" + this.time + "Z"))
           ),
           staffMember: this.staffMember.Ucode,
-          doctor: this.staffMember.name
+          doctor: this.staffMember.name,
+          contactNumber: this.contactNumber
         })
         .then(() => {
           alert("Appointments info updated!");
@@ -283,7 +286,8 @@ export const appointmentMixin = {
           expired: false,
           doctor: this.doctor,
           testName: this.testID.title,
-          used: false
+          used: false,
+          contactNumber: this.contactNumber
         })
         .then(docRef => {
           this.addDailyCheckups();
