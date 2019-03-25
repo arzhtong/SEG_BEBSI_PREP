@@ -47,9 +47,6 @@ void main() {
 
     MockBackend mockBackend = new MockBackend();
 
-//    when(mockBackend.flickCheckupSwitch('id2', '0', false));
-//    when(mockBackend.flickCheckupSwitch('id2', '1', true));
-
     when(mockBackend.dailyCheckupsSnapshots).thenAnswer((_) => mapStream);
     when(mockBackend.dateTime)
         .thenReturn(Timestamp(1553004682, 424000000).toDate());

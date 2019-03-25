@@ -28,8 +28,6 @@ class FaqParser extends StatelessWidget {
               child: LinearProgressIndicator(),
             );
           } else {
-            print("-------THE NEW DATA IS-----------");
-            print(mapListSnapshot.data);
             if (mapListSnapshot.data != null &&
                 mapListSnapshot.data.length > 0) {
               return ListView.builder(
