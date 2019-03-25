@@ -14,7 +14,7 @@
                 </div>
             </div>
 
-            <table v-else class="collection with-header responsive-table">
+            <table v-else class="collection with-header ">
                 <thead class="collection-header">
                     <tr style="font-size:1.5em">
                         <th style="padding: 20px;">Article title</th> 

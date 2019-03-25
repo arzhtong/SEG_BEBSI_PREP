@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="login">
     <div class="container" style="padding-top:10em">
       <div class="row">
         <div class="col s12 m8 offset-m2">
@@ -14,7 +14,6 @@
                 <i class="material-icons prefix">lock</i>
                 <input placeholder="Password" type="password" name="password" id="password" v-model="passwordLog">
               </div>
-
               <button id="loginBtn" v-on:click="login" class="btn btn-large blue lighten-2 black-text">Login</button>
               <router-link id="resetPasswordBtn" to="/resetPassword" style="margin-left:50px;">Forgot Password?</router-link>
             </form>
@@ -32,10 +31,12 @@ export default {
   mixins: [authMixin]
 };
 </script>
-<style>
-body {
-  background: #007bff;
-  background: linear-gradient(to right, #4b0082, #0062e6);
+
+<style scoped>
+input.text {
+  padding-left: 10px;
+}
+#login {
   margin: 0;
   position: relative;
   top: 50%;

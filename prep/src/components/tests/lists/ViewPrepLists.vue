@@ -13,7 +13,7 @@
                 </div>
             </div>
           <table
-            class="collection with-header responsive-table"
+            class="collection with-header"
             style="background: white;;width:100%;height:auto"
           >
             <thead class="collection-header">

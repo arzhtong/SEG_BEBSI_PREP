@@ -17,7 +17,7 @@
                 <li><router-link to="/past-appointments" class="menuItem" exact-active-class="exact active" exact>Past Appointments</router-link></li>
                 <li><router-link v-if="isAdmin == 'Admin'" to="/view-staff" class="menuItem" exact-active-class="exact active" exact>Staff</router-link></li>
                 <li><router-link to="/view-tests" class="menuItem" exact-active-class="exact active" exact>Tests</router-link></li>
-                <li><router-link to="/add-appointment" class="waves-effect waves-light btn red">Add Appointment</router-link></li>
+                <li><router-link to="/add-appointment" class="btn red">Add Appointment</router-link></li>
             </ul>
 
             <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
@@ -40,7 +40,7 @@ export default {
             users: []
         }
     },
-    created(){
+    created() {
         if(firebase.auth().currentUser) {
             this.isLoggedIn = true
             this.currentUser = firebase.auth().currentUser.email

@@ -31,6 +31,7 @@ export default {
     overflow: auto;
     max-height: 90vh;
     padding-top: 30px;
+    min-width: 80vmax;
   }
   .tooltip {
   position: relative;

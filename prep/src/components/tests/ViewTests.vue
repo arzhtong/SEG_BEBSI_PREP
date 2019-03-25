@@ -36,7 +36,7 @@
                                
                             </li>
                             <li class="collection-item avatar">
-                                <i class="material-icons circle blue">assignment</i>
+                                <i class="material-icons circle purple">assignment</i>
                                 <h5 class="titles">Articles</h5>
                                 <router-link 
                                     v-bind:to="{name: 'view-articles', params: {test_id: test.id, test_title: test.title}}"  

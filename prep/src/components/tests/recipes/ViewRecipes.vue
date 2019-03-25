@@ -3,7 +3,7 @@
         <ul class="collection with-header">
             <li class="collection-header">
                 <div class="container" style="width:100%;height:100%">
-                    <table class="collection with-header responsive-table" style="background: white;margin-top:10%;width:100%;height:auto">
+                    <table class="collection with-header " style="background: white;margin-top:10%;width:100%;height:auto">
                         <thead class="collection-header">
                             <h4 style="padding:20px;font-size:3em;"><b>Recipes</b></h4>
                             <tr style="font-size:1.5em">
