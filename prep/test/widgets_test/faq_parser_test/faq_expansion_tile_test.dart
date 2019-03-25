@@ -1,10 +1,20 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:prep/widgets/faq_parser/faq_expansion_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:prep/utils/backend_provider.dart';
+import 'package:prep/utils/backend.dart';
+import 'package:mockito/mockito.dart';
+
+class MockBackend extends Mock implements FirestoreBackend {}
 
 void main() {
-  Widget testableWidget({Widget child}) {
-    return MaterialApp(home: child);
+  Widget testableWidget({MockBackend backend, Widget child}) {
+    return BackendProvider(
+      backend: backend,
+      child: MaterialApp(
+        home: child,
+      ),
+    );
   }
 
   testWidgets('Expansion tile is not expanded and only shows question',
@@ -53,5 +63,49 @@ void main() {
     expect(find.text('A'), findsOneWidget);
     expect(find.byKey(Key('chatButton')), findsOneWidget);
     expect(find.byKey(Key('infoButton')), findsOneWidget);
+  });
+
+  testWidgets('Tapping on the information shortcut button navigates to the preparation tab screen', (WidgetTester tester) async {
+    FaqExpansionTile faqExpansionTile = FaqExpansionTile('Q', 'A', true, true);
+
+    MockBackend mockBackend = MockBackend();
+
+    when(mockBackend.appointmentName).thenReturn("sample appointment name");
+    when(mockBackend.messagesStream(any)).thenAnswer(null);
+    when(mockBackend.prepCardsSnapshots).thenAnswer(null);
+
+    await tester.pumpWidget(testableWidget(backend: mockBackend, child: faqExpansionTile));
+
+    await tester.tap(find.text('Q'));
+    await tester.pump();
+
+    final infoButtonFinder = find.byKey(Key('infoButton'));
+
+    expect(infoButtonFinder, findsOneWidget);
+
+    await tester.tap(infoButtonFinder);
+  });
+
+  testWidgets('Tapping on the chat shortcut button navigates to the Dr. Chat tab screen', (WidgetTester tester) async {
+    FaqExpansionTile faqExpansionTile = FaqExpansionTile('Q', 'A', true, true);
+
+    MockBackend mockBackend = MockBackend();
+
+    when(mockBackend.appointmentName).thenReturn("sample appointment name");
+    when(mockBackend.messagesStream(any)).thenAnswer(null);
+    when(mockBackend.prepCardsSnapshots).thenAnswer(null);
+    when(mockBackend.messagesStream(any)).thenAnswer(null);
+    when(mockBackend.appointmentID).thenAnswer(null);
+
+    await tester.pumpWidget(testableWidget(backend: mockBackend, child: faqExpansionTile));
+
+    await tester.tap(find.text('Q'));
+    await tester.pump();
+
+    final infoButtonFinder = find.byKey(Key('chatButton'));
+
+    expect(infoButtonFinder, findsOneWidget);
+
+    await tester.tap(infoButtonFinder);
   });
 }
