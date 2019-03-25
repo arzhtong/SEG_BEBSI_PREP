@@ -45,7 +45,7 @@
                 </div>
 
                 <button type="submit" class="btn">Submit</button>
-                <router-link v-bind:to="{name: 'view-dailycheckups-info', params: {test_id:test_id, daily_id:title}}" class="btn grey">
+                <router-link v-bind:to="{name: 'view-dailycheckups-info', params: {test_id:test_id, daily_id:this.code}}" class="btn grey">
                   Cancel
                 </router-link>
                  
@@ -62,12 +62,13 @@ export default {
   mixins: [dailycheckupMixin],
   data(){
     return{
+      code:null,
       test_id: this.$route.params.test_id,
       daily_id: this.$route.params.daily_id
     }
   },
   created() {
-     this.title=this.$route.params.daily_id
+     this.code=this.$route.params.daily_id
      this.getCheckups()
   }
 };
