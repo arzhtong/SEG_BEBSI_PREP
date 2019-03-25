@@ -4,7 +4,6 @@ import firebase from "firebase/app";
 export const dailycheckupMixin ={
     data() {
         return {
-          title: '',
           daily_id:'',
           timeArray:[],
           allInstr: [],
@@ -30,7 +29,6 @@ export const dailycheckupMixin ={
                 'daysBeforeTest':doc.data().daysBeforeTest,
                 'description':doc.data().description,
                 'instrcutions': doc.data().instructions,
-                'title':doc.data().title,
               }
                 this.dailyCheckups.push(data)
             })
@@ -45,7 +43,6 @@ export const dailycheckupMixin ={
             .get()
             .then(doc => {
               this.code = doc.id;
-              this.title = doc.data().title;
               this.instructions = doc.data().instructions;
               this.daysBeforeTest = doc.data().daysBeforeTest;
               this.description = doc.data().description;   
@@ -62,8 +59,7 @@ export const dailycheckupMixin ={
                   (this.code=doc.id),             
                   (this.allInstr = doc.data().instructions),
                   (this.description = doc.data().description),
-                  (this.daysBeforeTest = doc.data().daysBeforeTest),
-                  (this.title = doc.data().title);
+                  (this.daysBeforeTest = doc.data().daysBeforeTest)
               
                for (const [key, value] of Object.entries(this.allInstr)) {
                      //convert the elements in insturction field to a new array 
@@ -119,7 +115,6 @@ export const dailycheckupMixin ={
               .doc(this.$route.params.test_id)
               .collection("dailyCheckups")
               .add({
-                title: this.title,
                 instructions: map,
                 description: this.description,
                 daysBeforeTest: Number(this.daysBeforeTest)
@@ -164,7 +159,6 @@ export const dailycheckupMixin ={
                if(doc.exists){
                  doc.ref
                    .update({
-                     title: this.title,
                      instructions: this.allInstr,
                      description: this.description,
                      daysBeforeTest:Number(this.daysBeforeTest),
