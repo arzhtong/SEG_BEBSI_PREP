@@ -48,9 +48,9 @@ class DailyCheckups extends StatelessWidget {
     }
   }
 
-  Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
+  Widget _buildListItem(BuildContext context, Map<String, dynamic> dataMap) {
     List<Widget> instructionWidgets = new List();
-    Map<dynamic, dynamic> dynamicInstructions = document['instructions'];
+    Map<dynamic, dynamic> dynamicInstructions = dataMap['instructions'];
 
     dynamicInstructions.forEach((index, map) {
       Map<dynamic, dynamic> checkupMap = map;
@@ -87,13 +87,8 @@ class DailyCheckups extends StatelessWidget {
                   activeTrackColor: Colors.green[100],
                   value: checkupMap['answer'],
                   onChanged: (_) {
-                    document.reference.updateData({
-                      // Toggles true/false for the daily checkup
-                      ('instructions.' + index + '.answer'):
-                          !checkupMap['answer'],
-                      ('instructions.' + index + '.lastChecked'):
-                          DateTime.now(),
-                    });
+                    BackendProvider.of(context).backend.flickCheckupSwitch(
+                        dataMap['title'], index, checkupMap['answer']);
                   },
                 ),
               ))
@@ -112,8 +107,8 @@ class DailyCheckups extends StatelessWidget {
         elevation: 3.0,
         child: ExpansionTile(
             initiallyExpanded: true,
-            leading: _getDailyCheckupIcon(document['daysBeforeTest'], context),
-            title: _getDailyCheckupText(document['daysBeforeTest']),
+            leading: _getDailyCheckupIcon(dataMap['daysBeforeTest'], context),
+            title: _getDailyCheckupText(dataMap['daysBeforeTest']),
             children: instructionWidgets),
       ),
     );
@@ -123,20 +118,20 @@ class DailyCheckups extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: BackendProvider.of(context).backend.dailyCheckupsSnapshots,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
+      builder: (context, mapListSnapshot) {
+        print(mapListSnapshot.data);
+        if (!mapListSnapshot.hasData) {
           return const Align(
             alignment: Alignment.topCenter,
             child: LinearProgressIndicator(),
           );
         } else {
-          if (snapshot.data.documents != null &&
-              snapshot.data.documents.length > 0) {
+          if (mapListSnapshot.data != null && mapListSnapshot.data.length > 0) {
             return ListView.builder(
               padding: EdgeInsets.only(top: 10, bottom: 10),
-              itemCount: snapshot.data.documents.length,
+              itemCount: mapListSnapshot.data.length,
               itemBuilder: (context, index) =>
-                  _buildListItem(context, snapshot.data.documents[index]),
+                  _buildListItem(context, mapListSnapshot.data[index]),
             );
           } else {
             return EmptyScreenPlaceholder("There are no checkups", "");
