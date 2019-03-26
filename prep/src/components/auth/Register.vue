@@ -5,7 +5,7 @@
                 <div class="col s12 m8 offset-m2">
                     <div class="login card-panel white blue-text center">
                         <h3>Register</h3>
-                        <form>
+                        <form @submit.prevent="register">
                             <div class="input-field">
                                 <i class="material-icons prefix">email</i>
                                 <input placeholder="Email" type="text" name="email" id="email" v-model="email" required>
@@ -38,7 +38,7 @@
                             </p>
                             </div>
                         
-                        <button id="registerBtn" style="margin-top:70px" v-on:click="register" type="submit" class="btn btn-large blue lighten-2 black-text">Register</button>
+                        <button id="registerBtn" style="margin-top:70px" type="submit" class="btn btn-large blue lighten-2 black-text">Register</button>
                         </form>
                     </div>
                 </div>

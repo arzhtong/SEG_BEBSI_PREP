@@ -23,7 +23,7 @@ describe("Component", () => {
       }),
       test("form submits successfully", () => {
         wrapper.setMethods({ register: jest.fn() });
-        wrapper.find("#registerBtn").trigger("click");
+        wrapper.find("#registerBtn").trigger("submit");
   
         expect(wrapper.vm.register).toHaveBeenCalled();
       }),
