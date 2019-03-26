@@ -4,6 +4,7 @@
 
 import db from "../../components/firebaseInit";
 import firebase from "firebase/app";
+import 'firebase/auth'
 
 export const viewAppointmentsMixin = {
   data() {
@@ -182,8 +183,14 @@ export const viewAppointmentsMixin = {
           Part of the Appointments Component.
       */
     loadUser() {
+      var mail = ""
+      if(firebase.auth().currentUser == null){
+        mail = "example@example.com"
+      }else{
+        mail = firebase.auth().currentUser.email
+      }
       db.collection("users")
-        .where("email", "==", firebase.auth().currentUser.email)
+        .where("email", "==", mail)
         .get()
         .then(querySnapshot => {
           querySnapshot.forEach(doc => {

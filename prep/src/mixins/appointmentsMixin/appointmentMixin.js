@@ -4,6 +4,7 @@
 
 import db from "../../components/firebaseInit";
 import firebase from "firebase/app";
+import 'firebase/auth'
 
 export const appointmentMixin = {
   data() {
@@ -27,7 +28,7 @@ export const appointmentMixin = {
       contactNumber: "",
       //Part of the AddAppointment Component
       testID: null,
-      currentUser: firebase.auth().currentUser.email,
+      currentUser: "",
       tests: [],
       doctor: ""
     };
@@ -329,6 +330,12 @@ export const appointmentMixin = {
         Part of the AddAppointment Component
     */
     getDocId() {
+      
+      if(firebase.auth().currentUser == null){
+        this.currentUser = "e@e.com"
+      }else{
+        this.currentUser = firebase.auth().currentUser.email
+      }
       db.collection("users")
         .where("email", "==", this.currentUser)
         .get()
