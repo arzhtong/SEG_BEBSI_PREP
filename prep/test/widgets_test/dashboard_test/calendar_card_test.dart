@@ -68,7 +68,7 @@ void main() {
     when(mockBackend.setBackendParams(any, any, any, any, any, any, any))
         .thenAnswer((_) {});
     when(mockBackend.appointmentName).thenReturn("sample appointment name");
-    when(mockBackend.messagesStream(any)).thenAnswer(null);
+    when(mockBackend.messagesSnapshots(any)).thenAnswer(null);
 
     await tester
         .pumpWidget(testableWidget(backend: mockBackend, child: calendarCard));
