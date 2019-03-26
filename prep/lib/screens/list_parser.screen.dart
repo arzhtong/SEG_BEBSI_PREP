@@ -20,6 +20,7 @@ class CategoryListParser extends StatelessWidget {
         title: Text(_title),
       ),
       body: StreamBuilder(
+        //Gets a stream of snapshots for the categories
           stream: BackendProvider.of(context)
               .backend
               .categoryListSnapshots(documentId),
@@ -30,6 +31,7 @@ class CategoryListParser extends StatelessWidget {
                 child: LinearProgressIndicator(),
               );
             } else {
+              //Making sure that there are snapshots available
               if (dataSnapshot.data['maps'] != null &&
                   dataSnapshot.data['maps'].length > 0) {
                 return ListView.builder(
@@ -39,6 +41,7 @@ class CategoryListParser extends StatelessWidget {
                       _buildDropDownList(context, dataSnapshot.data),
                 );
               } else {
+                //If there are no snapshots available
                 return EmptyScreenPlaceholder("No items in this list", "");
               }
             }
@@ -48,14 +51,14 @@ class CategoryListParser extends StatelessWidget {
 
   Widget _buildDropDownList(
       BuildContext context, Map<String, dynamic> dataMap) {
-    List<Widget> dropDowns = new List();
-    List<dynamic> mappedData = dataMap['maps'];
-
+    List<Widget> dropDowns = new List(); //Stores the tiles containing name,description and items
+    List<dynamic> mappedData = dataMap['maps']; //Stores the mapped data in the database
+    //Goes through the mappedData and makes a tile containing the name,description and items.
     mappedData.forEach((value) {
       dropDowns.add(DescriptiveExpansionTile(
           value['name'], value['description'], value['list']));
     });
-
+    //Makes the column of expansion tiles with dropdowns containing the listtiles 
     return Column(key: Key("listsColumn"), children: dropDowns);
   }
 }
