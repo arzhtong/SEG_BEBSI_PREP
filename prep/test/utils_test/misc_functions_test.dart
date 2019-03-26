@@ -1,4 +1,4 @@
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:matcher/matcher.dart';
 
 import 'package:prep/utils/misc_functions.dart';
