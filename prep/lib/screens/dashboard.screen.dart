@@ -6,6 +6,7 @@ import 'package:prep/utils/backend.dart';
 import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/widgets/dashboard/help_dialog.dart';
 import 'package:prep/widgets/dashboard/calendar.dart';
+import 'package:prep/screens/empty_screen_placeholder.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -95,6 +96,11 @@ class _DashboardState extends State<Dashboard> {
     //reading appointments from the database and updating the codes file
     var querySnap =
         await BackendProvider.of(context).backend.appointmentCodes();
+
+    if (querySnap == null) {
+      return EmptyScreenPlaceholder(
+          "Your calendar is empty", "Add some appointments");
+    }
 
     documentList = querySnap;
 
@@ -236,9 +242,12 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                       child: RaisedButton(
                         color: Colors.indigo,
                         onPressed: () async {
+                          print("--------SUBMIT button pressed");
                           if (loading) {
                             return null;
                           }
+
+                          print("Checkpoint 1");
 
                           if (_parent.codeController.text.isEmpty) {
                             _parent._formKey.currentState.validate();
@@ -246,6 +255,8 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                             setState(() {
                               loading = true;
                             });
+
+                            print("Checkpoint 2");
 
                             bool inFile = _parent._documentInCodeFile(
                                 _parent.codeController.text);
@@ -257,17 +268,24 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                             _parent.validationResultDb = inDatabase;
                             _parent.validationResultFile = inFile;
 
+                            print("Checkpoint 3");
+
                             // If the validator will succeed, start overwriting the used field already
                             if (inDatabase && !inFile) {
-                              await Firestore.instance
-                                  .collection('appointments')
-                                  .document(_parent.codeController.text)
-                                  .updateData({'used': true});
+                              await BackendProvider.of(context)
+                                  .backend
+                                  .setAppointmentCodeUsed(
+                                      _parent.codeController.text);
+                              print("-----------TRANSITION COMPLETED----------");
                             }
+
+                            print("Checkpoint 4");
 
                             setState(() {
                               loading = false;
                             });
+
+                            print("Checkpoint 5");
 
                             if (_parent._formKey.currentState.validate()) {
                               print(
@@ -284,6 +302,8 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                                     _parent.codeController.text);
                                 _parent.codeController.text = "";
                               });
+
+                              print("--------- Navigator about to pop");
 
                               Navigator.pop(context);
                             }
