@@ -74,7 +74,7 @@ void main() {
     MockBackend mockBackend = MockBackend();
 
     when(mockBackend.appointmentName).thenReturn("sample appointment name");
-    when(mockBackend.messagesStream(any)).thenAnswer(null);
+    when(mockBackend.messagesSnapshots(any)).thenAnswer(null);
     when(mockBackend.prepCardsSnapshots).thenAnswer(null);
 
     await tester.pumpWidget(testableWidget(backend: mockBackend, child: faqExpansionTile));
@@ -89,7 +89,7 @@ void main() {
     await tester.tap(infoButtonFinder);
     await tester.pumpAndSettle();
 
-    //expect(find.byKey(Key('builder')), findsOneWidget);
+    // expect(find.byKey(Key('appointmentPrepScreen')), findsOneWidget);
   });
 
   testWidgets('Tapping on the chat shortcut button navigates to the Dr. Chat tab screen', (WidgetTester tester) async {
@@ -98,9 +98,9 @@ void main() {
     MockBackend mockBackend = MockBackend();
 
     when(mockBackend.appointmentName).thenReturn("sample appointment name");
-    when(mockBackend.messagesStream(any)).thenAnswer(null);
+    when(mockBackend.messagesSnapshots(any)).thenAnswer(null);
     when(mockBackend.prepCardsSnapshots).thenAnswer(null);
-    when(mockBackend.messagesStream(any)).thenAnswer(null);
+    when(mockBackend.messagesSnapshots(any)).thenAnswer(null);
     when(mockBackend.appointmentID).thenAnswer(null);
 
     await tester.pumpWidget(testableWidget(backend: mockBackend, child: faqExpansionTile));
