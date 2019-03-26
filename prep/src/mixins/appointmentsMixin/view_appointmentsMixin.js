@@ -4,7 +4,7 @@
 
 import db from "../../components/firebaseInit";
 import firebase from "firebase/app";
-import 'firebase/auth'
+import "firebase/auth";
 
 export const viewAppointmentsMixin = {
   data() {
@@ -166,7 +166,7 @@ export const viewAppointmentsMixin = {
       } else {
         if (inputValue != "") {
           alert("No code found for " + inputValue + " !");
-        }else{
+        } else {
           alert("Nothing to search for...");
         }
         // @ts-ignore
@@ -183,11 +183,11 @@ export const viewAppointmentsMixin = {
           Part of the Appointments Component.
       */
     loadUser() {
-      var mail = ""
-      if(firebase.auth().currentUser == null){
-        mail = "example@example.com"
-      }else{
-        mail = firebase.auth().currentUser.email
+      var mail = "";
+      if (firebase.auth().currentUser == null) {
+        mail = "example@example.com";
+      } else {
+        mail = firebase.auth().currentUser.email;
       }
       db.collection("users")
         .where("email", "==", mail)
@@ -220,7 +220,7 @@ export const viewAppointmentsMixin = {
                 location: appointment.data().location,
                 id: appointment.id,
                 testID: appointment.data().testID,
-                expired: appointment.data().expired,
+                expired: appointment.data().expired
               };
               this.appointments.push(data);
               this.listenForDailyCheckups(appointment.id);
@@ -394,6 +394,14 @@ export const viewAppointmentsMixin = {
           Part of the Appointments Component.
       */
     resetTable() {
+      // @ts-ignore
+      document.getElementById("resetBtn").disabled = true;
+      // @ts-ignore
+      window.setTimeout(function() {
+        // @ts-ignore
+        document.getElementById("resetBtn").disabled = false;
+      }, 500);
+
       this.clearData();
       // @ts-ignore
       document.getElementById("select").value = "Date";
