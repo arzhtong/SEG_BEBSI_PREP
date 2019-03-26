@@ -47,7 +47,7 @@ describe("Component", () => {
     }),
     test("has the correct buttons rendered", () => {
       const selectDropDown = wrapper.find("#select");
-      const calendarIconBtneditBtn = wrapper.find("#calendarIconBtn");
+      const calendarIconBtneditBtn = wrapper.find("#datePicker");
       const searchBtn = wrapper.find("#searchBtn");
       const resetBtn = wrapper.find("#resetBtn");
       const viewAppBtn = wrapper.find("#viewAppBtn");

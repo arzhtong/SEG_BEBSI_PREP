@@ -46,8 +46,8 @@
                   type="text"
                 >
                 <div>
-                  <button style="margin:5px" @click="sortByCode" class="btn">Search</button>
-                  <button style="margin:5px" @click="resetTable" class="btn">Reset</button>
+                  <button id="searchBtn" style="margin:5px" @click="sortByCode" class="btn">Search</button>
+                  <button id="resetBtn" style="margin:5px" @click="resetTable" class="btn">Reset</button>
                 </div>
               </div>
             </div>
@@ -97,6 +97,7 @@
             </template>
             <td>
               <router-link
+                id="viewAppBtn"
                 v-bind:to="{name: 'view-appointment', params: {expired:past ,id:appointment.code}}"
               >
                 <a class="tooltip">
@@ -109,7 +110,7 @@
               </router-link>
             </td>
             <td v-if="past==false">
-              <a class="tooltip">
+              <a id="expireAppBtn" class="tooltip">
                 <span class="tooltiptext">Make Appointment Expired</span>
                 <i
                   @click="expireAppointment(appointment.code, false)"
@@ -119,7 +120,7 @@
               </a>
             </td>
             <td>
-              <a class="tooltip">
+              <a id="deleteAppBtn" class="tooltip">
                 <span class="tooltiptext">Delete Appointment</span>
                 <i
                   @click="deleteAppointment(appointment.code)"
@@ -130,6 +131,7 @@
             </td>
             <td>
               <router-link
+              id="msgBtn"
                 v-bind:to="{name: 'message', params: {expired: past, appointmentID: appointment.code}}"
               >
                 <i
@@ -148,7 +150,7 @@
           </tr>
         </tbody>
         <template v-if="past==false">
-          <router-link to="/add-appointment" class="btn green" style="margin:20px">Add Appointment</router-link>
+          <router-link id="addAppBtn" to="/add-appointment" class="btn green" style="margin:20px">Add Appointment</router-link>
         </template>
         <template v-else>
           <router-link

@@ -166,9 +166,9 @@ export const viewAppointmentsMixin = {
       } else {
         if (inputValue != "") {
           alert("No code found for " + inputValue + " !");
+        }else{
+          alert("Nothing to search for...");
         }
-        this.clearData();
-        this.getAppointments("asc");
         // @ts-ignore
         document.getElementById("searchCode").value = "";
       }
