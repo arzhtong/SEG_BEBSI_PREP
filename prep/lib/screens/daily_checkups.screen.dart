@@ -7,7 +7,6 @@ import 'package:prep/screens/empty_screen_placeholder.dart';
 import 'package:prep/utils/misc_functions.dart';
 
 class DailyCheckups extends StatelessWidget {
-
   CircleAvatar _getDailyCheckupIcon(int daysBeforeTest, BuildContext context) {
     final BaseBackend backend = BackendProvider.of(context).backend;
 

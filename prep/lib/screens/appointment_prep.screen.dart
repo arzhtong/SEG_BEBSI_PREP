@@ -14,24 +14,25 @@ class AppointmentPrep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
+      key: Key('builder'),
         stream: BackendProvider.of(context).backend.prepCardsSnapshots,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
+        builder: (context, mapListSnapshot) {
+          if (!mapListSnapshot.hasData) {
             return const Align(
               alignment: Alignment.topCenter,
               child: LinearProgressIndicator(),
             );
           } else {
-            if (snapshot.data.documents != null &&
-                snapshot.data.documents.length > 0) {
+            if (mapListSnapshot.data != null &&
+                mapListSnapshot.data.length > 0) {
               seenFAQ = false;
               seenRecipe = false;
               return StaggeredGridView.countBuilder(
                 padding: EdgeInsets.all(7.5),
                 crossAxisCount: 4,
-                itemCount: snapshot.data.documents.length,
+                itemCount: mapListSnapshot.data.length,
                 itemBuilder: (context, index) =>
-                    _buildGrid(context, snapshot.data.documents[index]),
+                    _buildGrid(context, mapListSnapshot.data[index]),
                 staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
                 mainAxisSpacing: 0,
                 crossAxisSpacing: 0,
@@ -44,21 +45,23 @@ class AppointmentPrep extends StatelessWidget {
         });
   }
 
-  Widget _buildGrid(BuildContext context, DocumentSnapshot document) {
-    if (document['type'] == 'article' || document['type'] == 'categoryList') {
-      return CategoryCard(
-          document.documentID, document['title'], document['type']);
+  Widget _buildGrid(
+      BuildContext context, Map<String, Map<String, dynamic>> docIdDataMap) {
+    String docID = docIdDataMap.keys.first;
+    Map<String, dynamic> dataMap = docIdDataMap[docIdDataMap.keys.first];
+
+    if (dataMap['type'] == 'article' || dataMap['type'] == 'categoryList') {
+      return CategoryCard(docID, dataMap['title'], dataMap['type']);
     } else {
-      if (document['type'] == 'faqs' && !seenFAQ) {
+      if (dataMap['type'] == 'faqs' && !seenFAQ) {
         seenFAQ = true;
-        return CategoryCard(document.documentID, "Frequently Asked Questions",
-            document['type']);
+        return CategoryCard(
+            docID, "Frequently Asked Questions", dataMap['type']);
       }
 
-      if (document['type'] == 'recipe' && !seenRecipe) {
+      if (dataMap['type'] == 'recipe' && !seenRecipe) {
         seenRecipe = true;
-        return CategoryCard(
-            document.documentID, "Suggested Recipes", document['type']);
+        return CategoryCard(docID, "Suggested Recipes", dataMap['type']);
       }
     }
 
