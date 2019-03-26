@@ -136,7 +136,6 @@ class FirestoreBackend implements BaseBackend {
         'datetime': DateTime.now(),
         'isPatient': true,
         'seenByPatient': true,
-        'seenByStaff': false,
       });
 
   void flickCheckupSwitch(String documentId, String index, bool previousValue) {
