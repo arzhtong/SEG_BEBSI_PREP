@@ -83,6 +83,7 @@ class _AppointmentState extends State<Appointment> {
         child: _getPage(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        key: Key('appointmentPage'),
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
               icon: Icon(Icons.info), title: Text('Information')),
@@ -107,7 +108,7 @@ class _AppointmentState extends State<Appointment> {
         : StreamBuilder(
             stream: BackendProvider.of(context)
                 .backend
-                .messagesStream(false),
+                .messagesSnapshots(false),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 snapshot.data.forEach((message) {
