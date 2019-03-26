@@ -55,7 +55,7 @@ abstract class BaseBackend {
 
   void flickCheckupSwitch(String documentId, String index, bool previousValue);
 
-  Stream<List<Map<String, dynamic>>> get dailyCheckupsSnapshots;
+  Stream<List<Map<String, Map<String, dynamic>>>> get dailyCheckupsSnapshots;
 
   Stream<List<Map<String, Map<String, dynamic>>>> get prepCardsSnapshots;
 
@@ -152,13 +152,15 @@ class FirestoreBackend implements BaseBackend {
     });
   }
 
-  Stream<List<Map<String, dynamic>>> get dailyCheckupsSnapshots =>
+  Stream<List<Map<String, Map<String, dynamic>>>> get dailyCheckupsSnapshots =>
       _appointmentReference
           .collection('dailyCheckups')
           .orderBy('daysBeforeTest', descending: true)
           .snapshots()
           .map((querySnap) =>
-              querySnap.documents.map((docSnap) => docSnap.data).toList());
+          querySnap.documents
+              .map((docSnap) => {docSnap.documentID: docSnap.data})
+              .toList());
 
   Stream<List<Map<String, Map<String, dynamic>>>> get prepCardsSnapshots =>
       _testReference
