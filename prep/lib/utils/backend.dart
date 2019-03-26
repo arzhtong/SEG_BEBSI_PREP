@@ -41,10 +41,11 @@ abstract class BaseBackend {
   String location;
   DateTime dateTime;
   String doctorName;
+  String contactNumber;
   Color color;
 
   void setBackendParams(newAppointmentID, newTestID, newAppointmentName,
-      newLocation, newDateTime, newDoctorName, newColor);
+      newLocation, newDateTime, newDoctorName, newContactNumber, newColor);
 
   Future<QuerySnapshot> get appointmentCodes;
 
@@ -54,7 +55,7 @@ abstract class BaseBackend {
 
   void flickCheckupSwitch(String documentId, String index, bool previousValue);
 
-  Stream<List<Map<String, dynamic>>> get dailyCheckupsSnapshots;
+  Stream<List<Map<String, Map<String, dynamic>>>> get dailyCheckupsSnapshots;
 
   Stream<List<Map<String, Map<String, dynamic>>>> get prepCardsSnapshots;
 
@@ -76,6 +77,7 @@ class FirestoreBackend implements BaseBackend {
   String location;
   DateTime dateTime;
   String doctorName;
+  String contactNumber;
   Color color;
 
   static final FirestoreBackend _singleton = FirestoreBackend._internal();
@@ -85,13 +87,14 @@ class FirestoreBackend implements BaseBackend {
   FirestoreBackend._internal();
 
   void setBackendParams(newAppointmentID, newTestID, newAppointmentName,
-      newLocation, newDateTime, newDoctorName, newColor) {
+      newLocation, newDateTime, newDoctorName, newContactNumber, newColor) {
     appointmentID = newAppointmentID;
     testID = newTestID;
     appointmentName = newAppointmentName;
     location = newLocation;
     dateTime = newDateTime;
     doctorName = newDoctorName;
+    contactNumber = newContactNumber;
     color = newColor;
   }
 
@@ -136,7 +139,6 @@ class FirestoreBackend implements BaseBackend {
         'datetime': DateTime.now(),
         'isPatient': true,
         'seenByPatient': true,
-        'seenByStaff': false,
       });
 
   void flickCheckupSwitch(String documentId, String index, bool previousValue) {
@@ -150,13 +152,15 @@ class FirestoreBackend implements BaseBackend {
     });
   }
 
-  Stream<List<Map<String, dynamic>>> get dailyCheckupsSnapshots =>
+  Stream<List<Map<String, Map<String, dynamic>>>> get dailyCheckupsSnapshots =>
       _appointmentReference
           .collection('dailyCheckups')
           .orderBy('daysBeforeTest', descending: true)
           .snapshots()
           .map((querySnap) =>
-              querySnap.documents.map((docSnap) => docSnap.data).toList());
+          querySnap.documents
+              .map((docSnap) => {docSnap.documentID: docSnap.data})
+              .toList());
 
   Stream<List<Map<String, Map<String, dynamic>>>> get prepCardsSnapshots =>
       _testReference
