@@ -14,9 +14,9 @@ class CalendarCard extends StatelessWidget {
   final String contactNumber;
   static final List<Color> colors = [
     Colors.green[300],
-    Colors.red[300],
+    Colors.deepPurple[300],
     Colors.blue[300],
-    Colors.orange[300]
+    Colors.deepOrange[300]
   ];
   final Color color;
 
