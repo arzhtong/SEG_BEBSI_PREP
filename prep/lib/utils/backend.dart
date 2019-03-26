@@ -56,7 +56,7 @@ abstract class BaseBackend {
 
   Stream<List<Map<String, dynamic>>> get dailyCheckupsSnapshots;
 
-  Stream<QuerySnapshot> get prepCardsSnapshots;
+  Stream<List<Map<String, Map<String, dynamic>>>> get prepCardsSnapshots;
 
   Stream<List<Map<String, dynamic>>> get faqSnapshots;
 
@@ -158,8 +158,14 @@ class FirestoreBackend implements BaseBackend {
           .map((querySnap) =>
               querySnap.documents.map((docSnap) => docSnap.data).toList());
 
-  Stream<QuerySnapshot> get prepCardsSnapshots =>
-      _testReference.collection('prepCards').snapshots();
+  Stream<List<Map<String, Map<String, dynamic>>>> get prepCardsSnapshots =>
+      _testReference
+          .collection('prepCards')
+          .snapshots()
+          .map((querySnap) =>
+          querySnap.documents
+              .map((docSnap) => {docSnap.documentID: docSnap.data})
+              .toList());
 
   Stream<List<Map<String, dynamic>>> get faqSnapshots => _testReference
       .collection('prepCards')
