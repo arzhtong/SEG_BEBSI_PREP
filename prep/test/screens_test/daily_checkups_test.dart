@@ -21,29 +21,32 @@ void main() {
   testWidgets(
       "The title and icon of the checkup are formatted correctly when daysBeforeTest is greater than 1",
       (WidgetTester tester) async {
-    List<List<Map<String, dynamic>>> maps = new List();
+    List<List<Map<String, Map<String, dynamic>>>> maps = new List();
 
     maps.add([
       {
-        'daysBeforeTest': 2,
-        'description': 'sample description 2',
-        'instructions': {
-          '0': {
-            'answer': false,
-            'lastChecked': 'sometime',
-            'question': 'sampleQuestion 1'
+        'sampleID': {
+          'daysBeforeTest': 2,
+          'description': 'sample description 2',
+          'instructions': {
+            '0': {
+              'answer': false,
+              'lastChecked': 'sometime',
+              'question': 'sampleQuestion 1'
+            },
+            '1': {
+              'answer': true,
+              'lastChecked': 'sometime',
+              'question': 'sampleQuestion 2'
+            }
           },
-          '1': {
-            'answer': true,
-            'lastChecked': 'sometime',
-            'question': 'sampleQuestion 2'
-          }
-        },
-        'title': 'id2'
+          'title': 'id2'
+        }
       }
     ]);
 
-    Stream<List<Map<String, dynamic>>> mapStream = Stream.fromIterable(maps);
+    Stream<List<Map<String, Map<String, dynamic>>>> mapStream =
+        Stream.fromIterable(maps);
 
     MockBackend mockBackend = new MockBackend();
 
@@ -78,29 +81,32 @@ void main() {
   testWidgets(
       "The title and icon of the checkup are formatted correctly when daysBeforeTest is 1",
       (WidgetTester tester) async {
-    List<List<Map<String, dynamic>>> maps = new List();
+    List<List<Map<String, Map<String, dynamic>>>> maps = new List();
 
     maps.add([
       {
-        'daysBeforeTest': 1,
-        'description': 'sample description 2',
-        'instructions': {
-          '0': {
-            'answer': false,
-            'lastChecked': 'sometime',
-            'question': 'sampleQuestion 1'
+        'sampleID': {
+          'daysBeforeTest': 1,
+          'description': 'sample description 2',
+          'instructions': {
+            '0': {
+              'answer': false,
+              'lastChecked': 'sometime',
+              'question': 'sampleQuestion 1'
+            },
+            '1': {
+              'answer': true,
+              'lastChecked': 'sometime',
+              'question': 'sampleQuestion 2'
+            }
           },
-          '1': {
-            'answer': true,
-            'lastChecked': 'sometime',
-            'question': 'sampleQuestion 2'
-          }
-        },
-        'title': 'id2'
+          'title': 'id2'
+        }
       }
     ]);
 
-    Stream<List<Map<String, dynamic>>> mapStream = Stream.fromIterable(maps);
+    Stream<List<Map<String, Map<String, dynamic>>>> mapStream =
+        Stream.fromIterable(maps);
 
     MockBackend mockBackend = new MockBackend();
 
@@ -135,29 +141,32 @@ void main() {
   testWidgets(
       "The title and icon of the checkup are formatted correctly when daysBeforeTest is 0",
       (WidgetTester tester) async {
-    List<List<Map<String, dynamic>>> maps = new List();
+    List<List<Map<String, Map<String, dynamic>>>> maps = new List();
 
     maps.add([
       {
-        'daysBeforeTest': 0,
-        'description': 'sample description 2',
-        'instructions': {
-          '0': {
-            'answer': false,
-            'lastChecked': 'sometime',
-            'question': 'sampleQuestion 1'
+        'sampleID': {
+          'daysBeforeTest': 0,
+          'description': 'sample description 2',
+          'instructions': {
+            '0': {
+              'answer': false,
+              'lastChecked': 'sometime',
+              'question': 'sampleQuestion 1'
+            },
+            '1': {
+              'answer': true,
+              'lastChecked': 'sometime',
+              'question': 'sampleQuestion 2'
+            }
           },
-          '1': {
-            'answer': true,
-            'lastChecked': 'sometime',
-            'question': 'sampleQuestion 2'
-          }
-        },
-        'title': 'id2'
+          'title': 'id2'
+        }
       }
     ]);
 
-    Stream<List<Map<String, dynamic>>> mapStream = Stream.fromIterable(maps);
+    Stream<List<Map<String, Map<String, dynamic>>>> mapStream =
+        Stream.fromIterable(maps);
 
     MockBackend mockBackend = new MockBackend();
 
@@ -193,29 +202,32 @@ void main() {
   testWidgets(
       "Exactly the number of instructions (2) given in the data are displayed in the checkups list",
       (WidgetTester tester) async {
-    List<List<Map<String, dynamic>>> maps = new List();
+    List<List<Map<String, Map<String, dynamic>>>> maps = new List();
 
     maps.add([
       {
-        'daysBeforeTest': 0,
-        'description': 'sample description 2',
-        'instructions': {
-          '0': {
-            'answer': false,
-            'lastChecked': 'sometime',
-            'question': 'sampleQuestion 1'
+        'sampleID': {
+          'daysBeforeTest': 0,
+          'description': 'sample description 2',
+          'instructions': {
+            '0': {
+              'answer': false,
+              'lastChecked': 'sometime',
+              'question': 'sampleQuestion 1'
+            },
+            '1': {
+              'answer': true,
+              'lastChecked': 'sometime',
+              'question': 'sampleQuestion 2'
+            }
           },
-          '1': {
-            'answer': true,
-            'lastChecked': 'sometime',
-            'question': 'sampleQuestion 2'
-          }
-        },
-        'title': 'id2'
+          'title': 'id2'
+        }
       }
     ]);
 
-    Stream<List<Map<String, dynamic>>> mapStream = Stream.fromIterable(maps);
+    Stream<List<Map<String, Map<String, dynamic>>>> mapStream =
+        Stream.fromIterable(maps);
 
     MockBackend mockBackend = new MockBackend();
 
@@ -242,24 +254,27 @@ void main() {
 
   testWidgets("The switches in the checkups can be tapped",
       (WidgetTester tester) async {
-    List<List<Map<String, dynamic>>> maps = new List();
+    List<List<Map<String, Map<String, dynamic>>>> maps = new List();
 
     maps.add([
       {
-        'daysBeforeTest': 0,
-        'description': 'sample description 2',
-        'instructions': {
-          '0': {
-            'answer': false,
-            'lastChecked': 'sometime',
-            'question': 'sampleQuestion 1'
-          }
-        },
-        'title': 'id2'
+        'sampleID': {
+          'daysBeforeTest': 0,
+          'description': 'sample description 2',
+          'instructions': {
+            '0': {
+              'answer': false,
+              'lastChecked': 'sometime',
+              'question': 'sampleQuestion 1'
+            }
+          },
+          'title': 'id2'
+        }
       }
     ]);
 
-    Stream<List<Map<String, dynamic>>> mapStream = Stream.fromIterable(maps);
+    Stream<List<Map<String, Map<String, dynamic>>>> mapStream =
+        Stream.fromIterable(maps);
 
     MockBackend mockBackend = new MockBackend();
 
@@ -279,11 +294,12 @@ void main() {
 
   testWidgets("An empty screen placeholder is displayed if no data is given",
       (WidgetTester tester) async {
-    List<List<Map<String, dynamic>>> maps = new List();
+    List<List<Map<String, Map<String, dynamic>>>> maps = new List();
 
     maps.add([]);
 
-    Stream<List<Map<String, dynamic>>> mapStream = Stream.fromIterable(maps);
+    Stream<List<Map<String, Map<String, dynamic>>>> mapStream =
+        Stream.fromIterable(maps);
 
     MockBackend mockBackend = new MockBackend();
 
@@ -303,11 +319,12 @@ void main() {
 
   testWidgets("Progress indicator is displayed while the stream arrives",
       (WidgetTester tester) async {
-    List<List<Map<String, dynamic>>> maps = new List();
+    List<List<Map<String, Map<String, dynamic>>>> maps = new List();
 
     maps.add([]);
 
-    Stream<List<Map<String, dynamic>>> mapStream = Stream.fromIterable(maps);
+    Stream<List<Map<String, Map<String, dynamic>>>> mapStream =
+        Stream.fromIterable(maps);
 
     MockBackend mockBackend = new MockBackend();
 
