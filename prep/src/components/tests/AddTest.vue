@@ -36,8 +36,8 @@
 </template>
 
 <script>
-import { testQueryMixin } from '../../mixins/testMixins/testQueryMixin'
-import { testMixin } from '../../mixins/testMixins/testMixin'
+import { testQueryMixin } from '../../mixins/testMixin/testQueryMixin'
+import { testMixin } from '../../mixins/testMixin/testMixin'
 
 export default {
     name: 'addTest',

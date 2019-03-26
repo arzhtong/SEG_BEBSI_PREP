@@ -57,8 +57,8 @@
 </template>
 
 <script>
-import { articleQueryMixin } from '../../../mixins/articleMixins/articleQueryMixin'
-import { articleMixin } from '../../../mixins/articleMixins/articleMixin'
+import { articleQueryMixin } from '../../../mixins/articleMixin/articleQueryMixin'
+import { articleMixin } from '../../../mixins/articleMixin/articleMixin'
 
 export default {
     name: 'view-articles',
