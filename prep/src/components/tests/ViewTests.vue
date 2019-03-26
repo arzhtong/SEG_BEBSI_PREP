@@ -32,8 +32,7 @@
                                 <router-link 
                                     v-bind:to="{name: 'view-dailycheckups', params: {test_id: test.id}}"
                                     class="btn blue secondary-content"
-                                >Show/Edit</router-link>
-                               
+                                >Show/Edit</router-link>                             
                             </li>
                             <li class="collection-item avatar">
                                 <i class="material-icons circle purple">assignment</i>
@@ -83,8 +82,8 @@
 </template>
 
 <script>
-import { testQueryMixin } from '../../mixins/testMixins/testQueryMixin'
-import { testMixin } from '../../mixins/testMixins/testMixin'
+import { testQueryMixin } from '../../mixins/testMixin/testQueryMixin'
+import { testMixin } from '../../mixins/testMixin/testMixin'
     
 export default {
     name: "view-tests",

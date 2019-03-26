@@ -89,8 +89,8 @@
 </template>
 
 <script>
-import { recipeMixin } from '../../../mixins/recipeMixins/recipeMixin'
-import { recipeQueryMixin } from '../../../mixins/recipeMixins/recipeQueryMixin'
+import { recipeMixin } from '../../../mixins/recipeMixin/recipeMixin'
+import { recipeQueryMixin } from '../../../mixins/recipeMixin/recipeQueryMixin'
 
 export default {
     name: 'new-recipe',
