@@ -28,7 +28,6 @@ export default {
 
 <style>
   #central {
-    overflow: auto;
     max-height: 90vh;
     padding-top: 30px;
     min-width: 80vmax;

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="resetPassword">
     <div class="container" style="padding-top:10em">
       <div class="row">
         <div class="col s12 m8 offset-m2">
@@ -30,9 +30,11 @@ export default {
   mixins: [authMixin]
 };
 </script>
-<style>
-body {
-  background: #007bff;
-  background: linear-gradient(to right, #4b0082, #0062e6);
+<style scoped>
+#resetPassword {
+  margin: 0;
+  position: relative;
+  top: 50%;
+  left: 7%;
 }
 </style>

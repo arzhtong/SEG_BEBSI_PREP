@@ -41,6 +41,5 @@ input.text {
   position: relative;
   top: 50%;
   left: 7%;
-  overflow: hidden;
 }
 </style>
