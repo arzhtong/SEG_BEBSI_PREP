@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-import 'package:prep/widgets/dashboard/calendar_label.dart';
-import 'package:prep/widgets/dashboard/calendar_card.dart';
-import 'package:prep/screens/empty_screen_placeholder.dart';
-import 'package:prep/utils/storage.dart';
 import 'package:prep/utils/backend.dart';
 import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/widgets/dashboard/help_dialog.dart';
@@ -24,7 +20,6 @@ class _DashboardState extends State<Dashboard> {
   List<DocumentSnapshot> documentList;
 
   // Codes file variables
-  Storage storage = new Storage();
   String codeFileState;
 
   // Form validation variables
@@ -60,7 +55,7 @@ class _DashboardState extends State<Dashboard> {
       codeFileState = "";
       codeController.text = '';
     });
-    return storage.writeData("");
+    return BackendProvider.of(context).storage.writeData("");
   }
 
   // Checks if a code exists in the Firestore and is not used
@@ -84,16 +79,16 @@ class _DashboardState extends State<Dashboard> {
 
   // Retrieves data from the Firestore and builds the calendar
   Future<Widget> _getDocData() async {
-    bool fileExists = await storage.fileExists();
+    bool fileExists = await BackendProvider.of(context).storage.fileExists();
 
     if (fileExists) {
       print("--- codes file found!");
     } else {
       print("--- codes file NOT found, creating one containing ','");
-      await storage.writeData(",");
+      await BackendProvider.of(context).storage.writeData(",");
     }
 
-    codeFileState = await storage.readData();
+    codeFileState = await BackendProvider.of(context).storage.readData();
     print("Raw codes file - in getDocData after reading: " + codeFileState);
 
     //reading appointments from the database and updating the codes file
@@ -120,11 +115,10 @@ class _DashboardState extends State<Dashboard> {
     print("New codes files - after filtering: " + newCodeFileState);
 
     // Saving the new sequence of codes in the codes file and updating file state
-    await storage.writeData(newCodeFileState);
+    await BackendProvider.of(context).storage.writeData(newCodeFileState);
     codeFileState = newCodeFileState;
 
     // building the return widget based on the updated (current) codes file
-    //return _buildCalendarWidget();
     return Calendar(codeFileState, documentList);
   }
 
@@ -274,7 +268,7 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                               print(
                                   "To be new code test file - NEW CODE DIALOG");
 
-                              await _parent.storage.writeData(
+                              await BackendProvider.of(context).storage.writeData(
                                   _parent.codeFileState +
                                       _parent.codeController.text +
                                       ',');
