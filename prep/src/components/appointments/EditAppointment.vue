@@ -44,15 +44,16 @@
         <div class="row">
           <div class="input-field col s12">
             <p>Change Referenced Staff:</p>
-            <select class="browser-default" style="color:black" v-model="staffMember">
+            <select id="selectRefStaff" class="browser-default" style="color:black" v-model="staffMember">
               <option v-for="user in users" v-bind:key="user.Ucode" :value="user">{{user.name}}</option>
             </select>
           </div>
         </div>
 
-        <button type="submit" class="btn">Submit</button>
+        <button id="submitEditAppBtn" type="submit" class="btn">Submit</button>
 
         <router-link
+          id="cancelAppEditBtn"
           v-bind:to="{name: 'view-appointment', params: {expired: expired, id: router}}"
           class="btn grey"
         >Cancel</router-link>

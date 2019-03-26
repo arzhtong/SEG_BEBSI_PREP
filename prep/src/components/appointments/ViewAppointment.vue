@@ -28,6 +28,7 @@
             <td>
               <template v-if="past == false">
                 <router-link
+                  id="goToEditAppBtn"
                   v-bind:to="{name: 'edit-appointment', params: {expired: past, id: router}}"
                 >
                   <a class="tooltip" style="margin-right:20px">
@@ -113,10 +114,10 @@
         </table>
       </div>
       <template v-if="past==false">
-        <router-link to="/view-appointments" class="btn">Go Back</router-link>
+        <router-link id="goToCurrentAppBtn" to="/view-appointments" class="btn">Go Back</router-link>
       </template>
       <template v-else>
-        <router-link to="/past-appointments" class="btn">Go Back</router-link>
+        <router-link id="goToPastAppBtn" to="/past-appointments" class="btn">Go Back</router-link>
       </template>
     </div>
   </div>
