@@ -41,10 +41,11 @@ abstract class BaseBackend {
   String location;
   DateTime dateTime;
   String doctorName;
+  String contactNumber;
   Color color;
 
   void setBackendParams(newAppointmentID, newTestID, newAppointmentName,
-      newLocation, newDateTime, newDoctorName, newColor);
+      newLocation, newDateTime, newDoctorName, newContactNumber, newColor);
 
   Future<QuerySnapshot> get appointmentCodes;
 
@@ -76,6 +77,7 @@ class FirestoreBackend implements BaseBackend {
   String location;
   DateTime dateTime;
   String doctorName;
+  String contactNumber;
   Color color;
 
   static final FirestoreBackend _singleton = FirestoreBackend._internal();
@@ -85,13 +87,14 @@ class FirestoreBackend implements BaseBackend {
   FirestoreBackend._internal();
 
   void setBackendParams(newAppointmentID, newTestID, newAppointmentName,
-      newLocation, newDateTime, newDoctorName, newColor) {
+      newLocation, newDateTime, newDoctorName, newContactNumber, newColor) {
     appointmentID = newAppointmentID;
     testID = newTestID;
     appointmentName = newAppointmentName;
     location = newLocation;
     dateTime = newDateTime;
     doctorName = newDoctorName;
+    contactNumber = newContactNumber;
     color = newColor;
   }
 

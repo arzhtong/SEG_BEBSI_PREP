@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'package:prep/screens/appointment.screen.dart';
-import 'package:prep/utils/backend_provider.dart';
-import 'package:prep/utils/misc_functions.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 import 'package:prep/widgets/dashboard/calendar_card.dart';
 import 'package:prep/widgets/dashboard/calendar_label.dart';
@@ -52,7 +49,8 @@ class Calendar extends StatelessWidget {
           documentList.elementAt(0).data['datetime'].toDate(),
           documentList.elementAt(0).data['testID'],
           documentList.elementAt(0).data['doctor'],
-          documentList.elementAt(0).data['testName']));
+          documentList.elementAt(0).data['testName'],
+          documentList.elementAt(0).data['contactNumber']));
 
       for (int i = 1; i < documentList.length; i++) {
         if (_datesAreEqual(documentList.elementAt(i).data['datetime'].toDate(),
@@ -63,7 +61,8 @@ class Calendar extends StatelessWidget {
               documentList.elementAt(i).data['datetime'].toDate(),
               documentList.elementAt(i).data['testID'],
               documentList.elementAt(i).data['doctor'],
-              documentList.elementAt(i).data['testName']));
+              documentList.elementAt(i).data['testName'],
+              documentList.elementAt(i).data['contactNumber']));
         } else {
           calendarElements.add(CalendarLabel(
               documentList.elementAt(i).data['datetime'].toDate()));
@@ -73,13 +72,14 @@ class Calendar extends StatelessWidget {
               documentList.elementAt(i).data['datetime'].toDate(),
               documentList.elementAt(i).data['testID'],
               documentList.elementAt(i).data['doctor'],
-              documentList.elementAt(i).data['testName']));
+              documentList.elementAt(i).data['testName'],
+              documentList.elementAt(i).data['contactNumber']));
         }
       }
 
       return ListView(
         padding:
-        EdgeInsets.only(top: 10.0, bottom: 80.0, left: 10.0, right: 10.0),
+            EdgeInsets.only(top: 10.0, bottom: 80.0, left: 10.0, right: 10.0),
         children: <Widget>[
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
