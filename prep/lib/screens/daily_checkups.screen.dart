@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:prep/utils/backend_provider.dart';
 
 import 'package:prep/utils/backend.dart';
@@ -118,6 +117,7 @@ class DailyCheckups extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
+      key: Key('dailyCheckupsScreen'),
       stream: BackendProvider.of(context).backend.dailyCheckupsSnapshots,
       builder: (context, mapListSnapshot) {
         if (!mapListSnapshot.hasData) {

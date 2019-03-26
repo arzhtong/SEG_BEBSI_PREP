@@ -21,7 +21,7 @@ class MockBackend extends Mock implements BaseBackend {
 }
 
 main() {
-  final MockBackend mockBackend = MockBackend();
+  final mockBackend = MockBackend();
 
   Widget testableWidget({Widget child}) {
     return BackendProvider(
@@ -33,13 +33,13 @@ main() {
   }
 
   void setUpMockBackend() {
-    final String mockAppointmentID = 'abcdefghi';
+    final mockAppointmentID = 'abcdefghi';
 
     when(mockBackend.appointmentID).thenReturn(
       mockAppointmentID,
     );
 
-    when(mockBackend.messagesStream(any)).thenAnswer(
+    when(mockBackend.messagesSnapshots(any)).thenAnswer(
       (_) => Stream.periodic(Duration(milliseconds: 100), (_) {
             List<Map<String, dynamic>> mockMessagesCollectionToSend =
                 mockBackend.mockMessagesCollection
@@ -67,14 +67,13 @@ main() {
 
   Future<void> setUpWidgetTester(WidgetTester tester) async {
     setUpMockBackend();
-    MessagingScreen messagingScreen = MessagingScreen();
 
-    await tester.pumpWidget(testableWidget(child: messagingScreen));
+    await tester.pumpWidget(testableWidget(child: MessagingScreen()));
     await tester.pumpAndSettle();
   }
 
-  group('Messaging tests:', () {
-    List<String> testMessages = [
+  group('Messaging screen tests:', () {
+    final testMessages = [
       "First Test Message!",
       "Second Test Message!",
       "Third Test Message!",
@@ -122,7 +121,7 @@ main() {
     test(
       "received encrypted messages can be decrypted",
       () {
-        List<String> decryptedMessages =
+        final decryptedMessages =
             mockBackend.mockMessagesCollection.map((message) {
           return MessageCrypto.decryptMessage(
             mockBackend.appointmentID,

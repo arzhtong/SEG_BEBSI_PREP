@@ -35,7 +35,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
     Future.delayed(Duration.zero, () {
       _messageStreamSubscription = BackendProvider.of(context)
           .backend
-          .messagesStream(true)
+          .messagesSnapshots(true)
           .listen((list) => list.forEach((message) => _addNewMessage(message)));
     });
   }
@@ -50,6 +50,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: Key('messagingScreen'),
       resizeToAvoidBottomInset: false,
       body: Column(children: <Widget>[
         _messagesView,
