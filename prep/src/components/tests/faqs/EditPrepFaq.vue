@@ -23,7 +23,7 @@
         <div class="row">
           <div class="input-field col s12">
             <span id="title">Answer*</span>
-            <input type="text" v-model="answer">
+            <input type="text" v-model="answer" required>
           </div>
         </div>
         <!-- adds 2 checkboxes representing shortcuts on the app -->
