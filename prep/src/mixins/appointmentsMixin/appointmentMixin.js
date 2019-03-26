@@ -252,7 +252,7 @@ export const appointmentMixin = {
       var ID = Math.random()
         .toString(36)
         .substr(2, 9);
-
+      this.code = ID; // for testing purposes
       var docRef = db.collection("appointments").doc(ID);
       return docRef
         .get()
