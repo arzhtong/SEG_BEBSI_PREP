@@ -47,7 +47,9 @@ abstract class BaseBackend {
   void setBackendParams(newAppointmentID, newTestID, newAppointmentName,
       newLocation, newDateTime, newDoctorName, newContactNumber, newColor);
 
-  Future<QuerySnapshot> get appointmentCodes;
+  //Future<List<Map<String, dynamic>>> get appointmentCodes;
+
+  Future<List<Map<String, Map<String, dynamic>>>> appointmentCodes() async {}
 
   Stream<List<Map<String, dynamic>>> messagesSnapshots(bool setSeen);
 
@@ -98,12 +100,32 @@ class FirestoreBackend implements BaseBackend {
     color = newColor;
   }
 
-  Future<QuerySnapshot> get appointmentCodes => _appointmentsCollection
-      .where('expired', isEqualTo: false)
-      .where('datetime',
-          isGreaterThan: DateTime.now().subtract(Duration(days: 1)))
-      .orderBy('datetime')
-      .getDocuments();
+//  Future<List<Map<String, dynamic>>> get appointmentCodes =>
+//      _appointmentsCollection
+//          .where('expired', isEqualTo: false)
+//          .where('datetime',
+//          isGreaterThan: DateTime.now().subtract(Duration(days: 1)))
+//          .orderBy('datetime')
+//          .getDocuments();
+
+  Future<List<Map<String, Map<String, dynamic>>>> appointmentCodes() async {
+    QuerySnapshot querySnapshot = await _appointmentsCollection
+        .where('expired', isEqualTo: false)
+        .where('datetime',
+            isGreaterThan: DateTime.now().subtract(Duration(days: 1)))
+        .orderBy('datetime')
+        .getDocuments();
+
+    //print(querySnapshot);
+
+    List<Map<String, Map<String, dynamic>>> futMap = querySnapshot.documents
+        .map((docSnap) => {docSnap.documentID: docSnap.data})
+        .toList();
+
+    //print(futMap);
+
+    return futMap;
+  }
 
   DocumentReference get _testReference =>
       DatabaseHandler.db.collection('tests').document(testID);
@@ -157,16 +179,12 @@ class FirestoreBackend implements BaseBackend {
           .collection('dailyCheckups')
           .orderBy('daysBeforeTest', descending: true)
           .snapshots()
-          .map((querySnap) =>
-          querySnap.documents
+          .map((querySnap) => querySnap.documents
               .map((docSnap) => {docSnap.documentID: docSnap.data})
               .toList());
 
   Stream<List<Map<String, Map<String, dynamic>>>> get prepCardsSnapshots =>
-      _testReference
-          .collection('prepCards')
-          .snapshots()
-          .map((querySnap) =>
+      _testReference.collection('prepCards').snapshots().map((querySnap) =>
           querySnap.documents
               .map((docSnap) => {docSnap.documentID: docSnap.data})
               .toList());

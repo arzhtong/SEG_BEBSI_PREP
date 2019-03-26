@@ -17,7 +17,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   // Firestore variables
   Widget cachedCalendar;
-  List<DocumentSnapshot> documentList;
+  List<Map<String, Map<String, dynamic>>> documentList;
 
   // Codes file variables
   String codeFileState;
@@ -62,10 +62,11 @@ class _DashboardState extends State<Dashboard> {
   Future<bool> _isCodeInFirestoreNotUsed(String code) async {
     List<String> liveNotUsedIDs = new List();
 
-    await BackendProvider.of(context).backend.appointmentCodes.then((query) {
-      query.documents.forEach((document) {
-        if (document['used'] == false) {
-          liveNotUsedIDs.add(document.documentID);
+    await BackendProvider.of(context).backend.appointmentCodes().then((query) {
+      query.forEach((dataListMap) {
+        String docId = dataListMap.keys.first;
+        if (dataListMap[docId]['used'] == false) {
+          liveNotUsedIDs.add(docId);
         }
       });
     });
@@ -92,16 +93,19 @@ class _DashboardState extends State<Dashboard> {
     print("Raw codes file - in getDocData after reading: " + codeFileState);
 
     //reading appointments from the database and updating the codes file
-    QuerySnapshot testDocList =
-        await BackendProvider.of(context).backend.appointmentCodes;
-    documentList = testDocList.documents;
+    var querySnap =
+        await BackendProvider.of(context).backend.appointmentCodes();
+
+    documentList = querySnap;
 
     // Get all the codes stored in the database
     List<String> availableCodes = new List();
 
-    documentList.forEach((doc) {
-      availableCodes.add(doc.documentID);
+    documentList.forEach((docIdDataMap) {
+      availableCodes.add(docIdDataMap.keys.first);
     });
+
+    print("Available codes:" + availableCodes.toString());
 
     // Store all the codes in both the database and the codes file in the var
     String newCodeFileState = "";
@@ -148,6 +152,7 @@ class _DashboardState extends State<Dashboard> {
       body: FutureBuilder(
           future: _getDocData(),
           builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
+            print("Snapshot: " + snapshot.data.toString());
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
                 return (cachedCalendar == null)
@@ -268,8 +273,9 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                               print(
                                   "To be new code test file - NEW CODE DIALOG");
 
-                              await BackendProvider.of(context).storage.writeData(
-                                  _parent.codeFileState +
+                              await BackendProvider.of(context)
+                                  .storage
+                                  .writeData(_parent.codeFileState +
                                       _parent.codeController.text +
                                       ',');
 
