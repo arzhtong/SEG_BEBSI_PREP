@@ -56,7 +56,7 @@
           <div class="row">
             <div class="input-field col s12">
               <span>Choose Test</span>
-              <select class="browser-default" style="color:black" v-model="testID">
+              <select id="selectTest" class="browser-default" style="color:black" v-model="testID">
                 <option v-for="test in tests" v-bind:key="test.testID" :value="test">{{test.title}}</option>
               </select>
             </div>
@@ -67,8 +67,8 @@
               <input type="text" v-model="code" disabled required>
             </div>
           </div>
-          <button type="submit" class="btn">Submit</button>
-          <router-link to="/view-appointments" class="btn grey">Cancel</router-link>
+          <button id="submitAddAppBtn" type="submit" class="btn">Submit</button>
+          <router-link id="cancelAddAppBtn" to="/view-appointments" class="btn grey">Cancel</router-link>
         </form>
       </div>
     </div>
