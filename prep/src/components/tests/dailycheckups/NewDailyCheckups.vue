@@ -22,7 +22,7 @@
           </div>
         </div>
 
-        <button @click="addInstruction" class="btn green">new instruction</button>
+        <button id="add" @click="addInstruction" class="btn green">new instruction</button>
         <div class="row">
           <div
             v-for="instruction in instructions"
@@ -38,11 +38,14 @@
           </div>
         </div>
 
-        <button type="submit" class="btn">Submit</button>
+        <button id="submit" type="submit" class="btn">Submit</button>
         <router-link
           v-bind:to="{name: 'view-dailycheckups', params: {test_id: this.$route.params.test_id}}"
-          class="btn grey"
-        >Cancel</router-link>
+        >
+        <button id="CancelAdd" class="btn grey">
+        Cancel
+        </button>
+        </router-link>
       </form>
     </div>
   </div>
