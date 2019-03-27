@@ -1,9 +1,13 @@
-import 'package:mockito/mockito.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+
+import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
+
 import 'package:prep/utils/backend.dart';
-import 'package:prep/screens/appointment_info.screen.dart';
 import 'package:prep/utils/backend_provider.dart';
+import 'package:prep/screens/appointment_info.screen.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 
 class MockBackend extends Mock implements FirestoreBackend {}

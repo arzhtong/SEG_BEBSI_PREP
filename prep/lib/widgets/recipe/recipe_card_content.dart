@@ -14,6 +14,7 @@ class RecipeCardContent extends StatelessWidget {
     final documentData = DocumentDataProvider.of(context).documentData;
 
     final dynamic dynamicIngredientListData = documentData['ingredients'];
+
     final dynamic dynamicMethodListData = documentData['method'];
     final dynamic dynamicExternalUrlData = documentData['externalURL'];
     final dynamic dynamicNoteData = documentData['note'];
@@ -23,12 +24,12 @@ class RecipeCardContent extends StatelessWidget {
     //internal recipe must either exist fully or doesn't at all
     bool hasInternalRecipe =
         (dynamicIngredientListData != null) && (dynamicMethodListData != null);
-    assert(hasInternalRecipe ||
+    /* assert(hasInternalRecipe ||
         ((dynamicMethodListData == null) &&
-            (dynamicIngredientListData == null)));
+            (dynamicIngredientListData == null))); */
 
     //at least one form of recipe must be present
-    assert(hasInternalRecipe || dynamicExternalUrlData != null);
+    //assert(hasInternalRecipe || dynamicExternalUrlData != null);
 
     //generate widgets from data
     if (hasInternalRecipe) {

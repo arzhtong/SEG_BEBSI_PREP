@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:prep/utils/constants.dart';
 import 'package:prep/utils/misc_functions.dart' show launchURL;
 
-//TODO: Add link error hendling.
+//TODO: Add link error validity chacking.
 class ExternalRecipeLink extends StatelessWidget {
   final dynamic externalUrlData;
 
@@ -12,12 +13,13 @@ class ExternalRecipeLink extends StatelessWidget {
     return Center(
       child: RaisedButton(
         child: const Text(
-          "VIEW RECIPE ONLINE",
+          Constants.kViewRecipeOnlineButtonText,
           style: TextStyle(
             color: Colors.white,
           ),
         ),
-        onPressed: () => launchURL(externalUrlData.toString()),
+        onPressed: () => print(
+            "I WAS TAPPED BIYATCH") /* launchURL(externalUrlData.toString()) */,
         color: Theme.of(context).accentColor,
         elevation: 4.0,
       ),
