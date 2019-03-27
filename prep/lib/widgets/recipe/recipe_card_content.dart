@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:validators/validators.dart';
+
 import 'package:prep/utils/document_data_provider.dart';
 import 'package:prep/widgets/recipe/error_recipe_not_found.dart';
 import 'package:prep/widgets/recipe/recipe_ingredient_list.dart';
@@ -17,8 +19,9 @@ class RecipeCardContent extends StatelessWidget {
     final dynamic dynamicIngredientListData = documentData['ingredients'];
 
     final dynamic dynamicMethodListData = documentData['method'];
-    final dynamic dynamicExternalUrlData = documentData['externalURL'];
-    final dynamic dynamicNoteData = documentData['note'];
+    final dynamic dynamicExternalUrlData =
+        documentData['externalURL']?.toString() ?? '';
+    final dynamic dynamicNoteData = documentData['note']?.toString();
 
     //check data
 
@@ -42,7 +45,11 @@ class RecipeCardContent extends StatelessWidget {
       _addWithSpacer(RecipeMethodList(dynamicMethodListData), content);
     }
 
-    if (dynamicExternalUrlData != null) {
+    if (isURL(
+      dynamicExternalUrlData,
+      allowUnderscore: true,
+      requireTld: false,
+    )) {
       assert(dynamicExternalUrlData.runtimeType == String);
       _addWithSpacer(ExternalRecipeLink(dynamicExternalUrlData), content);
     }
