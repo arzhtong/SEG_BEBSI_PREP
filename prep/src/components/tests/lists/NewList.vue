@@ -1,6 +1,6 @@
 <template>
   <div id="new-list" style="background-color:white; padding: 10px 50px 10px 50px; margin-top:10px">
-    <h3>New List</h3>
+    <h3>New List View</h3>
     <div class="row">
       <ul class="collapsible">
         <li>
