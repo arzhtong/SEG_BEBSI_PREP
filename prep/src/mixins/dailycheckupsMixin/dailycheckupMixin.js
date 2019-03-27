@@ -112,7 +112,7 @@ export const dailycheckupMixin ={
             }
             
             var l=Object.keys(map).length
-
+            if(l>0){
             db.collection("tests")
               .doc(this.$route.params.test_id)
               .collection("dailyCheckups")
@@ -122,18 +122,17 @@ export const dailycheckupMixin ={
                 daysBeforeTest: Number(this.daysBeforeTest)
               })
               .then(docRef => {
-                if(l>0){
                 alert("Successfully created new Daily Check-ups!");
                 this.$router.push({
                   name: "view-dailycheckups",
                   params: { test_id: this.$route.params.test_id }
                 })
-              }
-              else{
-                alert("You must create at least one instruction");
-              }
               })
               .catch(error => console.log(err));
+            }
+            else{
+              alert("You must add at least one instruction")
+            }
           },
           /*
           This method put all the elements in the array to the 
