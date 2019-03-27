@@ -87,46 +87,28 @@ class RecipeCardHeader extends StatelessWidget {
     );
   }
 
-  //TODO: add bundle check for file before loading.
-  //TODO: Refactor via a list of available images.
   Image _getDefaultImageFromRecipeType(String type) {
-    if (type != null) {
-      switch (type.trim().toLowerCase()) {
-        case 'salad':
-          return _getAssetImage('salad.jpg');
-        case 'soup':
-          return _getAssetImage('soup.jpg');
-        case 'vegetable':
-          return _getAssetImage('vegetable.jpg');
-        case 'roast':
-          return _getAssetImage('roast.jpg');
-        case 'stew':
-          return _getAssetImage('stew.jpg');
-        case 'pizza':
-          return _getAssetImage('pizza.jpg');
-        case 'pasta':
-          return _getAssetImage('pasta.jpg');
-        case 'sandwich':
-          return _getAssetImage('sandwich.jpg');
-        case 'wrap':
-          return _getAssetImage('wrap.jpg');
-        case 'pie':
-          return _getAssetImage('pie.jpg');
-        case 'fish':
-          return _getAssetImage('fish.jpg');
-        case 'steak':
-          return _getAssetImage('steak.jpg');
-        case 'chicken':
-          return _getAssetImage('chicken.jpg');
-        case 'curry':
-          return _getAssetImage('curry.jpg');
-        case 'eggs':
-          return _getAssetImage('eggs.jpg');
-        default:
-          return _getAssetImage('default.jpg');
-      }
-    }
-    return _getAssetImage('default.jpg');
+    const Map<String, String> imageOfType = {
+      'salad': 'salad.jpg',
+      'soup': 'soup.jpg',
+      'vegetable': 'vegetable.jpg',
+      'roast': 'roast.jpg',
+      'stew': 'stew.jpg',
+      'pizza': 'pizza.jpg',
+      'pasta': 'pasta.jpg',
+      'sandwich': 'sandwich.jpg',
+      'wrap': 'wrap.jpg',
+      'pie': 'pie.jpg',
+      'fish': 'fish.jpg',
+      'steak': 'steak.jpg',
+      'chicken': 'chicken.jpg',
+      'curry': 'curry.jpg',
+      'eggs': 'eggs.jpg',
+    };
+
+    return _getAssetImage(
+      (type != null) ? imageOfType[type.trim().toLowerCase()] : 'default.jpg',
+    );
   }
 
   Image _getAssetImage(String name) =>

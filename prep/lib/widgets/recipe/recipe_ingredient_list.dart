@@ -4,10 +4,9 @@ import 'package:prep/utils/misc_functions.dart'
     show convertDynamicListToStringList;
 
 import 'package:prep/widgets/recipe/recipe_ingredient_list_item.dart';
+import 'package:prep/utils/constants.dart';
 
 class RecipeIngredientList extends StatelessWidget {
-  static const String _ingredientListHeadline = "Show ingredients";
-
   final dynamic dynamicIngredientList;
 
   RecipeIngredientList(this.dynamicIngredientList);
@@ -24,14 +23,13 @@ class RecipeIngredientList extends StatelessWidget {
     }
 
     return ExpansionTile(
-      key: Key('ingredientList'),
+      initiallyExpanded: Constants.kIsDebug,
       title: Text(
-        _ingredientListHeadline,
+        Constants.kIngredientListHeadline,
         style: Theme.of(context).textTheme.button,
       ),
       children: _ingredientListItems,
       backgroundColor: Colors.black12,
-      initiallyExpanded: false,
     );
   }
 }

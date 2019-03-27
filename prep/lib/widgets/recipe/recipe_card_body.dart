@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prep/utils/constants.dart';
 
 import 'package:prep/utils/document_data_provider.dart';
 import 'package:prep/widgets/recipe/recipe_card_content.dart';
@@ -34,7 +35,7 @@ class RecipeCardBody extends StatelessWidget {
     }
 
     return ExpansionTile(
-      key: Key('recipeCardBody'),
+      initiallyExpanded: Constants.kIsDebug,
       title: Column(
         verticalDirection: VerticalDirection.down,
         crossAxisAlignment: CrossAxisAlignment.start,
