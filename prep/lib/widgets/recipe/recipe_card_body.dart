@@ -7,9 +7,9 @@ import 'package:prep/widgets/recipe/recipe_card_content.dart';
 class RecipeCardBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var title = DocumentDataProvider.of(context).documentData['title'];
+    var title = DocumentDataProvider.of(context).documentData['title'] ??
+        Constants.kDefaultRecipeTitle;
     var subtitle = DocumentDataProvider.of(context).documentData['subtitle'];
-    assert(title != null);
     assert(title is String);
     if (subtitle != null) {
       assert(subtitle is String);
