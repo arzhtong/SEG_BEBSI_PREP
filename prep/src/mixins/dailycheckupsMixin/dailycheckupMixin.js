@@ -110,7 +110,9 @@ export const dailycheckupMixin ={
             for (var i = 0; i < this.instructions.length; i++) {
               map[i] = { answer: false, question: this.instructions[i].value, lastChecked: lastChecked };
             }
-      
+            
+            var l=Object.keys(map).length
+
             db.collection("tests")
               .doc(this.$route.params.test_id)
               .collection("dailyCheckups")
@@ -120,11 +122,16 @@ export const dailycheckupMixin ={
                 daysBeforeTest: Number(this.daysBeforeTest)
               })
               .then(docRef => {
+                if(l>0){
                 alert("Successfully created new Daily Check-ups!");
                 this.$router.push({
                   name: "view-dailycheckups",
                   params: { test_id: this.$route.params.test_id }
-                });
+                })
+              }
+              else{
+                alert("You must create at least one instruction");
+              }
               })
               .catch(error => console.log(err));
           },

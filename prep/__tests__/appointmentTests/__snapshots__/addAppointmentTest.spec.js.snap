@@ -1,0 +1,207 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component renders correctly 1`] = `
+<div
+  id="new-appointment"
+  style="background-color: white; padding: 10px 50px 10px 50px; margin-top: 10px;"
+>
+  <div
+    id="loader"
+  >
+    <div
+      class="preloader-wrapper big active"
+      id="el"
+    >
+      <div
+        class="spinner-layer spinner-blue-only"
+      >
+        <div
+          class="circle-clipper left"
+        >
+          <div
+            class="circle"
+          />
+        </div>
+         
+        <div
+          class="gap-patch"
+        >
+          <div
+            class="circle"
+          />
+        </div>
+         
+        <div
+          class="circle-clipper right"
+        >
+          <div
+            class="circle"
+          />
+        </div>
+      </div>
+    </div>
+     
+    <label
+      style="font-size: 25px;"
+    >
+      Generating Code... Please wait!
+    </label>
+  </div>
+   
+  <div
+    id="mainScreen"
+  >
+    <h3>
+      New Appointment
+    </h3>
+     
+    <div
+      class="row"
+    >
+      <form
+        class="col s12"
+      >
+        <div
+          class="row"
+        >
+          <div
+            class="input-field col s12"
+          >
+            <input
+              class="datepicker"
+              min="2019-01-01"
+              required="required"
+              type="date"
+            />
+             
+            <label>
+              Date
+            </label>
+          </div>
+        </div>
+         
+        <div
+          class="row"
+        >
+          <div
+            class="input-field col s12"
+          >
+            <input
+              class="timepicker"
+              required="required"
+              type="time"
+            />
+             
+            <label>
+              Time
+            </label>
+          </div>
+        </div>
+         
+        <div
+          class="row"
+        >
+          <div
+            class="input-field col s12"
+          >
+            <span>
+              Location
+            </span>
+             
+            <input
+              required="required"
+              type="text"
+            />
+          </div>
+        </div>
+         
+        <div
+          class="row"
+        >
+          <div
+            class="input-field col s12"
+          >
+            <span>
+              Contact Number
+            </span>
+             
+            <input
+              required="required"
+              type="number"
+            />
+          </div>
+        </div>
+         
+        <div
+          class="row"
+        >
+          <div
+            class="input-field col s12"
+          >
+            <span>
+              Staff Member
+            </span>
+             
+            <input
+              disabled="disabled"
+              required="required"
+              type="text"
+            />
+          </div>
+        </div>
+         
+        <div
+          class="row"
+        >
+          <div
+            class="input-field col s12"
+          >
+            <span>
+              Choose Test
+            </span>
+             
+            <select
+              class="browser-default"
+              id="selectTest"
+              style="color: black;"
+            />
+          </div>
+        </div>
+         
+        <div
+          class="row"
+        >
+          <div
+            class="input-field col s12"
+          >
+            <span>
+              Generated Mobile Code
+            </span>
+             
+            <input
+              disabled="disabled"
+              required="required"
+              type="text"
+            />
+          </div>
+        </div>
+         
+        <button
+          class="btn"
+          id="submitAddAppBtn"
+          type="submit"
+        >
+          Submit
+        </button>
+         
+        <a
+          class="btn grey"
+          id="cancelAddAppBtn"
+        >
+          Cancel
+        </a>
+      </form>
+    </div>
+  </div>
+</div>
+`;
