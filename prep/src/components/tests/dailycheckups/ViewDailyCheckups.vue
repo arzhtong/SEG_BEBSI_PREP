@@ -22,7 +22,7 @@
                        </tbody>
                        <br>
                         <router-link v-bind:to="{name: 'new-dailycheckups', params: {test_id: testID}}"> <button class="btn green" style="position:relative;text-align:center;">Add DailyCheckUps</button></router-link>
-                        <router-link to="/view-tests" ><button class="btn grey" style="margin:20px;">Back</button></router-link>
+                        <router-link to="/view-tests" ><button id="GoBackTest" class="btn grey" style="margin:20px;">Back</button></router-link>
                        
                    </table>
                </div>
