@@ -10,6 +10,7 @@ class MakeHelpIcon extends StatelessWidget {
       return AlertDialog(content: Text('No Description Available'));
     } else {
       return IconButton(
+        key: Key("helpButton"),
           icon: new Icon(Icons.help, color: Colors.white),
           onPressed: () {
             _makeAlert(context, info);

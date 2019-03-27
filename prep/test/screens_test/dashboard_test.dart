@@ -643,7 +643,7 @@ void main() {
     expect(multipleCardFinder, findsNWidgets(2));
   });
 
-  testWidgets("Help button is clickable", (WidgetTester tester)async{
+  testWidgets("Help button is clickable and displays the help dialog", (WidgetTester tester)async{
     List<Map<String, Map<String, dynamic>>> maps = new List();
 
     Future<List<Map<String, Map<String, dynamic>>>> futureMap =
@@ -667,10 +667,13 @@ void main() {
         storage: mockStorage, backend: mockBackend, child: dashboard));
     await tester.pump(Duration.zero);
 
-    await tester.tap(find.byWidget(MakeHelpIcon('This screen shows a calendar with all your due appointments. Tap on one of them to get more information.')));
+    final helpButtonFinder = find.byKey(Key("helpButton"));
+    expect(helpButtonFinder, findsOneWidget);
+
+    await tester.tap(helpButtonFinder);
     await tester.pump();
 
-    final cardFinder = find.byType(Card);
-    expect(cardFinder, findsOneWidget);
+    final helpAlertDialogFinder = find.byType(AlertDialog);
+    expect(helpAlertDialogFinder, findsOneWidget);
   });
 }
