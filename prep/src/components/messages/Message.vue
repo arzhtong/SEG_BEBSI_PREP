@@ -4,7 +4,7 @@
       <div id="messages" tag="msg">
         <ul>
           <li v-for="message in messages" v-bind:key="message.msgKey">
-            <div v-if="message.isPatient == false" class="containerChat" style="max-width:100%;">
+            <div v-if="message.isPatient == false" class="containerChat" style="max-width:100%;overflow:hidden;">
               <p>{{message.content}}</p>
               <span class="time-left">{{message.datetime}}</span>
               <div>
@@ -16,7 +16,7 @@
             <div
               v-if="message.isPatient == true"
               class="containerChat darker"
-              style="max-width:100%"
+              style="max-width:100%;overflow:hidden;"
             >
               <p>{{message.content}}</p>
               <span class="time-left">{{message.datetime}}</span>
