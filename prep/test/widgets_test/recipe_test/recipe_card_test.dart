@@ -4,7 +4,7 @@ import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:prep/utils/constants.dart';
 
-import 'package:prep/widgets/recipe/recipe_card.dart';
+import 'package:prep/widgets/recipe/recipe_card_widgets_export.dart';
 
 class MockRecipeCardData extends Mock implements Map<String, dynamic> {
   static const String validTitle = 'valid title';
@@ -94,6 +94,10 @@ class MockRecipeCardData extends Mock implements Map<String, dynamic> {
         externalUrl: 'http://example.com',
         note: validNote,
       );
+
+  MockRecipeCardData configureEmpty() => configure(
+        title: null,
+      );
 }
 
 void main() {
@@ -103,98 +107,111 @@ void main() {
         ),
       );
 
-  testWidgets(
-    'RecipeCard should build each component with all data fields set and valid',
-    (WidgetTester tester) async {
-      final MockRecipeCardData mockRecipeCardData =
-          MockRecipeCardData().configureValid();
+  group('RecipeCard', () {
+    testWidgets(
+      'should build each component with all data fields set and valid',
+      (WidgetTester tester) async {
+        final RecipeCard cardToTest = RecipeCard(
+          data: MockRecipeCardData().configureValid(),
+        );
 
+        await tester.pumpWidget(makeTestableWidget(cardToTest));
+        await tester.pump();
+
+        expect(MockRecipeCardData.validTitleFinder, findsOneWidget);
+        expect(MockRecipeCardData.validSubtitleFinder, findsOneWidget);
+        expect(MockRecipeCardData.labelFinder, findsNWidgets(3));
+        expect(MockRecipeCardData.ingredientListFinder, findsOneWidget);
+        expect(MockRecipeCardData.methodListFinder, findsOneWidget);
+        expect(MockRecipeCardData.urlButtonFinder, findsOneWidget);
+        expect(MockRecipeCardData.validNoteFinder, findsOneWidget);
+        expect(MockRecipeCardData.methodListItemFinder, findsNWidgets(3));
+        expect(MockRecipeCardData.ingredientListItemFinder, findsNWidgets(3));
+      },
+    );
+
+    testWidgets(
+      'should not build internal recipe if method list is not specified',
+      (WidgetTester tester) async {
+        final MockRecipeCardData mockRecipeCardData =
+            MockRecipeCardData().configureValid();
+        //remove method list
+        when(mockRecipeCardData['method']).thenReturn(null);
+
+        final RecipeCard cardToTest = RecipeCard(
+          data: mockRecipeCardData,
+        );
+
+        await tester.pumpWidget(makeTestableWidget(cardToTest));
+        await tester.pump();
+
+        expect(MockRecipeCardData.ingredientListFinder, findsNothing);
+        expect(MockRecipeCardData.methodListFinder, findsNothing);
+        expect(MockRecipeCardData.methodListItemFinder, findsNothing);
+        expect(MockRecipeCardData.ingredientListItemFinder, findsNothing);
+      },
+    );
+
+    testWidgets(
+      'should not build internal recipe if method ingredient list is not specified',
+      (WidgetTester tester) async {
+        final MockRecipeCardData mockRecipeCardData =
+            MockRecipeCardData().configureValid();
+        //remove method list
+        when(mockRecipeCardData['ingredients']).thenReturn(null);
+
+        final RecipeCard cardToTest = RecipeCard(
+          data: mockRecipeCardData,
+        );
+
+        await tester.pumpWidget(makeTestableWidget(cardToTest));
+        await tester.pump();
+
+        expect(MockRecipeCardData.ingredientListFinder, findsNothing);
+        expect(MockRecipeCardData.methodListFinder, findsNothing);
+        expect(MockRecipeCardData.methodListItemFinder, findsNothing);
+        expect(MockRecipeCardData.ingredientListItemFinder, findsNothing);
+      },
+    );
+
+    testWidgets(
+      'should build Error message if neither an internal nor external recipe are specified',
+      (WidgetTester tester) async {
+        final MockRecipeCardData mockRecipeCardData =
+            MockRecipeCardData().configureValid();
+        //remove method list
+        when(mockRecipeCardData['ingredients']).thenReturn(null);
+        when(mockRecipeCardData['method']).thenReturn(null);
+        when(mockRecipeCardData['externalURL']).thenReturn(null);
+
+        final RecipeCard cardToTest = RecipeCard(
+          data: mockRecipeCardData,
+        );
+
+        await tester.pumpWidget(makeTestableWidget(cardToTest));
+        await tester.pump();
+
+        expect(MockRecipeCardData.ingredientListFinder, findsNothing);
+        expect(MockRecipeCardData.methodListFinder, findsNothing);
+        expect(MockRecipeCardData.methodListItemFinder, findsNothing);
+        expect(MockRecipeCardData.ingredientListItemFinder, findsNothing);
+        expect(MockRecipeCardData.urlButtonFinder, findsNothing);
+
+        expect(find.text(Constants.kErrorRecipeNotFound), findsOneWidget);
+      },
+    );
+
+    testWidgets('should build default data when required data is not spesified',
+        (WidgetTester tester) async {
       final RecipeCard cardToTest = RecipeCard(
-        data: mockRecipeCardData,
+        data: MockRecipeCardData().configureEmpty(),
       );
 
       await tester.pumpWidget(makeTestableWidget(cardToTest));
       await tester.pump();
 
-      expect(MockRecipeCardData.validTitleFinder, findsOneWidget);
-      expect(MockRecipeCardData.validSubtitleFinder, findsOneWidget);
-      expect(MockRecipeCardData.labelFinder, findsNWidgets(3));
-      expect(MockRecipeCardData.ingredientListFinder, findsOneWidget);
-      expect(MockRecipeCardData.methodListFinder, findsOneWidget);
-      expect(MockRecipeCardData.urlButtonFinder, findsOneWidget);
-      expect(MockRecipeCardData.validNoteFinder, findsOneWidget);
-      expect(MockRecipeCardData.methodListItemFinder, findsNWidgets(3));
-      expect(MockRecipeCardData.ingredientListItemFinder, findsNWidgets(3));
-    },
-  );
-
-  testWidgets(
-    'RecipeCard should not build internal recipe if method list is not specified',
-    (WidgetTester tester) async {
-      final MockRecipeCardData mockRecipeCardData =
-          MockRecipeCardData().configureValid();
-      //remove method list
-      when(mockRecipeCardData['method']).thenReturn(null);
-
-      final RecipeCard cardToTest = RecipeCard(
-        data: mockRecipeCardData,
-      );
-
-      await tester.pumpWidget(makeTestableWidget(cardToTest));
-      await tester.pump();
-
-      expect(MockRecipeCardData.ingredientListFinder, findsNothing);
-      expect(MockRecipeCardData.methodListFinder, findsNothing);
-      expect(MockRecipeCardData.methodListItemFinder, findsNothing);
-      expect(MockRecipeCardData.ingredientListItemFinder, findsNothing);
-    },
-  );
-
-  testWidgets(
-    'RecipeCard should not build internal recipe if method ingredient list is not specified',
-    (WidgetTester tester) async {
-      final MockRecipeCardData mockRecipeCardData =
-          MockRecipeCardData().configureValid();
-      //remove method list
-      when(mockRecipeCardData['ingredients']).thenReturn(null);
-
-      final RecipeCard cardToTest = RecipeCard(
-        data: mockRecipeCardData,
-      );
-
-      await tester.pumpWidget(makeTestableWidget(cardToTest));
-      await tester.pump();
-
-      expect(MockRecipeCardData.ingredientListFinder, findsNothing);
-      expect(MockRecipeCardData.methodListFinder, findsNothing);
-      expect(MockRecipeCardData.methodListItemFinder, findsNothing);
-      expect(MockRecipeCardData.ingredientListItemFinder, findsNothing);
-    },
-  );
-
-  testWidgets(
-    'RecipeCard should build Error message if neither an internal nor external recipe are specified',
-    (WidgetTester tester) async {
-      final MockRecipeCardData mockRecipeCardData =
-          MockRecipeCardData().configureValid();
-      //remove method list
-      when(mockRecipeCardData['ingredients']).thenReturn(null);
-      when(mockRecipeCardData['method']).thenReturn(null);
-      when(mockRecipeCardData['externalURL']).thenReturn(null);
-
-      final RecipeCard cardToTest = RecipeCard(
-        data: mockRecipeCardData,
-      );
-
-      await tester.pumpWidget(makeTestableWidget(cardToTest));
-      await tester.pump();
-
-      expect(MockRecipeCardData.ingredientListFinder, findsNothing);
-      expect(MockRecipeCardData.methodListFinder, findsNothing);
-      expect(MockRecipeCardData.methodListItemFinder, findsNothing);
-      expect(MockRecipeCardData.ingredientListItemFinder, findsNothing);
-      expect(MockRecipeCardData.urlButtonFinder, findsNothing);
-      //TODO: add error message checker.
-    },
-  );
+      expect(find.widgetWithText(RecipeCardBody, Constants.kDefaultRecipeTitle),
+          findsOneWidget);
+    });
+  });
 }

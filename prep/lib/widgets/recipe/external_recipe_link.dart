@@ -18,8 +18,7 @@ class ExternalRecipeLink extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        onPressed: () => print(
-            "I WAS TAPPED BIYATCH") /* launchURL(externalUrlData.toString()) */,
+        onPressed: () => launchURL(externalUrlData.toString()),
         color: Theme.of(context).accentColor,
         elevation: 4.0,
       ),
