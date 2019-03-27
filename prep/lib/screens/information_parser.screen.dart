@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_html/flutter_html.dart';
 
-import 'package:prep/utils/query.dart';
+import 'package:prep/utils/backend.dart';
+import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 import 'package:prep/utils/misc_functions.dart';
 
@@ -12,11 +13,12 @@ class InformationParser extends StatelessWidget {
 
   InformationParser(this._documentId, this._articleName);
 
-  Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
+  Widget _buildListItem(BuildContext context, Map<String, dynamic> dataMap) {
     return Container(
         child: SingleChildScrollView(
       child: Html(
-        data: document['description'],
+        key: Key('articleText'),
+        data: dataMap['description'],
         padding: EdgeInsets.all(20.0),
         useRichText: true,
         //turn this off to get the alternative parser
@@ -37,17 +39,19 @@ class InformationParser extends StatelessWidget {
         title: Text(_articleName),
       ),
       body: StreamBuilder(
-          stream: Queries.informationSnapshots(_documentId),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
+          stream: BackendProvider.of(context)
+              .backend
+              .informationSnapshots(_documentId),
+          builder: (context, dataSnapshot) {
+            if (!dataSnapshot.hasData) {
               return const Align(
                 alignment: Alignment.topCenter,
                 child: LinearProgressIndicator(),
               );
             } else {
-              if (snapshot.data['description'] != null &&
-                  snapshot.data['description'].length > 0) {
-                return _buildListItem(context, snapshot.data);
+              if (dataSnapshot.data['description'] != null &&
+                  dataSnapshot.data['description'].length > 0) {
+                return _buildListItem(context, dataSnapshot.data);
               } else {
                 return EmptyScreenPlaceholder("This article is empty", "");
               }

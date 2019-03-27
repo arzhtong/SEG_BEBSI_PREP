@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prep/utils/constants.dart';
 
 import 'package:prep/utils/document_data_provider.dart';
 import 'package:prep/widgets/recipe/recipe_card_content.dart';
@@ -6,9 +7,8 @@ import 'package:prep/widgets/recipe/recipe_card_content.dart';
 class RecipeCardBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var title = FirestoreDocumentDataProvider.of(context).documentData['title'];
-    var subtitle =
-        FirestoreDocumentDataProvider.of(context).documentData['subtitle'];
+    var title = DocumentDataProvider.of(context).documentData['title'];
+    var subtitle = DocumentDataProvider.of(context).documentData['subtitle'];
     assert(title != null);
     assert(title is String);
     if (subtitle != null) {
@@ -28,7 +28,6 @@ class RecipeCardBody extends StatelessWidget {
         Text(
           subtitle,
           overflow: TextOverflow.ellipsis,
-          
           maxLines: 2,
           style: Theme.of(context).textTheme.subhead.copyWith(fontSize: 18.0),
         ),
@@ -36,6 +35,7 @@ class RecipeCardBody extends StatelessWidget {
     }
 
     return ExpansionTile(
+      initiallyExpanded: Constants.kIsDebug,
       title: Column(
         verticalDirection: VerticalDirection.down,
         crossAxisAlignment: CrossAxisAlignment.start,

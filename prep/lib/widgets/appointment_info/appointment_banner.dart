@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:prep/utils/query.dart';
+import 'package:prep/utils/backend_provider.dart';
+import 'package:prep/utils/backend.dart';
 import 'package:prep/utils/misc_functions.dart';
 
 class AppointmentDetailsBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final BaseBackend backend = BackendProvider.of(context).backend;
+
     return Card(
+      key: Key('rootCard'),
       elevation: 3.0,
-      color: Queries.color,
+      color: backend.color,
       child: Container(
         padding: EdgeInsets.all(10.0),
         alignment: Alignment.centerLeft,
@@ -16,22 +20,36 @@ class AppointmentDetailsBanner extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             _TitleText("Date"),
-            _SubtitleText(dateFormatter(Queries.dateTime)),
+            _SubtitleText(dateFormatter(backend.dateTime)),
             Divider(
               color: Colors.white,
             ),
             _TitleText("Time"),
-            _SubtitleText(timeFormatter(Queries.dateTime)),
+            _SubtitleText(timeFormatter(backend.dateTime)),
             Divider(
               color: Colors.white,
             ),
             _TitleText("Location"),
-            _SubtitleText(Queries.location),
+            _SubtitleText(backend.location),
             Divider(
               color: Colors.white,
             ),
-            _TitleText("Staff member"),
-            _SubtitleText(Queries.doctorName),
+            _TitleText("Staff"),
+            _SubtitleText(backend.doctorName),
+            Divider(
+              color: Colors.white,
+            ),
+            _TitleText("Contact Number"),
+            Text(
+              "Call to reschedule appointments",
+              style: TextStyle(
+                fontSize: 15.0,
+                fontWeight: FontWeight.w400,
+                fontStyle: FontStyle.italic,
+                color: Colors.white,
+              ),
+            ),
+            _SubtitleText(backend.contactNumber),
           ],
         ),
       ),

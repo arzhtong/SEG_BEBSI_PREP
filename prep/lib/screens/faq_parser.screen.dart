@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:prep/utils/query.dart';
+import 'package:prep/utils/backend.dart';
+import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 import 'package:prep/widgets/faq_parser/faq_expansion_tile.dart';
 
 class FaqParser extends StatelessWidget {
-  Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
-    return FaqExpansionTIle(document['question'], document['answer'],
-        document['chatShortcut'], document['informationShortcut']);
+  Widget _buildListItem(BuildContext context, Map<String, dynamic> dataMap) {
+    return FaqExpansionTile(dataMap['question'], dataMap['answer'],
+        dataMap['chatShortcut'], dataMap['informationShortcut']);
   }
 
   @override
@@ -19,21 +20,21 @@ class FaqParser extends StatelessWidget {
         title: Text("FAQ"),
       ),
       body: StreamBuilder(
-        stream: Queries.faqSnapshots,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
+        stream: BackendProvider.of(context).backend.faqSnapshots,
+        builder: (context, mapListSnapshot) {
+          if (!mapListSnapshot.hasData) {
             return const Align(
               alignment: Alignment.topCenter,
               child: LinearProgressIndicator(),
             );
           } else {
-            if (snapshot.data.documents != null &&
-                snapshot.data.documents.length > 0) {
+            if (mapListSnapshot.data != null &&
+                mapListSnapshot.data.length > 0) {
               return ListView.builder(
                 padding: EdgeInsets.only(top: 10.0),
-                itemCount: snapshot.data.documents.length,
+                itemCount: mapListSnapshot.data.length,
                 itemBuilder: (context, index) =>
-                    _buildListItem(context, snapshot.data.documents[index]),
+                    _buildListItem(context, mapListSnapshot.data[index]),
               );
             } else {
               return EmptyScreenPlaceholder(

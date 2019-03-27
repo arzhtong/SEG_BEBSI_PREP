@@ -4,7 +4,7 @@ import 'package:prep/screens/appointment_info.screen.dart';
 import 'package:prep/screens/appointment_prep.screen.dart';
 import 'package:prep/screens/daily_checkups.screen.dart';
 import 'package:prep/screens/messaging.screen.dart';
-import 'package:prep/utils/query.dart';
+import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/widgets/dashboard/help_dialog.dart';
 
 class Appointment extends StatefulWidget {
@@ -31,13 +31,11 @@ class _AppointmentState extends State<Appointment> {
       case 1:
         return (_appointmentPrep != null)
             ? _appointmentPrep
-            : _appointmentPrep =
-                AppointmentPrep();
+            : _appointmentPrep = AppointmentPrep();
       case 2:
         return (_dailyCheckups != null)
             ? _dailyCheckups
-            : _dailyCheckups =
-                DailyCheckups();
+            : _dailyCheckups = DailyCheckups();
       case 3:
         return (_messagingScreen != null)
             ? _messagingScreen
@@ -79,12 +77,13 @@ class _AppointmentState extends State<Appointment> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.indigo,
-          title: Text(Queries.appointmentName),
+          title: Text(BackendProvider.of(context).backend.appointmentName),
           actions: <Widget>[_chooseHelpMenuToDisplay()]),
       body: Center(
         child: _getPage(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        key: Key('appointmentPage'),
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
               icon: Icon(Icons.info), title: Text('Information')),
@@ -107,16 +106,16 @@ class _AppointmentState extends State<Appointment> {
     return (_selectedIndex == 3)
         ? Icon(Icons.chat)
         : StreamBuilder(
-            stream: Queries.messageSnapshots,
+            stream: BackendProvider.of(context)
+                .backend
+                .messagesSnapshots(false),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                snapshot.data.documentChanges.forEach((change) {
-                  if (change.type == DocumentChangeType.added &&
-                      !change.document.data['seenByPatient']) {
-                    _unseenMessages = true;
-                  }
+                snapshot.data.forEach((message) {
+                  if (!message['seenByPatient']) _unseenMessages = true;
                 });
               }
+
               return (_unseenMessages)
                   ? Icon(Icons.chat, color: Colors.red)
                   : Icon(Icons.chat);

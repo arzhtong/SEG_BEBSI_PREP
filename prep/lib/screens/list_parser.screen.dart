@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:prep/utils/query.dart';
+import 'package:prep/utils/backend.dart';
+import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/widgets/list_parser/description_expansion_tile.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 
@@ -19,20 +20,23 @@ class CategoryListParser extends StatelessWidget {
         title: Text(_title),
       ),
       body: StreamBuilder(
-          stream: Queries.categoryListSnapshots(documentId),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
+          stream: BackendProvider.of(context)
+              .backend
+              .categoryListSnapshots(documentId),
+          builder: (context, dataSnapshot) {
+            if (!dataSnapshot.hasData) {
               return const Align(
                 alignment: Alignment.topCenter,
                 child: LinearProgressIndicator(),
               );
             } else {
-              if (snapshot.data['maps'] != null && snapshot.data['maps'].length > 0) {
+              if (dataSnapshot.data['maps'] != null &&
+                  dataSnapshot.data['maps'].length > 0) {
                 return ListView.builder(
                   padding: EdgeInsets.all(10.0),
                   itemCount: 1,
                   itemBuilder: (context, index) =>
-                      _buildDropDownList(context, snapshot.data),
+                      _buildDropDownList(context, dataSnapshot.data),
                 );
               } else {
                 return EmptyScreenPlaceholder("No items in this list", "");
@@ -42,17 +46,16 @@ class CategoryListParser extends StatelessWidget {
     );
   }
 
-  Widget _buildDropDownList(BuildContext context, DocumentSnapshot document) {
+  Widget _buildDropDownList(
+      BuildContext context, Map<String, dynamic> dataMap) {
     List<Widget> dropDowns = new List();
-    List<dynamic> mappedData = document['maps'];
-
-    print(document['maps']);
+    List<dynamic> mappedData = dataMap['maps'];
 
     mappedData.forEach((value) {
       dropDowns.add(DescriptiveExpansionTile(
           value['name'], value['description'], value['list']));
     });
 
-    return Column(children: dropDowns);
+    return Column(key: Key("listsColumn"), children: dropDowns);
   }
 }

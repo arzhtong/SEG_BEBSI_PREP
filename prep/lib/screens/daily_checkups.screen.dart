@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:prep/utils/backend_provider.dart';
 
-import 'package:prep/utils/query.dart';
+import 'package:prep/utils/backend.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 import 'package:prep/utils/misc_functions.dart';
 
 class DailyCheckups extends StatelessWidget {
-  CircleAvatar _getDailyCheckupIcon(int daysBeforeTest) {
+  CircleAvatar _getDailyCheckupIcon(int daysBeforeTest, BuildContext context) {
+    final BaseBackend backend = BackendProvider.of(context).backend;
+
     return CircleAvatar(
+      key: Key('dateIcon'),
       backgroundColor:
           (daysBeforeTest == 0) ? Colors.red[400] : Colors.indigo[400],
       child: Column(
@@ -15,7 +18,7 @@ class DailyCheckups extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            Queries.dateTime
+            backend.dateTime
                 .subtract(Duration(days: daysBeforeTest))
                 .day
                 .toString(),
@@ -26,7 +29,7 @@ class DailyCheckups extends StatelessWidget {
             ),
           ),
           Text(
-            monthAbbreviation(Queries.dateTime),
+            monthAbbreviation(backend.dateTime),
             style: TextStyle(color: Colors.white, fontSize: 10.0),
           ),
         ],
@@ -45,9 +48,13 @@ class DailyCheckups extends StatelessWidget {
     }
   }
 
-  Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
+  Widget _buildListItem(BuildContext context, Map<String, Map<String, dynamic>> docIdDataMap) {
     List<Widget> instructionWidgets = new List();
-    Map<dynamic, dynamic> dynamicInstructions = document['instructions'];
+
+    String docID = docIdDataMap.keys.first;
+    Map<String, dynamic> dataMap = docIdDataMap[docID];
+
+    Map<dynamic, dynamic> dynamicInstructions = dataMap['instructions'];
 
     dynamicInstructions.forEach((index, map) {
       Map<dynamic, dynamic> checkupMap = map;
@@ -84,11 +91,9 @@ class DailyCheckups extends StatelessWidget {
                   activeTrackColor: Colors.green[100],
                   value: checkupMap['answer'],
                   onChanged: (_) {
-                    document.reference.updateData({
-                      // Toggles true/false for the daily checkup
-                      ('instructions.' + index + '.answer'): !checkupMap['answer'],
-                      ('instructions.' + index + '.lastChecked'): DateTime.now(),
-                    });
+                    print(docID);
+                    BackendProvider.of(context).backend.flickCheckupSwitch(
+                        docID, index, checkupMap['answer']);
                   },
                 ),
               ))
@@ -107,8 +112,8 @@ class DailyCheckups extends StatelessWidget {
         elevation: 3.0,
         child: ExpansionTile(
             initiallyExpanded: true,
-            leading: _getDailyCheckupIcon(document['daysBeforeTest']),
-            title: _getDailyCheckupText(document['daysBeforeTest']),
+            leading: _getDailyCheckupIcon(dataMap['daysBeforeTest'], context),
+            title: _getDailyCheckupText(dataMap['daysBeforeTest']),
             children: instructionWidgets),
       ),
     );
@@ -117,20 +122,21 @@ class DailyCheckups extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: Queries.dailyCheckupsSnapshots,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
+      key: Key('dailyCheckupsScreen'),
+      stream: BackendProvider.of(context).backend.dailyCheckupsSnapshots,
+      builder: (context, mapListSnapshot) {
+        if (!mapListSnapshot.hasData) {
           return const Align(
             alignment: Alignment.topCenter,
             child: LinearProgressIndicator(),
           );
         } else {
-          if (snapshot.data.documents != null && snapshot.data.documents.length > 0){
+          if (mapListSnapshot.data != null && mapListSnapshot.data.length > 0) {
             return ListView.builder(
               padding: EdgeInsets.only(top: 10, bottom: 10),
-              itemCount: snapshot.data.documents.length,
+              itemCount: mapListSnapshot.data.length,
               itemBuilder: (context, index) =>
-                  _buildListItem(context, snapshot.data.documents[index]),
+                  _buildListItem(context, mapListSnapshot.data[index]),
             );
           } else {
             return EmptyScreenPlaceholder("There are no checkups", "");

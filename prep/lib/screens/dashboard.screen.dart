@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-import 'package:prep/widgets/dashboard/calendar_label.dart';
-import 'package:prep/widgets/dashboard/calendar_card.dart';
-import 'package:prep/screens/empty_screen_placeholder.dart';
-import 'package:prep/utils/storage.dart';
-import 'package:prep/utils/query.dart';
+import 'package:prep/utils/backend.dart';
+import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/widgets/dashboard/help_dialog.dart';
+import 'package:prep/widgets/dashboard/calendar.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -20,12 +18,9 @@ class _DashboardState extends State<Dashboard> {
   // Firestore variables
   Widget cachedCalendar;
   List<DocumentSnapshot> documentList;
-  QuerySnapshot testDocList;
 
   // Codes file variables
-  Storage storage = new Storage();
   String codeFileState;
-  bool fileExists = false;
 
   // Form validation variables
   TextEditingController codeController = new TextEditingController();
@@ -37,11 +32,6 @@ class _DashboardState extends State<Dashboard> {
   void _subscribeToNotifications(String appointmentID) {
     final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
     firebaseMessaging.autoInitEnabled();
-    /* firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) {},
-      onResume: (Map<String, dynamic> message) {},
-      onLaunch: (Map<String, dynamic> message) {},
-    ); */
     firebaseMessaging.subscribeToTopic(appointmentID);
   }
 
@@ -65,20 +55,22 @@ class _DashboardState extends State<Dashboard> {
       codeFileState = "";
       codeController.text = '';
     });
-    return storage.writeData("");
+    return BackendProvider.of(context).storage.writeData("");
   }
 
-//  // Checks if a code exists in the Firestore
-  Future<bool> _isCodeInFirestore(String code) async {
-    List<String> liveIDs = new List();
+  // Checks if a code exists in the Firestore and is not used
+  Future<bool> _isCodeInFirestoreNotUsed(String code) async {
+    List<String> liveNotUsedIDs = new List();
 
-    await Queries.appointmentCodes.then((query) {
+    await BackendProvider.of(context).backend.appointmentCodes.then((query) {
       query.documents.forEach((document) {
-        liveIDs.add(document.documentID);
+        if (document['used'] == false) {
+          liveNotUsedIDs.add(document.documentID);
+        }
       });
     });
 
-    if (liveIDs.contains(code)) {
+    if (liveNotUsedIDs.contains(code)) {
       return true;
     } else {
       return false;
@@ -87,117 +79,47 @@ class _DashboardState extends State<Dashboard> {
 
   // Retrieves data from the Firestore and builds the calendar
   Future<Widget> _getDocData() async {
-    bool fileExists = await storage.fileExists();
+    bool fileExists = await BackendProvider.of(context).storage.fileExists();
 
     if (fileExists) {
       print("--- codes file found!");
     } else {
       print("--- codes file NOT found, creating one containing ','");
-      await storage.writeData(",");
+      await BackendProvider.of(context).storage.writeData(",");
     }
 
-    codeFileState = await storage.readData();
+    codeFileState = await BackendProvider.of(context).storage.readData();
     print("Raw codes file - in getDocData after reading: " + codeFileState);
 
     //reading appointments from the database and updating the codes file
-    documentList = new List();
-    testDocList = await Queries.appointmentCodes;
+    QuerySnapshot testDocList =
+        await BackendProvider.of(context).backend.appointmentCodes;
     documentList = testDocList.documents;
 
     // Get all the codes stored in the database
-    List<String> documentIDs = new List();
+    List<String> availableCodes = new List();
+
     documentList.forEach((doc) {
-      documentIDs.add(doc.documentID);
+      availableCodes.add(doc.documentID);
     });
 
     // Store all the codes in both the database and the codes file in the var
     String newCodeFileState = "";
+
     codeFileState.split(',').forEach((code) {
-      if (documentIDs.contains(code)) {
+      if (availableCodes.contains(code)) {
         newCodeFileState = newCodeFileState + code + ',';
       }
     });
 
     print("New codes files - after filtering: " + newCodeFileState);
 
-    // Saving the new sequence of codes in the codes file
-    await storage.writeData(newCodeFileState);
-
+    // Saving the new sequence of codes in the codes file and updating file state
+    await BackendProvider.of(context).storage.writeData(newCodeFileState);
     codeFileState = newCodeFileState;
 
     // building the return widget based on the updated (current) codes file
-    return _buildCalendarWidget();
-  }
-
-  bool _datesAreEqual(DateTime date1, DateTime date2) {
-    return (date1.day == date2.day &&
-        date1.month == date2.month &&
-        date1.year == date2.year);
-  }
-
-  Widget _buildCalendarWidget() {
-    // building the return widget based on the updated (current) codes file
-    List<Widget> calendarElements = new List();
-
-    if (codeFileState == null) {
-      return null;
-    } else if (codeFileState.isEmpty) {
-      return EmptyScreenPlaceholder(
-          "Your calendar is empty", "Add some appointments");
-    } else {
-      //Generates a list of filtered appointments
-      List<DocumentSnapshot> filteredDocuments = new List();
-      documentList.forEach((doc) {
-        if (_documentInCodeFile(doc.documentID)) {
-          filteredDocuments.add(doc);
-        }
-      });
-      documentList = filteredDocuments;
-
-      calendarElements.add(
-          CalendarLabel(documentList.elementAt(0).data['datetime'].toDate()));
-      calendarElements.add(CalendarCard(
-          documentList.elementAt(0).documentID,
-          documentList.elementAt(0).data['location'],
-          documentList.elementAt(0).data['datetime'].toDate(),
-          documentList.elementAt(0).data['testID'],
-          documentList.elementAt(0).data['doctor'],
-          documentList.elementAt(0).data['testName']));
-
-      for (int i = 1; i < documentList.length; i++) {
-        if (_datesAreEqual(documentList.elementAt(i).data['datetime'].toDate(),
-            (documentList.elementAt(i - 1).data['datetime'].toDate()))) {
-          calendarElements.add(CalendarCard(
-              documentList.elementAt(i).documentID,
-              documentList.elementAt(i).data['location'],
-              documentList.elementAt(i).data['datetime'].toDate(),
-              documentList.elementAt(i).data['testID'],
-              documentList.elementAt(i).data['doctor'],
-              documentList.elementAt(i).data['testName']));
-        } else {
-          calendarElements.add(CalendarLabel(
-              documentList.elementAt(i).data['datetime'].toDate()));
-          calendarElements.add(CalendarCard(
-              documentList.elementAt(i).documentID,
-              documentList.elementAt(i).data['location'],
-              documentList.elementAt(i).data['datetime'].toDate(),
-              documentList.elementAt(i).data['testID'],
-              documentList.elementAt(i).data['doctor'],
-              documentList.elementAt(i).data['testName']));
-        }
-      }
-
-      return ListView(
-        padding:
-            EdgeInsets.only(top: 10.0, bottom: 80.0, left: 10.0, right: 10.0),
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: calendarElements,
-          )
-        ],
-      );
-    }
+    return Calendar(codeFileState, documentList);
   }
 
   @override
@@ -322,11 +244,21 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
 
                             bool inFile = _parent._documentInCodeFile(
                                 _parent.codeController.text);
-                            bool inDatabase = await _parent._isCodeInFirestore(
-                                _parent.codeController.text);
+                            bool inDatabase =
+                                await _parent._isCodeInFirestoreNotUsed(
+                                    _parent.codeController.text);
 
+                            // The validator will succeed if the code is not already in the codes file and if it is not used in firestore
                             _parent.validationResultDb = inDatabase;
                             _parent.validationResultFile = inFile;
+
+                            // If the validator will succeed, start overwriting the used field already
+                            if (inDatabase && !inFile) {
+                              await Firestore.instance
+                                  .collection('appointments')
+                                  .document(_parent.codeController.text)
+                                  .updateData({'used': true});
+                            }
 
                             setState(() {
                               loading = false;
@@ -336,13 +268,14 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                               print(
                                   "To be new code test file - NEW CODE DIALOG");
 
-                              await _parent.storage.writeData(
+                              await BackendProvider.of(context).storage.writeData(
                                   _parent.codeFileState +
                                       _parent.codeController.text +
                                       ',');
 
                               _parent.setState(() {
-                                _parent._subscribeToNotifications(_parent.codeController.text);
+                                _parent._subscribeToNotifications(
+                                    _parent.codeController.text);
                                 _parent.codeController.text = "";
                               });
 

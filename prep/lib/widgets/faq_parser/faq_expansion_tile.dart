@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 
 import 'package:prep/screens/appointment.screen.dart';
 
-class FaqExpansionTIle extends StatelessWidget {
+class FaqExpansionTile extends StatelessWidget {
   final String question;
   final String answer;
   final bool chatShortcut;
   final bool infoShortcut;
 
-  FaqExpansionTIle(this.question, this.answer, this.chatShortcut, this.infoShortcut);
+  FaqExpansionTile(
+      this.question, this.answer, this.chatShortcut, this.infoShortcut);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -16,6 +18,7 @@ class FaqExpansionTIle extends StatelessWidget {
       child: Card(
         elevation: 3.0,
         child: ExpansionTile(
+          key: Key('expandableTile'),
           title: Text(question),
           children: <Widget>[
             ListTile(
@@ -30,25 +33,27 @@ class FaqExpansionTIle extends StatelessWidget {
               children: <Widget>[
                 (chatShortcut)
                     ? IconButton(
-                    icon: Icon(Icons.chat),
-                    color: Colors.indigo[400],
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Appointment(3)));
-                    })
+                        key: Key('chatButton'),
+                        icon: Icon(Icons.chat),
+                        color: Colors.indigo[400],
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Appointment(3)));
+                        })
                     : Container(),
                 (infoShortcut)
                     ? IconButton(
-                    icon: Icon(Icons.info),
-                    color: Colors.deepPurple[400],
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Appointment(1)));
-                    })
+                        key: Key('infoButton'),
+                        icon: Icon(Icons.info),
+                        color: Colors.deepPurple[400],
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Appointment(1)));
+                        })
                     : Container(),
               ],
             )

@@ -9,7 +9,7 @@ import 'package:pointycastle/paddings/pkcs7.dart';
 import 'package:pointycastle/block/aes_fast.dart';
 import 'package:pointycastle/block/modes/cbc.dart';
 
-import 'package:prep/utils/query.dart';
+import 'package:prep/utils/backend.dart';
 
 class MessageCrypto {
   static const MessageCrypto _singleton = MessageCrypto._internal();
@@ -18,7 +18,7 @@ class MessageCrypto {
 
   const MessageCrypto._internal();
 
-  static String encryptMessage(String message) {
+  static String encryptMessage(String appointmentID, String message) {
     Random rand = Random.secure();
     int ivArrayLength = 16;
     Uint8List iv = Uint8List(ivArrayLength);
@@ -26,28 +26,28 @@ class MessageCrypto {
       iv[i] = rand.nextInt(256);
     }
 
-    PaddedBlockCipher cipher = _getCipher(true, iv);
+    PaddedBlockCipher cipher = _getCipher(true, appointmentID, iv);
     String encodedText =
         HEX.encode(iv) + HEX.encode(cipher.process(utf8.encode(message)));
     return encodedText;
   }
 
-  static String decryptMessage(String message) {
+  static String decryptMessage(String appointmentID, String message) {
     String encodedIV = message.substring(0, 32);
     Uint8List iv = HEX.decode(encodedIV);
 
-    PaddedBlockCipher cipher = _getCipher(false, iv);
+    PaddedBlockCipher cipher = _getCipher(false, appointmentID, iv);
     String encodedMessage = message.substring(32);
     String decodedMessage =
         utf8.decode(cipher.process(HEX.decode(encodedMessage)));
     return decodedMessage;
   }
 
-  static PaddedBlockCipher _getCipher(bool mode, Uint8List iv) {
+  static PaddedBlockCipher _getCipher(
+      bool mode, String appointmentID, Uint8List iv) {
     Digest md5 = Digest("MD5");
     String hexEncryptedIV = HEX.encode(md5.process(iv));
-    Uint8List keyArray =
-        utf8.encode(Queries.appointmentID + hexEncryptedIV);
+    Uint8List keyArray = utf8.encode(appointmentID + hexEncryptedIV);
     String hexEncryptedKey = HEX.encode(md5.process(keyArray));
     Uint8List encryptedKeyArray = utf8.encode(hexEncryptedKey);
 

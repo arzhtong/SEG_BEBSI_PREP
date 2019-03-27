@@ -7,47 +7,43 @@ import 'package:prep/widgets/recipe/recipe_note.dart';
 import 'package:prep/widgets/recipe/external_recipe_link.dart';
 
 class RecipeCardContent extends StatelessWidget {
-  final List<Widget> content = [];
   @override
   Widget build(BuildContext context) {
-    //FIXME: Remove code duplication!!
-
+    final List<Widget> content = [];
     //get data
-    final dynamic dynamicIngredientListData =
-        FirestoreDocumentDataProvider.of(context).documentData['ingredients'];
-    final dynamic dynamicMethodListData =
-        FirestoreDocumentDataProvider.of(context).documentData['method'];
-    final dynamic dynamicExternalUrlData =
-        FirestoreDocumentDataProvider.of(context).documentData['externalURL'];
+    final documentData = DocumentDataProvider.of(context).documentData;
+
+    final dynamic dynamicIngredientListData = documentData['ingredients'];
+
+    final dynamic dynamicMethodListData = documentData['method'];
+    final dynamic dynamicExternalUrlData = documentData['externalURL'];
+    final dynamic dynamicNoteData = documentData['note'];
 
     //check data
 
     //internal recipe must either exist fully or doesn't at all
     bool hasInternalRecipe =
         (dynamicIngredientListData != null) && (dynamicMethodListData != null);
-    assert(hasInternalRecipe |
+    /* assert(hasInternalRecipe ||
         ((dynamicMethodListData == null) &&
-            (dynamicIngredientListData == null)));
+            (dynamicIngredientListData == null))); */
 
     //at least one form of recipe must be present
-    assert(hasInternalRecipe || dynamicExternalUrlData != null);
+    //assert(hasInternalRecipe || dynamicExternalUrlData != null);
 
     //generate widgets from data
     if (hasInternalRecipe) {
-      content.add(RecipeIngredientList(dynamicIngredientListData));
-      _addSpacer();
-      content.add(RecipeMethodList(dynamicMethodListData));
-      _addSpacer();
+      _addToContentWithSpacer(
+          RecipeIngredientList(dynamicIngredientListData), content);
+      _addToContentWithSpacer(RecipeMethodList(dynamicMethodListData), content);
     }
 
     if (dynamicExternalUrlData != null) {
       assert(dynamicExternalUrlData.runtimeType == String);
-      content.add(ExternalRecipeLink(dynamicExternalUrlData));
-      _addSpacer();
+      _addToContentWithSpacer(
+          ExternalRecipeLink(dynamicExternalUrlData), content);
     }
 
-    final dynamic dynamicNoteData =
-        FirestoreDocumentDataProvider.of(context).documentData['note'];
     if (dynamicNoteData != null) {
       assert(dynamicNoteData.runtimeType == String);
       content.add(RecipeNote(dynamicNoteData));
@@ -59,9 +55,11 @@ class RecipeCardContent extends StatelessWidget {
     );
   }
 
-  void _addSpacer() => content.add(
-        SizedBox(
-          height: 16.0,
-        ),
-      );
+  void _addToContentWithSpacer(Widget toAdd, List<Widget> addTo) => addTo
+    ..add(toAdd)
+    ..add(
+      SizedBox(
+        height: 16.0,
+      ),
+    );
 }

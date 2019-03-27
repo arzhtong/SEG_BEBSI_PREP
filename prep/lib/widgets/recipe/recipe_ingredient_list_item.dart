@@ -7,6 +7,7 @@ class RecipeIngredientListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(ingredient);
     return Row(
       children: <Widget>[
         SizedBox(width: 32.0),
