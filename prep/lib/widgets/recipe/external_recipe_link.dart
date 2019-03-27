@@ -4,9 +4,9 @@ import 'package:prep/utils/misc_functions.dart' show launchURL;
 
 //TODO: Add link error validity chacking.
 class ExternalRecipeLink extends StatelessWidget {
-  final dynamic externalUrlData;
+  final String externalUrl;
 
-  ExternalRecipeLink(this.externalUrlData);
+  ExternalRecipeLink(this.externalUrl);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class ExternalRecipeLink extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        onPressed: () => launchURL(externalUrlData.toString()),
+        onPressed: () => launchURL(externalUrl),
         color: Theme.of(context).accentColor,
         elevation: 4.0,
       ),
