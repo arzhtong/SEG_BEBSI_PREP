@@ -9,7 +9,7 @@
         <div class="row">
           <div class="input-field col s12">
             <span>Email:</span>
-            <input type="text" v-model="email" required>
+            <input disabled type="text" v-model="email" required>
           </div>
         </div>
         <div class="row">
