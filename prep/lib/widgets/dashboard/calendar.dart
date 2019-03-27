@@ -7,7 +7,7 @@ import 'package:prep/widgets/dashboard/calendar_label.dart';
 
 class Calendar extends StatelessWidget {
   String codeFileState;
-  List<DocumentSnapshot> documentList;
+  List<Map<String, Map<String, dynamic>>> documentList;
 
   Calendar(this.codeFileState, this.documentList);
 
@@ -33,47 +33,61 @@ class Calendar extends StatelessWidget {
           "Your calendar is empty", "Add some appointments");
     } else {
       //Generates a list of filtered appointments
-      List<DocumentSnapshot> filteredDocuments = new List();
-      documentList.forEach((doc) {
-        if (_documentInCodeFile(doc.documentID)) {
-          filteredDocuments.add(doc);
+      List<Map<String, Map<String, dynamic>>> filteredDocuments = new List();
+
+      documentList.forEach((docIdDataMap) {
+        String docID = docIdDataMap.keys.first;
+        if (_documentInCodeFile(docID)) {
+          filteredDocuments.add(docIdDataMap);
         }
       });
       documentList = filteredDocuments;
 
-      calendarElements.add(
-          CalendarLabel(documentList.elementAt(0).data['datetime'].toDate()));
+      String element0docID = documentList.elementAt(0).keys.first;
+      Map<String, dynamic> element0dataMap =
+          documentList.elementAt(0)[element0docID];
+
+      calendarElements.add(CalendarLabel(element0dataMap['datetime'].toDate()));
+
       calendarElements.add(CalendarCard(
-          documentList.elementAt(0).documentID,
-          documentList.elementAt(0).data['location'],
-          documentList.elementAt(0).data['datetime'].toDate(),
-          documentList.elementAt(0).data['testID'],
-          documentList.elementAt(0).data['doctor'],
-          documentList.elementAt(0).data['testName'],
-          documentList.elementAt(0).data['contactNumber']));
+          element0docID,
+          element0dataMap['location'],
+          element0dataMap['datetime'].toDate(),
+          element0dataMap['testID'],
+          element0dataMap['doctor'],
+          element0dataMap['testName'],
+          element0dataMap['contactNumber']));
 
       for (int i = 1; i < documentList.length; i++) {
-        if (_datesAreEqual(documentList.elementAt(i).data['datetime'].toDate(),
-            (documentList.elementAt(i - 1).data['datetime'].toDate()))) {
+        String prevElementId = documentList.elementAt(i-1).keys.first;
+        Map<String, dynamic> prevElementDataMap =
+        documentList.elementAt(i-1)[prevElementId];
+
+        String elementidocID = documentList.elementAt(i).keys.first;
+        Map<String, dynamic> elementidataMap =
+            documentList.elementAt(i)[elementidocID];
+
+        if (_datesAreEqual(elementidataMap['datetime'].toDate(),
+            (prevElementDataMap['datetime'].toDate()))) {
           calendarElements.add(CalendarCard(
-              documentList.elementAt(i).documentID,
-              documentList.elementAt(i).data['location'],
-              documentList.elementAt(i).data['datetime'].toDate(),
-              documentList.elementAt(i).data['testID'],
-              documentList.elementAt(i).data['doctor'],
-              documentList.elementAt(i).data['testName'],
-              documentList.elementAt(i).data['contactNumber']));
+              elementidocID,
+              elementidataMap['location'],
+              elementidataMap['datetime'].toDate(),
+              elementidataMap['testID'],
+              elementidataMap['doctor'],
+              elementidataMap['testName'],
+              elementidataMap['contactNumber']));
         } else {
-          calendarElements.add(CalendarLabel(
-              documentList.elementAt(i).data['datetime'].toDate()));
+          calendarElements
+              .add(CalendarLabel(elementidataMap['datetime'].toDate()));
           calendarElements.add(CalendarCard(
-              documentList.elementAt(i).documentID,
-              documentList.elementAt(i).data['location'],
-              documentList.elementAt(i).data['datetime'].toDate(),
-              documentList.elementAt(i).data['testID'],
-              documentList.elementAt(i).data['doctor'],
-              documentList.elementAt(i).data['testName'],
-              documentList.elementAt(i).data['contactNumber']));
+              elementidocID,
+              elementidataMap['location'],
+              elementidataMap['datetime'].toDate(),
+              elementidataMap['testID'],
+              elementidataMap['doctor'],
+              elementidataMap['testName'],
+              elementidataMap['contactNumber']));
         }
       }
 
