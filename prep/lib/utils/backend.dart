@@ -185,7 +185,7 @@ class FirestoreBackend implements BaseBackend {
 
   Stream<QuerySnapshot> get recipeSnapshots => _testReference
       .collection('prepCards')
-      .where('cardType', isEqualTo: 'recipe')
+      .where('type', isEqualTo: 'recipe')
       .snapshots();
 
   Stream<Map<String, dynamic>> informationSnapshots(documentId) =>
