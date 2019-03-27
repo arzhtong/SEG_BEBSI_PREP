@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_html/flutter_html.dart';
 
-import 'package:prep/utils/backend.dart';
 import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 import 'package:prep/widgets/appointment_info/appointment_banner.dart';
@@ -29,6 +27,7 @@ class AppointmentInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      key: Key('appointmentInfoScreen'),
       padding: EdgeInsets.all(10.0),
       children: <Widget>[
         AppointmentDetailsBanner(),

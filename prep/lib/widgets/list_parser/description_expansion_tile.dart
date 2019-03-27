@@ -9,10 +9,11 @@ class DescriptiveExpansionTile extends StatelessWidget {
   DescriptiveExpansionTile(this.category, this.description, this.items) {
     columnChildren = new List();
 
-    if (description.isNotEmpty) {
+    if (description != null && description.isNotEmpty) {
       columnChildren.add(
         Text(
           description,
+          key: Key('description'),
           style: TextStyle(
             color: Colors.black,
           ),
@@ -37,13 +38,12 @@ class DescriptiveExpansionTile extends StatelessWidget {
   String _formatItemList(List<dynamic> elementList) {
     String rawItems = "";
 
-    if (items.isNotEmpty) {
+    if (items != null && items.isNotEmpty) {
       elementList.forEach((value) {
         rawItems += value + " " "•" + " ";
       });
 
-      rawItems =
-          rawItems.replaceRange(rawItems.length - 2, rawItems.length - 1, ' ');
+      rawItems = rawItems.substring(0, rawItems.length - 3);
     }
 
     return rawItems;
@@ -59,6 +59,7 @@ class DescriptiveExpansionTile extends StatelessWidget {
           children: <Widget>[
             ListTile(
               title: Container(
+                key: Key('listContainer'),
                 padding: EdgeInsets.only(right: 50.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

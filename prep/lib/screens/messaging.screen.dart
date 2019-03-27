@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:async';
 
-import 'package:prep/utils/backend.dart';
 import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/utils/message_crypto.dart';
 import 'package:prep/widgets/messaging/messages_view.dart';
@@ -36,7 +35,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
     Future.delayed(Duration.zero, () {
       _messageStreamSubscription = BackendProvider.of(context)
           .backend
-          .messagesStream(setSeen: true)
+          .messagesSnapshots(true)
           .listen((list) => list.forEach((message) => _addNewMessage(message)));
     });
   }
@@ -51,6 +50,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: Key('messagingScreen'),
       resizeToAvoidBottomInset: false,
       body: Column(children: <Widget>[
         _messagesView,
