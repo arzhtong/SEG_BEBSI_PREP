@@ -40,6 +40,7 @@
 <script>
 import db from "../firebaseInit"
 import firebase from "firebase/app"
+import 'firebase/storage'
 
 export default {
     name: 'imageUploader',

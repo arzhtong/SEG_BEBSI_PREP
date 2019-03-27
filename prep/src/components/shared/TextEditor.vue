@@ -37,6 +37,7 @@
 <script>
 import { VueEditor } from 'vue2-editor';
 import firebase from "firebase/app";
+import 'firebase/storage'
 
 export default {
     props: ["editorInformation", "editorImages"],
