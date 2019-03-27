@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:prep/screens/dashboard.screen.dart';
 import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/utils/backend.dart';
+import 'package:prep/utils/storage.dart';
 
 void main() {
   DatabaseHandler.initDatabase();
@@ -12,6 +13,7 @@ void main() {
       runApp(
         BackendProvider(
           backend: FirestoreBackend(),
+          storage: Storage(),
           child: MaterialApp(
             theme: ThemeData(
               primarySwatch: Colors.indigo,

@@ -36,6 +36,20 @@ class AppointmentDetailsBanner extends StatelessWidget {
             ),
             _TitleText("Staff"),
             _SubtitleText(backend.doctorName),
+            Divider(
+              color: Colors.white,
+            ),
+            _TitleText("Contact Number"),
+            Text(
+              "Call to reschedule appointments",
+              style: TextStyle(
+                fontSize: 15.0,
+                fontWeight: FontWeight.w400,
+                fontStyle: FontStyle.italic,
+                color: Colors.white,
+              ),
+            ),
+            _SubtitleText(backend.contactNumber),
           ],
         ),
       ),

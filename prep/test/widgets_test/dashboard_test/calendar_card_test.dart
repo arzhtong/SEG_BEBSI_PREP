@@ -2,10 +2,20 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:prep/widgets/dashboard/calendar_card.dart';
 import 'package:flutter/material.dart';
 import 'package:prep/utils/misc_functions.dart';
+import 'package:prep/utils/backend_provider.dart';
+import 'package:prep/utils/backend.dart';
+import 'package:mockito/mockito.dart';
+
+class MockBackend extends Mock implements FirestoreBackend {}
 
 void main() {
-  Widget testableWidget({Widget child}) {
-    return MaterialApp(home: child);
+  Widget testableWidget({MockBackend backend, Widget child}) {
+    return BackendProvider(
+      backend: backend,
+      child: MaterialApp(
+        home: child,
+      ),
+    );
   }
 
   testWidgets(
@@ -17,7 +27,8 @@ void main() {
         DateTime(2019, 3, 25, 10, 0),
         "VyyiBYwp0xX4nJyvX9oN",
         "Eliana Reyes",
-        "FDG PET Scan of the Heart");
+        "FDG PET Scan of the Heart",
+        "12345 123456");
 
     await tester.pumpWidget(testableWidget(child: calendarCard));
 
@@ -40,5 +51,34 @@ void main() {
     expect(date, findsOneWidget);
     expect(time, findsOneWidget);
     expect(appointmentCode, findsOneWidget);
+  });
+
+  testWidgets(
+      'Tapping on the card sets the values it contains in Backend and navigates to Appointment',
+      (WidgetTester tester) async {
+    CalendarCard calendarCard = CalendarCard(
+        "hjhfuz3ey",
+        "St. Thomas Hospiutal",
+        DateTime(2019, 3, 25, 10, 0),
+        "VyyiBYwp0xX4nJyvX9oN",
+        "Eliana Reyes",
+        "FDG PET Scan of the Heart",
+        "12345 123456");
+
+    MockBackend mockBackend = new MockBackend();
+
+    when(mockBackend.setBackendParams(any, any, any, any, any, any, any, any))
+        .thenAnswer((_) {});
+    when(mockBackend.appointmentName).thenReturn("sample appointment name");
+    when(mockBackend.messagesSnapshots(any)).thenAnswer(null);
+
+    await tester
+        .pumpWidget(testableWidget(backend: mockBackend, child: calendarCard));
+
+    final appointmentCodeTextFinder = find.text('hjhfuz3ey');
+
+    expect(appointmentCodeTextFinder, findsOneWidget);
+
+    await tester.tap(appointmentCodeTextFinder);
   });
 }

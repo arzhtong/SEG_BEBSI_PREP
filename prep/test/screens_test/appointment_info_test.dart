@@ -40,6 +40,7 @@ void main() {
     when(mockBackend.location).thenReturn("St. Thomas Hospiutal");
     when(mockBackend.dateTime).thenReturn(DateTime(2019, 3, 25, 10, 0));
     when(mockBackend.doctorName).thenReturn("Eliana Reyes");
+    when(mockBackend.contactNumber).thenReturn("12345");
     when(mockBackend.color).thenReturn(Colors.blue);
 
     AppointmentInfo appointmentInfo = AppointmentInfo();
@@ -73,6 +74,7 @@ void main() {
     when(mockBackend.location).thenReturn("St. Thomas Hospiutal");
     when(mockBackend.dateTime).thenReturn(DateTime(2019, 3, 25, 10, 0));
     when(mockBackend.doctorName).thenReturn("Eliana Reyes");
+    when(mockBackend.contactNumber).thenReturn("12345");
     when(mockBackend.color).thenReturn(Colors.blue);
 
     AppointmentInfo appointmentInfo = AppointmentInfo();
@@ -108,6 +110,7 @@ void main() {
     when(mockBackend.location).thenReturn("St. Thomas Hospiutal");
     when(mockBackend.dateTime).thenReturn(DateTime(2019, 3, 25, 10, 0));
     when(mockBackend.doctorName).thenReturn("Eliana Reyes");
+    when(mockBackend.contactNumber).thenReturn("12345");
     when(mockBackend.color).thenReturn(Colors.blue);
 
     AppointmentInfo appointmentInfo = AppointmentInfo();
@@ -143,6 +146,7 @@ void main() {
     when(mockBackend.location).thenReturn("St. Thomas Hospiutal");
     when(mockBackend.dateTime).thenReturn(DateTime(2019, 3, 25, 10, 0));
     when(mockBackend.doctorName).thenReturn("Eliana Reyes");
+    when(mockBackend.contactNumber).thenReturn("12345");
     when(mockBackend.color).thenReturn(Colors.blue);
 
     AppointmentInfo appointmentInfo = AppointmentInfo();

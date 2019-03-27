@@ -50,6 +50,7 @@ class _MessagesViewState extends State<MessagesView>
         behavior: HitTestBehavior.opaque,
         onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
         child: ListView.builder(
+          key: Key('messagesView'),
           padding: EdgeInsets.only(top: 8.0),
           reverse: true,
           itemBuilder: (_, int index) {

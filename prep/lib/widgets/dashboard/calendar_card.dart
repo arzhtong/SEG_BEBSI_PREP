@@ -5,23 +5,24 @@ import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/utils/misc_functions.dart';
 
 class CalendarCard extends StatelessWidget {
-  final String name;
+  final String appointmentID;
   final String location;
   final DateTime dateTime;
   final String testID;
   final String doctorName;
   final String testName;
+  final String contactNumber;
   static final List<Color> colors = [
     Colors.green[300],
-    Colors.red[300],
+    Colors.deepPurple[300],
     Colors.blue[300],
-    Colors.orange[300]
+    Colors.deepOrange[300]
   ];
   final Color color;
 
-  CalendarCard(this.name, this.location, this.dateTime, this.testID,
-      this.doctorName, this.testName)
-      : color = colors[name.hashCode % 4];
+  CalendarCard(this.appointmentID, this.location, this.dateTime, this.testID,
+      this.doctorName, this.testName, this.contactNumber)
+      : color = colors[appointmentID.hashCode % 4];
 
   Widget _informationRow(String label, String content) {
     return Container(
@@ -110,7 +111,7 @@ class CalendarCard extends StatelessWidget {
                     )),
                 ListTile(
                   leading: Icon(Icons.code),
-                  title: Text(name),
+                  title: Text(appointmentID),
                 ),
               ],
             ),
@@ -121,12 +122,13 @@ class CalendarCard extends StatelessWidget {
                     splashColor: Color.fromRGBO(255, 255, 255, 0.2),
                     onTap: () {
                       BackendProvider.of(context).backend.setBackendParams(
-                          this.name,
+                          this.appointmentID,
                           this.testID,
                           this.testName,
                           this.location,
                           this.dateTime,
                           this.doctorName,
+                          this.contactNumber,
                           this.color);
                       Navigator.push(
                           context,
