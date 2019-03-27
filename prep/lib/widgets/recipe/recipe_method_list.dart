@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'package:prep/utils/misc_functions.dart' show convertDynamicListToStringList;
+import 'package:prep/utils/misc_functions.dart'
+    show convertDynamicListToStringList;
 
 import 'package:prep/widgets/recipe/recipe_method_list_item.dart';
+import 'package:prep/utils/constants.dart';
 
 class RecipeMethodList extends StatelessWidget {
-  static const String _MethodListHeadline = "Method";
-
   final dynamic dynamicMethodInstructions;
 
   RecipeMethodList(this.dynamicMethodInstructions);
@@ -20,7 +20,7 @@ class RecipeMethodList extends StatelessWidget {
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Text(
-          _MethodListHeadline,
+          Constants.kMethodListHeadline,
           style: Theme.of(context).textTheme.headline.copyWith(fontSize: 18.0),
         ),
       ),
