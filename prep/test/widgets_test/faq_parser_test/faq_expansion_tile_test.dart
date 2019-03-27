@@ -108,11 +108,11 @@ void main() {
     await tester.tap(find.text('Q'));
     await tester.pump();
 
-    final infoButtonFinder = find.byKey(Key('chatButton'));
+    final chatButtonFinder = find.byKey(Key('chatButton'));
 
-    expect(infoButtonFinder, findsOneWidget);
+    expect(chatButtonFinder, findsOneWidget);
 
-    await tester.tap(infoButtonFinder);
-    await tester.pump();
+    await tester.tap(chatButtonFinder);
+    await tester.pumpAndSettle();
   });
 }

@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-import 'package:prep/widgets/dashboard/calendar_label.dart';
-import 'package:prep/widgets/dashboard/calendar_card.dart';
-import 'package:prep/screens/empty_screen_placeholder.dart';
-import 'package:prep/utils/storage.dart';
 import 'package:prep/utils/backend.dart';
 import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/widgets/dashboard/help_dialog.dart';
+import 'package:prep/widgets/dashboard/calendar.dart';
+import 'package:prep/screens/empty_screen_placeholder.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -20,10 +18,9 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   // Firestore variables
   Widget cachedCalendar;
-  List<DocumentSnapshot> documentList;
+  List<Map<String, Map<String, dynamic>>> documentList;
 
   // Codes file variables
-  Storage storage = new Storage();
   String codeFileState;
 
   // Form validation variables
@@ -36,11 +33,6 @@ class _DashboardState extends State<Dashboard> {
   void _subscribeToNotifications(String appointmentID) {
     final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
     firebaseMessaging.autoInitEnabled();
-    /* firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) {},
-      onResume: (Map<String, dynamic> message) {},
-      onLaunch: (Map<String, dynamic> message) {},
-    ); */
     firebaseMessaging.subscribeToTopic(appointmentID);
   }
 
@@ -64,17 +56,18 @@ class _DashboardState extends State<Dashboard> {
       codeFileState = "";
       codeController.text = '';
     });
-    return storage.writeData("");
+    return BackendProvider.of(context).storage.writeData("");
   }
 
   // Checks if a code exists in the Firestore and is not used
   Future<bool> _isCodeInFirestoreNotUsed(String code) async {
     List<String> liveNotUsedIDs = new List();
 
-    await BackendProvider.of(context).backend.appointmentCodes.then((query) {
-      query.documents.forEach((document) {
-        if (document['used'] == false) {
-          liveNotUsedIDs.add(document.documentID);
+    await BackendProvider.of(context).backend.appointmentCodes().then((query) {
+      query.forEach((dataListMap) {
+        String docId = dataListMap.keys.first;
+        if (dataListMap[docId]['used'] == false) {
+          liveNotUsedIDs.add(docId);
         }
       });
     });
@@ -88,29 +81,37 @@ class _DashboardState extends State<Dashboard> {
 
   // Retrieves data from the Firestore and builds the calendar
   Future<Widget> _getDocData() async {
-    bool fileExists = await storage.fileExists();
+    bool fileExists = await BackendProvider.of(context).storage.fileExists();
 
     if (fileExists) {
       print("--- codes file found!");
     } else {
       print("--- codes file NOT found, creating one containing ','");
-      await storage.writeData(",");
+      await BackendProvider.of(context).storage.writeData(",");
     }
 
-    codeFileState = await storage.readData();
+    codeFileState = await BackendProvider.of(context).storage.readData();
     print("Raw codes file - in getDocData after reading: " + codeFileState);
 
     //reading appointments from the database and updating the codes file
-    QuerySnapshot testDocList =
-        await BackendProvider.of(context).backend.appointmentCodes;
-    documentList = testDocList.documents;
+    var querySnap =
+        await BackendProvider.of(context).backend.appointmentCodes();
+
+    if (querySnap == null) {
+      return EmptyScreenPlaceholder(
+          "Your calendar is empty", "Add some appointments");
+    }
+
+    documentList = querySnap;
 
     // Get all the codes stored in the database
     List<String> availableCodes = new List();
 
-    documentList.forEach((doc) {
-      availableCodes.add(doc.documentID);
+    documentList.forEach((docIdDataMap) {
+      availableCodes.add(docIdDataMap.keys.first);
     });
+
+    print("Available codes:" + availableCodes.toString());
 
     // Store all the codes in both the database and the codes file in the var
     String newCodeFileState = "";
@@ -124,82 +125,11 @@ class _DashboardState extends State<Dashboard> {
     print("New codes files - after filtering: " + newCodeFileState);
 
     // Saving the new sequence of codes in the codes file and updating file state
-    await storage.writeData(newCodeFileState);
+    await BackendProvider.of(context).storage.writeData(newCodeFileState);
     codeFileState = newCodeFileState;
 
     // building the return widget based on the updated (current) codes file
-    return _buildCalendarWidget();
-  }
-
-  bool _datesAreEqual(DateTime date1, DateTime date2) {
-    return (date1.day == date2.day &&
-        date1.month == date2.month &&
-        date1.year == date2.year);
-  }
-
-  Widget _buildCalendarWidget() {
-    // building the return widget based on the updated (current) codes file
-    List<Widget> calendarElements = new List();
-
-    if (codeFileState == null) {
-      return null;
-    } else if (codeFileState.isEmpty) {
-      return EmptyScreenPlaceholder(
-          "Your calendar is empty", "Add some appointments");
-    } else {
-      //Generates a list of filtered appointments
-      List<DocumentSnapshot> filteredDocuments = new List();
-      documentList.forEach((doc) {
-        if (_documentInCodeFile(doc.documentID)) {
-          filteredDocuments.add(doc);
-        }
-      });
-      documentList = filteredDocuments;
-
-      calendarElements.add(
-          CalendarLabel(documentList.elementAt(0).data['datetime'].toDate()));
-      calendarElements.add(CalendarCard(
-          documentList.elementAt(0).documentID,
-          documentList.elementAt(0).data['location'],
-          documentList.elementAt(0).data['datetime'].toDate(),
-          documentList.elementAt(0).data['testID'],
-          documentList.elementAt(0).data['doctor'],
-          documentList.elementAt(0).data['testName']));
-
-      for (int i = 1; i < documentList.length; i++) {
-        if (_datesAreEqual(documentList.elementAt(i).data['datetime'].toDate(),
-            (documentList.elementAt(i - 1).data['datetime'].toDate()))) {
-          calendarElements.add(CalendarCard(
-              documentList.elementAt(i).documentID,
-              documentList.elementAt(i).data['location'],
-              documentList.elementAt(i).data['datetime'].toDate(),
-              documentList.elementAt(i).data['testID'],
-              documentList.elementAt(i).data['doctor'],
-              documentList.elementAt(i).data['testName']));
-        } else {
-          calendarElements.add(CalendarLabel(
-              documentList.elementAt(i).data['datetime'].toDate()));
-          calendarElements.add(CalendarCard(
-              documentList.elementAt(i).documentID,
-              documentList.elementAt(i).data['location'],
-              documentList.elementAt(i).data['datetime'].toDate(),
-              documentList.elementAt(i).data['testID'],
-              documentList.elementAt(i).data['doctor'],
-              documentList.elementAt(i).data['testName']));
-        }
-      }
-
-      return ListView(
-        padding:
-            EdgeInsets.only(top: 10.0, bottom: 80.0, left: 10.0, right: 10.0),
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: calendarElements,
-          )
-        ],
-      );
-    }
+    return Calendar(codeFileState, documentList);
   }
 
   @override
@@ -219,6 +149,7 @@ class _DashboardState extends State<Dashboard> {
                 _clearData();
               }),
           IconButton(
+              key: Key('refreshButton'),
               icon: Icon(Icons.refresh),
               onPressed: () {
                 setState(() {});
@@ -228,6 +159,7 @@ class _DashboardState extends State<Dashboard> {
       body: FutureBuilder(
           future: _getDocData(),
           builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
+            print("Snapshot: " + snapshot.data.toString());
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
                 return (cachedCalendar == null)
@@ -311,9 +243,12 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                       child: RaisedButton(
                         color: Colors.indigo,
                         onPressed: () async {
+                          print("--------SUBMIT button pressed");
                           if (loading) {
                             return null;
                           }
+
+                          print("Checkpoint 1");
 
                           if (_parent.codeController.text.isEmpty) {
                             _parent._formKey.currentState.validate();
@@ -321,6 +256,8 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                             setState(() {
                               loading = true;
                             });
+
+                            print("Checkpoint 2");
 
                             bool inFile = _parent._documentInCodeFile(
                                 _parent.codeController.text);
@@ -332,24 +269,30 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                             _parent.validationResultDb = inDatabase;
                             _parent.validationResultFile = inFile;
 
+                            print("Checkpoint 3");
+
                             // If the validator will succeed, start overwriting the used field already
                             if (inDatabase && !inFile) {
-                              await Firestore.instance
-                                  .collection('appointments')
-                                  .document(_parent.codeController.text)
-                                  .updateData({'used': true});
+                              await BackendProvider.of(context)
+                                  .backend
+                                  .setAppointmentCodeUsed(
+                                      _parent.codeController.text);
+                              print(
+                                  "-----------TRANSITION COMPLETED----------");
                             }
+
+                            print("Checkpoint 4");
 
                             setState(() {
                               loading = false;
                             });
 
-                            if (_parent._formKey.currentState.validate()) {
-                              print(
-                                  "To be new code test file - NEW CODE DIALOG");
+                            print("Checkpoint 5");
 
-                              await _parent.storage.writeData(
-                                  _parent.codeFileState +
+                            if (_parent._formKey.currentState.validate()) {
+                              await BackendProvider.of(context)
+                                  .storage
+                                  .writeData(_parent.codeFileState +
                                       _parent.codeController.text +
                                       ',');
 
@@ -358,6 +301,8 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                                     _parent.codeController.text);
                                 _parent.codeController.text = "";
                               });
+
+                              print("--------- Navigator about to pop");
 
                               Navigator.pop(context);
                             }

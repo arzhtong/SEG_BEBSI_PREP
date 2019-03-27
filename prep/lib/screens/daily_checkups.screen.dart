@@ -48,8 +48,12 @@ class DailyCheckups extends StatelessWidget {
     }
   }
 
-  Widget _buildListItem(BuildContext context, Map<String, dynamic> dataMap) {
+  Widget _buildListItem(BuildContext context, Map<String, Map<String, dynamic>> docIdDataMap) {
     List<Widget> instructionWidgets = new List();
+
+    String docID = docIdDataMap.keys.first;
+    Map<String, dynamic> dataMap = docIdDataMap[docID];
+
     Map<dynamic, dynamic> dynamicInstructions = dataMap['instructions'];
 
     dynamicInstructions.forEach((index, map) {
@@ -87,8 +91,9 @@ class DailyCheckups extends StatelessWidget {
                   activeTrackColor: Colors.green[100],
                   value: checkupMap['answer'],
                   onChanged: (_) {
+                    print(docID);
                     BackendProvider.of(context).backend.flickCheckupSwitch(
-                        dataMap['title'], index, checkupMap['answer']);
+                        docID, index, checkupMap['answer']);
                   },
                 ),
               ))

@@ -2,7 +2,9 @@
 /// Firebase Cloud Firestore database backend. Each class defines a
 /// specific group of queries.
 
+import 'dart:async';
 import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 export 'package:cloud_firestore/cloud_firestore.dart';
@@ -41,12 +43,13 @@ abstract class BaseBackend {
   String location;
   DateTime dateTime;
   String doctorName;
+  String contactNumber;
   Color color;
 
   void setBackendParams(newAppointmentID, newTestID, newAppointmentName,
-      newLocation, newDateTime, newDoctorName, newColor);
+      newLocation, newDateTime, newDoctorName, newContactNumber, newColor);
 
-  Future<QuerySnapshot> get appointmentCodes;
+  Future<List<Map<String, Map<String, dynamic>>>> appointmentCodes() async {}
 
   Stream<List<Map<String, dynamic>>> messagesSnapshots(bool setSeen);
 
@@ -54,7 +57,9 @@ abstract class BaseBackend {
 
   void flickCheckupSwitch(String documentId, String index, bool previousValue);
 
-  Stream<List<Map<String, dynamic>>> get dailyCheckupsSnapshots;
+  Future<void> setAppointmentCodeUsed(String documentId) async {}
+
+  Stream<List<Map<String, Map<String, dynamic>>>> get dailyCheckupsSnapshots;
 
   Stream<List<Map<String, Map<String, dynamic>>>> get prepCardsSnapshots;
 
@@ -76,6 +81,7 @@ class FirestoreBackend implements BaseBackend {
   String location;
   DateTime dateTime;
   String doctorName;
+  String contactNumber;
   Color color;
 
   static final FirestoreBackend _singleton = FirestoreBackend._internal();
@@ -85,22 +91,31 @@ class FirestoreBackend implements BaseBackend {
   FirestoreBackend._internal();
 
   void setBackendParams(newAppointmentID, newTestID, newAppointmentName,
-      newLocation, newDateTime, newDoctorName, newColor) {
+      newLocation, newDateTime, newDoctorName, newContactNumber, newColor) {
     appointmentID = newAppointmentID;
     testID = newTestID;
     appointmentName = newAppointmentName;
     location = newLocation;
     dateTime = newDateTime;
     doctorName = newDoctorName;
+    contactNumber = newContactNumber;
     color = newColor;
   }
 
-  Future<QuerySnapshot> get appointmentCodes => _appointmentsCollection
-      .where('expired', isEqualTo: false)
-      .where('datetime',
-          isGreaterThan: DateTime.now().subtract(Duration(days: 1)))
-      .orderBy('datetime')
-      .getDocuments();
+  Future<List<Map<String, Map<String, dynamic>>>> appointmentCodes() async {
+    QuerySnapshot querySnapshot = await _appointmentsCollection
+        .where('expired', isEqualTo: false)
+        .where('datetime',
+            isGreaterThan: DateTime.now().subtract(Duration(days: 1)))
+        .orderBy('datetime')
+        .getDocuments();
+
+    List<Map<String, Map<String, dynamic>>> futMap = querySnapshot.documents
+        .map((docSnap) => {docSnap.documentID: docSnap.data})
+        .toList();
+
+    return futMap;
+  }
 
   DocumentReference get _testReference =>
       DatabaseHandler.db.collection('tests').document(testID);
@@ -136,7 +151,6 @@ class FirestoreBackend implements BaseBackend {
         'datetime': DateTime.now(),
         'isPatient': true,
         'seenByPatient': true,
-        'seenByStaff': false,
       });
 
   void flickCheckupSwitch(String documentId, String index, bool previousValue) {
@@ -150,19 +164,28 @@ class FirestoreBackend implements BaseBackend {
     });
   }
 
-  Stream<List<Map<String, dynamic>>> get dailyCheckupsSnapshots =>
+  Future<void> setAppointmentCodeUsed(String documentId) async {
+    DatabaseHandler.db.runTransaction((transaction) async {
+      DocumentSnapshot freshSnap =
+          await transaction.get(_appointmentsCollection.document(documentId));
+      await transaction.update(freshSnap.reference, {
+        'used': true
+      });
+    });
+    //_appointmentsCollection.document(documentId).updateData({'used': true});
+  }
+
+  Stream<List<Map<String, Map<String, dynamic>>>> get dailyCheckupsSnapshots =>
       _appointmentReference
           .collection('dailyCheckups')
           .orderBy('daysBeforeTest', descending: true)
           .snapshots()
-          .map((querySnap) =>
-              querySnap.documents.map((docSnap) => docSnap.data).toList());
+          .map((querySnap) => querySnap.documents
+              .map((docSnap) => {docSnap.documentID: docSnap.data})
+              .toList());
 
   Stream<List<Map<String, Map<String, dynamic>>>> get prepCardsSnapshots =>
-      _testReference
-          .collection('prepCards')
-          .snapshots()
-          .map((querySnap) =>
+      _testReference.collection('prepCards').snapshots().map((querySnap) =>
           querySnap.documents
               .map((docSnap) => {docSnap.documentID: docSnap.data})
               .toList());
@@ -179,7 +202,7 @@ class FirestoreBackend implements BaseBackend {
 
   Stream<QuerySnapshot> get recipeSnapshots => _testReference
       .collection('prepCards')
-      .where('cardType', isEqualTo: 'recipe')
+      .where('type', isEqualTo: 'recipe')
       .snapshots();
 
   Stream<Map<String, dynamic>> informationSnapshots(documentId) =>

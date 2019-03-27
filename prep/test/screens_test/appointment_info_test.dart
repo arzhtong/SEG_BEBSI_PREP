@@ -1,9 +1,13 @@
-import 'package:mockito/mockito.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+
+import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
+
 import 'package:prep/utils/backend.dart';
-import 'package:prep/screens/appointment_info.screen.dart';
 import 'package:prep/utils/backend_provider.dart';
+import 'package:prep/screens/appointment_info.screen.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 
 class MockBackend extends Mock implements FirestoreBackend {}
@@ -36,6 +40,7 @@ void main() {
     when(mockBackend.location).thenReturn("St. Thomas Hospiutal");
     when(mockBackend.dateTime).thenReturn(DateTime(2019, 3, 25, 10, 0));
     when(mockBackend.doctorName).thenReturn("Eliana Reyes");
+    when(mockBackend.contactNumber).thenReturn("12345");
     when(mockBackend.color).thenReturn(Colors.blue);
 
     AppointmentInfo appointmentInfo = AppointmentInfo();
@@ -69,6 +74,7 @@ void main() {
     when(mockBackend.location).thenReturn("St. Thomas Hospiutal");
     when(mockBackend.dateTime).thenReturn(DateTime(2019, 3, 25, 10, 0));
     when(mockBackend.doctorName).thenReturn("Eliana Reyes");
+    when(mockBackend.contactNumber).thenReturn("12345");
     when(mockBackend.color).thenReturn(Colors.blue);
 
     AppointmentInfo appointmentInfo = AppointmentInfo();
@@ -104,6 +110,7 @@ void main() {
     when(mockBackend.location).thenReturn("St. Thomas Hospiutal");
     when(mockBackend.dateTime).thenReturn(DateTime(2019, 3, 25, 10, 0));
     when(mockBackend.doctorName).thenReturn("Eliana Reyes");
+    when(mockBackend.contactNumber).thenReturn("12345");
     when(mockBackend.color).thenReturn(Colors.blue);
 
     AppointmentInfo appointmentInfo = AppointmentInfo();
@@ -139,6 +146,7 @@ void main() {
     when(mockBackend.location).thenReturn("St. Thomas Hospiutal");
     when(mockBackend.dateTime).thenReturn(DateTime(2019, 3, 25, 10, 0));
     when(mockBackend.doctorName).thenReturn("Eliana Reyes");
+    when(mockBackend.contactNumber).thenReturn("12345");
     when(mockBackend.color).thenReturn(Colors.blue);
 
     AppointmentInfo appointmentInfo = AppointmentInfo();

@@ -27,7 +27,8 @@ void main() {
         DateTime(2019, 3, 25, 10, 0),
         "VyyiBYwp0xX4nJyvX9oN",
         "Eliana Reyes",
-        "FDG PET Scan of the Heart");
+        "FDG PET Scan of the Heart",
+        "12345 123456");
 
     await tester.pumpWidget(testableWidget(child: calendarCard));
 
@@ -61,11 +62,12 @@ void main() {
         DateTime(2019, 3, 25, 10, 0),
         "VyyiBYwp0xX4nJyvX9oN",
         "Eliana Reyes",
-        "FDG PET Scan of the Heart");
+        "FDG PET Scan of the Heart",
+        "12345 123456");
 
     MockBackend mockBackend = new MockBackend();
 
-    when(mockBackend.setBackendParams(any, any, any, any, any, any, any))
+    when(mockBackend.setBackendParams(any, any, any, any, any, any, any, any))
         .thenAnswer((_) {});
     when(mockBackend.appointmentName).thenReturn("sample appointment name");
     when(mockBackend.messagesSnapshots(any)).thenAnswer(null);

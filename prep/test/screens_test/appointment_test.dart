@@ -37,6 +37,7 @@ main() {
   }
 
   void setUpMockBackend() {
+    when(mockBackend.contactNumber).thenReturn("");
     when(mockBackend.doctorName).thenReturn("");
     when(mockBackend.location).thenReturn("");
     when(mockBackend.appointmentName).thenReturn("");
