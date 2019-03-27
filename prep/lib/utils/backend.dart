@@ -2,7 +2,9 @@
 /// Firebase Cloud Firestore database backend. Each class defines a
 /// specific group of queries.
 
+import 'dart:async';
 import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 export 'package:cloud_firestore/cloud_firestore.dart';
@@ -183,7 +185,7 @@ class FirestoreBackend implements BaseBackend {
 
   Stream<QuerySnapshot> get recipeSnapshots => _testReference
       .collection('prepCards')
-      .where('cardType', isEqualTo: 'recipe')
+      .where('type', isEqualTo: 'recipe')
       .snapshots();
 
   Stream<Map<String, dynamic>> informationSnapshots(documentId) =>
