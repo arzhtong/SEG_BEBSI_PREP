@@ -24,15 +24,17 @@ void main() {
         DescriptiveExpansionTile("testCategory", "testDescription", items);
       //Renders UI with expansionTile widget
     await tester.pumpWidget(testableWidget(child: expansionTile));
-
-    final titleFinder = find.text("testCategory"); //Text to search for
+     //Text to search for
+    final titleFinder = find.text("testCategory"); 
     final descriptionFinder = find.text("testDescription");
     final itemListFinder =
         find.text("item1 • item2 • item3 hello • item4 cars • item5");
-
-    expect(titleFinder, findsOneWidget); //Expect a widget wiht title
-    expect(descriptionFinder, findsNothing); //Expect no widget with description
-    expect(itemListFinder, findsNothing); //Expect no widget with items
+    //Expect a widget wiht title
+    expect(titleFinder, findsOneWidget); 
+    //Expect no widget with description
+    expect(descriptionFinder, findsNothing); 
+    //Expect no widget with items
+    expect(itemListFinder, findsNothing); 
   });
 
   testWidgets(
@@ -82,11 +84,11 @@ void main() {
     await tester.pumpWidget(testableWidget(child: expansionTile));
 
     final titleFinder = find.text("testCategory");
-
-    await tester.tap(titleFinder); //Makes a gesture of a tap on the title
+    //Makes a gesture of a tap on the title
+    await tester.tap(titleFinder); 
     await tester.pump();
-
-    final descriptionFinder = find.byKey(Key('description')); //Search for widget with key containing "description"
+    //Search for widget with key containing "description"
+    final descriptionFinder = find.byKey(Key('description')); 
     final itemListFinder =
         find.text("item1 • item2 • item3 hello • item4 cars • item5");
 

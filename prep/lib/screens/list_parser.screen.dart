@@ -5,8 +5,8 @@ import 'package:prep/utils/backend.dart';
 import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/widgets/list_parser/description_expansion_tile.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
-///Builds a categorylist in the form of expansion tiles for different categories
 
+//Builds a categorylist in the form of expansion tiles for different categories
 class CategoryListParser extends StatelessWidget {
   final String documentId;
   final String _title;
@@ -29,7 +29,8 @@ class CategoryListParser extends StatelessWidget {
             if (!dataSnapshot.hasData) {
               return const Align(
                 alignment: Alignment.topCenter,
-                child: LinearProgressIndicator(), //Displays progress bar at top
+                //Displays progress bar at top
+                child: LinearProgressIndicator(), 
               );
             } else {
               //Making sure that there are snapshots available
@@ -52,8 +53,10 @@ class CategoryListParser extends StatelessWidget {
 
   Widget _buildDropDownList(
       BuildContext context, Map<String, dynamic> dataMap) {
-    List<Widget> dropDowns = new List(); //Stores the tiles containing name,description and items
-    List<dynamic> mappedData = dataMap['maps']; //Gets the mapped data from the database
+        //Stores the tiles containing name,description and items
+    List<Widget> dropDowns = new List(); 
+     //Gets the mapped data from the database
+    List<dynamic> mappedData = dataMap['maps'];
     //Goes through the mappedData and makes a tile containing the name,description and items.
     mappedData.forEach((value) {
       dropDowns.add(DescriptiveExpansionTile(
