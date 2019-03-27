@@ -149,6 +149,7 @@ class _DashboardState extends State<Dashboard> {
                 _clearData();
               }),
           IconButton(
+              key: Key('refreshButton'),
               icon: Icon(Icons.refresh),
               onPressed: () {
                 setState(() {});
@@ -276,7 +277,8 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                                   .backend
                                   .setAppointmentCodeUsed(
                                       _parent.codeController.text);
-                              print("-----------TRANSITION COMPLETED----------");
+                              print(
+                                  "-----------TRANSITION COMPLETED----------");
                             }
 
                             print("Checkpoint 4");
@@ -288,9 +290,6 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                             print("Checkpoint 5");
 
                             if (_parent._formKey.currentState.validate()) {
-                              print(
-                                  "To be new code test file - NEW CODE DIALOG");
-
                               await BackendProvider.of(context)
                                   .storage
                                   .writeData(_parent.codeFileState +
