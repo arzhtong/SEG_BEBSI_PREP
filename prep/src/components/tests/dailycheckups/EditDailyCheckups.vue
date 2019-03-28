@@ -7,13 +7,6 @@
 
                <div class="row">
                     <div class="input-field col s12">
-                        <p>Description</p>
-                        <input type="text" v-model="description" required>
-                    </div>
-               </div>
-
-               <div class="row">
-                    <div class="input-field col s12">
                          <p>Number of Days Before Test:</p>
                         <input type="number" min="0" v-model="daysBeforeTest" required>
                     </div>

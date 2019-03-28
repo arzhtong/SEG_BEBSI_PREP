@@ -12,10 +12,6 @@
         <b>Number of Days Before Test:</b>
         {{daysBeforeTest}}
       </li>
-      <li v-if="description" class="collection-item">
-        <b>Description:</b>
-        {{description}}
-      </li>
       <li class="collection-item">
         <b>Instructions:</b>
        

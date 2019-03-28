@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component renders correctly 1`] = `
+<div
+  id="view-dailycheckups"
+>
+  <ul
+    class="collection with-header"
+  >
+    <li
+      class="collection-header"
+    >
+      <div
+        calss="container"
+        style="width: 100%; height: 100%;"
+      >
+        <table
+          calss="collection with-header "
+          style="background: white; margin-top: 10%; width: 100%; height: auto;"
+        >
+          <thead
+            calss="collection-header"
+          >
+            <h4
+              style="padding: 10px; font-size: 3em; font-weight: bold;"
+            >
+              Daily Check-ups
+            </h4>
+             
+            <tr
+              style="font-size: 1.5em;"
+            >
+              <th>
+                Id
+              </th>
+               
+              <th>
+                Days Before Test
+              </th>
+               
+              <th>
+                Description
+              </th>
+            </tr>
+          </thead>
+            
+          <br />
+           
+          <a>
+            <button
+              class="btn green"
+              style="position: relative; text-align: center;"
+            >
+              Add DailyCheckUps
+            </button>
+          </a>
+           
+          <a>
+            <button
+              class="btn grey"
+              id="GoBackTest"
+              style="margin: 20px;"
+            >
+              Back
+            </button>
+          </a>
+        </table>
+      </div>
+    </li>
+  </ul>
+</div>
+`;

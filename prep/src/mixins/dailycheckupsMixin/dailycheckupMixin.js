@@ -9,7 +9,6 @@ export const dailycheckupMixin ={
           allInstr: [],
           allInstrArray:[],
           instructions:[],
-          description: null,
           daysBeforeTest:null 
         }
     },
@@ -27,7 +26,6 @@ export const dailycheckupMixin ={
               const data = {
                 'id': doc.id,
                 'daysBeforeTest':doc.data().daysBeforeTest,
-                'description':doc.data().description,
                 'instrcutions': doc.data().instructions,
               }
                 this.dailyCheckups.push(data)
@@ -44,8 +42,7 @@ export const dailycheckupMixin ={
             .then(doc => {
               this.code = doc.id;
               this.instructions = doc.data().instructions;
-              this.daysBeforeTest = doc.data().daysBeforeTest;
-              this.description = doc.data().description;   
+              this.daysBeforeTest = doc.data().daysBeforeTest; 
             })
       },
         //get daily checkups data for edit daily check-ups page
@@ -58,7 +55,6 @@ export const dailycheckupMixin ={
             .then(doc => {
                   (this.code=doc.id),             
                   (this.allInstr = doc.data().instructions),
-                  (this.description = doc.data().description),
                   (this.daysBeforeTest = doc.data().daysBeforeTest)
               
                for (const [key, value] of Object.entries(this.allInstr)) {
@@ -118,7 +114,6 @@ export const dailycheckupMixin ={
               .collection("dailyCheckups")
               .add({
                 instructions: map,
-                description: this.description,
                 daysBeforeTest: Number(this.daysBeforeTest)
               })
               .then(docRef => {
@@ -166,7 +161,6 @@ export const dailycheckupMixin ={
                  doc.ref
                    .update({
                      instructions: this.allInstr,
-                     description: this.description,
                      daysBeforeTest:Number(this.daysBeforeTest),
                    })
                    .then(() => {             

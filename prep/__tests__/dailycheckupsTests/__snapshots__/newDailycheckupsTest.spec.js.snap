@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component renders correctly 1`] = `
+<div
+  id="new-dailycheckups"
+  style="background-color: white; padding: 10px 50px 10px 50px; margin-top: 10px;"
+>
+  <h3>
+    Add Daily Check-ups
+  </h3>
+   
+  <div
+    class="row"
+  >
+    <form
+      class="col s12"
+    >
+      <div
+        class="row"
+      >
+        <div
+          class="input-field col s12"
+        >
+          <input
+            required="required"
+            type="text"
+          />
+           
+          <label>
+            Description
+          </label>
+        </div>
+      </div>
+       
+      <div
+        class="row"
+      >
+        <div
+          class="input-field col s12"
+        >
+          <input
+            min="0"
+            required="required"
+            type="number"
+          />
+           
+          <label>
+            Number of Days Before Test:
+          </label>
+        </div>
+      </div>
+       
+      <button
+        class="btn green"
+        id="add"
+      >
+        new instruction
+      </button>
+       
+      <div
+        class="row"
+      />
+       
+      <button
+        class="btn"
+        id="submit"
+        type="submit"
+      >
+        Submit
+      </button>
+       
+      <a>
+        <button
+          class="btn grey"
+          id="CancelAdd"
+        >
+          
+      Cancel
+      
+        </button>
+      </a>
+    </form>
+  </div>
+</div>
+`;

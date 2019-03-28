@@ -50,7 +50,6 @@
           <thead class="collection-header">
             <tr style="font-size:1.5em;">
               <th>Days to appointment</th>
-              <th style="padding-left:10% !important">Description</th>
               <th style="padding-left:10% !important">Instructions:</th>
             </tr>
           </thead>
@@ -63,7 +62,6 @@
           >
             <tr>
               <td>{{checkup.daysBeforeTest}}</td>
-              <td style="padding-left:10% !important">{{checkup.description}}</td>
               <td style="padding-left:10% !important">
                 <div v-for="(instruction, index) in checkup.instructions" v-bind:key="index">
                   <div style="float:left;">
