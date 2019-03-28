@@ -6,7 +6,7 @@
                 <div class="col s12">
                     <div class="card-panel light-blue">
                         <span class="card-title white-text"><i class="small material-icons">info_outline</i>Info</span>
-                        <p class="white-text">Fill in the fields below and then click submit. Only a title is required, all other fields are optional.</p>
+                        <p class="white-text">Fill in the fields below and then click submit.<br> A title is required, along with a recipe link or an ingredients list with instructions.</p>
                     </div>
                 </div>
                 <form @submit.prevent="saveRecipe" class="col s12">
@@ -55,9 +55,10 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div id="tags" class="input-field col s6">
+                        <div id="tags" class="input-field col s6 left">
+                            <label id="heading" >Recipe tags</label>
                             <!-- chips component for recipe tags -->
-                            <div class="chips chips-placeholder"></div>
+                            <div class="chips chips-placeholder" style="padding-top: 40px;"></div>
                         </div>
                     </div>
                     <div class="row">
@@ -109,7 +110,7 @@ export default {
     font-size: 15px
 }
 #tags {
-    padding-bottom: 15px
+    padding-bottom: 15px 
 }
 #addBtn {
     margin: 10px;
