@@ -5,6 +5,7 @@ import 'package:prep/utils/backend.dart';
 import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/widgets/list_parser/description_expansion_tile.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
+import 'package:prep/utils/misc_functions.dart';
 
 class CategoryListParser extends StatelessWidget {
   final String documentId;
@@ -17,7 +18,7 @@ class CategoryListParser extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.indigo,
-        title: Text(_title),
+        title: Text(stringValidator(_title)),
       ),
       body: StreamBuilder(
           stream: BackendProvider.of(context)
