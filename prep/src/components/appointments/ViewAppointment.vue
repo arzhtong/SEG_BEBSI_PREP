@@ -62,7 +62,7 @@
           >
             <tr>
               <td style="padding-left: 8%; font-size: 20px;">{{checkup.daysBeforeTest}}</td>
-              <td style="padding-left:10% !important">
+              <td style="padding-left:5% !important">
                 <div v-for="(instruction, index) in checkup.instructions" v-bind:key="index">
                   <div style="float:left;">
                     <span>
