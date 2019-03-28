@@ -12,9 +12,7 @@ exports[`Component renders correctly 1`] = `
   <div
     class="row"
   >
-    <ul
-      class="collapsible"
-    >
+    <ul>
       <li>
         <div
           class="col s12"

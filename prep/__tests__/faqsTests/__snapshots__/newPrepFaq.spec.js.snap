@@ -1,0 +1,168 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component renders correctly 1`] = `
+<div
+  id="new-prep-faq"
+  style="background-color: white; padding: 10px 50px 10px 50px; margin-top: 10px;"
+>
+  <h3>
+    New FAQ
+  </h3>
+   
+  <div
+    class="row"
+  >
+    <ul>
+      <li>
+        <div
+          class="col s12"
+        >
+          <div
+            class="card-panel light-blue"
+          >
+            <span
+              class="card-title white-text"
+            >
+              <i
+                class="small material-icons"
+              >
+                info_outline
+              </i>
+              Info
+          
+            </span>
+             
+            <p
+              class="white-text"
+            >
+              
+            Enter a question and its answer in the respective fields below.
+            
+              <br />
+               
+              <br />
+              Add information and chat buttons to this question to take the patient directly to that page.
+          
+            </p>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+   
+  <div
+    class="row"
+  >
+    <form
+      class="col s12"
+    >
+      <div
+        class="row"
+      >
+        <div
+          class="input-field col s12"
+        >
+          <span
+            id="title"
+          >
+            Question*
+          </span>
+           
+          <input
+            required="required"
+            type="text"
+          />
+        </div>
+      </div>
+       
+      <div
+        class="row"
+      >
+        <div
+          class="input-field col s12"
+        >
+          <span
+            id="title"
+          >
+            Answer*
+          </span>
+           
+          <input
+            required="required"
+            type="text"
+          />
+        </div>
+      </div>
+       
+      <div
+        class="row"
+      >
+        <div
+          class="input-field col s12"
+        >
+          <p
+            style="margin-right: 100%;"
+          >
+            <label>
+              <input
+                class="filled-in"
+                id="chatCheck"
+                type="checkbox"
+              />
+               
+              <span
+                class="blue-text"
+              >
+                Has chat shortcut?
+              </span>
+            </label>
+          </p>
+        </div>
+      </div>
+       
+      <div
+        class="row"
+      >
+        <div
+          class="input-field col s12"
+        >
+          <p
+            style="margin-right: 100%;"
+          >
+            <label>
+              <input
+                class="filled-in"
+                id="informationCheck"
+                type="checkbox"
+              />
+               
+              <span
+                class="blue-text"
+              >
+                Has information shortcut?
+              </span>
+            </label>
+          </p>
+        </div>
+      </div>
+       
+      <div>
+        <button
+          class="btn"
+          id="submitButton"
+          type="submit"
+        >
+          Submit
+        </button>
+         
+        <a
+          class="btn grey"
+          id="cancelButton"
+        >
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+`;
