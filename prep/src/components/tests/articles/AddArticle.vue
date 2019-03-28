@@ -14,7 +14,8 @@
                         <div class="collapsible-header"><i class="small material-icons">info_outline</i>Info</div>
                         <div class="collapsible-body"><span>Please use the text area below to enter information about this article. If this information is not currently available, 
                         you can leave this blank for now and edit the information later.<br><br>Images can also be uploaded by clicking on the 
-                        image icon. Images should be placed inbetween blocks of text so that they correctly display in the app.</span></div>
+                        image icon. Images should be placed inbetween blocks of text so that they correctly display in the app.<br><br>
+                        When entering web links, please ensure they are copied directly from the browser bar. Eg starting with https rather than www. </span></div>
                     </li>
                 </ul>
                 <div>
