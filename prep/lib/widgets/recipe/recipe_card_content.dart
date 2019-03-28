@@ -16,8 +16,9 @@ class RecipeCardContent extends StatelessWidget {
     final dynamic dynamicIngredientListData = documentData['ingredients'];
 
     final dynamic dynamicMethodListData = documentData['method'];
-    final dynamic dynamicExternalUrlData = documentData['externalURL'];
-    final dynamic dynamicNoteData = documentData['note'];
+    final dynamic dynamicExternalUrlData =
+        documentData['externalURL']?.toString();
+    final dynamic dynamicNoteData = documentData['note']?.toString();
 
     //check data
 
@@ -38,7 +39,12 @@ class RecipeCardContent extends StatelessWidget {
       _addToContentWithSpacer(RecipeMethodList(dynamicMethodListData), content);
     }
 
-    if (dynamicExternalUrlData != null) {
+    if (dynamicExternalUrlData != null &&
+        isURL(
+          dynamicExternalUrlData,
+          allowUnderscore: true,
+          requireTld: false,
+        )) {
       assert(dynamicExternalUrlData.runtimeType == String);
       _addToContentWithSpacer(
           ExternalRecipeLink(dynamicExternalUrlData), content);
