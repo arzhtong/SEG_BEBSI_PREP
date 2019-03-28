@@ -9,6 +9,10 @@ class Constants {
   static const String kDefaultRecipeType = "default";
   static const String kDefaultRecipeTitle = "Recipe";
 
+  static const String kNoRecipesFoundTitle = 'No Recipes Found!';
+  static const String kNoRecipesFoundSubtitle =
+      'Seems like the staff havn\'t  added any recipes yet...';
+
   static const String kErrorPrefix = "Error:";
   static const String kErrorRecipeNotFound =
       "$kErrorPrefix Recipe data not found.";
