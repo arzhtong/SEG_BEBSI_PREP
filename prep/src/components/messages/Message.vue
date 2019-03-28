@@ -43,7 +43,7 @@
       <form @submit.prevent="sendMessage">
         <div class="row">
           <div class="input-field col s12">
-            <div id="foot">
+            <div id="foot" class="valign-wrapper">
               <textarea
                 @click="scrollToBottom"
                 style="width:30%;height:80px;resize: none;"
@@ -54,7 +54,7 @@
                 id="sendMessage"
                 type="submit"
                 class="btn btn-large"
-                style="margin: 0 0 8% 10px"
+                style="margin-left:5px;"
               >
                 <i class="material-icons left">send</i>
               </button>
