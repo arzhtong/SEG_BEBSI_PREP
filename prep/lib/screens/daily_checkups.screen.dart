@@ -18,10 +18,10 @@ class DailyCheckups extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            backend.dateTime
+            stringValidator(backend.dateTime
                 .subtract(Duration(days: daysBeforeTest))
                 .day
-                .toString(),
+                .toString()),
             style: TextStyle(
               color: Colors.white,
               fontSize: 18.0,
@@ -48,7 +48,8 @@ class DailyCheckups extends StatelessWidget {
     }
   }
 
-  Widget _buildListItem(BuildContext context, Map<String, Map<String, dynamic>> docIdDataMap) {
+  Widget _buildListItem(
+      BuildContext context, Map<String, Map<String, dynamic>> docIdDataMap) {
     List<Widget> instructionWidgets = new List();
 
     String docID = docIdDataMap.keys.first;
@@ -56,50 +57,52 @@ class DailyCheckups extends StatelessWidget {
 
     Map<dynamic, dynamic> dynamicInstructions = dataMap['instructions'];
 
-    dynamicInstructions.forEach((index, map) {
-      Map<dynamic, dynamic> checkupMap = map;
+    if (dynamicInstructions != null) {
+      dynamicInstructions.forEach((index, map) {
+        Map<dynamic, dynamic> checkupMap = map;
 
-      instructionWidgets.add(Column(
-        children: <Widget>[
-          Divider(),
-          ListTile(
-              leading: Container(
-                //color: Colors.red,
-                child: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  radius: 23.0,
+        instructionWidgets.add(Column(
+          children: <Widget>[
+            Divider(),
+            ListTile(
+                leading: Container(
+                  //color: Colors.red,
                   child: CircleAvatar(
-                    backgroundColor: Colors.grey[300],
-                    radius: 14.0,
-                    child: Text(
-                      (int.parse(index) + 1).toString(),
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.bold),
+                    backgroundColor: Colors.white,
+                    radius: 23.0,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.grey[300],
+                      radius: 14.0,
+                      child: Text(
+                        stringValidator((int.parse(index) + 1).toString()),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              title: Text(
-                checkupMap['question'],
-              ),
-              trailing: Container(
-                //color: Colors.red,
-                child: Switch(
-                  activeColor: Colors.green[500],
-                  activeTrackColor: Colors.green[100],
-                  value: checkupMap['answer'],
-                  onChanged: (_) {
-                    print(docID);
-                    BackendProvider.of(context).backend.flickCheckupSwitch(
-                        docID, index, checkupMap['answer']);
-                  },
+                title: Text(
+                  stringValidator(checkupMap['question']),
                 ),
-              ))
-        ],
-      ));
-    });
+                trailing: Container(
+                  //color: Colors.red,
+                  child: Switch(
+                    activeColor: Colors.green[500],
+                    activeTrackColor: Colors.green[100],
+                    value: checkupMap['answer'],
+                    onChanged: (_) {
+                      print(docID);
+                      BackendProvider.of(context).backend.flickCheckupSwitch(
+                          docID, index, checkupMap['answer']);
+                    },
+                  ),
+                ))
+          ],
+        ));
+      });
+    }
 
     instructionWidgets.add(Divider(
       height: 9.0,
