@@ -1,6 +1,16 @@
 <template>
   <div>
     <div class="containerChat" id="top">
+       <div class="row">
+                <div class="col s12">
+                    <div class="card-panel light-blue" style="height: 150px">
+                        <span class="card-title white-text"><i class="small material-icons">info_outline</i></span>
+                        <p class="white-text">Please be aware that pressing 'Enter' will only make a new line and not send the message!
+                          <br>Click the 'Send Button' to send a message.
+                        </p>
+                    </div>
+                </div>
+            </div>
       <div id="messages" tag="msg">
         <ul>
           <li v-for="message in messages" v-bind:key="message.msgKey">
@@ -44,7 +54,7 @@
                 id="sendMessage"
                 type="submit"
                 class="btn btn-large"
-                style="margin: 0 0 5% 10px"
+                style="margin: 0 0 8% 10px"
               >
                 <i class="material-icons left">send</i>
               </button>
@@ -52,6 +62,7 @@
           </div>
         </div>
       </form>
+      
       <template v-if="this.$route.params.expired == false">
         <router-link id="currentApp" to="/view-appointments" class="btn" style="margin-bottom:10px;">Go Back</router-link>
       </template>
