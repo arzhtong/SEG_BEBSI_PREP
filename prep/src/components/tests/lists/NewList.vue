@@ -2,7 +2,7 @@
   <div id="new-list" style="background-color:white; padding: 10px 50px 10px 50px; margin-top:10px">
     <h3>New List</h3>
     <div class="row">
-      <ul class="collapsible">
+      <ul>
         <li>
           <div class="col s12">
             <div class="card-panel light-blue">

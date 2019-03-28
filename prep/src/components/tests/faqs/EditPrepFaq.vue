@@ -3,12 +3,22 @@
   style="background-color:white; padding: 10px 50px 10px 50px; margin-top:10px">
     <h3>Edit FAQ</h3>
     <div class="row">
-         <ul class="collapsible">
-                    <li>
-                        <div class="collapsible-header" style="color:#2196f3"><i class="small material-icons">info_outline</i>Info</div>
-                        <div class="collapsible-body"><span>Enter a question and its answer in the respective fields below.<br><br>Add information and chat buttons to this question to take the patient directly to that page.</span></div>
-                    </li>
-                </ul>
+      <ul>
+         <li>
+        <div class="col s12">
+          <div class="card-panel light-blue">
+            <span class="card-title white-text">
+              <i class="small material-icons">info_outline</i>Info
+            </span>
+            <p class="white-text">
+              Enter a question and its answer in the respective fields below.
+              <br>
+              <br>Add information and chat buttons to this question to take the patient directly to that page.
+            </p>
+          </div>
+        </div>
+      </li>
+      </ul>
         </div>
     <div class="row">
       <form @submit.prevent="updateFAQ" class="col s12">
@@ -59,9 +69,10 @@
             </p>
           </div>
         </div>
-        <button type="submit" class="btn">Submit</button>
+        <button id="submitButton" type="submit" class="btn">Submit</button>
         <!-- cancel button -->
         <router-link
+        id="cancelButton"
           v-bind:to="{name: 'view-prep-faqs', params: {test_id: test_id}}"
           class="btn grey"
         >Cancel</router-link>
@@ -78,13 +89,7 @@ export default {
   mixins: [faqsMixin],
   created(){
     this.createEditPrepFaq()
-  },
-   mounted() {
-        // initalise colapsablie component
-         $(document).ready(function() {
-            $('.collapsible').collapsible()
-        })
-    }
+  }
 };
 </script>
 <style scoped>
