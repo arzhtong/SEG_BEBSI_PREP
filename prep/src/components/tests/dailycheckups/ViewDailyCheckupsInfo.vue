@@ -28,6 +28,14 @@
 
       <li class="collection-item">
         <router-link
+          v-bind:to="{name: 'view-dailycheckups', params: {test_id: test_id}}"
+        >
+        <button id="GoBackDaily" class="btn grey">
+        Back
+        </button>
+        </router-link>
+        
+        <router-link
           v-bind:to="{name: 'edit-dailycheckups', params: {test_id: test_id, daily_id:this.code}}"
         >
         <button id="GoEditCheckups" class="btn green">
@@ -39,13 +47,6 @@
           <button id="DeleteCheckups" @click="deleteDailyCheckups" class="btn red">Delete</button>
         </router-link>
 
-        <router-link
-          v-bind:to="{name: 'view-dailycheckups', params: {test_id: test_id}}"
-        >
-        <button id="GoBackDaily" class="btn grey">
-        Back
-        </button>
-        </router-link>
       </li>
     </ul>
 

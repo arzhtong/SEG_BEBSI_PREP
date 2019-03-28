@@ -1,7 +1,7 @@
 <template>
   <div
     id="new-appointment"
-    style="background-color:white; padding: 10px 50px 10px 50px; margin-top:10px"
+    style="background-color:white; padding: 10px 50px 10px 50px; margin-top:10px; margin-bottom:30px"
   >
     <div id="loader">
       <div id="el" class="preloader-wrapper big active">

@@ -3,7 +3,7 @@
         <ul class="collection with-header">
             <li class="collection-header">
                 <div class="container" style="width:100%;height:100%">
-                    <table class="collection with-header " style="background: white;margin-top:10%;width:100%;height:auto">
+                    <table class="collection with-header " style="background: white;width:100%;height:auto">
                         <thead class="collection-header">
                             <h4 style="padding:20px;font-size:3em;"><b>Recipes</b></h4>
                             <tr style="font-size:1.5em">
@@ -18,7 +18,7 @@
                             </tr>
                         </tbody>
                         <router-link v-bind:to="{name: 'new-recipe', params: {test_id: testID}}" class="btn green">Add Recipe</router-link>
-                        <router-link to="/view-tests" ><button class="btn grey" style="margin:20px;">Back</button></router-link>
+                        <router-link to="/view-tests" ><button class="btn grey" style="margin:10px;">Back</button></router-link>
                     </table>
                 </div>
             </li>

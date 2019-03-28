@@ -12,17 +12,6 @@
                 </div>
                 </div>
             </div>
-        <div class="container" style="width:100%;height:100%">
-          <router-link
-            v-bind:to="{name: 'new-prep-faq', params: {test_id: testID}}"
-            class="btn green"
-            style="margin:20px"
-          >Add FAQ</router-link>
-          <router-link
-            to="/view-tests"
-            class="btn grey"
-          >Back</router-link>
-        </div>
 
         <!-- adds a dropdown -->
         <ul class="collapsible">
@@ -67,6 +56,17 @@
             </div>
           </li>
         </ul>
+        <div class="container" style="width:100%;height:100%">
+          <router-link
+            v-bind:to="{name: 'new-prep-faq', params: {test_id: testID}}"
+            class="btn green"
+            style="margin: 10px 10px 10px 0px"
+          >Add FAQ</router-link>
+          <router-link
+            to="/view-tests"
+            class="btn grey"
+          >Back</router-link>
+        </div>
       </li>
     </ul>
   </div>
