@@ -43,6 +43,7 @@ export const recipeMixin = {
 
     
     methods: {
+        // functions to edit the ingredients and instructions 
         addInstruction() {
             this.instructions.push('')
         },

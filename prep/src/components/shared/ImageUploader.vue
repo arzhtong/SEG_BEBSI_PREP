@@ -44,6 +44,7 @@ import 'firebase/storage'
 
 export default {
     name: 'imageUploader',
+    // prop can be supllied to display an image already stored
     props: ['imageURL'],
     data() {
         return {
@@ -57,6 +58,8 @@ export default {
         }
     },
     methods: {
+        // called when a file has been selected from the file picker
+        // checks that the file is of an acceptable format before attempting to upload
         upload(event) {
             this.selectedFile = event.target.files[0]
             this.fileName = this.selectedFile.name
@@ -71,11 +74,13 @@ export default {
                 txt += "Please make sure your file is in jpg, png or gif format and less than 1 MB.\n\n"
                 alert(txt);
             } else {
+                // upload the image to firebase storage
                 this.uploading = true
                 this.uploadTask = firebase.storage().ref('images/' + this.fileName).put(this.selectedFile)
             }
         },
         deleteImage() {
+            // remove the currently displayed image from firebase and rest the component ready for a new picture
             firebase.storage()
                     .refFromURL(this.downloadURL)
                     .delete()
@@ -91,6 +96,8 @@ export default {
         }
     },
     watch: {
+        // function is triggered when a file starts uploading to firestore
+        // progress is tracked in the uploadPercentage property
         uploadTask: function() {
                 this.uploadTask.on('state_changed', snapshot => {
                 var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -100,7 +107,7 @@ export default {
             (error) => {
                 console.error(`file upload error occured: ${error}`)
             },
-            
+            // upload is complete and download URL is stored and emited to parent components
             () => {
                 this.uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
                 this.uploadEnd = true
@@ -109,6 +116,8 @@ export default {
                 })
             })
         },
+        // if provided with an image component at creation, this will ensure that the image is displayed 
+        // and the delete button rather than the upload button
         imageURL: function() {
             if (this.imageURL !== null && this.imageURL !=='') {
                 this.uploadEnd = true

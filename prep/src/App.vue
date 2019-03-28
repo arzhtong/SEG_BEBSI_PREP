@@ -30,6 +30,8 @@ export default {
   #central {
     max-height: 90vh;
     padding-top: 30px;
+    padding-right: 30px;
+    min-height: 70vmax;
     min-width: 80vmax;
   }
   .tooltip {

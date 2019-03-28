@@ -19,7 +19,7 @@
             <label style="font-size:25px">Saving file... {{uploadPercentage}}%</label>
         </div>
     </div>
-
+    <!-- import the text editor framework with custom options -->
     <div id="app">
         <vue-editor id="editor"
         useCustomImageHandler
@@ -28,9 +28,6 @@
         :editorToolbar="customToolbar">
         </vue-editor>
     </div>
-    <!-- <div class="center-align">
-        <a class="btn green" @click="saveEditorData">Done</a>
-    </div> -->
 </div>
 </template>
  
@@ -40,6 +37,7 @@ import firebase from "firebase/app";
 import 'firebase/storage'
 
 export default {
+    // preload editor text and images if supplied from parent component
     props: ["editorInformation", "editorImages"],
     data() {
         return {
@@ -52,7 +50,7 @@ export default {
             uploadEnd: false,
             uploadTask: '',
             fileName: '',
-            customToolbar: [
+            customToolbar: [ // custom toolbar options
             [{ 'header': [false, 1, 2, 3, 4] }],
             ['bold', 'italic', 'underline', 'strike'],
             ['blockquote', 'code-block'],
@@ -70,6 +68,7 @@ export default {
         this.addData()
     },
     methods: {
+        // custom image handler that checks valid image format before uploading to firebase 
         handleImageAdded: function(file, Editor, cursorLocation, resetUploader) {
             
             this.editor = Editor;
@@ -90,6 +89,7 @@ export default {
                 this.uploadTask = firebase.storage().ref('images/' + this.fileName).put(file)
             }
         },
+        // save the editors data and check if any images have been removed
         saveEditorData() {
             this.uploading = true
             this.deleteImages()
@@ -97,11 +97,13 @@ export default {
             // optional emit of editor data, uncomment if required
             // this.$emit('editorData', [this.htmlForEditor, this.images])
         },
+        // check if any images have been removed from the editor and if so delete them from firebase
         deleteImages() {
             let temp = []
             if(!(this.images === undefined || this.images.length == 0)) {
                 // check if any images have been removed from the editor
                 for (var i = 0; i < this.images.length; i++) { 
+                    // if image string is not matched -1 will be returned
                     if(this.htmlForEditor.indexOf(this.images[i]) < 0) {
                         // delete if they have been removed
                         firebase.storage().ref('images/' + this.images[i]).delete().then(() => {
@@ -110,6 +112,7 @@ export default {
                             console.error(`file delete error occured: ${error}`)
                         })
                     } else {
+                        // image has not been deleted so add it back
                         temp.push(this.images[i])
                     }
                 };
@@ -117,6 +120,7 @@ export default {
             // update images array
             this.images = temp
         }, 
+        // load any data provided in props by parent component
         addData() {
             if(this.editorInformation !== '') {
             this.htmlForEditor = this.editorInformation
