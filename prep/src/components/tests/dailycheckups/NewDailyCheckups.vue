@@ -32,7 +32,8 @@
           >
             <input type="text" v-model="instruction.value" required>
             <label>Instructions</label>
-            <button
+            <button 
+              id="delete"
               class="btn red"
               @click="deleteInstruction(instructions.indexOf(instruction))"
             >remove instruction</button>

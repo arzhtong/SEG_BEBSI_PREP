@@ -48,18 +48,15 @@ describe("Component", () => {
     
         expect(wrapper.vm.updateDailyCheckups).toHaveBeenCalled();
     }),
-    test("add correct instructions", () => {
-        // initialize the method
-        wrapper.setMethods({ addInstruction: jest.fn()})
+    test("add instructions button has been called", () => {
+      // initialize the method
+      wrapper.setMethods({ addInstruction: jest.fn()})
 
-        wrapper.vm. addInstruction()
-        const data1 = wrapper.vm.data
-        const data2 = { value: "Don't drink water" };
+      wrapper.find("#add").trigger("click");
 
-        expect(data2.value).toBe("Don't drink water")
-        expect(wrapper.vm.data).toBe(data1)
+      expect(wrapper.vm.addInstruction).toHaveBeenCalled();
 
-      }),
+    }),
       test("test if data is set correctly", () => {
         const data = {
           description:"someDescription",

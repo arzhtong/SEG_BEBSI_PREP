@@ -20,7 +20,7 @@
                </div>
 
 
-                <button @click="addInstruction" class="btn green"> Add instruction</button>
+                <button id="add" @click="addInstruction" class="btn green"> Add instruction</button>
                 <div class="row">
                     <div v-for="instruction in instructions" v-bind:key="instruction" class="input-field col s12">
                         <input type="text"  v-model="instruction.value" required>
@@ -34,7 +34,7 @@
                   <div v-for="instr in allInstrArray.length" v-bind:key="instr" class="input-field col s12">
                     <span>Instruction</span>
                     <input type="text" v-model="allInstrArray[instr - 1]" required>   
-                    <button @click="deleteInstructionEdit(instr -1)" class="btn red">remove instruction</button>
+                    <button id="delete" @click="deleteInstructionEdit(instr -1)" class="btn red">remove instruction</button>
                   </div>
                 </div>
 
