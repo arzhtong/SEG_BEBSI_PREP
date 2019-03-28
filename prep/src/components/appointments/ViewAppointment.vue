@@ -45,7 +45,7 @@
         <h4>Daily Checkups</h4>
         <table
           class="collection with-header "
-          style="background: white;height:auto"
+          style="background: white;height:auto; table-layout: fixed;"
         >
           <thead class="collection-header">
             <tr style="font-size:1.5em;">
@@ -61,7 +61,7 @@
             v-bind:key="index"
           >
             <tr>
-              <td>{{checkup.daysBeforeTest}}</td>
+              <td style="padding-left: 8%; font-size: 20px;">{{checkup.daysBeforeTest}}</td>
               <td style="padding-left:10% !important">
                 <div v-for="(instruction, index) in checkup.instructions" v-bind:key="index">
                   <div style="float:left;">

@@ -29,6 +29,7 @@ export default {
 <style>
   #central {
     max-height: 90vh;
+    padding-bottom: 30px;
     padding-top: 30px;
     padding-right: 30px;
     min-height: 70vmax;
@@ -51,7 +52,7 @@ export default {
   z-index: 1;
   bottom: 125%;
   left: 100%;
-  margin-left: -60px;
+  margin-left: -70px;
   opacity: 0;
   transition: opacity 0.3s;
 }
