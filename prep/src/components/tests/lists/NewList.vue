@@ -2,21 +2,21 @@
   <div id="new-list" style="background-color:white; padding: 10px 50px 10px 50px; margin-top:10px">
     <h3>New List View</h3>
     <div class="row">
-      <ul class="collapsible">
+      <ul>
         <li>
-          <div class="collapsible-header" style="color:#2196f3">
-            <i class="small material-icons">info_outline</i>Info
-          </div>
-          <div class="collapsible-body">
-            <span>
-              The list title will be displayed in the preparation card and as the title on that list's screen
-              <br>
-              <br>
-              Clicking on the NEW LIST button will create a new sublist inside the list's screen. This will contain a name, description and a list of items
-              <br>
-              <br>
-              Click on the NEW ITEM button to add items to the list of items.
-            </span>
+          <div class="col s12">
+            <div class="card-panel light-blue">
+              <span class="card-title white-text">
+                <i class="small material-icons">info_outline</i>Info
+              </span>
+              <p class="white-text">
+                The list title will be displayed in the preparation card and as the title on that list's screen
+                <br>
+                <br>Clicking on the NEW LIST button will create a new sublist inside the list's screen. This will contain a name, description and a list of items
+                <br>
+                <br>Click on the NEW ITEM button to add items to the list of items.
+              </p>
+            </div>
           </div>
         </li>
       </ul>
@@ -39,7 +39,7 @@
         </div>
         <div>
           <!-- adds a new map to be added to the database -->
-          <button @click="addMap" class="btn green">new List</button>
+          <button id="newListButton" @click="addMap" class="btn green">new List</button>
           <div v-for="map in allMaps" v-bind:key="map.id" class="input-field col s12">
             <span id="title">Name*</span>
             <input type="text" v-model="map.name" required>
@@ -66,9 +66,10 @@
           </div>
         </div>
         <div style="margin-top:10px">
-          <button type="submit" class="btn">Submit</button>
+          <button id="submitButton" type="submit" class="btn">Submit</button>
           <!-- cancel button -->
           <router-link
+            id="cancelButton"
             v-bind:to="{name: 'view-prep-lists', params: {test_id: this.$route.params.test_id}}"
             class="btn grey"
           >Cancel</router-link>
@@ -83,12 +84,6 @@ import { listsMixin } from "../../../mixins/listsMixin/listsMixin.js";
 export default {
   name: "new-list",
   mixins: [listsMixin],
-  mounted() {
-    // initalise colapsablie component
-    $(document).ready(function() {
-      $(".collapsible").collapsible();
-    });
-  }
 };
 </script>
 <style scoped>

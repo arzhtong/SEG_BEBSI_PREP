@@ -6,15 +6,17 @@
         <h4>{{title}}:</h4>
         <!-- route to all the lists -->
         <router-link
+        id="backButton"
           v-bind:to="{name: 'view-prep-lists', params: {test_id: test_id}}"
           class="btn grey"
         >Back</router-link>
         <!-- edit the list -->
         <router-link
+        id="editButton"
           v-bind:to="{name: 'edit-prep-list', params: {test_id: test_id, contents: this.$route.params.contents}}"
           class="btn green"
         >Edit</router-link>
-        <button @click="deleteList" class="btn red">Delete</button>
+        <button @click="deleteList" id="deleteButton" class="btn red">Delete</button>
       </li>
       <li class="collection-item">
         <b>

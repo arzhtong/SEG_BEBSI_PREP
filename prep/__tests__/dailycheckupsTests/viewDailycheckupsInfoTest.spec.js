@@ -25,10 +25,9 @@ describe("Component", () => {
   test("renders correctly", () => {
     expect(wrapper.element).toMatchSnapshot();
   }),
-  test("check if table is populated correctly", () => {
+  test("check if lists are populated correctly", () => {
     // <ul></ul> exists
     expect(wrapper.find("ul").exists()).toBe(true);
-    expect(wrapper.findAll("ul")).toHaveLength(1);
     expect(wrapper.findAll("li")).toHaveLength(5)
   }),
   test("the title is right", ()=> {
