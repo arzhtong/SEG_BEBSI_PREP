@@ -5,6 +5,7 @@ import 'package:prep/utils/backend.dart';
 import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/widgets/list_parser/description_expansion_tile.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
+import 'package:prep/utils/misc_functions.dart';
 
 //Builds a categorylist in the form of expansion tiles for different categories
 class CategoryListParser extends StatelessWidget {
@@ -18,7 +19,7 @@ class CategoryListParser extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.indigo,
-        title: Text(_title),
+        title: Text(stringValidator(_title)),
       ),
       body: StreamBuilder(
         //Gets a stream of snapshots for the categories

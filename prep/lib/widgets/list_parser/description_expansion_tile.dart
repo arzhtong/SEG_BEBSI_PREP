@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:prep/utils/misc_functions.dart';
+
 class DescriptiveExpansionTile extends StatelessWidget {
   final String category;
   final String description;
@@ -55,7 +57,7 @@ class DescriptiveExpansionTile extends StatelessWidget {
       child: Card(
         elevation: 3.0,
         child: ExpansionTile(
-          title: Text(category),
+          title: Text(stringValidator(category)),
           children: <Widget>[
             ListTile(
               title: Container(

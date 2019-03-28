@@ -33,7 +33,7 @@ class CalendarCard extends StatelessWidget {
         Expanded(
           flex: 4,
           child: Text(
-            label,
+            stringValidator(label),
             style: TextStyle(
               color: Colors.white,
               fontSize: 20.0,
@@ -44,7 +44,7 @@ class CalendarCard extends StatelessWidget {
         Expanded(
           flex: 6,
           child: Text(
-            content,
+            stringValidator(content),
             textAlign: TextAlign.end,
             style: TextStyle(
               color: Colors.white,
@@ -85,7 +85,7 @@ class CalendarCard extends StatelessWidget {
                               Container(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  testName,
+                                  stringValidator(testName),
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors.white,
@@ -111,7 +111,7 @@ class CalendarCard extends StatelessWidget {
                     )),
                 ListTile(
                   leading: Icon(Icons.code),
-                  title: Text(appointmentID),
+                  title: Text(stringValidator(appointmentID)),
                 ),
               ],
             ),

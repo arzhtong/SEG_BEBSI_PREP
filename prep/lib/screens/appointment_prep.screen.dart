@@ -6,6 +6,7 @@ import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/utils/backend.dart';
 import 'package:prep/widgets/appointment_prep/category_card.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
+import 'package:prep/utils/misc_functions.dart';
 
 class AppointmentPrep extends StatelessWidget {
   bool seenRecipe;

@@ -4,6 +4,7 @@ import 'package:prep/screens/recipeList.screen.dart';
 import 'package:prep/screens/information_parser.screen.dart';
 import 'package:prep/screens/list_parser.screen.dart';
 import 'package:prep/screens/faq_parser.screen.dart';
+import 'package:prep/utils/misc_functions.dart';
 
 class CategoryCard extends StatelessWidget {
   final String documentID;
@@ -100,7 +101,7 @@ class CategoryCard extends StatelessWidget {
               children: <Widget>[
                 ListTile(
                   title: Text(
-                    _getCategory(),
+                    stringValidator(_getCategory()),
                     style: TextStyle(
                         color: Colors.grey[400], fontStyle: FontStyle.italic),
                   ),
@@ -108,7 +109,7 @@ class CategoryCard extends StatelessWidget {
                 ),
                 ListTile(
                   title: Text(
-                    title,
+                    stringValidator(title),
                     //maxLines: 3,
                   ),
                 ),
