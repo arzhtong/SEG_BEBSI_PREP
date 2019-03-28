@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:prep/utils/constants.dart';
 
 import 'package:prep/utils/document_data_provider.dart';
 import 'package:prep/utils/misc_functions.dart';
@@ -69,7 +70,7 @@ class RecipeCardHeader extends StatelessWidget {
         DocumentDataProvider.of(context).documentData['recipeType'];
 
     backgroundImageUrl ??= '';
-    recipeType ??= 'default';
+    recipeType ??= Constants.kDefaultRecipeType;
     if (recipeType != null) {
       assert(recipeType is String);
     }

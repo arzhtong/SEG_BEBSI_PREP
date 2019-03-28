@@ -66,7 +66,7 @@ class _TitleText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Text(
-        text,
+        stringValidator(text),
         style: TextStyle(
           fontSize: 20.0,
           fontWeight: FontWeight.bold,
@@ -86,7 +86,7 @@ class _SubtitleText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Text(
-        text,
+        stringValidator(text),
         style: TextStyle(
           fontSize: 20.0,
           fontWeight: FontWeight.w300,

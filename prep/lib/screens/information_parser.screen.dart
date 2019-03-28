@@ -36,7 +36,7 @@ class InformationParser extends StatelessWidget {
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         backgroundColor: Colors.indigo,
-        title: Text(_articleName),
+        title: Text(stringValidator(_articleName)),
       ),
       body: StreamBuilder(
           stream: BackendProvider.of(context)

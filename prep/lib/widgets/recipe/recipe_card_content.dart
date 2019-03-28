@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:validators/validators.dart';
+
 import 'package:prep/utils/document_data_provider.dart';
+import 'package:prep/widgets/recipe/error_recipe_not_found.dart';
 import 'package:prep/widgets/recipe/recipe_ingredient_list.dart';
 import 'package:prep/widgets/recipe/recipe_method_list.dart';
 import 'package:prep/widgets/recipe/recipe_note.dart';
@@ -25,19 +28,23 @@ class RecipeCardContent extends StatelessWidget {
     //internal recipe must either exist fully or doesn't at all
     bool hasInternalRecipe =
         (dynamicIngredientListData != null) && (dynamicMethodListData != null);
-    /* assert(hasInternalRecipe ||
-        ((dynamicMethodListData == null) &&
-            (dynamicIngredientListData == null))); */
+
+    //Assertions
+
+    //internal recipe must be full
+    //  assert(hasInternalRecipe ||
+    //     ((dynamicMethodListData == null) &&
+    //         (dynamicIngredientListData == null)));
 
     //at least one form of recipe must be present
     //assert(hasInternalRecipe || dynamicExternalUrlData != null);
 
     //generate widgets from data
     if (hasInternalRecipe) {
-      _addToContentWithSpacer(
-          RecipeIngredientList(dynamicIngredientListData), content);
-      _addToContentWithSpacer(RecipeMethodList(dynamicMethodListData), content);
+      _addWithSpacer(RecipeIngredientList(dynamicIngredientListData), content);
+      _addWithSpacer(RecipeMethodList(dynamicMethodListData), content);
     }
+
 
     if (dynamicExternalUrlData != null &&
         isURL(
@@ -46,8 +53,12 @@ class RecipeCardContent extends StatelessWidget {
           requireTld: false,
         )) {
       assert(dynamicExternalUrlData.runtimeType == String);
-      _addToContentWithSpacer(
-          ExternalRecipeLink(dynamicExternalUrlData), content);
+      _addWithSpacer(ExternalRecipeLink(dynamicExternalUrlData), content);
+    }
+
+    //if no recipe is specified
+    if (dynamicExternalUrlData == null && !hasInternalRecipe) {
+      _addWithSpacer(ErrorRecipeNotFound(), content);
     }
 
     if (dynamicNoteData != null) {
@@ -61,7 +72,7 @@ class RecipeCardContent extends StatelessWidget {
     );
   }
 
-  void _addToContentWithSpacer(Widget toAdd, List<Widget> addTo) => addTo
+  void _addWithSpacer(Widget toAdd, List<Widget> addTo) => addTo
     ..add(toAdd)
     ..add(
       SizedBox(

@@ -164,4 +164,34 @@ void main() {
       });
     });
   });
+
+  group('String validator prevents null outputs from a String input', () {
+    List<Map<String, String>> stringList = new List();
+
+    stringList.add({
+      "stringIn": 'Hello',
+      "stringOut": "Hello"
+    });
+
+    stringList.add({
+      "stringIn": null,
+      "stringOut": "N/A"
+    });
+
+    stringList.add({
+      "stringIn": 'H e l l o',
+      "stringOut": "H e l l o"
+    });
+
+    stringList.add({
+      "stringIn": 'HELLO',
+      "stringOut": "HELLO"
+    });
+
+    stringList.forEach((map) {
+      test('Test ' + (stringList.indexOf(map) + 1).toString(), () {
+        expect(stringValidator(map['stringIn']), map['stringOut']);
+      });
+    });
+  });
 }

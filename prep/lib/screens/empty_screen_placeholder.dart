@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:prep/utils/misc_functions.dart';
+
 class EmptyScreenPlaceholder extends StatelessWidget {
   final String title;
   final String subtitle;
@@ -14,7 +16,7 @@ class EmptyScreenPlaceholder extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Text(
-            title,
+            stringValidator(title),
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 30.0,
@@ -27,7 +29,7 @@ class EmptyScreenPlaceholder extends StatelessWidget {
           padding: EdgeInsets.all(20.0),
         ),
           Text(
-            subtitle,
+            stringValidator(subtitle),
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 25.0,

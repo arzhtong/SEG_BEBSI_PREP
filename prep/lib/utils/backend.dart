@@ -49,13 +49,15 @@ abstract class BaseBackend {
   void setBackendParams(newAppointmentID, newTestID, newAppointmentName,
       newLocation, newDateTime, newDoctorName, newContactNumber, newColor);
 
-  Future<QuerySnapshot> get appointmentCodes;
+  Future<List<Map<String, Map<String, dynamic>>>> appointmentCodes() async {}
 
   Stream<List<Map<String, dynamic>>> messagesSnapshots(bool setSeen);
 
   void sendMessage(String message);
 
   void flickCheckupSwitch(String documentId, String index, bool previousValue);
+
+  Future<void> setAppointmentCodeUsed(String documentId) async {}
 
   Stream<List<Map<String, Map<String, dynamic>>>> get dailyCheckupsSnapshots;
 
@@ -100,12 +102,20 @@ class FirestoreBackend implements BaseBackend {
     color = newColor;
   }
 
-  Future<QuerySnapshot> get appointmentCodes => _appointmentsCollection
-      .where('expired', isEqualTo: false)
-      .where('datetime',
-          isGreaterThan: DateTime.now().subtract(Duration(days: 1)))
-      .orderBy('datetime')
-      .getDocuments();
+  Future<List<Map<String, Map<String, dynamic>>>> appointmentCodes() async {
+    QuerySnapshot querySnapshot = await _appointmentsCollection
+        .where('expired', isEqualTo: false)
+        .where('datetime',
+            isGreaterThan: DateTime.now().subtract(Duration(days: 1)))
+        .orderBy('datetime')
+        .getDocuments();
+
+    List<Map<String, Map<String, dynamic>>> futMap = querySnapshot.documents
+        .map((docSnap) => {docSnap.documentID: docSnap.data})
+        .toList();
+
+    return futMap;
+  }
 
   DocumentReference get _testReference =>
       DatabaseHandler.db.collection('tests').document(testID);
@@ -152,6 +162,17 @@ class FirestoreBackend implements BaseBackend {
       ('instructions.' + index + '.answer'): !previousValue,
       ('instructions.' + index + '.lastChecked'): DateTime.now(),
     });
+  }
+
+  Future<void> setAppointmentCodeUsed(String documentId) async {
+    DatabaseHandler.db.runTransaction((transaction) async {
+      DocumentSnapshot freshSnap =
+          await transaction.get(_appointmentsCollection.document(documentId));
+      await transaction.update(freshSnap.reference, {
+        'used': true
+      });
+    });
+    //_appointmentsCollection.document(documentId).updateData({'used': true});
   }
 
   Stream<List<Map<String, Map<String, dynamic>>>> get dailyCheckupsSnapshots =>
