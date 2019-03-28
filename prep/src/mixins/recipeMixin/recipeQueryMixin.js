@@ -18,7 +18,7 @@ export const recipeQueryMixin = {
               .get()
               .then(querySnapshot => {
                 querySnapshot.forEach(doc => {
-                    if(doc.data().cardType === 'recipe') {
+                    if(doc.data().type === 'recipe') {
                         const data = {
                             id: doc.id,
                             title: doc.data().title
@@ -63,7 +63,7 @@ export const recipeQueryMixin = {
                 .doc(this.$route.params.test_id)
                 .collection('prepCards')
                 .add({
-                    cardType: 'recipe',
+                    type: 'recipe',
                     title: this.title,
                     subtitle: this.subtitle,
                     backgroundImage: this.imageURL,
