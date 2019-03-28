@@ -32,7 +32,6 @@ export default {
     padding-bottom: 30px;
     padding-top: 30px;
     padding-right: 30px;
-    min-height: 70vmax;
     min-width: 80vmax;
   }
   .tooltip {

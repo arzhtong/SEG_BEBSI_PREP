@@ -1,6 +1,6 @@
 <template>
-    <div id="view-recipe-info">
-        <ul class="collection with-header">
+    <div id="view-recipe-info" style="background-color:white; padding: 10px 50px 30px 50px; margin-top:10px; margin-bottom:20px">
+        <ul class="collection with-header" style="border: none;">
             <li class="collection-header">
                 <h4>Recipe Information:</h4>
             </li>
