@@ -9,11 +9,10 @@
         <div class="col s12">
             <div class="card-panel light-blue">
                 <span class="card-title white-text"><i class="small material-icons">info_outline</i>Info</span>
-                <p class="white-text">
-                    Fill in the fields below and then click submit. A title is required, along with a recipe link or an ingredients list with instructions.<br>
-                    Please ensure that web links are valid and appears in full (ie begins with “http://www.” or “https://www.”) otherwise it may not be shown in the app even if provided online.<br>
-                    Please do not add too many tags for the recipe (3 - 4 maximum)<br>
-                    Finally, you can upload a header image for the recipe. We recommend images of around 1000 pixels by 250 pixels, without transparency.
+                <p class="white-text">Fill in the fields below and then click submit. A title is required, along with a recipe link or an ingredients list with instructions.
+                  <br>Please ensure that web links are valid and appears in full (ie begins with “http://www.” or “https://www.”) otherwise it may not be shown in the app even if provided online.
+                  <br>Please do not add too many tags for the recipe (3 - 4 maximum)
+                  <br>Finally, you can upload a header image for the recipe. We recommend images of around 1000 pixels by 250 pixels, without transparency.
                 </p>
             </div>
         </div>
