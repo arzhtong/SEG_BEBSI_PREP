@@ -6,17 +6,17 @@
                 <div id="user">
                     <li><span id="role" class="email black-text"> 
                             {{user.role}} 
-                            <router-link id="settings" v-bind:to="{name: 'edit-staff', params: {email: currentUser}}"><i class="fa fa-cog right"></i></router-link>
+                            <router-link id="settings" v-bind:to="{name: 'edit-staff', params: {email: currentUser}}"><i class="fa fa-cog right sidenav-close"></i></router-link>
                         </span>
                     </li>
                     <li><span id="email" class="email black-text"> {{currentUser}}</span></li>
                 </div>
                 <li><div class="divider"></div></li>
-                <li><router-link to="/view-appointments" class="menuItem" exact-active-class="exact active" exact>Current Appointments</router-link></li>
-                <li><router-link to="/past-appointments" class="menuItem" exact-active-class="exact active" exact>Past Appointments</router-link></li>
-                <li><router-link v-if="isAdmin == 'Admin'" to="/view-staff" class="menuItem" exact-active-class="exact active" exact>Staff</router-link></li>
-                <li><router-link to="/view-tests" class="menuItem" exact-active-class="exact active" exact>Tests</router-link></li>
-                <li><router-link to="/add-appointment" class="btn red">Add Appointment</router-link></li>
+                <li><router-link to="/view-appointments" class="menuItem sidenav-close" exact-active-class="exact active" exact>Current Appointments</router-link></li>
+                <li><router-link to="/past-appointments" class="menuItem sidenav-close" exact-active-class="exact active" exact>Past Appointments</router-link></li>
+                <li><router-link v-if="isAdmin == 'Admin'" to="/view-staff" class="menuItem sidenav-close" exact-active-class="exact active" exact>Staff</router-link></li>
+                <li><router-link to="/view-tests" class="menuItem sidenav-close" exact-active-class="exact active" exact>Tests</router-link></li>
+                <li><router-link to="/add-appointment" class="btn red sidenav-close">Add Appointment</router-link></li>
             </ul>
 
             <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
@@ -52,6 +52,7 @@ export default {
 }
 .sidenav-trigger {
     color: white;
+    position: fixed;
 }
 #settings {
     font-size: 20px;
