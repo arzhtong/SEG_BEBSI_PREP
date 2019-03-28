@@ -35,16 +35,13 @@ describe("Component", () => {
   }),
   test("test if data is set correctly", () => {
     const data = {
-      description:"someDescription",
       daysBeforeTest: 4
     };
     // calls Vue.set recursively
     wrapper.setData({
-      description: "someDescription",
-      daysBeforeTest: "4",
+      daysBeforeTest: "4"
     });
     // Check if data() is set properly
-    expect(wrapper.vm.description).toMatch("someDescription");
     expect(wrapper.vm.daysBeforeTest).toMatch("4");
   }),
   test("has the correct buttons rendered", () => {

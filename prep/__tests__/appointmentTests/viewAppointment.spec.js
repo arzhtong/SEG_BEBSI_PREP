@@ -30,7 +30,7 @@ describe("Component", () => {
       // generate 2 tables
       expect(wrapper.findAll('tr')).toHaveLength(2);
       // Check if all ths are rendered
-      expect(wrapper.findAll("th")).toHaveLength(8);
+      expect(wrapper.findAll("th")).toHaveLength(7);
     }),
     test("has the correct buttons rendered", () => {
       const goToEditAppBtn = wrapper.find("#goToEditAppBtn");
