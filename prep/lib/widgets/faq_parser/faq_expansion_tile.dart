@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:prep/screens/appointment.screen.dart';
+import 'package:prep/utils/misc_functions.dart';
 
 class FaqExpansionTile extends StatelessWidget {
   final String question;
@@ -19,11 +20,11 @@ class FaqExpansionTile extends StatelessWidget {
         elevation: 3.0,
         child: ExpansionTile(
           key: Key('expandableTile'),
-          title: Text(question),
+          title: Text(stringValidator(question)),
           children: <Widget>[
             ListTile(
               title: Text(
-                answer,
+                stringValidator(answer),
                 style: TextStyle(color: Colors.grey),
               ),
             ),
