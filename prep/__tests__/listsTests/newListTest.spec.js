@@ -36,7 +36,7 @@ describe("Component", () => {
       expect(inputArray).toHaveLength(0);
     }),
     test("the title is right", ()=> {
-        expect(wrapper.find('h3').text()).toBe("New List")
+        expect(wrapper.find('h3').text()).toBe("New List View")
     }),
     test("has the correct buttons rendered", () => {
         const cancelButton = wrapper.find("#cancelButton");
