@@ -10,8 +10,7 @@
             <span class="card-title white-text">
               <i class="small material-icons">info_outline</i>Info
             </span>
-            <p class="white-text">
-              Enter a question and its answer in the respective fields below.
+            <p class="white-text">Enter a question and its answer in the respective fields below.
               <br>
               <br>Add information and chat buttons to this question to take the patient directly to that page.
             </p>

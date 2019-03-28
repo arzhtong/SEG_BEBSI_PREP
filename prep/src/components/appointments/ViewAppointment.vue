@@ -1,7 +1,7 @@
 <template>
   <div
     id="new-appointment"
-    style="background-color:white; padding: 10px 50px 10px 50px; margin-top:10px"
+    style="background-color:white; padding: 10px 50px 10px 50px; margin-top:10px; margin-bottom:30px"
   >
     <div id="mainScreen">
       <h4 style="font-size:3em;">
@@ -112,10 +112,10 @@
         </table>
       </div>
       <template v-if="past==false">
-        <router-link id="goToCurrentAppBtn" to="/view-appointments" class="btn">Go Back</router-link>
+        <router-link id="goToCurrentAppBtn" to="/view-appointments" class="btn grey">Go Back</router-link>
       </template>
       <template v-else>
-        <router-link id="goToPastAppBtn" to="/past-appointments" class="btn">Go Back</router-link>
+        <router-link id="goToPastAppBtn" to="/past-appointments" class="btn grey">Go Back</router-link>
       </template>
     </div>
   </div>

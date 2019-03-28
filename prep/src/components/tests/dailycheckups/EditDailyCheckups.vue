@@ -3,6 +3,17 @@
        <h3>Edit Daily Check-ups</h3>
 
         <div class="row">
+          <div class="col s12">
+            <div class="card-panel light-blue">
+              <span class="card-title white-text">
+                <i class="small material-icons">info_outline</i>Info
+              </span>
+              <p class="white-text">Enter a number of days before the test that this checkup applies.
+                <br>
+                <br>You can add and remove instructions as needed.
+              </p>
+            </div>
+          </div>
             <form @submit.prevent="updateDailyCheckups" class="col s12">
 
                <div class="row">

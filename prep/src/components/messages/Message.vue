@@ -3,10 +3,11 @@
     <div class="containerChat" id="top">
        <div class="row">
                 <div class="col s12">
-                    <div class="card-panel light-blue" style="height: 150px">
+                    <div class="card-panel light-blue" style="height: 200px">
                         <span class="card-title white-text"><i class="small material-icons">info_outline</i></span>
                         <p class="white-text">Please be aware that pressing 'Enter' will only make a new line and not send the message!
                           <br>Click the 'Send Button' to send a message.
+                          <br>To scroll to the bottom click on the textbox.
                         </p>
                     </div>
                 </div>
