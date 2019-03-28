@@ -7,11 +7,11 @@ class MakeHelpIcon extends StatelessWidget {
 
   Widget build(BuildContext context) {
     //Return a dialog box if no information is provided
-    if (info==null){
+    if (info == null) {
       return AlertDialog(content: Text('No Description Available'));
     } else {
       return IconButton(
-        key: Key("helpButton"),
+          key: Key("helpButton"),
           icon: new Icon(Icons.help, color: Colors.white),
           onPressed: () {
             _makeAlert(context, info);

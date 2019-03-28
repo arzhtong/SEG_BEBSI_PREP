@@ -82,3 +82,11 @@ String monthAbbreviation(DateTime datetime) {
 
   return months[datetime.month - 1].substring(0, 3);
 }
+
+String stringValidator(String string) {
+  if (string == null) {
+    return "N/A";
+  } else {
+    return string;
+  }
+}
