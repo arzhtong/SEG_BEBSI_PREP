@@ -76,6 +76,7 @@ export const recipeQueryMixin = {
                 })
                 .then(docRef => {
                     this.$router.push({ name: 'view-recipes', params: {test_id: this.$route.params.test_id} })
+                    alert('Recipe: ' + this.title + ' saved!')
                 })
                 .catch(error => console.log(err))
             }
