@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>0/4</span>
+        <span class='fraction'>2/2</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -30,21 +30,21 @@
         <span class='fraction'>0/0</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/3</span>
+        <span class='fraction'>1/1</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>0/4</span>
+        <span class='fraction'>2/2</span>
       </div>
     </div>
     <p class="quiet">
       Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
     </p>
   </div>
-  <div class='status-line low'></div>
+  <div class='status-line high'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -176,11 +176,7 @@
 <a name='L128'></a><a href='#L128'>128</a>
 <a name='L129'></a><a href='#L129'>129</a>
 <a name='L130'></a><a href='#L130'>130</a>
-<a name='L131'></a><a href='#L131'>131</a>
-<a name='L132'></a><a href='#L132'>132</a>
-<a name='L133'></a><a href='#L133'>133</a>
-<a name='L134'></a><a href='#L134'>134</a>
-<a name='L135'></a><a href='#L135'>135</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L131'></a><a href='#L131'>131</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -286,19 +282,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -315,9 +307,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&lt;template&gt;
-  &lt;div id="edit-prep-list" 
-  style="background-color:white; padding: 10px 50px 10px 50px; margin-top:10px"&gt;
-    &lt;div class="fixed-action-btn"&gt; 
+  &lt;div
+    id="edit-prep-list"
+    style="background-color:white; padding: 10px 50px 10px 50px; margin-top:10px"
+  &gt;
+    &lt;div class="fixed-action-btn"&gt;
       &lt;router-link
         v-bind:to="{name: 'view-prep-list', params: {test_id: this.$route.params.test_id, contents: List}}"
         class="btn-floating btn-large black"
@@ -325,23 +319,23 @@
         &lt;i class="material-icons"&gt;arrow_back&lt;/i&gt;
       &lt;/router-link&gt;
     &lt;/div&gt;
-    &lt;h3&gt;Edit Preperation List&lt;/h3&gt;
+    &lt;h3&gt;Edit Preparation List&lt;/h3&gt;
     &lt;div class="row"&gt;
       &lt;ul class="collapsible"&gt;
         &lt;li&gt;
-          &lt;div class="collapsible-header" style="color:#2196f3"&gt;
-            &lt;i class="small material-icons"&gt;info_outline&lt;/i&gt;Info
-          &lt;/div&gt;
-          &lt;div class="collapsible-body"&gt;
-            &lt;span&gt;
-              The list title will be displayed in the preparation card and as the title on that list's screen
-              &lt;br&gt;
-              &lt;br&gt;
-              Clicking on the NEW LIST button will create a new sublist inside the list's screen. This will contain a name, description and a list of items
-              &lt;br&gt;
-              &lt;br&gt;
-              Click on the NEW ITEM button to add items to the list of items.
-            &lt;/span&gt;
+          &lt;div class="col s12"&gt;
+            &lt;div class="card-panel light-blue"&gt;
+              &lt;span class="card-title white-text"&gt;
+                &lt;i class="small material-icons"&gt;info_outline&lt;/i&gt;Info
+              &lt;/span&gt;
+              &lt;p class="white-text"&gt;
+                The list title will be displayed in the preparation card and as the title on that list's screen
+                &lt;br&gt;
+                &lt;br&gt;Clicking on the NEW LIST button will create a new sublist inside the list's screen. This will contain a name, description and a list of items
+                &lt;br&gt;
+                &lt;br&gt;Click on the NEW ITEM button to add items to the list of items.
+              &lt;/p&gt;
+            &lt;/div&gt;
           &lt;/div&gt;
         &lt;/li&gt;
       &lt;/ul&gt;
@@ -352,7 +346,7 @@
           &lt;div class="input-field col s12"&gt;
             &lt;span id="title"&gt;Title*&lt;/span&gt;
             &lt;input type="text" v-model="title" required&gt;
-          &lt;/div&gt; 
+          &lt;/div&gt;
         &lt;/div&gt;
         &lt;div class="row"&gt;
           &lt;!-- gets all the maps that already exist in the database --&gt;
@@ -360,8 +354,8 @@
             &lt;span id="title"&gt;Name*&lt;/span&gt;
             &lt;input type="text" v-model="data.name" required&gt;
             &lt;!-- gets a description if it is found in the database --&gt;
-            &lt;span id="title" &gt;Description&lt;/span&gt;
-            &lt;input type="text" v-model="data.description" &gt;
+            &lt;span id="title"&gt;Description&lt;/span&gt;
+            &lt;input type="text" v-model="data.description"&gt;
             &lt;!-- adds an item to the list in the database --&gt;
             &lt;button @click="addToOldList(data)" class="btn green"&gt;new item&lt;/button&gt;
             &lt;div v-for="item in data.list.length" v-bind:key="item" class="input-field col s12"&gt;
@@ -382,12 +376,12 @@
             &gt;remove List&lt;/button&gt;
           &lt;/div&gt;
           &lt;!-- adds a new map to be added to the database --&gt;
-          &lt;button @click="addMap" class="btn green"&gt;new List&lt;/button&gt;
+          &lt;button id="newListButton" @click="addMap" class="btn green"&gt;new List&lt;/button&gt;
           &lt;div v-for="map in allMaps" v-bind:key="map.id" class="input-field col s12"&gt;
             &lt;span id="title"&gt;Name*&lt;/span&gt;
             &lt;input type="text" v-model="map.name" required&gt;
             &lt;span id="title"&gt;description&lt;/span&gt;
-            &lt;input type="text" v-model="map.description" &gt;
+            &lt;input type="text" v-model="map.description"&gt;
             &lt;!-- adds an item to the list in the new map --&gt;
             &lt;button @click="addToList(map)" class="btn green"&gt;new item&lt;/button&gt;
             &lt;div v-for="item in map.list.length" v-bind:key="item" class="input-field col s12"&gt;
@@ -408,9 +402,10 @@
             &gt;remove List&lt;/button&gt;
           &lt;/div&gt;
         &lt;/div&gt;
-        &lt;button type="submit" class="btn"&gt;Submit&lt;/button&gt;
+        &lt;button id="submitButton" type="submit" class="btn"&gt;Submit&lt;/button&gt;
         &lt;!-- cancel button --&gt;
         &lt;router-link
+          id="cancelButton"
           v-bind:to="{name: 'view-prep-list', params: {test_id: this.$route.params.test_id, contents: List}}"
           class="btn grey"
         &gt;Cancel&lt;/router-link&gt;
@@ -420,28 +415,21 @@
 &lt;/template&gt;
 &nbsp;
 &lt;script&gt;
-<span class="cstat-no" title="statement not covered" >import { listsMixin } from "../../../mixins/listsMixin/listsMixin.js";</span>
+import { listsMixin } from "../../../mixins/listsMixin/listsMixin.js";
 export default {
   name: "edit-prep-list",
   mixins: [listsMixin],
-<span class="fstat-no" title="function not covered" >  created (){</span>
-<span class="cstat-no" title="statement not covered" >    this.createEditPrepList()</span>
-  },
-<span class="fstat-no" title="function not covered" >  mounted() {</span>
-    // initalise colapsablie component
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >    $(document).ready(function() {</span></span>
-<span class="cstat-no" title="statement not covered" >      $(".collapsible").collapsible();</span>
-    });
+  created() {
+    this.createEditPrepList();
   }
 };
-&nbsp;
 &lt;/script&gt;
 &lt;style scoped&gt;
 #title {
-  color: #2196f3
+  color: #2196f3;
 }
 #addBtn {
-    margin: 15px;
+  margin: 15px;
 }
 #removeBtn {
   margin-right: 10px;
@@ -454,7 +442,7 @@ export default {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Mar 27 2019 00:24:31 GMT+0000 (GMT)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Mar 28 2019 00:01:26 GMT+0000 (Greenwich Mean Time)
 </div>
 </div>
 <script src="../../../../prettify.js"></script>

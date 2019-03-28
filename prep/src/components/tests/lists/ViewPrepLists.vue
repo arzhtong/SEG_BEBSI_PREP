@@ -44,11 +44,12 @@
             </tbody>
             <!-- add a new list -->
             <router-link
+            id="addListButton"
               v-bind:to="{name: 'new-list', params: {test_id: test_id}}"
               class="btn green"
               style="margin:20px"
             >Add List</router-link>
-            <router-link to="/view-tests" class="btn grey" style="margin:20px">Back</router-link>
+            <router-link to="/view-tests" id="backButton" class="btn grey" style="margin:20px">Back</router-link>
           </table>
         </div>
       </li>

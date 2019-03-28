@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">8.76% </span>
+        <span class="strong">8.63% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>12/137</span>
+        <span class='fraction'>12/139</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">3.85% </span>
@@ -30,14 +30,14 @@
         <span class='fraction'>2/52</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">15.63% </span>
+        <span class="strong">15.15% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>5/32</span>
+        <span class='fraction'>5/33</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">9.02% </span>
+        <span class="strong">8.89% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>12/133</span>
+        <span class='fraction'>12/135</span>
       </div>
     </div>
     <p class="quiet">
@@ -464,7 +464,15 @@
 <a name='L416'></a><a href='#L416'>416</a>
 <a name='L417'></a><a href='#L417'>417</a>
 <a name='L418'></a><a href='#L418'>418</a>
-<a name='L419'></a><a href='#L419'>419</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L419'></a><a href='#L419'>419</a>
+<a name='L420'></a><a href='#L420'>420</a>
+<a name='L421'></a><a href='#L421'>421</a>
+<a name='L422'></a><a href='#L422'>422</a>
+<a name='L423'></a><a href='#L423'>423</a>
+<a name='L424'></a><a href='#L424'>424</a>
+<a name='L425'></a><a href='#L425'>425</a>
+<a name='L426'></a><a href='#L426'>426</a>
+<a name='L427'></a><a href='#L427'>427</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -634,7 +642,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -858,6 +866,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -888,7 +904,7 @@
 &nbsp;
 import db from "../../components/firebaseInit";
 import firebase from "firebase/app";
-import 'firebase/auth'
+import "firebase/auth";
 &nbsp;
 export const viewAppointmentsMixin = {
   data() {
@@ -1050,9 +1066,9 @@ export const viewAppointmentsMixin = {
       } else {
 <span class="cstat-no" title="statement not covered" >        if (inputValue != "") {</span>
 <span class="cstat-no" title="statement not covered" >          alert("No code found for " + inputValue + " !");</span>
+        } else {
+<span class="cstat-no" title="statement not covered" >          alert("Nothing to search for...");</span>
         }
-<span class="cstat-no" title="statement not covered" >        this.clearData();</span>
-<span class="cstat-no" title="statement not covered" >        this.getAppointments("asc");</span>
         // @ts-ignore
 <span class="cstat-no" title="statement not covered" >        document.getElementById("searchCode").value = "";</span>
       }
@@ -1067,11 +1083,11 @@ export const viewAppointmentsMixin = {
           Part of the Appointments Component.
       */
     loadUser() {
-      var mail = ""
-      <span class="missing-if-branch" title="else path not taken" >E</span>if(firebase.auth().currentUser == null){
-        mail = "example@example.com"
-      }else{
-<span class="cstat-no" title="statement not covered" >        mail = firebase.auth().currentUser.email</span>
+      var mail = "";
+      <span class="missing-if-branch" title="else path not taken" >E</span>if (firebase.auth().currentUser == null) {
+        mail = "example@example.com";
+      } else {
+<span class="cstat-no" title="statement not covered" >        mail = firebase.auth().currentUser.email;</span>
       }
       db.collection("users")
         .where("email", "==", mail)
@@ -1104,7 +1120,7 @@ export const viewAppointmentsMixin = {
                 location: appointment.data().location,
                 id: appointment.id,
                 testID: appointment.data().testID,
-                expired: appointment.data().expired,
+                expired: appointment.data().expired
               };
 <span class="cstat-no" title="statement not covered" >              this.appointments.push(data);</span>
 <span class="cstat-no" title="statement not covered" >              this.listenForDailyCheckups(appointment.id);</span>
@@ -1278,6 +1294,14 @@ export const viewAppointmentsMixin = {
           Part of the Appointments Component.
       */
 <span class="fstat-no" title="function not covered" >    re</span>setTable() {
+      // @ts-ignore
+<span class="cstat-no" title="statement not covered" >      document.getElementById("resetBtn").disabled = true;</span>
+      // @ts-ignore
+<span class="cstat-no" title="statement not covered" >      window.setTimeout(<span class="fstat-no" title="function not covered" >fu</span>nction() {</span>
+        // @ts-ignore
+<span class="cstat-no" title="statement not covered" >        document.getElementById("resetBtn").disabled = false;</span>
+      }, 500);
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      this.clearData();</span>
       // @ts-ignore
 <span class="cstat-no" title="statement not covered" >      document.getElementById("select").value = "Date";</span>
@@ -1306,7 +1330,7 @@ export const viewAppointmentsMixin = {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Mar 27 2019 00:24:31 GMT+0000 (GMT)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Mar 28 2019 00:01:26 GMT+0000 (Greenwich Mean Time)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

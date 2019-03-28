@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>0/3</span>
+        <span class='fraction'>1/1</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -30,21 +30,21 @@
         <span class='fraction'>0/0</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/2</span>
+        <span class='fraction'>0/0</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>0/3</span>
+        <span class='fraction'>1/1</span>
       </div>
     </div>
     <p class="quiet">
       Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
     </p>
   </div>
-  <div class='status-line low'></div>
+  <div class='status-line high'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -145,12 +145,7 @@
 <a name='L97'></a><a href='#L97'>97</a>
 <a name='L98'></a><a href='#L98'>98</a>
 <a name='L99'></a><a href='#L99'>99</a>
-<a name='L100'></a><a href='#L100'>100</a>
-<a name='L101'></a><a href='#L101'>101</a>
-<a name='L102'></a><a href='#L102'>102</a>
-<a name='L103'></a><a href='#L103'>103</a>
-<a name='L104'></a><a href='#L104'>104</a>
-<a name='L105'></a><a href='#L105'>105</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L100'></a><a href='#L100'>100</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -231,14 +226,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -260,19 +250,19 @@
     &lt;div class="row"&gt;
       &lt;ul class="collapsible"&gt;
         &lt;li&gt;
-          &lt;div class="collapsible-header" style="color:#2196f3"&gt;
-            &lt;i class="small material-icons"&gt;info_outline&lt;/i&gt;Info
-          &lt;/div&gt;
-          &lt;div class="collapsible-body"&gt;
-            &lt;span&gt;
-              The list title will be displayed in the preparation card and as the title on that list's screen
-              &lt;br&gt;
-              &lt;br&gt;
-              Clicking on the NEW LIST button will create a new sublist inside the list's screen. This will contain a name, description and a list of items
-              &lt;br&gt;
-              &lt;br&gt;
-              Click on the NEW ITEM button to add items to the list of items.
-            &lt;/span&gt;
+          &lt;div class="col s12"&gt;
+            &lt;div class="card-panel light-blue"&gt;
+              &lt;span class="card-title white-text"&gt;
+                &lt;i class="small material-icons"&gt;info_outline&lt;/i&gt;Info
+              &lt;/span&gt;
+              &lt;p class="white-text"&gt;
+                The list title will be displayed in the preparation card and as the title on that list's screen
+                &lt;br&gt;
+                &lt;br&gt;Clicking on the NEW LIST button will create a new sublist inside the list's screen. This will contain a name, description and a list of items
+                &lt;br&gt;
+                &lt;br&gt;Click on the NEW ITEM button to add items to the list of items.
+              &lt;/p&gt;
+            &lt;/div&gt;
           &lt;/div&gt;
         &lt;/li&gt;
       &lt;/ul&gt;
@@ -295,7 +285,7 @@
         &lt;/div&gt;
         &lt;div&gt;
           &lt;!-- adds a new map to be added to the database --&gt;
-          &lt;button @click="addMap" class="btn green"&gt;new List&lt;/button&gt;
+          &lt;button id="newListButton" @click="addMap" class="btn green"&gt;new List&lt;/button&gt;
           &lt;div v-for="map in allMaps" v-bind:key="map.id" class="input-field col s12"&gt;
             &lt;span id="title"&gt;Name*&lt;/span&gt;
             &lt;input type="text" v-model="map.name" required&gt;
@@ -322,9 +312,10 @@
           &lt;/div&gt;
         &lt;/div&gt;
         &lt;div style="margin-top:10px"&gt;
-          &lt;button type="submit" class="btn"&gt;Submit&lt;/button&gt;
+          &lt;button id="submitButton" type="submit" class="btn"&gt;Submit&lt;/button&gt;
           &lt;!-- cancel button --&gt;
           &lt;router-link
+            id="cancelButton"
             v-bind:to="{name: 'view-prep-lists', params: {test_id: this.$route.params.test_id}}"
             class="btn grey"
           &gt;Cancel&lt;/router-link&gt;
@@ -335,16 +326,10 @@
 &lt;/template&gt;
 &nbsp;
 &lt;script&gt;
-<span class="cstat-no" title="statement not covered" >import { listsMixin } from "../../../mixins/listsMixin/listsMixin.js";</span>
+import { listsMixin } from "../../../mixins/listsMixin/listsMixin.js";
 export default {
   name: "new-list",
   mixins: [listsMixin],
-<span class="fstat-no" title="function not covered" >  mounted() {</span>
-    // initalise colapsablie component
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >    $(document).ready(function() {</span></span>
-<span class="cstat-no" title="statement not covered" >      $(".collapsible").collapsible();</span>
-    });
-  }
 };
 &lt;/script&gt;
 &lt;style scoped&gt;
@@ -364,7 +349,7 @@ export default {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Mar 27 2019 00:24:31 GMT+0000 (GMT)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Mar 28 2019 00:01:26 GMT+0000 (Greenwich Mean Time)
 </div>
 </div>
 <script src="../../../../prettify.js"></script>

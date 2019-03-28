@@ -1,0 +1,239 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component renders correctly 1`] = `
+<div
+  id="view-appointment"
+>
+  <div
+    class="container"
+    style="width: 100%; height: 100%;"
+  >
+    <table
+      class="collection with-header"
+      style="background: white;"
+    >
+      <thead
+        class="collection-header"
+      >
+        <h3>
+          <b>
+             Appointments
+          </b>
+        </h3>
+         
+        <div>
+          <div
+            class="row"
+            style="padding: 20px; display: flex;"
+          >
+            <div
+              class="input-field col s12"
+            >
+              <span
+                style="color: black;"
+              >
+                <b>
+                  Sort by:
+                </b>
+              </span>
+               
+              <select
+                class="browser-default"
+                id="select"
+                style="color: black; min-width: 185px;"
+              >
+                <option
+                  selected="selected"
+                  value="Date"
+                >
+                  Date in ascending order
+                </option>
+                 
+                <option
+                  value="Date desc"
+                >
+                  Date in descending order
+                </option>
+              </select>
+            </div>
+             
+            <div
+              class="input-field col s12"
+              style="padding: 15px;"
+            >
+              <input
+                id="datePicker"
+                min="2019-01-01"
+                required="required"
+                style="text-align: center;"
+                type="date"
+                value=""
+              />
+            </div>
+             
+            <div>
+              <a
+                class="blue-text tooltip"
+                style="margin-top: 45px !important; cursor: pointer;"
+              >
+                <span
+                  class="tooltiptext"
+                >
+                  Click this calendar icon to sort by specific date
+                </span>
+                 
+                <i
+                  class="material-icons"
+                >
+                  calendar_today
+                </i>
+              </a>
+            </div>
+          </div>
+           
+          <div
+            style="position: relative; bottom: 50px;"
+          >
+            <div
+              class="input-field col s12"
+              style="width: 70%;"
+            >
+              <span
+                class="blue-text"
+                for=""
+              >
+                Search By Code
+              </span>
+               
+              <input
+                class="file-path validate"
+                id="searchCode"
+                required="required"
+                type="text"
+              />
+               
+              <div>
+                <button
+                  class="btn"
+                  id="searchBtn"
+                  style="margin: 5px;"
+                >
+                  Search
+                </button>
+                 
+                <button
+                  class="btn"
+                  id="resetBtn"
+                  style="margin: 5px;"
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+         
+        <tr
+          style="font-size: 1.5em;"
+        >
+          <th>
+            <a
+              class="black-text tooltip"
+              style="margin-left: 25px;"
+            >
+              <span
+                class="tooltiptext"
+              >
+                Mobile Code
+              </span>
+               
+              <i
+                class="material-icons"
+              >
+                phonelink_lock
+              </i>
+            </a>
+          </th>
+           
+          <th>
+            <a
+              class="black-text tooltip"
+            >
+              <span
+                class="tooltiptext"
+              >
+                Date and Time
+              </span>
+               
+              <i
+                class="material-icons"
+              >
+                event
+              </i>
+            </a>
+          </th>
+           
+          <th>
+            <a
+              class="black-text tooltip"
+            >
+              <span
+                class="tooltiptext"
+              >
+                Location
+              </span>
+               
+              <i
+                class="material-icons"
+              >
+                location_on
+              </i>
+            </a>
+          </th>
+           
+          <th>
+            <a
+              class="black-text tooltip"
+            >
+              <span
+                class="tooltiptext"
+              >
+                Completed Daily Checkups
+              </span>
+               
+              <i
+                class="material-icons"
+              >
+                done_outline
+              </i>
+            </a>
+          </th>
+           
+          <th />
+           
+          <th />
+           
+          <th />
+           
+          <th />
+        </tr>
+      </thead>
+       
+      <tbody
+        class="collection-item"
+      />
+       
+      <router-link-stub
+        class="btn green"
+        disabled=""
+        event="click"
+        style="margin: 20px;"
+        tag="a"
+        to="/add-appointment"
+      >
+        Add Appointment
+      </router-link-stub>
+    </table>
+  </div>
+</div>
+`;

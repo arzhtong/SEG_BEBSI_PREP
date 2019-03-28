@@ -1,0 +1,100 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component renders correctly 1`] = `
+<div
+  id="new-appointment"
+  style="background-color: white; padding: 10px 50px 10px 50px; margin-top: 10px;"
+>
+  <div
+    id="mainScreen"
+  >
+    <h4
+      style="font-size: 3em;"
+    >
+      <b>
+        Appointment: id
+      </b>
+    </h4>
+     
+    <table
+      class="collection with-header "
+      style="background: white; height: auto;"
+    >
+      <thead
+        class="collection-header"
+      >
+        <tr
+          style="font-size: 1.5em;"
+        >
+          <th>
+            Date
+          </th>
+           
+          <th>
+            Time
+          </th>
+           
+          <th>
+            Location
+          </th>
+           
+          <th>
+            Test
+          </th>
+           
+          <th>
+            Test Type
+          </th>
+        </tr>
+      </thead>
+       
+    </table>
+     
+    <div
+      id="dailyCheckups"
+      style="padding-top: 5%;"
+    >
+      <h4>
+        Daily Checkups
+      </h4>
+       
+      <table
+        class="collection with-header "
+        style="background: white; height: auto;"
+      >
+        <thead
+          class="collection-header"
+        >
+          <tr
+            style="font-size: 1.5em;"
+          >
+            <th>
+              Days to appointment
+            </th>
+             
+            <th
+              style="padding-left: 10%;"
+            >
+              Description
+            </th>
+             
+            <th
+              style="padding-left: 10%;"
+            >
+              Instructions:
+            </th>
+          </tr>
+        </thead>
+         
+      </table>
+    </div>
+     
+    <a
+      class="btn"
+      id="goToCurrentAppBtn"
+    >
+      Go Back
+    </a>
+  </div>
+</div>
+`;
