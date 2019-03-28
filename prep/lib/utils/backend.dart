@@ -65,7 +65,7 @@ abstract class BaseBackend {
 
   Stream<Map<String, dynamic>> get testSnapshots;
 
-  Stream<QuerySnapshot> get recipeSnapshots;
+  Stream<List<Map<String, dynamic>>> get recipeSnapshots;
 
   Stream<Map<String, dynamic>> informationSnapshots(String documentId);
 
@@ -159,16 +159,12 @@ class FirestoreBackend implements BaseBackend {
           .collection('dailyCheckups')
           .orderBy('daysBeforeTest', descending: true)
           .snapshots()
-          .map((querySnap) =>
-          querySnap.documents
+          .map((querySnap) => querySnap.documents
               .map((docSnap) => {docSnap.documentID: docSnap.data})
               .toList());
 
   Stream<List<Map<String, Map<String, dynamic>>>> get prepCardsSnapshots =>
-      _testReference
-          .collection('prepCards')
-          .snapshots()
-          .map((querySnap) =>
+      _testReference.collection('prepCards').snapshots().map((querySnap) =>
           querySnap.documents
               .map((docSnap) => {docSnap.documentID: docSnap.data})
               .toList());
@@ -183,10 +179,12 @@ class FirestoreBackend implements BaseBackend {
   Stream<Map<String, dynamic>> get testSnapshots =>
       _testReference.snapshots().map((docSnap) => docSnap.data);
 
-  Stream<QuerySnapshot> get recipeSnapshots => _testReference
+  Stream<List<Map<String, dynamic>>> get recipeSnapshots => _testReference
       .collection('prepCards')
       .where('type', isEqualTo: 'recipe')
-      .snapshots();
+      .snapshots()
+      .map((querySnap) =>
+          querySnap.documents.map((docSnap) => docSnap.data).toList());
 
   Stream<Map<String, dynamic>> informationSnapshots(documentId) =>
       _testReference
