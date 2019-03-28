@@ -12,11 +12,11 @@
                 <form @submit.prevent="saveRecipe" class="col s12">
                     <div class="row">
                         <div class="input-field col s12">
-                            <input type="text" v-model="title" id="title" required>
+                            <input type="text" v-model="title" id="title" maxlength = "70" required>
                             <label for="title">Title *</label>
                         </div>
                         <div class="input-field col s12">
-                            <input type="text" id="subtitle" v-model="subtitle">
+                            <input type="text" id="subtitle" maxlength = "70" v-model="subtitle">
                             <label for="subtitle">Subtitle</label>
                         </div>
                     </div>
