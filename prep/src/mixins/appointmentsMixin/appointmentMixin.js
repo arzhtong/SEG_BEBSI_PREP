@@ -97,7 +97,6 @@ export const appointmentMixin = {
               const data = {
                 docId: change.doc.id,
                 daysBeforeTest: change.doc.data().daysBeforeTest,
-                description: change.doc.data().description,
                 instructions: change.doc.data().instructions
               };
 
