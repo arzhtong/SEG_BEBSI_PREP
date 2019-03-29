@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-import 'package:prep/utils/backend.dart';
 import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/widgets/dashboard/help_dialog.dart';
 import 'package:prep/widgets/dashboard/calendar.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 
+/// This class is the backbone of the application. It sets the appointment code
+/// (used by the rest of the system to retrieve data) in the backend class.
+///
+/// It contains various setup and security protocols that must be performed
+/// asynchronously and before any other part of the application is accessed.
 class Dashboard extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -29,26 +33,27 @@ class _DashboardState extends State<Dashboard> {
   bool validationResultDb;
   bool validationResultFile;
 
-  // Subscribe user to message notifications
+  /// Subscribe the user to message notifications
   void _subscribeToNotifications(String appointmentID) {
     final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
     firebaseMessaging.autoInitEnabled();
     firebaseMessaging.subscribeToTopic(appointmentID);
   }
 
-  // Unsubscribe user from all message notifications
-  // TODO: change structure of removing appointments, to allow unsubscribing from each appointment.
+  /// Unsubscribe the user from all message notifications
+  // TODO: change structure of removing appointments, to allow unsubscribing
+  // from each appointment.
   void _unsubscribeFromNotifications() {
     final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
     firebaseMessaging.deleteInstanceID();
   }
 
-  // Checks if an appointment ID exists in the codes file
+  /// Determine if an appointment ID exists in the codes file
   bool _documentInCodeFile(String value) {
     return codeFileState.split(',').contains(value);
   }
 
-  // Writes data to the codes file
+  /// Clear all the data from the codes file
   Future<File> _clearData() async {
     _unsubscribeFromNotifications();
     //must apply set state to make sure the calendar is redrawn
@@ -59,7 +64,7 @@ class _DashboardState extends State<Dashboard> {
     return BackendProvider.of(context).storage.writeData("");
   }
 
-  // Checks if a code exists in the Firestore and is not used
+  /// Determine if a code exists in the Firestore and is not used
   Future<bool> _isCodeInFirestoreNotUsed(String code) async {
     List<String> liveNotUsedIDs = new List();
 
@@ -79,59 +84,63 @@ class _DashboardState extends State<Dashboard> {
     }
   }
 
-  // Retrieves data from the Firestore and builds the calendar
-  Future<Widget> _getDocData() async {
+  /// Retrieve data from the database and determine if a calendar can be built.
+  ///
+  /// All the operations performed in this method are key for the validation of
+  /// the data that is passed on to the rest of the application. All of them
+  /// must be executed asynchronously as they require I/O access (the database
+  /// and the device file manager). Having them together in one method
+  /// ensures the state of the widget tree remains constant during their
+  /// execution, thus avoiding concurrency bugs.
+  Future<Widget> _validateCalendar() async {
+    // Determine if the application is running on a fresh install or not
     bool fileExists = await BackendProvider.of(context).storage.fileExists();
-
-    if (fileExists) {
-      print("--- codes file found!");
-    } else {
-      print("--- codes file NOT found, creating one containing ','");
+    if (fileExists) {} else {
       await BackendProvider.of(context).storage.writeData(",");
     }
 
+    // Load the contents of the local codes file into a variable
     codeFileState = await BackendProvider.of(context).storage.readData();
-    print("Raw codes file - in getDocData after reading: " + codeFileState);
 
-    //reading appointments from the database and updating the codes file
+    // Read appointments from the database
     var querySnap =
         await BackendProvider.of(context).backend.appointmentCodes();
-
     if (querySnap == null) {
       return EmptyScreenPlaceholder(
           "Your calendar is empty", "Add some appointments");
     }
 
+    // Retrieve appointment codes from the database
     documentList = querySnap;
-
-    // Get all the codes stored in the database
     List<String> availableCodes = new List();
-
     documentList.forEach((docIdDataMap) {
       availableCodes.add(docIdDataMap.keys.first);
     });
 
-    print("Available codes:" + availableCodes.toString());
-
-    // Store all the codes in both the database and the codes file in the var
+    // Store all the codes in both the database and the codes file in a variable
     String newCodeFileState = "";
-
     codeFileState.split(',').forEach((code) {
       if (availableCodes.contains(code)) {
         newCodeFileState = newCodeFileState + code + ',';
       }
     });
 
-    print("New codes files - after filtering: " + newCodeFileState);
-
-    // Saving the new sequence of codes in the codes file and updating file state
+    // Save the new sequence of codes in the codes file
     await BackendProvider.of(context).storage.writeData(newCodeFileState);
     codeFileState = newCodeFileState;
 
-    // building the return widget based on the updated (current) codes file
     return Calendar(codeFileState, documentList);
   }
 
+  /// Builds the refresh and help buttons on the app bar, the floating action
+  /// button for adding new codes and it displays a calendar when appropriate.
+  ///
+  /// The FutureBuilder used allows for the retrieval of all the appointments at
+  /// once, as supposed to as a steam of documents. This is needed because the
+  /// data needs to be analysed as a whole to determine which appointment cards
+  /// to group under which date labels. The future caches the latest version of
+  /// the calendar so it can be displayed while the latest version of it is
+  /// being built.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,7 +154,6 @@ class _DashboardState extends State<Dashboard> {
           IconButton(
               icon: Icon(Icons.delete_sweep),
               onPressed: () {
-                print("---clear data button pressed---");
                 _clearData();
               }),
           IconButton(
@@ -157,9 +165,8 @@ class _DashboardState extends State<Dashboard> {
         ],
       ),
       body: FutureBuilder(
-          future: _getDocData(),
+          future: _validateCalendar(),
           builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
-            print("Snapshot: " + snapshot.data.toString());
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
                 return (cachedCalendar == null)
@@ -177,7 +184,6 @@ class _DashboardState extends State<Dashboard> {
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            print("floating button pressed - codeFileState: " + codeFileState);
             showDialog(
                 context: context, builder: (_) => _NewAppointmentDialog(this));
           }),
@@ -185,6 +191,13 @@ class _DashboardState extends State<Dashboard> {
   }
 }
 
+/// This private class is contained in the same file as Dashboard because
+/// they are closely related and share functionality. The reason behind their
+/// split is to allow animations to be performed in _NewAppointmentDialog
+/// without triggering the execution of expensive methods in Dashboard.
+///
+/// This class displays a form that allows the user to add new appointments to
+/// their calendar. It validates such codes and provides feedback to the user.
 class _NewAppointmentDialog extends StatefulWidget {
   final _DashboardState _parent;
 
@@ -198,10 +211,25 @@ class _NewAppointmentDialog extends StatefulWidget {
 
 class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
   bool loading = false;
-  _DashboardState _parent;
+  _DashboardState _parent; // needed to access its members
 
   _NewAppointmentDialogState(this._parent);
 
+
+  /// Builds a simple form with a single input field and a submit button.
+  ///
+  /// Pressing the SUBMIT button triggers the execution of asynchronous
+  /// functions used to validate the code entered. If the code is valid, a
+  /// transaction is initialised to edit the database record and block further
+  /// use of this appointment by anybody.
+  ///
+  /// Due to the asynchronous nature of the operations and the fact that they
+  /// are used to maintain data consistency and security, they are kept in one
+  /// private method to avoid concurrency bugs.
+  ///
+  /// The state of the widget tree is being changed before, during and after
+  /// some operations make I/O requests so the sequence in which they are
+  /// written needs to be altered with CAUTION.
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -225,6 +253,7 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                         return "This appointment is in your calendar";
                       } else {
                         if (_parent.validationResultDb) {
+                          // A return type of null is a successful validation
                           return null;
                         } else {
                           return "Invalid code";
@@ -243,12 +272,9 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                       child: RaisedButton(
                         color: Colors.indigo,
                         onPressed: () async {
-                          print("--------SUBMIT button pressed");
                           if (loading) {
                             return null;
                           }
-
-                          print("Checkpoint 1");
 
                           if (_parent.codeController.text.isEmpty) {
                             _parent._formKey.currentState.validate();
@@ -257,37 +283,30 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                               loading = true;
                             });
 
-                            print("Checkpoint 2");
-
                             bool inFile = _parent._documentInCodeFile(
                                 _parent.codeController.text);
                             bool inDatabase =
                                 await _parent._isCodeInFirestoreNotUsed(
                                     _parent.codeController.text);
 
-                            // The validator will succeed if the code is not already in the codes file and if it is not used in firestore
+                            // The validator will succeed if the code is not
+                            // already in the codes file and if it is not used
+                            // in the database
                             _parent.validationResultDb = inDatabase;
                             _parent.validationResultFile = inFile;
 
-                            print("Checkpoint 3");
-
-                            // If the validator will succeed, start overwriting the used field already
+                            // If the validator will succeed, start overwriting
+                            // the used field already
                             if (inDatabase && !inFile) {
                               await BackendProvider.of(context)
                                   .backend
                                   .setAppointmentCodeUsed(
                                       _parent.codeController.text);
-                              print(
-                                  "-----------TRANSITION COMPLETED----------");
                             }
-
-                            print("Checkpoint 4");
 
                             setState(() {
                               loading = false;
                             });
-
-                            print("Checkpoint 5");
 
                             if (_parent._formKey.currentState.validate()) {
                               await BackendProvider.of(context)
@@ -301,8 +320,6 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
                                     _parent.codeController.text);
                                 _parent.codeController.text = "";
                               });
-
-                              print("--------- Navigator about to pop");
 
                               Navigator.pop(context);
                             }
