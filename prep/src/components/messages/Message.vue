@@ -19,7 +19,7 @@
             <div
               v-if="message.isPatient == false"
               class="containerChat"
-              style="max-width:100%;overflow:hidden;"
+              style="max-width:100%;overflow:hidden;background-color:#d0ecff"
             >
               <p>{{message.content}}</p>
               <span class="time-left">{{message.datetime}}</span>
@@ -56,7 +56,7 @@
                 id="textArea"
                 required
               ></textarea>
-              <button id="sendMessage" type="submit" class="btn btn-large" style="margin-left:5px;">
+              <button id="sendMessage" type="submit" class="btn btn-large" style="margin-left:5px;padding-right:15px">
                 <i class="material-icons left">send</i>
               </button>
             </div>
@@ -68,7 +68,7 @@
         <router-link
           id="currentApp"
           to="/view-appointments"
-          class="btn"
+          class="btn grey"
           style="margin-bottom:10px;"
         >Go Back</router-link>
       </template>
@@ -113,7 +113,7 @@ p {
 .containerChat {
   word-wrap: break-word;
   border: 2px solid #dedede;
-  background-color: #f1f1f1;
+  background-color: white;
   border-radius: 5px;
   padding: 10px;
   margin: 10px 0;
@@ -126,13 +126,13 @@ p {
   word-wrap: break-word;
   white-space: normal;
   overflow: hidden;
-  background-color: #f1f1f1;
+  background-color: white;
   clear: both;
 }
 
 .darker {
   border-color: #ccc;
-  background-color: #ddd;
+  background-color: #e7e7e7;
 }
 
 .containerChat::after {
