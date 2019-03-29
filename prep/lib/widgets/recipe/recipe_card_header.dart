@@ -79,9 +79,6 @@ class RecipeCardHeader extends StatelessWidget {
       imageUrl: backgroundImageUrl?.trim(),
       errorWidget: (context, url, err) =>
           _getDefaultImageFromRecipeType(recipeType),
-      placeholder: (context, url) => LinearProgressIndicator(
-            backgroundColor: Theme.of(context).accentColor,
-          ),
       fadeInCurve: Curves.decelerate,
       fadeInDuration: Duration(microseconds: 300),
       fit: BoxFit.cover,

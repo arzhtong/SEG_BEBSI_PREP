@@ -1,5 +1,5 @@
 class Constants {
-  static const bool kIsDebug = true;
+  static const bool kIsDebug = false;
 
   //Recipe Constants
   static const String kIngredientListHeadline = "Show Ingredients";

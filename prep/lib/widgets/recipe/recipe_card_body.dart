@@ -15,12 +15,15 @@ class RecipeCardBody extends StatelessWidget {
       assert(subtitle is String);
     }
 
-    var recipeName = [
-      Text(
-        title,
-        overflow: TextOverflow.ellipsis,
-        maxLines: 1,
-        style: Theme.of(context).textTheme.headline,
+    List<Widget> recipeName = [
+      FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          title,
+          //overflow: TextOverflow.ellipsis,
+          //maxLines: 1,
+          style: Theme.of(context).textTheme.headline,
+        ),
       ),
     ];
     if (subtitle != null) {
