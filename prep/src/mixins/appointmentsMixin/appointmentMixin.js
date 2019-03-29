@@ -4,7 +4,7 @@
 
 import db from "../../components/firebaseInit";
 import firebase from "firebase/app";
-import 'firebase/auth'
+import "firebase/auth";
 
 export const appointmentMixin = {
   data() {
@@ -75,7 +75,13 @@ export const appointmentMixin = {
         .doc(this.appointmentsView[0].testID)
         .get()
         .then(doc => {
-          (this.testName = doc.data().title), (this.testType = doc.data().type);
+          if (doc.data() != undefined) {
+            (this.testName = doc.data().title),
+              (this.testType = doc.data().type);
+          }else{
+            this.testName = "Unavailable"
+            this.testType = "Unavailable"
+          }
         });
     },
     /*
@@ -329,11 +335,10 @@ export const appointmentMixin = {
         Part of the AddAppointment Component
     */
     getDocId() {
-      
-      if(firebase.auth().currentUser == null){
-        this.currentUser = "e@e.com"
-      }else{
-        this.currentUser = firebase.auth().currentUser.email
+      if (firebase.auth().currentUser == null) {
+        this.currentUser = "e@e.com";
+      } else {
+        this.currentUser = firebase.auth().currentUser.email;
       }
       db.collection("users")
         .where("email", "==", this.currentUser)
