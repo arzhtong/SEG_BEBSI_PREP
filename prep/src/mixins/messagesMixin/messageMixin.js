@@ -156,13 +156,13 @@ export const messageMixin = {
             seenByStaff: true,
             seenByPatient: false
           })
-          .then(function() {
+          .then(function () {
             document.getElementById("textArea").value = "";
             message = null;
             document.getElementById("textArea").click();
             console.log("Document successfully written!");
           })
-          .catch(function(error) {
+          .catch(function (error) {
             console.error("Error writing document: ", error);
           });
       }
@@ -173,7 +173,7 @@ export const messageMixin = {
 
         Part of the Message Component.
     */
-   scrollToBottom() {
+    scrollToBottom() {
       var elmnt = document.getElementById("messages");
       elmnt.scrollTop = elmnt.scrollHeight;
     }

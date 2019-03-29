@@ -1,5 +1,5 @@
 <template>
-    <div id="view-test" style="background-color:white; padding: 10px 50px 10px 50px; margin-top:10px; margin-bottom:20px">
+    <div class="mainContainer" id="view-test">
         <div id="mainScreen">
             <h4 style="font-size:3em;"><b>Tests</b></h4>
 

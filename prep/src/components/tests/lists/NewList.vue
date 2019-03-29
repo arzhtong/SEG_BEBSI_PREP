@@ -1,5 +1,5 @@
 <template>
-  <div id="new-list" style="background-color:white; padding: 10px 50px 10px 50px; margin-top:10px">
+  <div class="mainContainer" id="new-list">
     <h3>New List View</h3>
     <div class="row">
       <ul>
@@ -9,7 +9,8 @@
               <span class="card-title white-text">
                 <i class="small material-icons">info_outline</i>Info
               </span>
-              <p class="white-text">The list title will be displayed in the preparation card and as the title on that list's screen
+              <p class="white-text">
+                The list title will be displayed in the preparation card and as the title on that list's screen
                 <br>
                 <br>Clicking on the NEW LIST button will create a new sublist inside the list's screen. This will contain a name, description and a list of items
                 <br>
@@ -82,7 +83,7 @@
 import { listsMixin } from "../../../mixins/listsMixin/listsMixin.js";
 export default {
   name: "new-list",
-  mixins: [listsMixin],
+  mixins: [listsMixin]
 };
 </script>
 <style scoped>

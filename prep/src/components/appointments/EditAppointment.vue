@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="edit-appointment"
-    style="background-color:white; padding: 10px 50px 10px 50px; margin-top:10px; margin-bottom:30px"
-  >
+  <div class="mainContainer" id="edit-appointment">
     <h3>Edit Appointment</h3>
     <div class="row">
       <form @submit.prevent="updateAppointment" class="col s12">
@@ -44,7 +41,12 @@
         <div class="row">
           <div class="input-field col s12">
             <p>Change Referenced Staff:</p>
-            <select id="selectRefStaff" class="browser-default" style="color:black" v-model="staffMember">
+            <select
+              id="selectRefStaff"
+              class="browser-default"
+              style="color:black"
+              v-model="staffMember"
+            >
               <option v-for="user in users" v-bind:key="user.Ucode" :value="user">{{user.name}}</option>
             </select>
           </div>
@@ -77,11 +79,11 @@ export default {
 };
 </script>
 <style scoped>
-  p {
-    color: #2196f3;
-  }
-  h3 {
-    font-weight: bold;
-    margin-left: 20px;
-  }
+p {
+  color: #2196f3;
+}
+h3 {
+  font-weight: bold;
+  margin-left: 20px;
+}
 </style>

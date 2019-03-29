@@ -2,16 +2,20 @@
   <div id="view-prep-faqs">
     <ul class="collection with-header">
       <li class="collection-header">
-        <h4><b>FAQS</b></h4>
-         <div v-if="faqs.length === 0" class="row">
-                <div class="col s12">
-                <div class="card-panel light-blue">
-                    <span class="card-title white-text"><i class="small material-icons">info_outline</i>Info</span>
-                    <p class="white-text">There are currently no faqs for this test.<br> To add one, please click on the button below.
-                    </p>
-                </div>
-                </div>
+        <h4>FAQS</h4>
+        <div v-if="faqs.length === 0" class="row">
+          <div class="col s12">
+            <div class="card-panel light-blue">
+              <span class="card-title white-text">
+                <i class="small material-icons">info_outline</i>Info
+              </span>
+              <p class="white-text">
+                There are currently no faqs for this test.
+                <br>To add one, please click on the button below.
+              </p>
             </div>
+          </div>
+        </div>
 
         <!-- adds a dropdown -->
         <ul class="collapsible">
@@ -40,7 +44,7 @@
                     <b>Has an information shortcut:</b>&nbsp;No
                   </li>
                   <li>
-                      <!-- delete faq -->
+                    <!-- delete faq -->
                     <button
                       @click="deleteFAQ(faq.id)"
                       class="waves-effect waves-light btn-small red"
@@ -62,10 +66,7 @@
             class="btn green"
             style="margin: 10px 10px 10px 0px"
           >Add FAQ</router-link>
-          <router-link
-            to="/view-tests"
-            class="btn grey"
-          >Back</router-link>
+          <router-link to="/view-tests" class="btn grey">Back</router-link>
         </div>
       </li>
     </ul>
@@ -77,14 +78,13 @@ import { faqsMixin } from "../../../mixins/faqsMixin/faqsMixin.js";
 export default {
   name: "view-prep-faqs",
   mixins: [faqsMixin],
-  created (){
+  created() {
     this.createFaqs();
   },
-   mounted() {
+  mounted() {
     M.AutoInit(); // initializes materialize components for the dropdowns
-  },
+  }
 };
-
 </script>
 
 

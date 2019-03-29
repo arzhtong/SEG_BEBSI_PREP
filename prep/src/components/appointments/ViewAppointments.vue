@@ -1,6 +1,6 @@
 <template>
   <div>
-      <view_app v-bind:past = "past" />
+    <view_app v-bind:past="past"/>
   </div>
 </template>
 <script>
@@ -13,7 +13,7 @@ export default {
   },
   data() {
     return {
-      past:false
+      past: false
     };
   }
 };

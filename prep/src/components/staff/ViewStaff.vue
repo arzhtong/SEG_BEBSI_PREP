@@ -1,10 +1,7 @@
 <template>
   <div id="view-staff">
-    <div class="container" style="width:100%;height:100%">
-      <table
-        class="collection with-header "
-        style="background: white;width:100%;height:auto"
-      >
+    <div class="container" style="width:100%;">
+      <table class="collection with-header" style="background: white;width:100%;height:auto">
         <thead class="collection-header">
           <h4 style="padding:20px;font-size:3em;">
             <b>Staff</b>

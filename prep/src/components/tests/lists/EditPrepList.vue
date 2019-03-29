@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="edit-prep-list"
-    style="background-color:white; padding: 10px 50px 10px 50px; margin-top:10px"
-  >
+  <div class="mainContainer" id="edit-prep-list">
     <div class="fixed-action-btn">
       <router-link
         v-bind:to="{name: 'view-prep-list', params: {test_id: this.$route.params.test_id, contents: List}}"
@@ -13,7 +10,7 @@
     </div>
     <h3>Edit Preparation List</h3>
     <div class="row">
-      <ul >
+      <ul>
         <li>
           <div class="col s12">
             <div class="card-panel light-blue">

@@ -5,7 +5,7 @@
 import imageUploader from '../../components/shared/ImageUploader'
 
 export const recipeMixin = {
-    data() { 
+    data() {
         return {
             // shared data for recipes
             title: null,
@@ -41,7 +41,7 @@ export const recipeMixin = {
         imageUploader
     },
 
-    
+
     methods: {
         // functions to edit the ingredients and instructions 
         addInstruction() {
@@ -60,8 +60,8 @@ export const recipeMixin = {
         getChips() {
             var arr = M.Chips.getInstance($('.chips')).chipsData
             var chips = []
-            if(arr.length !== 0) {
-                for(var i = 0; i < arr.length; i++) {
+            if (arr.length !== 0) {
+                for (var i = 0; i < arr.length; i++) {
                     chips.push(arr[i].tag)
                 }
             }
@@ -69,9 +69,9 @@ export const recipeMixin = {
         },
         // load current chips into the input area
         loadChips() {
-            if(this.labels !== null) {
+            if (this.labels !== null) {
                 var instance = M.Chips.getInstance($('.chips'))
-                for(var i = 0; i < this.labels.length; i++) {
+                for (var i = 0; i < this.labels.length; i++) {
                     instance.addChip({
                         tag: this.labels[i]
                     })
@@ -81,7 +81,7 @@ export const recipeMixin = {
 
         // make sure the recipe has the required fields
         validRecipe() {
-            if(!((this.externalURL !== null && this.externalURL !== '') || (this.ingredients.length > 0 && this.instructions.length > 0))) {
+            if (!((this.externalURL !== null && this.externalURL !== '') || (this.ingredients.length > 0 && this.instructions.length > 0))) {
                 alert('Please provide a recipe link or a method and ingredients')
                 return false
             } else {
@@ -94,8 +94,8 @@ export const recipeMixin = {
         $('.chips-placeholder').chips({
             placeholder: 'Enter a tag'
         })
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('select').formSelect()
-        })    
+        })
     }
 }

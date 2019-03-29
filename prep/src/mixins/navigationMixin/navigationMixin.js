@@ -6,7 +6,7 @@ import db from '../../components/firebaseInit'
 import firebase from 'firebase/app'
 
 export const navigationMixin = {
-    data() { 
+    data() {
         return {
             // shared data for navigation
             isLoggedIn: false,
@@ -24,36 +24,36 @@ export const navigationMixin = {
                 this.isLoggedIn = true
                 this.currentUser = firebase.auth().currentUser.email
                 db.collection("users")
-                .where("email", "==", firebase.auth().currentUser.email)
-                .get()
-                .then(querySnapshot => {
-                    querySnapshot.forEach(doc => {
-                        if (doc.exists) {
-                            this.user = {
-                                email: doc.data().email,
-                                dept: doc.data().dept,
-                                role: doc.data().role
+                    .where("email", "==", firebase.auth().currentUser.email)
+                    .get()
+                    .then(querySnapshot => {
+                        querySnapshot.forEach(doc => {
+                            if (doc.exists) {
+                                this.user = {
+                                    email: doc.data().email,
+                                    dept: doc.data().dept,
+                                    role: doc.data().role
+                                }
+                                // this.user.push(data)
+                                this.isAdmin = doc.data().role
                             }
-                            // this.user.push(data)
-                            this.isAdmin = doc.data().role
-                        }
+                        })
                     })
-                })
             }
         },
 
         // log the user out and refresh the screen to display the login screen
         logout() {
             firebase
-            .auth()
-            .signOut()
-            .then(() => {
-                this.$router.go({ path: this.$router.path })
-            })
+                .auth()
+                .signOut()
+                .then(() => {
+                    this.$router.go({ path: this.$router.path })
+                })
         }
     },
     mounted() {
         // initialise sidebar component
-        M.AutoInit()  
+        M.AutoInit()
     }
 }

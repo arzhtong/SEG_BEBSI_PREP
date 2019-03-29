@@ -12,10 +12,24 @@
               </div>
               <div class="input-field">
                 <i class="material-icons prefix">lock</i>
-                <input placeholder="Password" type="password" name="password" id="password" v-model="passwordLog">
+                <input
+                  placeholder="Password"
+                  type="password"
+                  name="password"
+                  id="password"
+                  v-model="passwordLog"
+                >
               </div>
-              <button id="loginBtn" v-on:click="login" class="btn btn-large blue lighten-2 black-text">Login</button>
-              <router-link id="resetPasswordBtn" to="/resetPassword" style="margin-left:50px;">Forgot Password?</router-link>
+              <button
+                id="loginBtn"
+                v-on:click="login"
+                class="btn btn-large blue lighten-2 black-text"
+              >Login</button>
+              <router-link
+                id="resetPasswordBtn"
+                to="/resetPassword"
+                style="margin-left:50px;"
+              >Forgot Password?</router-link>
             </form>
           </div>
         </div>

@@ -146,7 +146,7 @@ export const userMixin = {
                   alert(`Successfully deleted user ${userEmail}`);
                   location.reload();
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                   console.error("Error removing document: ", error);
                   alert(`There was an error: ${error}`);
                 });

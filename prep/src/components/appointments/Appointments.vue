@@ -1,7 +1,7 @@
 <template>
   <div id="view-appointment">
-    <div class="container" style="width:100%;height:100%;">
-      <table class="collection with-header" style="background: white;">
+    <div class="container" id="main">
+      <table class="collection with-header">
         <thead class="collection-header">
           <h3>
             <b>{{pastString}} Appointments</b>
@@ -12,7 +12,12 @@
                 <span style="color:black !important">
                   <b>Sort by:</b>
                 </span>
-                <select id="select" @change="sortByOrder" class="browser-default" style="color:black; min-width: 185px">
+                <select
+                  id="select"
+                  @change="sortByOrder"
+                  class="browser-default"
+                  style="color:black; min-width: 185px"
+                >
                   <option value="Date" selected>Date in ascending order</option>
                   <option value="Date desc">Date in descending order</option>
                 </select>
@@ -131,14 +136,14 @@
             </td>
             <td>
               <router-link
-              id="msgBtn"
+                id="msgBtn"
                 v-bind:to="{name: 'message', params: {expired: past, appointmentID: appointment.code}}"
               >
                 <i
                   class="material-icons left green-text"
                   style="margin-left:5px;font-size:30px;text-align:center"
                 >insert_comment</i>
-                
+
                 <span v-if="notifications[ids.indexOf(appointment.code)] != 0">
                   <span
                     v-if="ids.includes(appointment.code) == true"
@@ -150,7 +155,12 @@
           </tr>
         </tbody>
         <template v-if="past==false">
-          <router-link id="addAppBtn" to="/add-appointment" class="btn green" style="margin:20px">Add Appointment</router-link>
+          <router-link
+            id="addAppBtn"
+            to="/add-appointment"
+            class="btn green"
+            style="margin:20px"
+          >Add Appointment</router-link>
         </template>
         <template v-else>
           <router-link
@@ -174,7 +184,7 @@ export default {
   created() {
     this.setDate();
     this.loadUser();
-    this.getAppointments("asc"); 
+    this.getAppointments("asc");
   }
 };
 </script>
@@ -183,14 +193,17 @@ export default {
 table {
   width: 100%;
   min-width: 50%;
+  background: white; 
+  height: auto;
 }
 h3 {
   padding: 20px;
 }
-
+#main {
+  width: 100%;
+}
 td,
 th {
   padding: 10px !important;
 }
-
 </style>
