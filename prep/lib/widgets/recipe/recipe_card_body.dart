@@ -4,6 +4,9 @@ import 'package:prep/utils/constants.dart';
 import 'package:prep/utils/document_data_provider.dart';
 import 'package:prep/widgets/recipe/recipe_card_content.dart';
 
+///[RecipeCardBody] displays the title given by the [context]'s 
+///[DocumentDataProvider] of the recipe and is 
+///expandalbe when tapped on to show full recipe details via [RecipeCardContent].
 class RecipeCardBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -15,12 +18,15 @@ class RecipeCardBody extends StatelessWidget {
       assert(subtitle is String);
     }
 
-    var recipeName = [
-      Text(
-        title,
-        overflow: TextOverflow.ellipsis,
-        maxLines: 1,
-        style: Theme.of(context).textTheme.headline,
+    List<Widget> recipeName = [
+      FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          title,
+          //overflow: TextOverflow.ellipsis,
+          //maxLines: 1,
+          style: Theme.of(context).textTheme.headline,
+        ),
       ),
     ];
     if (subtitle != null) {
