@@ -48,7 +48,7 @@ export const navigationMixin = {
                 .auth()
                 .signOut()
                 .then(() => {
-                    this.$router.go({ path: this.$router.path })
+                    location.reload();
                 })
         }
     },

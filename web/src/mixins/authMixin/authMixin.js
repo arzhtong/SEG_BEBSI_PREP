@@ -70,7 +70,7 @@ export const authMixin = {
         .signInWithEmailAndPassword(this.emailLog, this.passwordLog)
         .then(
           user => {
-            this.$router.go({ path: this.$router.path });
+            location.reload();
           },
           err => {
             alert(err.message);
