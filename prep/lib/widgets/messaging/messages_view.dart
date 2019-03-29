@@ -6,6 +6,7 @@ import 'package:prep/utils/misc_functions.dart';
 class MessagesView extends StatefulWidget {
   final _MessagesViewState _messagesState = _MessagesViewState();
 
+  /// Adds a new message to the messages view state.
   void addMessage({String messageText, DateTime datetime, bool isPatient}) {
     _messagesState._addMessageToList(
       messageText: messageText,
@@ -23,6 +24,7 @@ class _MessagesViewState extends State<MessagesView>
     with TickerProviderStateMixin {
   List<_MessageData> _messagesList = [];
 
+  /// Adds a new message to the list of messages.
   void _addMessageToList(
       {String messageText, DateTime datetime, bool isPatient}) {
     AnimationController animController =
@@ -38,6 +40,7 @@ class _MessagesViewState extends State<MessagesView>
     setState(() => _messagesList.insert(0, _newMessage));
   }
 
+  /// Disposes the animation controllers clicking off the messaging screen.
   void dispose() {
     for (_MessageData message in _messagesList) {
       message.animController.dispose();
@@ -45,6 +48,7 @@ class _MessagesViewState extends State<MessagesView>
     super.dispose();
   }
 
+  /// Builds the list of all the messages.
   @override
   Widget build(BuildContext context) {
     return Flexible(
@@ -78,7 +82,7 @@ class _MessageData {
   final String messageText;
   final DateTime datetime;
   final bool isPatient;
-  final AnimationController animController; //not yet used
+  final AnimationController animController;
 
   _MessageData(
       {@required this.messageText,
@@ -154,6 +158,7 @@ class _MessageListItem extends StatelessWidget {
     );
   }
 
+  /// Builds a single message widget.
   @override
   Widget build(BuildContext context) {
     return Padding(

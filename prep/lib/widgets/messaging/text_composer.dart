@@ -4,7 +4,7 @@ import 'package:prep/utils/backend.dart';
 import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/utils/message_crypto.dart';
 
-/// Creates the text composer stateful widget, used to input a message.
+/// Creates the text composer stateful widget, used to input and send a message.
 class TextComposer extends StatefulWidget {
   @override
   State createState() => _TextComposerState();
@@ -26,6 +26,7 @@ class _TextComposerState extends State<TextComposer> {
     }
   }
 
+  /// Builds the text composer.
   @override
   Widget build(BuildContext context) {
     return Container(
