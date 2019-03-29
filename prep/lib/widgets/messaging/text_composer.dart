@@ -62,7 +62,6 @@ class _TextComposerState extends State<TextComposer> {
                         key: Key('sendButton'),
                         icon: Icon(
                           Icons.send,
-                          //TODO Change to proper theme colors after implementation.
                           color: (_hasTyped)
                               ? Theme.of(context).accentColor
                               : Theme.of(context).buttonColor,
