@@ -1,13 +1,10 @@
 <template>
-  <div
-    id="new-appointment"
-    style="background-color:white; padding: 10px 50px 10px 50px; margin-top:10px; margin-bottom:30px"
-  >
+  <div class="mainContainer" id="new-appointment">
     <div id="mainScreen">
       <h4 style="font-size:3em;">
         <b>Appointment: {{this.$route.params.id}}</b>
       </h4>
-      <table class="collection with-header " style="background: white;height:auto">
+      <table class="collection with-header" style="background: white;height:auto">
         <thead class="collection-header">
           <tr style="font-size:1.5em;">
             <th>Date</th>
@@ -44,7 +41,7 @@
       <div style="padding-top:5%;" id="dailyCheckups">
         <h4>Daily Checkups</h4>
         <table
-          class="collection with-header "
+          class="collection with-header"
           style="background: white;height:auto; table-layout: fixed;"
         >
           <thead class="collection-header">

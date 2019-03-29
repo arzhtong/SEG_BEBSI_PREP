@@ -5,7 +5,7 @@
 import textEditor from '../../components/shared/TextEditor'
 
 export const articleMixin = {
-    data() { 
+    data() {
         return {
             // shared data for articles
             title: '',
@@ -25,14 +25,14 @@ export const articleMixin = {
         textEditor
     },
 
-    
+
     methods: {
 
     },
     mounted() {
         // initialise collapsible component
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('.collapsible').collapsible()
-        })   
+        })
     }
 }

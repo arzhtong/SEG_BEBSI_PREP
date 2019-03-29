@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="new-appointment"
-    style="background-color:white; padding: 10px 50px 10px 50px; margin-top:10px; margin-bottom:30px"
-  >
+  <div class="mainContainer" id="new-appointment">
     <div id="loader">
       <div id="el" class="preloader-wrapper big active">
         <div class="spinner-layer spinner-blue-only">
@@ -90,7 +87,8 @@ export default {
   }
 };
 </script>
-  <style>
+
+<style>
 label {
   color: #2196f3 !important;
 }

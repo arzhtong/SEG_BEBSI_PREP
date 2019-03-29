@@ -117,17 +117,17 @@ export const faqsMixin = {
         });
     },
     // sets values of fields before entering the page
-    createEditPrepFaq (){
+    createEditPrepFaq() {
       db.collection("tests")
         .doc(this.$route.params.test_id)
         .collection("prepCards")
         .doc(this.$route.params.faq_id)
         .get()
         .then(doc => {
-            this.question = doc.data().question;
-            this.answer = doc.data().answer;
-            this.chatShortcut = doc.data().chatShortcut;
-            this.informationShortcut = doc.data().informationShortcut;
+          this.question = doc.data().question;
+          this.answer = doc.data().answer;
+          this.chatShortcut = doc.data().chatShortcut;
+          this.informationShortcut = doc.data().informationShortcut;
         });
     }
   }

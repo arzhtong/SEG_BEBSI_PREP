@@ -193,7 +193,7 @@ export const appointmentMixin = {
           alert("Appointments info updated!");
           this.$router.push("/view-appointments");
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.error("Error writing document: ", error);
         });
     },
@@ -263,7 +263,7 @@ export const appointmentMixin = {
             return false;
           }
         })
-        .catch(function(error) {
+        .catch(function (error) {
           alert(error);
         });
     },
@@ -329,10 +329,9 @@ export const appointmentMixin = {
         Part of the AddAppointment Component
     */
     getDocId() {
-      
-      if(firebase.auth().currentUser == null){
+      if (firebase.auth().currentUser == null) {
         this.currentUser = "e@e.com"
-      }else{
+      } else {
         this.currentUser = firebase.auth().currentUser.email
       }
       db.collection("users")

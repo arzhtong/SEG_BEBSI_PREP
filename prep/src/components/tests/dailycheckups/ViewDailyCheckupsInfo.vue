@@ -14,39 +14,33 @@
       </li>
       <li class="collection-item">
         <b>Instructions:</b>
-       
+
         <ul v-for="(value, key) in instructions" :key="key">
           <ol style="padding:10px;font-weight: bold;">Instruction {{key}}:</ol>
           <ol>Question: {{value.question}}</ol>
-          <ol>Last checked time: 
+          <ol>
+            Last checked time:
             {{value.lastChecked.toDate().toISOString().split("T")[0]}}
             {{value.lastChecked.toDate().toTimeString().split(" ")[0]}}
           </ol>
-          <ol>Status: {{value.answer}} </ol>
+          <ol>Status: {{value.answer}}</ol>
         </ul>
       </li>
 
       <li class="collection-item">
-        <router-link
-          v-bind:to="{name: 'view-dailycheckups', params: {test_id: test_id}}"
-        >
-        <button id="GoBackDaily" class="btn grey">
-        Back
-        </button>
+        <router-link v-bind:to="{name: 'view-dailycheckups', params: {test_id: test_id}}">
+          <button id="GoBackDaily" class="btn grey">Back</button>
         </router-link>
-        
+
         <router-link
           v-bind:to="{name: 'edit-dailycheckups', params: {test_id: test_id, daily_id:this.code}}"
         >
-        <button id="GoEditCheckups" class="btn green">
-        Edit
-        </button>
+          <button id="GoEditCheckups" class="btn green">Edit</button>
         </router-link>
 
         <router-link v-bind:to="{name: 'view-dailycheckups', params: {test_id: test_id}}">
           <button id="DeleteCheckups" @click="deleteDailyCheckups" class="btn red">Delete</button>
         </router-link>
-
       </li>
     </ul>
 
@@ -55,22 +49,20 @@
 </template>
 
 <script>
-import {dailycheckupMixin} from "../../../mixins/dailycheckupsMixin/dailycheckupMixin";
+import { dailycheckupMixin } from "../../../mixins/dailycheckupsMixin/dailycheckupMixin";
 export default {
   name: "view-dailycheckups-info",
   mixins: [dailycheckupMixin],
-  data(){
-    return{
-     test_id: this.$route.params.test_id,
-     daily_id:this.$route.params.daily_id,
-     code: null
+  data() {
+    return {
+      test_id: this.$route.params.test_id,
+      daily_id: this.$route.params.daily_id,
+      code: null
     };
-   
   },
-  created(){
-     this.code=this.$route.params.daily_id
-     this.getDaily(this.test_id,this.daily_id)
+  created() {
+    this.code = this.$route.params.daily_id;
+    this.getDaily(this.test_id, this.daily_id);
   }
-
 };
 </script>

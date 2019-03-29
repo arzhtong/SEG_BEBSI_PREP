@@ -6,13 +6,13 @@
         <h4>{{title}}:</h4>
         <!-- route to all the lists -->
         <router-link
-        id="backButton"
+          id="backButton"
           v-bind:to="{name: 'view-prep-lists', params: {test_id: test_id}}"
           class="btn grey"
         >Back</router-link>
         <!-- edit the list -->
         <router-link
-        id="editButton"
+          id="editButton"
           v-bind:to="{name: 'edit-prep-list', params: {test_id: test_id, contents: this.$route.params.contents}}"
           class="btn green"
         >Edit</router-link>
@@ -49,9 +49,8 @@ import { listsMixin } from "../../../mixins/listsMixin/listsMixin.js";
 export default {
   name: "view-prep-list",
   mixins: [listsMixin],
-  created (){
-    this.createPrepList()
+  created() {
+    this.createPrepList();
   }
 };
-
 </script>

@@ -338,7 +338,7 @@ export const viewAppointmentsMixin = {
             alert(`Successfully deleted appointment ` + code);
             location.reload();
           })
-          .catch(function(error) {
+          .catch(function (error) {
             console.error("Error removing document: ", error);
             alert(`There was an error: ${error}`);
           });
@@ -364,11 +364,11 @@ export const viewAppointmentsMixin = {
             .update({
               expired: true
             })
-            .then(function() {
+            .then(function () {
               location.reload();
               console.log("Document successfully over-written!");
             })
-            .catch(function(error) {
+            .catch(function (error) {
               console.error("Error writing document: ", error);
             });
         }
@@ -378,10 +378,10 @@ export const viewAppointmentsMixin = {
           .update({
             expired: true
           })
-          .then(function() {
+          .then(function () {
             console.log("Document successfully over-written!");
           })
-          .catch(function(error) {
+          .catch(function (error) {
             console.error("Error writing document: ", error);
           });
       }
@@ -397,7 +397,7 @@ export const viewAppointmentsMixin = {
       // @ts-ignore
       document.getElementById("resetBtn").disabled = true;
       // @ts-ignore
-      window.setTimeout(function() {
+      window.setTimeout(function () {
         // @ts-ignore
         document.getElementById("resetBtn").disabled = false;
       }, 500);

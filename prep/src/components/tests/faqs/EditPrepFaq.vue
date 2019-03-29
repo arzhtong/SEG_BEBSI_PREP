@@ -1,24 +1,24 @@
 <template>
-  <div id="edit-recipe"
-  style="background-color:white; padding: 10px 50px 10px 50px; margin-top:10px">
+  <div class="mainContainer" id="edit-recipe">
     <h3>Edit FAQ</h3>
     <div class="row">
       <ul>
-         <li>
-        <div class="col s12">
-          <div class="card-panel light-blue">
-            <span class="card-title white-text">
-              <i class="small material-icons">info_outline</i>Info
-            </span>
-            <p class="white-text">Enter a question and its answer in the respective fields below.
-              <br>
-              <br>Add information and chat buttons to this question to take the patient directly to that page.
-            </p>
+        <li>
+          <div class="col s12">
+            <div class="card-panel light-blue">
+              <span class="card-title white-text">
+                <i class="small material-icons">info_outline</i>Info
+              </span>
+              <p class="white-text">
+                Enter a question and its answer in the respective fields below.
+                <br>
+                <br>Add information and chat buttons to this question to take the patient directly to that page.
+              </p>
+            </div>
           </div>
-        </div>
-      </li>
+        </li>
       </ul>
-        </div>
+    </div>
     <div class="row">
       <form @submit.prevent="updateFAQ" class="col s12">
         <!-- adds the question input field -->
@@ -71,7 +71,7 @@
         <button id="submitButton" type="submit" class="btn">Submit</button>
         <!-- cancel button -->
         <router-link
-        id="cancelButton"
+          id="cancelButton"
           v-bind:to="{name: 'view-prep-faqs', params: {test_id: test_id}}"
           class="btn grey"
         >Cancel</router-link>
@@ -86,13 +86,13 @@ import { faqsMixin } from "../../../mixins/faqsMixin/faqsMixin.js";
 export default {
   name: "edit-prep-faq",
   mixins: [faqsMixin],
-  created(){
-    this.createEditPrepFaq()
+  created() {
+    this.createEditPrepFaq();
   }
 };
 </script>
 <style scoped>
 #title {
-  color: #2196f3
+  color: #2196f3;
 }
 </style>

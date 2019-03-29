@@ -26,7 +26,7 @@ export const authMixin = {
 
         Part of the Register Component
     */
-    register: function(e) {
+    register: function (e) {
       if (this.name != null && this.dept != null && this.role != null) {
         firebase
           .auth()
@@ -63,7 +63,7 @@ export const authMixin = {
 
         Part of the Login Component
     */
-    login: function(e) {
+    login: function (e) {
       firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
       firebase
         .auth()
@@ -84,18 +84,18 @@ export const authMixin = {
 
       Part of the ResetPassword Component
     */
-    sendResetEmail: function() {
-    // @ts-ignore
+    sendResetEmail: function () {
+      // @ts-ignore
       var email = document.getElementById("email").value;
       firebase
         .auth()
         .sendPasswordResetEmail(email)
-        .then(function() {
+        .then(function () {
           // Password reset email sent.
           alert(`Password email has been sent to ${email}`);
           window.location.href = "/";
         })
-        .catch(function(error) {
+        .catch(function (error) {
           // Error occurred. Inspect error.code.
           alert(error);
         });

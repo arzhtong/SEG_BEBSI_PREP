@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="edit-employee"
-    style="background-color:white; padding: 10px 50px 10px 50px; margin-top:10px"
-  >
+  <div class="mainContainer" id="edit-employee">
     <h3>Edit User</h3>
     <div class="row">
       <form @submit.prevent="updateUser" class="col s12">
@@ -43,7 +40,7 @@ import { userMixin } from "../../mixins/usersMixin/userMixin";
 export default {
   name: "edit-staff",
   mixins: [userMixin],
-  created(){
+  created() {
     this.preloadFields();
   },
   watch: {
@@ -53,7 +50,7 @@ export default {
 </script>
 
 <style>
-  span {
-    color: #2196f3;
-  }
+span {
+  color: #2196f3;
+}
 </style>
