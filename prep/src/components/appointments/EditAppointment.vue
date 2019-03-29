@@ -34,7 +34,7 @@
         <div class="row">
           <div class="input-field col s12">
             <p>Contact Number:</p>
-            <input type="number" v-model="contactNumber" required>
+            <input type="tel" v-model="contactNumber" required>
           </div>
         </div>
 

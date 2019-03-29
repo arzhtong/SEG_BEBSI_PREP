@@ -18,12 +18,7 @@
         <ul v-for="(value, key) in instructions" :key="key">
           <ol style="padding:10px;font-weight: bold;">Instruction {{key}}:</ol>
           <ol>Question: {{value.question}}</ol>
-          <ol>
-            Last checked time:
-            {{value.lastChecked.toDate().toISOString().split("T")[0]}}
-            {{value.lastChecked.toDate().toTimeString().split(" ")[0]}}
-          </ol>
-          <ol>Status: {{value.answer}}</ol>
+          <ol>Status: {{value.answer}} </ol>
         </ul>
       </li>
 

@@ -30,7 +30,7 @@ describe("Component", () => {
         expect(wrapper.find('h3').text()).toBe("Edit Daily Check-ups")
     }),
     test("has the right amount of inputs", () => {
-        expect(wrapper.findAll("input")).toHaveLength(2);
+        expect(wrapper.findAll("input")).toHaveLength(1);
     }),
     test("all inputs have required attribute", () => {
         var inputArray = wrapper.findAll("input");
@@ -68,12 +68,10 @@ describe("Component", () => {
         map[0] = {answer: false, question: "Don't drink water" }
 
         wrapper.setData({
-          description: "someDescription",
           daysBeforeTest: "2",
           instructions:[map],
         });
         // Check if data() is set properly
-        expect(wrapper.vm.description).toMatch("someDescription");
         expect(wrapper.vm.daysBeforeTest).toMatch("2");
         expect(wrapper.vm.instructions).toHaveLength(1);
         expect(wrapper.vm.instructions).toBeDefined();

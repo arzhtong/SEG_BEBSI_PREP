@@ -51,7 +51,7 @@
             </td>
           </tr>
         </tbody>
-        <router-link id="addStaffBtn" to="/register" class="btn green" style="margin:20px">Add Staff</router-link>
+        <router-link id="addStaffBtn" to="/register" class="btn green" style="margin:20px">Add Member</router-link>
       </table>
     </div>
   </div>

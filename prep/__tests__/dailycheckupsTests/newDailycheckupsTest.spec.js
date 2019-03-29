@@ -27,7 +27,7 @@ describe("Component", () => {
       expect(wrapper.element).toMatchSnapshot();
     }),
     test("has the right amount of inputs", () => {
-      expect(wrapper.findAll("input")).toHaveLength(2);
+      expect(wrapper.findAll("input")).toHaveLength(1);
     }),
     test("all inputs have required attribute", () => {
       var inputArray = wrapper.findAll("input");
