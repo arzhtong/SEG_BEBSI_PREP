@@ -40,14 +40,6 @@ class _DashboardState extends State<Dashboard> {
     firebaseMessaging.subscribeToTopic(appointmentID);
   }
 
-  /// Unsubscribe the user from all message notifications
-  // TODO: change structure of removing appointments, to allow unsubscribing
-  // from each appointment.
-  void _unsubscribeFromNotifications() {
-    final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
-    firebaseMessaging.deleteInstanceID();
-  }
-
   /// Determine if an appointment ID exists in the codes file
   bool _documentInCodeFile(String value) {
     return codeFileState.split(',').contains(value);
@@ -55,7 +47,6 @@ class _DashboardState extends State<Dashboard> {
 
   /// Clear all the data from the codes file
   Future<File> _clearData() async {
-    _unsubscribeFromNotifications();
     //must apply set state to make sure the calendar is redrawn
     setState(() {
       codeFileState = "";

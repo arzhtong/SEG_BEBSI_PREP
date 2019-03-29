@@ -1,5 +1,7 @@
 import 'package:url_launcher/url_launcher.dart';
 
+/// Converts a list of [dynamic] objects into a list of [String] objects.
+/// Returning a null object if the parameter list is null.
 List<String> convertDynamicListToStringList(List<dynamic> dynamicList) {
   if (dynamicList == null) return [];
 
