@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-///Provides a docuemnt snapshot instnace to pass down a widget tree
+///Provides a document snapshot instance to pass down a widget tree
 ///in order to avoid passing it down through the constructor.
-///Should be used within a strambuilder which sould handle the document updates.
+///Should be used within a StreamBuilder which should handle the document updates.
 class DocumentDataProvider extends InheritedWidget {
   final Map<String, dynamic> documentData;
 

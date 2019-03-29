@@ -13,7 +13,7 @@ class BackendProvider extends InheritedWidget {
       {Key key,
       @required Widget child,
       @required this.backend,
-      @required this.storage})
+      this.storage})
       : super(key: key, child: child);
 
   @override

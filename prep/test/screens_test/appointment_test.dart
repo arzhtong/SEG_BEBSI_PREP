@@ -53,7 +53,7 @@ main() {
   Future<void> setUpWidgetTester(WidgetTester tester) async {
     setUpMockBackend();
 
-    await tester.pumpWidget(testableWidget(child: Appointment(3)));
+    await tester.pumpWidget(testableWidget(child: Appointment(0)));
     await tester.pumpAndSettle();
   }
 

@@ -33,11 +33,7 @@ main() {
   }
 
   void setUpMockBackend() {
-    final mockAppointmentID = 'abcdefghi';
-
-    when(mockBackend.appointmentID).thenReturn(
-      mockAppointmentID,
-    );
+    when(mockBackend.appointmentID).thenReturn('abcdefghi');
 
     when(mockBackend.messagesSnapshots(any)).thenAnswer(
       (_) => Stream.periodic(Duration(milliseconds: 100), (_) {

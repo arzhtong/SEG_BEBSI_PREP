@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:prep/screens/appointment.screen.dart';
+import 'package:prep/utils/misc_functions.dart';
 
+/// Displays one FAQ expansion tile in a default collapsed state. It contains a
+/// question, displayed as the title of the expansion tile. When tapped, the
+/// rest of the contents are showed. These include an answer text and up to 2
+/// icon buttons.
 class FaqExpansionTile extends StatelessWidget {
   final String question;
   final String answer;
@@ -11,6 +16,10 @@ class FaqExpansionTile extends StatelessWidget {
   FaqExpansionTile(
       this.question, this.answer, this.chatShortcut, this.infoShortcut);
 
+  /// Uses the class parameters to style each FAQ expansion tile widget. It
+  /// contains 2 pieces of text (question and answer) along with two button
+  /// icons: chatShortcut, navigating to the messaging screen and infoShortcut,
+  /// navigating back to the preparation tab.
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,11 +28,11 @@ class FaqExpansionTile extends StatelessWidget {
         elevation: 3.0,
         child: ExpansionTile(
           key: Key('expandableTile'),
-          title: Text(question),
+          title: Text(stringValidator(question)),
           children: <Widget>[
             ListTile(
               title: Text(
-                answer,
+                stringValidator(answer),
                 style: TextStyle(color: Colors.grey),
               ),
             ),
@@ -39,6 +48,7 @@ class FaqExpansionTile extends StatelessWidget {
                         onPressed: () {
                           Navigator.push(
                               context,
+                              // Navigates to the messaging screen
                               MaterialPageRoute(
                                   builder: (context) => Appointment(3)));
                         })
@@ -51,6 +61,7 @@ class FaqExpansionTile extends StatelessWidget {
                         onPressed: () {
                           Navigator.push(
                               context,
+                              // Navigates to the preparation tab
                               MaterialPageRoute(
                                   builder: (context) => Appointment(1)));
                         })

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:prep/utils/misc_functions.dart';
 
+/// Creates the messages view stateful widget, which shows all of the messages.
 class MessagesView extends StatefulWidget {
   final _MessagesViewState _messagesState = _MessagesViewState();
 
@@ -17,6 +18,7 @@ class MessagesView extends StatefulWidget {
   State createState() => _messagesState;
 }
 
+/// Creates the state for the messages view.
 class _MessagesViewState extends State<MessagesView>
     with TickerProviderStateMixin {
   List<_MessageData> _messagesList = [];
@@ -71,6 +73,7 @@ class _MessagesViewState extends State<MessagesView>
   }
 }
 
+/// Contains the data of the message.
 class _MessageData {
   final String messageText;
   final DateTime datetime;
@@ -84,7 +87,7 @@ class _MessageData {
       this.animController});
 }
 
-//Widget used to display a particlat message on screen
+/// Stateless widget used to display a particular message on the screen.
 class _MessageListItem extends StatelessWidget {
   final _MessageData message;
   final bool showDate;
@@ -99,20 +102,20 @@ class _MessageListItem extends StatelessWidget {
   final MainAxisAlignment rowAlignment;
   final Color messageBackgroundColor;
 
+  /// Widget used to display the time of the message
   Widget _getStatusLine(BuildContext context) {
-    var statuslineTimestamp = Text(
-      message.datetime.toString().substring(10, 16),
-      style: TextStyle(fontSize: 12.0),
-    );
-
     return Row(
       mainAxisAlignment: rowAlignment,
       children: <Widget>[
-        statuslineTimestamp,
+        Text(
+          timeFormatter(message.datetime).replaceAll(" ", ""),
+          style: TextStyle(fontSize: 12.0),
+        ),
       ],
     );
   }
 
+  /// Widget used to display the date of the message
   Widget _getDateLine(BuildContext context) {
     return Column(children: <Widget>[
       Text(
@@ -123,6 +126,7 @@ class _MessageListItem extends StatelessWidget {
     ]);
   }
 
+  /// Widget used to display the body of the message
   Widget _getMessageBody(BuildContext context) {
     return Row(
       mainAxisAlignment: rowAlignment,

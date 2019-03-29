@@ -4,6 +4,9 @@ import 'package:prep/screens/appointment.screen.dart';
 import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/utils/misc_functions.dart';
 
+/// Displays some information about an appointment in a labelled column layout.
+/// Such information includes the appointment id, the location, the date and
+/// time, the doctor name, the test name and the contact number of the hospital.
 class CalendarCard extends StatelessWidget {
   final String appointmentID;
   final String location;
@@ -20,10 +23,15 @@ class CalendarCard extends StatelessWidget {
   ];
   final Color color;
 
+  /// Initialises the card's fields and assigns the card a color. The color
+  /// depends on the hash value of the appointment id string of the specific
+  /// appointment. 1 of 4 colors is assigned to each card.
   CalendarCard(this.appointmentID, this.location, this.dateTime, this.testID,
       this.doctorName, this.testName, this.contactNumber)
       : color = colors[appointmentID.hashCode % 4];
 
+  /// Builds an information row containing the label of the information on the
+  /// left hand side and the data itself on the right hand side.
   Widget _informationRow(String label, String content) {
     return Container(
         child: Row(
@@ -33,7 +41,7 @@ class CalendarCard extends StatelessWidget {
         Expanded(
           flex: 4,
           child: Text(
-            label,
+            stringValidator(label),
             style: TextStyle(
               color: Colors.white,
               fontSize: 20.0,
@@ -44,7 +52,7 @@ class CalendarCard extends StatelessWidget {
         Expanded(
           flex: 6,
           child: Text(
-            content,
+            stringValidator(content),
             textAlign: TextAlign.end,
             style: TextStyle(
               color: Colors.white,
@@ -57,6 +65,11 @@ class CalendarCard extends StatelessWidget {
     ));
   }
 
+  /// Builds and formats the card using a mixture of containers, columns,
+  /// stacks, cards and text widgets. An interactive Inkwell component is added
+  /// to allow an event on tap. The card sets the values of the backend being
+  /// used (this allows other pages to access basic appointment data without
+  /// needed a further database query) and navigates to the appointment screen.
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -85,7 +98,7 @@ class CalendarCard extends StatelessWidget {
                               Container(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  testName,
+                                  stringValidator(testName),
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors.white,
@@ -111,7 +124,7 @@ class CalendarCard extends StatelessWidget {
                     )),
                 ListTile(
                   leading: Icon(Icons.code),
-                  title: Text(appointmentID),
+                  title: Text(stringValidator(appointmentID)),
                 ),
               ],
             ),

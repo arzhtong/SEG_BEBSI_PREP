@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import 'package:prep/utils/backend_provider.dart';
-import 'package:prep/utils/backend.dart';
 import 'package:prep/widgets/appointment_prep/category_card.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 
+/// This widget displays a dual column grid containing at most 1 FAQ card, 1
+/// Recipe card, n List cards and n Article cards. The grid is contained inside
+/// a scrollable widget due to its expandable properties. The cards inside the
+/// grid adjust their size to fit their contents.
 class AppointmentPrep extends StatelessWidget {
+  // Allow the _buildGrid to make sure only 1 FAQ and Recipe card is created
   bool seenRecipe;
   bool seenFAQ;
 
+  /// Specifies the source of the data Stream, applies formatting to the grid
+  /// and decides what to display on screen depending on the data received. An
+  /// empty screen placeholder is displayed if the data is null or empty
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -45,6 +51,9 @@ class AppointmentPrep extends StatelessWidget {
         });
   }
 
+  /// Converts the data in [docIdDataMap] from a JSON format to a usable Map
+  /// format. It cycles through the snapshot and builds the appropriate card
+  /// for each parameter document.
   Widget _buildGrid(
       BuildContext context, Map<String, Map<String, dynamic>> docIdDataMap) {
     String docID = docIdDataMap.keys.first;

@@ -9,15 +9,15 @@ import 'package:pointycastle/paddings/pkcs7.dart';
 import 'package:pointycastle/block/aes_fast.dart';
 import 'package:pointycastle/block/modes/cbc.dart';
 
-import 'package:prep/utils/backend.dart';
-
+/// Performs messaging crypto. Contains methods for encrypting and
+/// decrypting a message.
 class MessageCrypto {
+  /// Initialises the singleton
   static const MessageCrypto _singleton = MessageCrypto._internal();
-
   factory MessageCrypto() => _singleton;
-
   const MessageCrypto._internal();
 
+  /// Encrypts an unencrypted message and returns the encrypted message.
   static String encryptMessage(String appointmentID, String message) {
     Random rand = Random.secure();
     int ivArrayLength = 16;
@@ -27,22 +27,29 @@ class MessageCrypto {
     }
 
     PaddedBlockCipher cipher = _getCipher(true, appointmentID, iv);
-    String encodedText =
+    String encryptedMessage =
         HEX.encode(iv) + HEX.encode(cipher.process(utf8.encode(message)));
-    return encodedText;
+    return encryptedMessage;
   }
 
+  /// Decrypts an encrypted message and returns the decrypted message.
   static String decryptMessage(String appointmentID, String message) {
-    String encodedIV = message.substring(0, 32);
-    Uint8List iv = HEX.decode(encodedIV);
+    String decryptedMessage;
+    try {
+      String encodedIV = message.substring(0, 32);
+      Uint8List iv = HEX.decode(encodedIV);
 
-    PaddedBlockCipher cipher = _getCipher(false, appointmentID, iv);
-    String encodedMessage = message.substring(32);
-    String decodedMessage =
-        utf8.decode(cipher.process(HEX.decode(encodedMessage)));
-    return decodedMessage;
+      PaddedBlockCipher cipher = _getCipher(false, appointmentID, iv);
+      String encodedMessage = message.substring(32);
+
+      decryptedMessage = utf8.decode(cipher.process(HEX.decode(encodedMessage)));
+    } catch (Exception) {
+      decryptedMessage = '';
+    }
+    return decryptedMessage;
   }
 
+  /// Creates the algorithm used to encrypt and decrypt messages.
   static PaddedBlockCipher _getCipher(
       bool mode, String appointmentID, Uint8List iv) {
     Digest md5 = Digest("MD5");
