@@ -5,8 +5,16 @@ import 'package:prep/utils/backend.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
 import 'package:prep/utils/misc_functions.dart';
 
+/// This widget displays a scrollable list of all daily checkups scheduled for
+/// a specific appointment. Each one contains the date of completion, an
+/// indicator of how many days are left until the day of the appointment, a list
+/// of checkup instructions and a switch per instruction to mark them as done.
 class DailyCheckups extends StatelessWidget {
-  CircleAvatar _getDailyCheckupIcon(int daysBeforeTest, BuildContext context) {
+
+  /// Returns a formatted date icon that contains a date in the format of a day
+  /// number and a 3 letter month abbreviation. If the date detected is the day
+  /// of the appointment, the background of the icon becomes red.
+  CircleAvatar _getCheckupIcon(int daysBeforeTest, BuildContext context) {
     final BaseBackend backend = BackendProvider.of(context).backend;
 
     return CircleAvatar(
@@ -37,7 +45,9 @@ class DailyCheckups extends StatelessWidget {
     );
   }
 
-  Text _getDailyCheckupText(int daysBeforeTest) {
+  /// Returns the title of a checkup expansion tile based on how many days are
+  /// left before the appointment.
+  Text _getCheckupText(int daysBeforeTest) {
     switch (daysBeforeTest) {
       case 1:
         return Text("Your appointment is tomorrow");
@@ -48,8 +58,13 @@ class DailyCheckups extends StatelessWidget {
     }
   }
 
-  Widget _buildListItem(
+  /// Converts the input data in JSON format to a more usable map. It builds the
+  /// body of a daily checkup containing a list of instructions and their
+  /// corresponding switch. The switches trigger an event that flips the boolean
+  /// value of their instruction in the database
+  Widget _buildCheckupBody(
       BuildContext context, Map<String, Map<String, dynamic>> docIdDataMap) {
+    // digesting data in Firebase JSON format
     List<Widget> instructionWidgets = new List();
 
     String docID = docIdDataMap.keys.first;
@@ -57,6 +72,7 @@ class DailyCheckups extends StatelessWidget {
 
     Map<dynamic, dynamic> dynamicInstructions = dataMap['instructions'];
 
+    // building the daily checkup body
     if (dynamicInstructions != null) {
       dynamicInstructions.forEach((index, map) {
         Map<dynamic, dynamic> checkupMap = map;
@@ -93,7 +109,6 @@ class DailyCheckups extends StatelessWidget {
                     activeTrackColor: Colors.green[100],
                     value: checkupMap['answer'],
                     onChanged: (_) {
-                      print(docID);
                       BackendProvider.of(context).backend.flickCheckupSwitch(
                           docID, index, checkupMap['answer']);
                     },
@@ -109,19 +124,24 @@ class DailyCheckups extends StatelessWidget {
       color: Colors.white,
     ));
 
+    // building the expansion tile
     return Container(
       padding: EdgeInsets.only(right: 10.0, left: 10.0, bottom: 5.0),
       child: Card(
         elevation: 3.0,
         child: ExpansionTile(
             initiallyExpanded: true,
-            leading: _getDailyCheckupIcon(dataMap['daysBeforeTest'], context),
-            title: _getDailyCheckupText(dataMap['daysBeforeTest']),
+            leading: _getCheckupIcon(dataMap['daysBeforeTest'], context),
+            title: _getCheckupText(dataMap['daysBeforeTest']),
             children: instructionWidgets),
       ),
     );
   }
 
+  /// Builds a column widget containing a list of daily checkup expansion tiles
+  /// if the data is valid, otherwise, an empty screen placeholder is displayed.
+  /// A StreamBuilder allows for data being stored live in the database and
+  /// having the app react to it immediately and update itself.
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -139,7 +159,7 @@ class DailyCheckups extends StatelessWidget {
               padding: EdgeInsets.only(top: 10, bottom: 10),
               itemCount: mapListSnapshot.data.length,
               itemBuilder: (context, index) =>
-                  _buildListItem(context, mapListSnapshot.data[index]),
+                  _buildCheckupBody(context, mapListSnapshot.data[index]),
             );
           } else {
             return EmptyScreenPlaceholder("There are no checkups", "");
