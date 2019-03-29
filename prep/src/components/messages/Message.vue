@@ -76,7 +76,7 @@
         <router-link
           id="pastApp"
           to="/past-appointments"
-          class="btn"
+          class="btn grey"
           style="margin-bottom:10px;"
         >Go Back</router-link>
       </template>
