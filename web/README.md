@@ -1,21 +1,31 @@
-# prep
+# 5CCS2SEG Major Project
 
-> A Vue.js project
+## Project 2: "Medical Appointment"
 
-## Build Setup
+## Administrative Web Client
 
-``` bash
-# install dependencies
-npm install
+### Team Members:
+David Temple  
+Xin Quan  
+Mufid Alkhaddour  
+Preslav Kisyov  
+### Website URL
+https://prep-232116.firebaseapp.com
 
-# serve with hot reload at localhost:8080
-npm run dev
+### Compile and Run commands
+Run the following commands inside the web project folder.  
 
-# build for production with minification
-npm run build
+`npm install` to install all the needed dependencies  
+`npm install -g firebase-tools` in order to be able to deploy to firebase
+`npm run dev` to start a localhost server  
+`npm test -- -u` to run vue/js testing and to update all the snapshots  
 
-# build for production and view the bundle analyzer report
-npm run build --report
-```
+**Note:** The website will not run, unless `npm install` is ran beforehand!
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+### To redeploy the website
+
+1. `npm run build` to build the vue project  
+2. `firebase deploy` to deploy to firebase  
+3. You might be asked if you would like to delete firebase functions - type `N`
+
+**Note:** You will need to login to firebase by using `firebase login`!
