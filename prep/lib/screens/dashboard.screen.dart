@@ -45,16 +45,6 @@ class _DashboardState extends State<Dashboard> {
     return codeFileState.split(',').contains(value);
   }
 
-  /// Clear all the data from the codes file
-  Future<File> _clearData() async {
-    //must apply set state to make sure the calendar is redrawn
-    setState(() {
-      codeFileState = "";
-      codeController.text = '';
-    });
-    return BackendProvider.of(context).storage.writeData("");
-  }
-
   /// Determine if a code exists in the Firestore and is not used
   Future<bool> _isCodeInFirestoreNotUsed(String code) async {
     List<String> liveNotUsedIDs = new List();
@@ -86,7 +76,8 @@ class _DashboardState extends State<Dashboard> {
   Future<Widget> _validateCalendar() async {
     // Determine if the application is running on a fresh install or not
     bool fileExists = await BackendProvider.of(context).storage.fileExists();
-    if (fileExists) {} else {
+    if (fileExists) {
+    } else {
       await BackendProvider.of(context).storage.writeData(",");
     }
 
@@ -142,11 +133,6 @@ class _DashboardState extends State<Dashboard> {
         actions: <Widget>[
           MakeHelpIcon(
               'This screen shows a calendar with all your due appointments. Tap on one of them to get more information.'),
-          IconButton(
-              icon: Icon(Icons.delete_sweep),
-              onPressed: () {
-                _clearData();
-              }),
           IconButton(
               key: Key('refreshButton'),
               icon: Icon(Icons.refresh),
@@ -205,7 +191,6 @@ class _NewAppointmentDialogState extends State<_NewAppointmentDialog> {
   _DashboardState _parent; // needed to access its members
 
   _NewAppointmentDialogState(this._parent);
-
 
   /// Builds a simple form with a single input field and a submit button.
   ///
