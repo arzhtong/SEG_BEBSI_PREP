@@ -54,7 +54,7 @@ main() {
     setUpMockBackend();
 
     await tester.pumpWidget(testableWidget(child: Appointment(0)));
-    await tester.pumpAndSettle();
+    await tester.pump();
   }
 
   BottomNavigationBar getNavBar() {
