@@ -27,21 +27,26 @@ class MessageCrypto {
     }
 
     PaddedBlockCipher cipher = _getCipher(true, appointmentID, iv);
-    String encodedText =
+    String encryptedMessage =
         HEX.encode(iv) + HEX.encode(cipher.process(utf8.encode(message)));
-    return encodedText;
+    return encryptedMessage;
   }
 
   /// Decrypts an encrypted message and returns the decrypted message.
   static String decryptMessage(String appointmentID, String message) {
-    String encodedIV = message.substring(0, 32);
-    Uint8List iv = HEX.decode(encodedIV);
+    String decryptedMessage;
+    try {
+      String encodedIV = message.substring(0, 32);
+      Uint8List iv = HEX.decode(encodedIV);
 
-    PaddedBlockCipher cipher = _getCipher(false, appointmentID, iv);
-    String encodedMessage = message.substring(32);
-    String decodedMessage =
-        utf8.decode(cipher.process(HEX.decode(encodedMessage)));
-    return decodedMessage;
+      PaddedBlockCipher cipher = _getCipher(false, appointmentID, iv);
+      String encodedMessage = message.substring(32);
+
+      decryptedMessage = utf8.decode(cipher.process(HEX.decode(encodedMessage)));
+    } catch (Exception) {
+      decryptedMessage = '';
+    }
+    return decryptedMessage;
   }
 
   /// Creates the algorithm used to encrypt and decrypt messages.
