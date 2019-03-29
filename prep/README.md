@@ -32,5 +32,5 @@ Then, to install to a particular device, connect it and select it on the dropdow
 ### Instructions to run automated tests for the mobile app:
 You need to have Flutter installed and set up. From the prep folder, run the following commands:  
 `$ flutter test --coverage`  
-`$ genhtml coverage/lcov.info -o coverage/report`
+`$ genhtml coverage/lcov.info -o coverage/report`  
 This will create the coverage report in the coverage/report folder, which can be viewed from the index.html file.
