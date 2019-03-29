@@ -23,11 +23,12 @@ class _MessagingScreenState extends State<MessagingScreen> {
     String decryptedMessage = MessageCrypto.decryptMessage(
         BackendProvider.of(context).backend.appointmentID, message['content']);
 
-    _messagesView.addMessage(
-      messageText: decryptedMessage,
-      datetime: message['datetime'].toDate(),
-      isPatient: message['isPatient'],
-    );
+    if (decryptedMessage != '')
+      _messagesView.addMessage(
+        messageText: decryptedMessage,
+        datetime: message['datetime'].toDate(),
+        isPatient: message['isPatient'],
+      );
   }
 
   /// Creates a subscription that listens for new messages, while on the messaging screen.
