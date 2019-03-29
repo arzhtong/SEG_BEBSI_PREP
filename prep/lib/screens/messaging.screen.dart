@@ -19,6 +19,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
   TextComposer _textComposer = TextComposer();
   StreamSubscription<List<Map<String, dynamic>>> _messageStreamSubscription;
 
+  /// Adds a new message.
   void _addNewMessage(Map<String, dynamic> message) {
     String decryptedMessage = MessageCrypto.decryptMessage(
         BackendProvider.of(context).backend.appointmentID, message['content']);
@@ -52,6 +53,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
     super.dispose();
   }
 
+  /// Builds the messaging screen.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
