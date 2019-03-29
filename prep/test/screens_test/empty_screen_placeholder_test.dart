@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:prep/screens/empty_screen_placeholder.dart';
 import 'package:flutter/material.dart';
+
+import 'package:prep/screens/empty_screen_placeholder.dart';
 
 void main() {
   Widget testableWidget({Widget child}) {
