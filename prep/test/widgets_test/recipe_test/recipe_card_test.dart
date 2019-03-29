@@ -101,6 +101,8 @@ class MockRecipeCardData extends Mock implements Map<String, dynamic> {
 }
 
 void main() {
+  Constants.kIsDebug = true;
+
   Widget makeTestableWidget(Widget child) => MaterialApp(
         home: SingleChildScrollView(
           child: child,
