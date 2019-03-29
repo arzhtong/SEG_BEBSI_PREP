@@ -7,11 +7,13 @@ import 'package:prep/utils/message_crypto.dart';
 import 'package:prep/widgets/messaging/messages_view.dart';
 import 'package:prep/widgets/messaging/text_composer.dart';
 
+/// Creates messaging screen stateful widget, which contains an input and all messages.
 class MessagingScreen extends StatefulWidget {
   @override
   State createState() => _MessagingScreenState();
 }
 
+/// Creates the state for the messaging screen.
 class _MessagingScreenState extends State<MessagingScreen> {
   MessagesView _messagesView = MessagesView();
   TextComposer _textComposer = TextComposer();
@@ -28,6 +30,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
     );
   }
 
+  /// Creates a subscription that listens for new messages, while on the messaging screen.
   @override
   void initState() {
     super.initState();
@@ -40,6 +43,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
     });
   }
 
+  /// Cancels the subscribtion that listened for new messages.
   @override
   void dispose() {
     _messageStreamSubscription.cancel();
