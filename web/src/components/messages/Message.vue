@@ -2,7 +2,11 @@
   <div>
     <div class="containerChat" id="top">
       <span class="card-title blue-text">
-        <i @click="(showInfo ? showInfo=false : showInfo=true )" class="small material-icons" style="cursor:pointer;">info_outline</i>Info
+        <i
+          @click="(showInfo ? showInfo=false : showInfo=true )"
+          class="small material-icons"
+          style="cursor:pointer;"
+        >info_outline</i>Info
       </span>
       <div class="row" v-if="showInfo">
         <div class="col s12">
@@ -50,15 +54,22 @@
         <div class="row">
           <div class="input-field col s12">
             <div id="foot" class="valign-wrapper">
-              <textarea
-                @click="scrollToBottom"
-                style="width:30%;height:80px;resize: none;"
-                id="textArea"
-                required
-              ></textarea>
-              <button id="sendMessage" type="submit" class="btn btn-large" style="margin-left:5px;padding-right:15px">
-                <i class="material-icons left">send</i>
-              </button>
+              <template v-if="this.$route.params.expired == false">
+                <textarea
+                  @click="scrollToBottom"
+                  style="width:30%;height:80px;resize: none;"
+                  id="textArea"
+                  required
+                ></textarea>
+                <button
+                  id="sendMessage"
+                  type="submit"
+                  class="btn btn-large"
+                  style="margin-left:5px;padding-right:15px"
+                >
+                  <i class="material-icons left">send</i>
+                </button>
+              </template>
             </div>
           </div>
         </div>
