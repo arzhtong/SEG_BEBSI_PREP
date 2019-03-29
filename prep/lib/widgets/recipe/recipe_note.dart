@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
-class RecipeNote extends StatelessWidget {
-  static const String notePrefix = "Note:";
+import 'package:prep/utils/constants.dart';
 
+///[RecipeNote] displays a high visibility note in a
+///[RecipeCard] which is important for the reader to know.
+class RecipeNote extends StatelessWidget {
   final dynamic note;
 
   RecipeNote(this.note);
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -24,7 +25,7 @@ class RecipeNote extends StatelessWidget {
       padding: EdgeInsets.all(16.0),
       child: Center(
         child: Text(
-          "$notePrefix $note",
+          "${Constants.kRecipeNotePrefix} $note",
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,

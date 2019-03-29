@@ -889,5 +889,5 @@ DerivedData/
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 
 ### Project spesific
-coverage/*
-report/*
+prep/coverage/*
+prep/report/*

@@ -1,9 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:prep/widgets/appointment_info/appointment_banner.dart';
 import 'package:flutter/material.dart';
-import 'package:prep/utils/query.dart';
-import 'package:prep/utils/misc_functions.dart';
 import 'package:mockito/mockito.dart';
+
+import 'package:prep/utils/backend.dart';
+import 'package:prep/utils/misc_functions.dart';
+import 'package:prep/widgets/appointment_info/appointment_banner.dart';
 import 'package:prep/utils/backend_provider.dart';
 
 class MockBackend extends Mock implements FirestoreBackend {}
@@ -26,6 +27,7 @@ void main() {
     when(mockBackend.location).thenReturn("appLocation");
     when(mockBackend.dateTime).thenReturn(DateTime(2027, 1, 1, 1, 0, 0, 0, 0));
     when(mockBackend.doctorName).thenReturn("doctorName");
+    when(mockBackend.contactNumber).thenReturn("12345");
     when(mockBackend.color).thenReturn(Colors.blue);
 
     AppointmentDetailsBanner appointmentDetailsBanner =
@@ -39,6 +41,7 @@ void main() {
     final timeTextFinder = find.text(timeFormatter(DateTime(2027, 1, 1, 1, 0, 0, 0, 0)));
     final locationTextFinder = find.text('appLocation');
     final doctorNameTextFinder = find.text('doctorName');
+    final contactNumberTextFinder = find.text('12345');
 
     Color bannerColor =
         (rootCardWidgetFinder.evaluate().single.widget as Card).color;
@@ -48,6 +51,10 @@ void main() {
     expect(timeTextFinder, findsOneWidget);
     expect(locationTextFinder, findsOneWidget);
     expect(doctorNameTextFinder, findsOneWidget);
+    expect(contactNumberTextFinder, findsOneWidget);
     expect(bannerColor, Colors.blue);
   });
+
+  tearDown(() => FirestoreBackend()
+      .setBackendParams(null, null, null, null, null, null, null, null));
 }

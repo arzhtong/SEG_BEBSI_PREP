@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
-import 'package:prep/utils/query.dart';
+import 'package:prep/utils/backend.dart';
 import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/utils/message_crypto.dart';
 
+/// Creates the text composer stateful widget, used to input and send a message.
 class TextComposer extends StatefulWidget {
   @override
   State createState() => _TextComposerState();
 }
 
+/// Creates the state for the text composer.
 class _TextComposerState extends State<TextComposer> {
   TextEditingController _textController = TextEditingController();
   bool _hasTyped = false;
@@ -24,6 +26,7 @@ class _TextComposerState extends State<TextComposer> {
     }
   }
 
+  /// Builds the text composer.
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -40,6 +43,7 @@ class _TextComposerState extends State<TextComposer> {
                   Flexible(
                     child: SingleChildScrollView(
                       child: TextField(
+                        key: Key('textField'),
                         autocorrect: true,
                         maxLines: null,
                         keyboardType: TextInputType.multiline,
@@ -56,9 +60,9 @@ class _TextComposerState extends State<TextComposer> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       IconButton(
+                        key: Key('sendButton'),
                         icon: Icon(
                           Icons.send,
-                          //TODO Change to proper theme colors after implementation.
                           color: (_hasTyped)
                               ? Theme.of(context).accentColor
                               : Theme.of(context).buttonColor,

@@ -7,9 +7,15 @@ import 'package:prep/screens/messaging.screen.dart';
 import 'package:prep/utils/backend_provider.dart';
 import 'package:prep/widgets/dashboard/help_dialog.dart';
 
+/// This widget contains a bottom navigation bar and a dynamic body. The body
+/// becomes one of the four pages that can be selected via the bottom navigation
+/// bar. These include: Information, Preparation, Checkups and Dr. Chat
+/// (messaging).
 class Appointment extends StatefulWidget {
   final int index;
 
+  /// The value of [index] determines which page is displayed when this widget
+  /// is built.
   Appointment(this.index);
 
   @override
@@ -26,6 +32,7 @@ class _AppointmentState extends State<Appointment> {
 
   _AppointmentState(this._selectedIndex);
 
+  /// Determines which page to display based on the given [index].
   Widget _getPage(int index) {
     switch (index) {
       case 1:
@@ -47,6 +54,8 @@ class _AppointmentState extends State<Appointment> {
     }
   }
 
+  /// Determines which Help alert dialog to display based on the currently
+  /// selected screen
   Widget _chooseHelpMenuToDisplay() {
     switch (_selectedIndex) {
       case 0:
@@ -72,6 +81,8 @@ class _AppointmentState extends State<Appointment> {
     }
   }
 
+  /// Builds a scaffold with a body containing the selected page and a bottom
+  /// navigation bar with links to each one of the four pages defined.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,6 +94,7 @@ class _AppointmentState extends State<Appointment> {
         child: _getPage(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        key: Key('appointmentPage'),
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
               icon: Icon(Icons.info), title: Text('Information')),
@@ -101,13 +113,14 @@ class _AppointmentState extends State<Appointment> {
     );
   }
 
+  /// Determines if the Dr. Chat tab icon should be white (no new messages) or
+  /// red (new messages).
   Widget _buildChatIcon() {
     return (_selectedIndex == 3)
         ? Icon(Icons.chat)
         : StreamBuilder(
-            stream: BackendProvider.of(context)
-                .backend
-                .messagesStream(setSeen: false),
+            stream:
+                BackendProvider.of(context).backend.messagesSnapshots(false),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 snapshot.data.forEach((message) {
@@ -122,6 +135,9 @@ class _AppointmentState extends State<Appointment> {
           );
   }
 
+  /// Reloads the widget tree when an item of the bottom navigation bar is
+  /// tapped. This causes the body of the enclosing scaffold to be redrawn and
+  /// display the newly selected screen.
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'package:prep/utils/misc_functions.dart' show convertDynamicListToStringList;
+import 'package:prep/utils/misc_functions.dart'
+    show convertDynamicListToStringList;
 
 import 'package:prep/widgets/recipe/recipe_ingredient_list_item.dart';
+import 'package:prep/utils/constants.dart';
 
+///[RecipeIngredientList] displays a list of [RecipeIngredientListItem]s in a [RecipeCard].
 class RecipeIngredientList extends StatelessWidget {
-  static const String _ingredientListHeadline = "Show ingredients";
-  
   final dynamic dynamicIngredientList;
 
   RecipeIngredientList(this.dynamicIngredientList);
@@ -23,13 +24,13 @@ class RecipeIngredientList extends StatelessWidget {
     }
 
     return ExpansionTile(
+      initiallyExpanded: Constants.kIsDebug,
       title: Text(
-        _ingredientListHeadline,
+        Constants.kIngredientListHeadline,
         style: Theme.of(context).textTheme.button,
       ),
       children: _ingredientListItems,
       backgroundColor: Colors.black12,
-      initiallyExpanded: false,
     );
   }
 }

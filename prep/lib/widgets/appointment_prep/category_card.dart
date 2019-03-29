@@ -4,33 +4,42 @@ import 'package:prep/screens/recipeList.screen.dart';
 import 'package:prep/screens/information_parser.screen.dart';
 import 'package:prep/screens/list_parser.screen.dart';
 import 'package:prep/screens/faq_parser.screen.dart';
+import 'package:prep/utils/misc_functions.dart';
 
+/// Represents a document from querySnapshot of the prepCards collection as a
+/// card containing an icon, a type and a title. Each card is used as a button
+/// to navigate to a parser screen for each type of document.
 class CategoryCard extends StatelessWidget {
   final String documentID;
   final String title;
   final String type;
 
-  CategoryCard(this.documentID,
-      this.title,
-      this.type);
+  CategoryCard(this.documentID, this.title, this.type);
 
+  /// Determines what screen to navigate to depending on the type of the card
   Future _navigate(dynamic context) {
     switch (type) {
       case "article":
-        return Navigator.push(context, MaterialPageRoute(builder:
-            (context) => InformationParser(documentID, title)));
+        return Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => InformationParser(documentID, title)));
       case "categoryList":
-        return Navigator.push(context, MaterialPageRoute(builder:
-            (context) => CategoryListParser(documentID, title)));
+        return Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CategoryListParser(documentID, title)));
       case "recipe":
-        return Navigator.push(context,
+        return Navigator.push(
+            context,
             MaterialPageRoute(builder: (context) => RecipeListScreen()));
       default:
-        return Navigator.push(context, MaterialPageRoute(builder:
-            (context) => FaqParser()));
+        return Navigator.push(
+            context, MaterialPageRoute(builder: (context) => FaqParser()));
     }
   }
 
+  /// Determines which icon to display depending on the type of the card
   CircleAvatar _getIcon() {
     if (type == "categoryList") {
       return CircleAvatar(
@@ -67,7 +76,9 @@ class CategoryCard extends StatelessWidget {
     }
   }
 
-  String _getCategory(){
+  /// Determines which category name to display based on the category assigned
+  /// to the document related to the card
+  String _getCategoryName() {
     switch (type) {
       case "article":
         return "Article";
@@ -80,6 +91,8 @@ class CategoryCard extends StatelessWidget {
     }
   }
 
+  /// Builds a card containing an icon, a type, a title and an interactive
+  /// InkWell component that enables navigation to other screens
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -97,23 +110,20 @@ class CategoryCard extends StatelessWidget {
               children: <Widget>[
                 ListTile(
                   title: Text(
-                    _getCategory(),
+                    stringValidator(_getCategoryName()),
                     style: TextStyle(
-                        color: Colors.grey[400],
-                        fontStyle: FontStyle.italic
-                    ),
+                        color: Colors.grey[400], fontStyle: FontStyle.italic),
                   ),
                   leading: _getIcon(),
                 ),
                 ListTile(
                   title: Text(
-                    title,
+                    stringValidator(title),
                     //maxLines: 3,
                   ),
                 ),
               ],
-            )
-        ),
+            )),
       ),
     );
   }
