@@ -11,7 +11,7 @@ class Constants {
 
   static const String kNoRecipesFoundTitle = 'No Recipes Found!';
   static const String kNoRecipesFoundSubtitle =
-      'Seems like the staff havn\'t  added any recipes yet...';
+      'Seems like the staff haven\'t  added any recipes yet...';
 
   static const String kErrorPrefix = "Error:";
   static const String kErrorRecipeNotFound =

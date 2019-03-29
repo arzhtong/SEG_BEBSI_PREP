@@ -6,6 +6,7 @@ import 'package:prep/screens/empty_screen_placeholder.dart';
 
 import 'package:prep/utils/constants.dart';
 
+///[RecipeListScreen] displays a screen of the test's Recipes as a list of [RecipeCards].
 class RecipeListScreen extends StatelessWidget {
   static const String _appBarTitle = "Suggested Recipes";
   static const Widget _loadingWidget = Center(
