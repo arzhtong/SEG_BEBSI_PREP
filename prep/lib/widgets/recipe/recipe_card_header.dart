@@ -102,6 +102,7 @@ class RecipeCardHeader extends StatelessWidget {
       'pie': 'pie.jpg',
       'fish': 'fish.jpg',
       'steak': 'steak.jpg',
+      'beef': 'beef.jpg', 
       'chicken': 'chicken.jpg',
       'curry': 'curry.jpg',
       'eggs': 'eggs.jpg',
