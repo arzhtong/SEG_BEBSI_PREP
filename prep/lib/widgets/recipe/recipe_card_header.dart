@@ -6,6 +6,9 @@ import 'package:prep/utils/constants.dart';
 import 'package:prep/utils/document_data_provider.dart';
 import 'package:prep/utils/misc_functions.dart';
 
+///[RecipeCardHeader] is always displayed with every [RecipeCard]. 
+///It loads the image for the recipe as well as the labels given by the [context]'s 
+///[DocumentDataProvider].
 class RecipeCardHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

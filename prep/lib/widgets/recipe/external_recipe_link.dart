@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:prep/utils/constants.dart';
 import 'package:prep/utils/misc_functions.dart' show launchURL;
 
-//TODO: Add link error validity chacking.
+/// [ExternalRecipeLink] displays a button which links to a given URL if it is valid
 class ExternalRecipeLink extends StatelessWidget {
   final String externalUrl;
 

@@ -9,3 +9,5 @@ export 'package:prep/widgets/recipe/recipe_ingredient_list_item.dart';
 export 'package:prep/widgets/recipe/recipe_method_list.dart';
 export 'package:prep/widgets/recipe/recipe_method_list_item.dart';
 export 'package:prep/widgets/recipe/recipe_note.dart';
+
+///This class is used to import all [RecipeCard] subwidgets for testing purposes.

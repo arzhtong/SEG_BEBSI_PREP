@@ -6,6 +6,9 @@ import 'package:prep/utils/misc_functions.dart'
 import 'package:prep/widgets/recipe/recipe_method_list_item.dart';
 import 'package:prep/utils/constants.dart';
 
+
+///[RecipeMethodList] displays a list of [RecipeMethodListItem]s in a [RecipeCard].
+///Each list item is automatically ennumerated.
 class RecipeMethodList extends StatelessWidget {
   final dynamic dynamicMethodInstructions;
 

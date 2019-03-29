@@ -6,6 +6,7 @@ import 'package:prep/utils/misc_functions.dart'
 import 'package:prep/widgets/recipe/recipe_ingredient_list_item.dart';
 import 'package:prep/utils/constants.dart';
 
+///[RecipeIngredientList] displays a list of [RecipeIngredientListItem]s in a [RecipeCard].
 class RecipeIngredientList extends StatelessWidget {
   final dynamic dynamicIngredientList;
 

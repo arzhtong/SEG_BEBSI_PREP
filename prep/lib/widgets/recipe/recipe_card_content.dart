@@ -9,6 +9,10 @@ import 'package:prep/widgets/recipe/recipe_method_list.dart';
 import 'package:prep/widgets/recipe/recipe_note.dart';
 import 'package:prep/widgets/recipe/external_recipe_link.dart';
 
+
+///[RecipeCardContent] does data validation on data given by the [context]'s 
+///[DocumentDataProvider] and builds the content of the [RecipeCard] from that data.
+///If some of the data is missing it will not build that particular [RecipeCard] subwidget.
 class RecipeCardContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -28,16 +32,6 @@ class RecipeCardContent extends StatelessWidget {
     //internal recipe must either exist fully or doesn't at all
     bool hasInternalRecipe =
         (dynamicIngredientListData != null) && (dynamicMethodListData != null);
-
-    //Assertions
-
-    //internal recipe must be full
-    //  assert(hasInternalRecipe ||
-    //     ((dynamicMethodListData == null) &&
-    //         (dynamicIngredientListData == null)));
-
-    //at least one form of recipe must be present
-    //assert(hasInternalRecipe || dynamicExternalUrlData != null);
 
     //generate widgets from data
     if (hasInternalRecipe) {

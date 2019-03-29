@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+///[RecipeMethodListItem] displays a single method instruction 
+///for a recipe in a [RecipeCard].
 class RecipeMethodListItem extends StatelessWidget {
   final String instruction;
   final int ordering;
@@ -17,7 +19,7 @@ class RecipeMethodListItem extends StatelessWidget {
             color: Theme.of(context).textTheme.body2.color,
           ),
         ),
-        backgroundColor: Colors.black12, //TODO: Use theme colors
+        backgroundColor: Colors.black12,
       ),
       title: Text(
         instruction,

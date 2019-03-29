@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+///[RecipeIngredientListItem] displays a single ingredient 
+///for a recipe in a [RecipeCard].
 class RecipeIngredientListItem extends StatelessWidget {
   final String ingredient;
 

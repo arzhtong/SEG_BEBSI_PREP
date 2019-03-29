@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:prep/utils/constants.dart';
 
+///[RecipeNote] displays a high visibility note in a
+///[RecipeCard] which is important for the reader to know.
 class RecipeNote extends StatelessWidget {
   final dynamic note;
 
