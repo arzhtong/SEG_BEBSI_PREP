@@ -1,14 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:prep/screens/dashboard.screen.dart';
 import 'package:flutter/material.dart';
-import 'package:prep/utils/backend_provider.dart';
-import 'package:prep/utils/backend.dart';
 import 'package:mockito/mockito.dart';
-import 'package:prep/utils/storage.dart';
 import 'dart:io';
 
+import 'package:prep/screens/dashboard.screen.dart';
 import 'package:prep/screens/empty_screen_placeholder.dart';
-import 'package:prep/widgets/dashboard/help_dialog.dart';
+import 'package:prep/utils/backend_provider.dart';
+import 'package:prep/utils/backend.dart';
+import 'package:prep/utils/storage.dart';
 
 class MockBackend extends Mock implements FirestoreBackend {}
 
@@ -25,7 +24,7 @@ void main() {
     );
   }
 
-  testWidgets("description...", (WidgetTester tester) async {
+  testWidgets("A card should appear in the calendar if the data given to it contains one record", (WidgetTester tester) async {
     List<Map<String, Map<String, dynamic>>> maps = new List();
 
     maps.add({

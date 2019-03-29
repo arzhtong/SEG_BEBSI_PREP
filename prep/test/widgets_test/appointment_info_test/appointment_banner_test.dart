@@ -1,9 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:prep/widgets/appointment_info/appointment_banner.dart';
 import 'package:flutter/material.dart';
+import 'package:mockito/mockito.dart';
+
 import 'package:prep/utils/backend.dart';
 import 'package:prep/utils/misc_functions.dart';
-import 'package:mockito/mockito.dart';
+import 'package:prep/widgets/appointment_info/appointment_banner.dart';
 import 'package:prep/utils/backend_provider.dart';
 
 class MockBackend extends Mock implements FirestoreBackend {}

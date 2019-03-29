@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:prep/widgets/dashboard/calendar_label.dart';
 import 'package:flutter/material.dart';
+
+import 'package:prep/widgets/dashboard/calendar_label.dart';
 import 'package:prep/utils/misc_functions.dart';
 
 void main() {
