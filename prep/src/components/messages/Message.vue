@@ -1,17 +1,15 @@
 <template>
-  <div class="mainContainer">
+  <div>
     <div class="containerChat" id="top">
-      <div class="row">
+      <span class="card-title blue-text">
+        <i @click="(showInfo ? showInfo=false : showInfo=true )" class="small material-icons" style="cursor:pointer;">info_outline</i>Info
+      </span>
+      <div class="row" v-if="showInfo">
         <div class="col s12">
-          <div class="card-panel light-blue" style="height: 200px">
-            <span class="card-title white-text">
-              <i class="small material-icons">info_outline</i>
-            </span>
-            <p class="white-text">
-              Please be aware that pressing 'Enter' will only make a new line and not send the message!
-              <br>Click the 'Send Button' to send a message.
-              <br>To scroll to the bottom click on the textbox.
-            </p>
+          <div class="card-panel light-blue white-text" style="height: 100px;">
+            Please be aware that pressing 'Enter' will only make a new line and not send the message!
+            <br>Click the 'Send Button' to send a message.
+            <br>To scroll to the bottom click on the textbox.
           </div>
         </div>
       </div>
@@ -99,6 +97,10 @@ export default {
 </script>
 
 <style>
+#top {
+  height: 100%;
+  width: 100%;
+}
 #messages {
   max-height: 50vh;
   overflow-y: auto;

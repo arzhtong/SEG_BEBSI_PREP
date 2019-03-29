@@ -13,8 +13,9 @@ export const messageMixin = {
       messages: [],
       messagesPatient: [],
       allMessages: [],
-      currentUser: null,
-      isStaff: null
+      currentUser: "",
+      isStaff: null,
+      showInfo: false
     };
   },
   methods: {
